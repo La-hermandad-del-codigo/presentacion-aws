@@ -1,0 +1,39 @@
+<!-- SLIDE 7: ARQUITECTURA CONCEPTUAL EN AWS -->
+      <section>
+        <h2 class="slide-title">Arquitectura de Red Propuesta (Amazon VPC)</h2>
+        <p class="slide-subtitle">Defensa en profundidad y desacoplamiento por capas lógicas</p>
+
+        <div class="grid-3">
+          <!-- Capa 1: Pública -->
+          <div class="glass-card" style="border-top: 4px solid var(--aws-blue);">
+            <div class="pill-badge blue" style="margin-bottom: 8px;">Capa Pública</div>
+            <h4 style="font-size: 1.1rem !important; margin: 0 0 6px !important;">Perímetro Seguro</h4>
+            <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; padding-left: 18px; margin: 0;">
+              <li><strong>Amazon Route 53:</strong> Resolución DNS.</li>
+              <li><strong>CloudFront (CDN):</strong> Caché y protección DDoS.</li>
+              <li><strong>ALB:</strong> Balanceo y terminación HTTPS con certificados ACM.</li>
+            </ul>
+          </div>
+
+          <!-- Capa 2: Privada de Cómputo -->
+          <div class="glass-card" style="border-top: 4px solid var(--aws-orange);">
+            <div class="pill-badge orange" style="margin-bottom: 8px;">Capa Privada</div>
+            <h4 style="font-size: 1.1rem !important; margin: 0 0 6px !important;">Cómputo Aislado</h4>
+            <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; padding-left: 18px; margin: 0;">
+              <li><strong>Amazon EC2 (t3.small):</strong> Backend NestJS, Frontend y Bot.</li>
+              <li><strong>Sin IP Pública:</strong> Solo recibe tráfico proveniente del balanceador.</li>
+              <li><strong>Gestión vía SSM:</strong> Sin puertos abiertos.</li>
+            </ul>
+          </div>
+
+          <!-- Capa 3: Datos y Assets -->
+          <div class="glass-card" style="border-top: 4px solid var(--success);">
+            <div class="pill-badge success" style="margin-bottom: 8px;">Capa de Datos</div>
+            <h4 style="font-size: 1.1rem !important; margin: 0 0 6px !important;">Persistencia Segura</h4>
+            <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; padding-left: 18px; margin: 0;">
+              <li><strong>Amazon RDS PostgreSQL:</strong> Subred aislada sin acceso a Internet.</li>
+              <li><strong>Amazon S3:</strong> Resguardo de copias de seguridad y videos/manuales del LMS.</li>
+            </ul>
+          </div>
+        </div>
+      </section>

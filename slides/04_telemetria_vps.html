@@ -1,0 +1,43 @@
+<!-- SLIDE 4: TELEMETRÍA REAL DEL SERVIDOR ACTUAL -->
+      <section>
+        <h2 class="slide-title">2. Diagnóstico: Telemetría Real del Servidor</h2>
+        <p class="slide-subtitle">Inspección física del nodo de producción (Ubuntu 22.04 LTS)</p>
+
+        <div class="grid-4" style="margin-bottom: 24px;">
+          <div class="glass-card" style="padding: 20px;">
+            <div class="metric-label">Cómputo Físico</div>
+            <div class="metric-value" style="color: var(--aws-navy);">3 vCPU</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">AMD EPYC-Rome</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px;">
+            <div class="metric-label">Memoria RAM</div>
+            <div class="metric-value" style="color: #d97706;">3.7 GiB</div>
+            <div style="font-size: 0.8rem; color: #d97706; font-weight: 700;">60% En Uso Sostenido</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px;">
+            <div class="metric-label">Memoria Swap</div>
+            <div class="metric-value" style="color: var(--danger);">0 Bytes</div>
+            <div style="font-size: 0.8rem; color: var(--danger); font-weight: 700;">Riesgo Inminente OOM</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px;">
+            <div class="metric-label">Almacenamiento</div>
+            <div class="metric-value" style="color: var(--aws-navy);">61%</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Solo 29 GB Libres</div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="border-left: 4px solid var(--danger); padding: 18px 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: var(--danger); font-size: 1rem;">11 Contenedores Coexistiendo en Docker:</strong>
+              <span style="color: var(--text-muted); font-size: 0.9rem; margin-left: 8px;">
+                Ecosistema SOFI + Clientes Comerciales (Reflexo4 y Arte Ideas con <strong>MySQL 8.0 y Postgres 16 en simultáneo</strong>).
+              </span>
+            </div>
+            <span class="pill-badge danger">Sin Aislamiento</span>
+          </div>
+        </div>
+      </section>

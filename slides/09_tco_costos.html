@@ -1,0 +1,50 @@
+<!-- SLIDE 9: ESTIMACIÓN ECONÓMICA Y TCO -->
+      <section>
+        <h2 class="slide-title">Estimación Económica Inicial</h2>
+        <p class="slide-subtitle">Análisis preliminar de costos con AWS Pricing Calculator</p>
+
+        <div class="grid-2">
+          <!-- Columna 1: Tarifa -->
+          <div class="glass-card">
+            <div class="metric-label">Inversión Mensual Estimada</div>
+            <div class="metric-value" style="color: var(--aws-orange);">~$40.40 <span style="font-size: 1.2rem; color: var(--text-muted);">USD/mes</span></div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 12px 0 0;">
+              Infraestructura base dimensionada para desacoplar el entorno sin sobrecostos innecesarios.
+            </p>
+          </div>
+
+          <!-- Columna 2: Desglose -->
+          <div class="glass-card" style="padding: 20px 24px;">
+            <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); text-align: left;">
+                  <th style="padding-bottom: 8px;">Servicio</th>
+                  <th style="padding-bottom: 8px; text-align: right;">Costo Aprox.</th>
+                </tr>
+              </thead>
+              <tbody style="color: var(--text-main);">
+                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.4);">
+                  <td style="padding: 8px 0;">Amazon EC2 (t3.small)</td>
+                  <td style="text-align: right; font-family: 'JetBrains Mono';">~$15.20</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.4);">
+                  <td style="padding: 8px 0;">Amazon RDS PostgreSQL</td>
+                  <td style="text-align: right; font-family: 'JetBrains Mono';">~$18.50</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.4);">
+                  <td style="padding: 8px 0;">Amazon EBS (30 GB gp3)</td>
+                  <td style="text-align: right; font-family: 'JetBrains Mono';">~$2.40</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.4);">
+                  <td style="padding: 8px 0;">Amazon S3 + Glacier</td>
+                  <td style="text-align: right; font-family: 'JetBrains Mono';">~$1.30</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0;">Route 53 &amp; CloudWatch</td>
+                  <td style="text-align: right; font-family: 'JetBrains Mono';">~$2.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
