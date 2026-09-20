@@ -11,7 +11,7 @@
 
 ### 1.1 Naturaleza de la Empresa, Sector y Modelo de Negocio
 
-La organización donde se desarrolla la formación práctica es **RPsoft**, una empresa de servicios tecnológicos perteneciente al sector de **Tecnologías de la Información (TI) y Desarrollo de Software**, orientada al desarrollo web, arquitectura de sistemas y gestión de talento técnico.
+La organización donde se desarrolla la formación práctica es **APM Inversiones EIRL**, una empresa de servicios tecnológicos perteneciente al sector de **Tecnologías de la Información (TI) y Desarrollo de Software**, orientada al desarrollo web, arquitectura de sistemas y gestión de talento técnico.
 
 El modelo de negocio global de la empresa opera bajo una modalidad **B2B (Business-to-Business)** sustentada en dos líneas comerciales principales:
 
@@ -27,7 +27,7 @@ El modelo de negocio global de la empresa opera bajo una modalidad **B2B (Busine
 
 ### 1.2 Identificación y Descripción del Área de Desarrollo de Soluciones de TI
 
-Dentro del departamento de TI de RPsoft existe una división funcional clara entre dos áreas de trabajo:
+Dentro del departamento de TI de APM Inversiones EIRL existe una división funcional clara entre dos áreas de trabajo:
 
 1. **Área de Proyectos Comerciales (Externa):** Equipo encargado de la maquetación, programación y entrega de los sitios web de los clientes finales. Aunque se conoce su existencia operativa dentro de la organización, el practicante no tiene acceso ni opera directamente sobre dichos repositorios o servidores de producción.
 2. **Área de Desarrollo y Plataformas Internas (Área de Formación Práctica del Estudiante):** Unidad técnica en la que el practicante desempeña sus funciones. Tiene a su cargo el diseño, desarrollo, soporte y evolución del ecosistema de software institucional de la empresa, denominado **Plataforma SOFI**.
@@ -36,7 +36,7 @@ Dentro del departamento de TI de RPsoft existe una división funcional clara ent
 flowchart TD
     subgraph Ecosistema_SOFI["Ecosistema Institucional SOFI - Área Interna"]
         direction TB
-        BOT["Bot de Asistencia (Bot-Asistencia-RPsoft)<br/>Interacción Discord"]
+        BOT["Bot de Asistencia (Bot-Asistencia-APM)<br/>Interacción Discord"]
         WEB["Portal Web SOFI (SOFI-WEB)<br/>Next.js / TailwindCSS"]
         BACK["Backend Central (sofi-backend)<br/>NestJS / Prisma ORM"]
         DB[("Base de Datos PostgreSQL")]
@@ -72,13 +72,13 @@ El flujo de trabajo técnico del área interna gira en torno a tres módulos int
   - **Estado actual (Panel Administrativo):** Proporciona una interfaz para que los líderes técnicos y administradores visualicen en tiempo real la asistencia de los practicantes, generen reportes y supervisen el cumplimiento de actividades.
   - **Evolución planificada (Módulo de Cursos y Capacitaciones LMS):** En su ciclo de desarrollo actual se proyecta incorporar un módulo formativo. A través de este portal, los practicantes accederán a guías técnicas, manuales de procesos, cursos estructurados y evaluaciones durante su estancia formativa en la empresa.
 
-* **Bot de Asistencia (`Bot-Asistencia-RPsoft`):**
+* **Bot de Asistencia (`Bot-Asistencia-APM`):**
   - Servicio automatizado integrado con la API de Discord que actúa como la interfaz diaria de comunicación para los practicantes.
   - Permite el registro de jornada (ingreso, pausas y salida), justificaciones y notificaciones operativas directamente desde los canales de trabajo remoto.
   - Transmite cada evento hacia `sofi-backend` para su validación y persistencia centralizada.
 
 #### Flujo Operativo Interno:
-1. El practicante remoto se conecta a los canales de la empresa e interactúa con `Bot-Asistencia-RPsoft`.
+1. El practicante remoto se conecta a los canales de la empresa e interactúa con `Bot-Asistencia-APM`.
 2. El bot valida la identidad del practicante y despacha la petición al servicio `sofi-backend`.
 3. El backend ejecuta las reglas de negocio, valida los horarios y registra la marca en la base de datos PostgreSQL.
 4. Los supervisores acceden a `SOFI-WEB` para auditar el tablero de asistencia y el rendimiento del equipo.
@@ -206,7 +206,7 @@ La arquitectura inicial en AWS traslada la inversión hacia un esquema de alta d
 | **Amazon S3** | Standard + Glacier<br>(Almacenamiento inicial de 15 GB) | Resguardo inmutable de copias de seguridad y repositorio para los materiales del módulo de cursos. | ~$1.30 |
 | **AWS Systems Manager** | SSM Session Manager (Servicio sin costo) | Administración segura y túneles de gestión sin requerir puertos abiertos a Internet. | $0.00 |
 | **Amazon CloudWatch** | Métricas estándar y alarmas básicas | Monitoreo de disponibilidad del backend y alerta inmediata ante caídas del bot. | ~$1.50 |
-| **Amazon Route 53** | 1 Hosted Zone | Resolución de subdominios institucionales de la plataforma (ej. `sofi.rpsoft.com`). | ~$0.50 |
+| **Amazon Route 53** | 1 Hosted Zone | Resolución de subdominios institucionales de la plataforma (ej. `sofi.apminversiones.com`). | ~$0.50 |
 | **Transferencia de Datos** | Tráfico saliente de Internet básico | Tráfico web para la interfaz de administración y consultas de API. | ~$1.00 |
 | **TOTAL MENSUAL ESTIMADO** | | **Inversión base mensual optimizada** | **~$40.40 USD** |
 
@@ -220,7 +220,7 @@ La arquitectura inicial en AWS traslada la inversión hacia un esquema de alta d
 
 ```mermaid
 flowchart TB
-    subgraph Cliente["RESPONSABILIDAD DE RPSOFT - Seguridad en la Nube"]
+    subgraph Cliente["RESPONSABILIDAD DE APM INVERSIONES EIRL - Seguridad en la Nube"]
         direction TB
         C1["Datos de Asistencia y Registros de Practicantes en SOFI"]
         C2["Control de Acceso e Identidades (Políticas IAM y MFA Obligatorio)"]
@@ -240,7 +240,7 @@ flowchart TB
 ```
 
 * **AWS es responsable de la seguridad "DE" la nube:** Protección física de las instalaciones, mantenimiento de los hipervisores y aplicación de actualizaciones del motor administrado de Amazon RDS.
-* **RPsoft es responsable de la seguridad "EN" la nube:** Configuración de Security Groups, gestión de identidades y accesos en IAM, protección de datos y despliegue seguro de las aplicaciones.
+* **APM Inversiones EIRL es responsable de la seguridad "EN" la nube:** Configuración de Security Groups, gestión de identidades y accesos en IAM, protección de datos y despliegue seguro de las aplicaciones.
 
 #### 3.3.2 Políticas Iniciales de Identidad y Accesos (AWS IAM)
 
@@ -307,7 +307,7 @@ flowchart TD
 
 1. **Amazon Route 53 y CloudFront:** El acceso al portal administrativo de `SOFI-WEB` y la futura entrega de recursos formativos se optimizan perimetralmente, distribuyendo archivos estáticos desde puntos de presencia cercanos sin recargar el servidor.
 2. **Subred Pública Dedicada al Balanceador (ALB):** El balanceador recibe el tráfico web entrante bajo HTTPS con certificados gestionados por AWS Certificate Manager (ACM). Ningún servidor de backend posee IP pública.
-3. **Subred Privada de Cómputo:** Aloja la instancia donde corren `sofi-backend`, `SOFI-WEB` y `Bot-Asistencia-RPsoft`. Esta instancia no está expuesta directamente a Internet y solo acepta tráfico del balanceador y eventos del bot a través de canales protegidos.
+3. **Subred Privada de Cómputo:** Aloja la instancia donde corren `sofi-backend`, `SOFI-WEB` y `Bot-Asistencia-APM`. Esta instancia no está expuesta directamente a Internet y solo acepta tráfico del balanceador y eventos del bot a través de canales protegidos.
 4. **Subred Privada Aislada de Datos:** Aloja la base de datos **Amazon RDS for PostgreSQL**. Al carecer de ruta al Internet Gateway, queda blindada frente a accesos externos y solo se comunica con la subred privada de cómputo.
 5. **Soporte para el Módulo de Cursos con Amazon S3:** Los contenidos didácticos y recursos multimedia para los practicantes se gestionan directamente en S3, evitando el agotamiento del disco del servidor y asegurando escalabilidad independiente.
 6. **Administración Segura sin Exposición:** Toda gestión administrativa sobre la infraestructura se realiza mediante **AWS Systems Manager**, asegurando que **no existan puertos expuestos directamente a Internet**.

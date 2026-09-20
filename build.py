@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Compilador modular para la presentación Reveal.js de AWS / RPsoft.
+Compilador modular para la presentación Reveal.js de AWS / APM Inversiones EIRL.
 Combina template.html + slides/*.html -> presentacion.html
 """
 
@@ -8,6 +8,9 @@ import os
 import sys
 import glob
 import time
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SLIDES_DIR = os.path.join(BASE_DIR, "slides")
