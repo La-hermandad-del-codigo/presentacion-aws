@@ -68,7 +68,7 @@
       z-index: 0;
     }
 
-    /* Fondo animado de nubes difuminadas al 60% (2.1px) */
+    /* Fondo animado de nubes con transición suave de desenfoque */
     #cloud-network-bg {
       position: fixed;
       top: -16px;
@@ -79,6 +79,22 @@
       pointer-events: none;
       opacity: 0.92;
       filter: blur(2.1px);
+      transition: filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Estilos fluidos con rebote elástico y desaceleración suave para fragmentos nativos */
+    .reveal .slides section .fragment.fade-up {
+      transform: translate3d(0, 52px, 0);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.75s ease-out,
+                  transform 1.05s cubic-bezier(0.34, 1.45, 0.65, 1) !important;
+    }
+
+    .reveal .slides section .fragment.fade-up.visible {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      visibility: inherit;
     }
 
     @keyframes pulseDash {
@@ -477,13 +493,42 @@
       controls: true,
       progress: true,
       center: true,
-      transition: 'fade',
-      transitionSpeed: 'fast',
+      transition: 'slide',
+      transitionSpeed: 'default',
       backgroundTransition: 'fade',
       margin: 0.08,
       width: 1200,
       height: 700
     });
+
+    // Sincronización del fondo reactivo y blur con los Fragmentos de Reveal.js
+    const bg = document.getElementById('cloud-network-bg');
+
+    function syncBackgroundBlur() {
+      if (!bg) return;
+      const indices = Reveal.getIndices();
+      const isFirstSlide = (indices.h === 0 && (indices.v === 0 || indices.v === undefined));
+
+      if (isFirstSlide) {
+        const slide1 = document.querySelector('.slide-portada');
+        const visibleFragments = slide1 ? slide1.querySelectorAll('.fragment.visible') : [];
+        if (visibleFragments.length === 0) {
+          bg.style.transition = 'filter 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+          bg.style.filter = 'blur(0px)';
+        } else {
+          bg.style.transition = 'filter 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
+          bg.style.filter = 'blur(2.1px)';
+        }
+      } else {
+        bg.style.transition = 'none';
+        bg.style.filter = 'blur(2.1px)';
+      }
+    }
+
+    Reveal.on('ready', syncBackgroundBlur);
+    Reveal.on('slidechanged', syncBackgroundBlur);
+    Reveal.on('fragmentshown', syncBackgroundBlur);
+    Reveal.on('fragmenthidden', syncBackgroundBlur);
   </script>
 </body>
 </html>
