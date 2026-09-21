@@ -1,37 +1,296 @@
 <!-- SLIDE 5: LIMITACIONES Y ENFOQUE CRÍTICO -->
-      <section>
-        <h2 class="slide-title">Vulnerabilidades y Riesgos Críticos</h2>
-        <p class="slide-subtitle">¿Por qué el modelo actual de VPS no es viable para la empresa?</p>
+<section class="slide-limitaciones">
+  <style>
+    /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
+    .reveal .slides section.slide-limitaciones .limitaciones-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
 
-        <div class="grid-3">
-          <div class="glass-card">
-            <div class="icon-box red">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    .reveal .slides section.slide-limitaciones .limitaciones-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-limitaciones .limitaciones-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    /* Borde / Trazo blanco alrededor de las letras para máximo contraste */
+    .reveal .slides section.slide-limitaciones .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Entrada escalonada fluida para las tarjetas */
+    .reveal .slides section.slide-limitaciones .limitaciones-card-left.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.18s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.18s !important;
+    }
+
+    .reveal .slides section.slide-limitaciones .limitaciones-card-right.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.32s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.32s !important;
+    }
+  </style>
+
+  <!-- Encabezado del Slide con Animación Fragment -->
+  <div class="limitaciones-header-wrapper">
+    <div class="limitaciones-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        Vulnerabilidades y <span style="color: #dc2626;">Riesgos Críticos</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal en Grid de 2 Columnas -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1180px; margin: 0 auto;">
+
+    <!-- TARJETA IZQUIERDA: SPOF & Resiliencia Operativa -->
+    <div class="glass-card limitaciones-card-left fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 242, 242, 0.88) 100%); border: 1.5px solid rgba(239, 68, 68, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 1 -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(239, 68, 68, 0.16); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+              <!-- Icono SPOF / Fallo Crítico -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <h4 style="font-size: 1.1rem !important; margin: 0 0 8px !important;">Punto Único de Fallo (SPOF)</h4>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              Si el VPS cae por una prueba de practicantes en desarrollo, caen simultáneamente todos los sitios comerciales de los clientes.
-            </p>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #dc2626;">
+                Resiliencia &amp; Continuidad
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                Punto Único de Fallo (SPOF)
+              </div>
+            </div>
           </div>
+          <span class="pill-badge danger" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(239, 68, 68, 0.12); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25);">
+            Impacto Severo
+          </span>
+        </div>
 
-          <div class="glass-card">
-            <div class="icon-box red">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <!-- Sub-bloque 1: Colapso en Cascada -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </div>
+              Colapso en Cascada (Sin Aislamiento)
             </div>
-            <h4 style="font-size: 1.1rem !important; margin: 0 0 8px !important;">Puertos Expuestos</h4>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              Bases de datos (Postgres y MySQL) y aplicaciones tienen <strong>puertos expuestos directamente a Internet</strong> sin firewall perimetral ni filtrado.
-            </p>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Efecto Dominó
+            </span>
           </div>
-
-          <div class="glass-card">
-            <div class="icon-box red">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/></svg>
-            </div>
-            <h4 style="font-size: 1.1rem !important; margin: 0 0 8px !important;">Bloqueo del LMS de Cursos</h4>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              Con solo 29 GB libres y sin elasticidad de almacenamiento, es técnicamente imposible alojar y servir los videos y manuales de capacitación.
-            </p>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Si el VPS colapsa por una consulta pesada o prueba de practicantes en SOFI, caen instantáneamente los portales productivos de clientes (<strong>Reflexo Perú</strong> y <strong>Arte Ideas</strong>).
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #991b1b;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Riesgo: Pérdida inmediata de facturación comercial e incumplimiento de SLA.
           </div>
         </div>
-      </section>
+
+        <!-- Sub-bloque 2: Riesgo Inminente OOM Killer -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); display: flex; align-items: center; justify-content: center; color: #b45309;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19v-3M10 19v-3M14 19v-3M18 19v-3M2 8h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/><path d="M2 8l2-4h16l2 4"/></svg>
+              </div>
+              Carencia Total de Swap (0 Bytes)
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #b45309; background: rgba(245, 158, 11, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Sin Amortiguador
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Al no contar con archivo ni partición Swap, el kernel de Linux ejecuta el <em>Out of Memory Killer</em> abortando procesos críticos al azar (PostgreSQL, Discord Bot o Nginx) ante cualquier pico.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #78350f;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Impacto: Caídas no reproducibles e interrupción del registro de jornadas remotas.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 3: Bloqueo del Módulo LMS -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(203, 213, 225, 0.9); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(35, 47, 62, 0.1); display: flex; align-items: center; justify-content: center; color: var(--aws-navy);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>
+              </div>
+              Agotamiento de Disco (Solo 29 GB Libres)
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #475569; background: rgba(148, 163, 184, 0.14); padding: 2px 7px; border-radius: 6px;">
+              61% En Uso
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Alojar videos instructivos y manuales PDF para el nuevo módulo formativo de practicantes (LMS) saturaría de inmediato el almacenamiento restante, bloqueando las bases de datos por falta de espacio para escrituras.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #334155;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Bloqueo: Imposible expandir el ecosistema formativo sin desacoplar el almacenamiento.
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie de Tarjeta 1: Métricas de Severidad -->
+      <div style="border-top: 1px solid rgba(239, 68, 68, 0.2); padding-top: 10px; margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Arquitectura
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #dc2626; margin-top: 1px;">SPOF Total</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 8h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/></svg>
+            Memoria Swap
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #b45309; margin-top: 1px;">0 B (OOM)</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Espacio Libre
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: var(--aws-navy); margin-top: 1px;">29 GB</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TARJETA DERECHA: Seguridad Perimetral & Sobrecarga Operativa -->
+    <div class="glass-card limitaciones-card-right fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.88) 100%); border: 1.5px solid rgba(99, 102, 241, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 2 -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+              <!-- Icono Seguridad / Candado -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #4338ca;">
+                Seguridad &amp; Operaciones
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                Superficie Expuesta &amp; Deuda Técnica
+              </div>
+            </div>
+          </div>
+          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(99, 102, 241, 0.12); color: #4338ca; border: 1px solid rgba(99, 102, 241, 0.25);">
+            Vulnerabilidad Alta
+          </span>
+        </div>
+
+        <!-- Sub-bloque 1: Puertos de BD Expuestos -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(239, 68, 68, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              Puertos RDBMS Abiertos a Internet
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Sin Firewall / DMZ
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Los puertos <strong>5432 (Postgres)</strong> y <strong>3307 (MySQL)</strong> reciben tráfico directamente desde Internet sin listas de acceso ni pasarela privada de red.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #991b1b;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Amenaza: Escaneos de puertos continuos y riesgo latente de ataques de fuerza bruta.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 2: Movimiento Lateral en Docker -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(99, 102, 241, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(99, 102, 241, 0.14); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              Red Plana &amp; Movimiento Lateral
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #4338ca; background: rgba(99, 102, 241, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Bridge Común (docker0)
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Los contenedores de clientes externos y el ecosistema SOFI comparten el mismo puente de red virtual sin subredes aisladas ni políticas de segmentación por capas.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #3730a3;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Vulnerabilidad: Un compromiso en un cliente externo expone la BD institucional de SOFI.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 3: Mantenimiento y Backups Manuales -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              Backups en el Mismo Disco Físico
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Sin Redundancia
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Los respaldos de datos se guardan en el mismo almacenamiento local sin réplica remota. Un fallo de disco o corrupción de partición provocaría pérdida permanente de datos.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #065f46;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Sobrecarga: Horas técnicas consumidas en mantenimiento manual y resolución de fallas.
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta Diagnóstica: Conclusión Técnica -->
+      <div style="background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 9px 12px; margin-top: 10px; display: flex; align-items: flex-start; gap: 10px;">
+        <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div style="font-size: 0.70rem; font-weight: 800; text-transform: uppercase; color: #dc2626; letter-spacing: 0.04em;">
+            Conclusión: El Modelo VPS Monolítico Ha Llegado a su Límite
+          </div>
+          <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">
+            La infraestructura actual es inviable para sostener el crecimiento. La adopción de <strong>AWS (VPC, RDS, S3, EC2)</strong> es obligatoria para garantizar aislamiento, seguridad y alta disponibilidad.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

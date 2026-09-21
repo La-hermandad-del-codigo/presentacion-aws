@@ -1,43 +1,340 @@
 <!-- SLIDE 4: TELEMETRÍA REAL DEL SERVIDOR ACTUAL -->
-      <section>
-        <h2 class="slide-title">2. Diagnóstico: Telemetría Real del Servidor</h2>
-        <p class="slide-subtitle">Inspección física del nodo de producción (Ubuntu 22.04 LTS)</p>
+<section class="slide-telemetria">
+  <style>
+    /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
+    .reveal .slides section.slide-telemetria .telemetria-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
 
-        <div class="grid-4" style="margin-bottom: 24px;">
-          <div class="glass-card" style="padding: 20px;">
-            <div class="metric-label">Cómputo Físico</div>
-            <div class="metric-value" style="color: var(--aws-navy);">3 vCPU</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">AMD EPYC-Rome</div>
-          </div>
+    .reveal .slides section.slide-telemetria .telemetria-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
 
-          <div class="glass-card" style="padding: 20px;">
-            <div class="metric-label">Memoria RAM</div>
-            <div class="metric-value" style="color: #d97706;">3.7 GiB</div>
-            <div style="font-size: 0.8rem; color: #d97706; font-weight: 700;">60% En Uso Sostenido</div>
-          </div>
+    .reveal .slides section.slide-telemetria .telemetria-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
 
-          <div class="glass-card" style="padding: 20px;">
-            <div class="metric-label">Memoria Swap</div>
-            <div class="metric-value" style="color: var(--danger);">0 Bytes</div>
-            <div style="font-size: 0.8rem; color: var(--danger); font-weight: 700;">Riesgo Inminente OOM</div>
-          </div>
+    /* Borde / Trazo blanco alrededor de las letras para máximo contraste */
+    .reveal .slides section.slide-telemetria .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
 
-          <div class="glass-card" style="padding: 20px;">
-            <div class="metric-label">Almacenamiento</div>
-            <div class="metric-value" style="color: var(--aws-navy);">61%</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Solo 29 GB Libres</div>
-          </div>
-        </div>
+    /* Entrada escalonada fluida para las tarjetas */
+    .reveal .slides section.slide-telemetria .telemetria-card-left.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.18s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.18s !important;
+    }
 
-        <div class="glass-card" style="border-left: 4px solid var(--danger); padding: 18px 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-              <strong style="color: var(--danger); font-size: 1rem;">11 Contenedores Coexistiendo en Docker:</strong>
-              <span style="color: var(--text-muted); font-size: 0.9rem; margin-left: 8px;">
-                Ecosistema SOFI + Clientes Comerciales (Reflexo4 y Arte Ideas con <strong>MySQL 8.0 y Postgres 16 en simultáneo</strong>).
-              </span>
+    .reveal .slides section.slide-telemetria .telemetria-card-right.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.32s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.32s !important;
+    }
+  </style>
+
+  <!-- Encabezado del Slide con Animación Fragment -->
+  <div class="telemetria-header-wrapper">
+    <div class="telemetria-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        2. Diagnóstico: <span style="color: #b45309;">Telemetría Real del Servidor</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal en Grid de 2 Columnas -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1180px; margin: 0 auto;">
+
+    <!-- TARJETA IZQUIERDA: Nodo Físico y Capacidad de Hardware -->
+    <div class="glass-card telemetria-card-left fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 235, 0.88) 100%); border: 1.5px solid rgba(255, 153, 0, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 1 -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+              <!-- Icono Servidor Físico -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             </div>
-            <span class="pill-badge danger">Sin Aislamiento</span>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #b45309;">
+                Hardware & Nodo VPS
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                Capacidad & Cuellos de Botella
+              </div>
+            </div>
+          </div>
+          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(255, 153, 0, 0.12); color: #b45309; border: 1px solid rgba(255, 153, 0, 0.25);">
+            Hetzner Cloud
+          </span>
+        </div>
+
+        <!-- Sub-bloque 1: Cómputo vCPU -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(255, 153, 0, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(255, 153, 0, 0.14); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+                <!-- Icono CPU -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+              </div>
+              3 vCPUs &middot; AMD EPYC-Rome
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #b45309; background: rgba(255, 153, 0, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Cómputo Fijo
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
+            Ubuntu 22.04.5 LTS (Kernel 5.15.0). Capacidad fija en hipervisor compartido sin escalado dinámico ante picos.
+          </p>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #78350f;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Impacto: 11 contenedores compiten por ciclos de reloj sin cuotas cgroups.
           </div>
         </div>
-      </section>
+
+        <!-- Sub-bloque 2: Memoria RAM & Swap (Punto Crítico) -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+                <!-- Icono RAM -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19v-3M10 19v-3M14 19v-3M18 19v-3M2 8h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/><path d="M2 8l2-4h16l2 4"/></svg>
+              </div>
+              RAM 3.7 GiB &middot; <span style="color: #dc2626;">Swap 0 Bytes</span>
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Riesgo OOM Killer
+            </span>
+          </div>
+          <!-- Barra gráfica de uso de RAM -->
+          <div style="margin: 6px 0 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.70rem; font-weight: 700; margin-bottom: 3px; color: var(--text-muted);">
+              <span>Uso sostenido: <strong>2.1 GiB (60%)</strong></span>
+              <span style="color: #dc2626; font-weight: 800;">Swap: 0 B</span>
+              <span>Margen libre: <strong>1.4 GiB</strong></span>
+            </div>
+            <div style="height: 6px; width: 100%; background: #e2e8f0; border-radius: 99px; overflow: hidden; display: flex;">
+              <div style="width: 60%; background: linear-gradient(90deg, #f59e0b, #ea580c);" title="RAM ocupada: 2.1 GiB"></div>
+              <div style="width: 40%; background: #10b981;" title="RAM disponible: 1.4 GiB"></div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #991b1b;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Vulnerabilidad: Sin swap, ante cualquier pico el kernel activa OOM y mata procesos.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 3: Almacenamiento SSD -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                <!-- Icono SSD / Disco -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>
+              </div>
+              Almacenamiento SSD &middot; 75 GB (/dev/sda1)
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 6px;">
+              61% Ocupado
+            </span>
+          </div>
+          <!-- Barra gráfica de uso de Disco -->
+          <div style="margin: 6px 0 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.70rem; font-weight: 700; margin-bottom: 3px; color: var(--text-muted);">
+              <span>En uso: <strong>44 GB (61%)</strong></span>
+              <span>Margen restante: <strong>29 GB Libres</strong></span>
+            </div>
+            <div style="height: 6px; width: 100%; background: #e2e8f0; border-radius: 99px; overflow: hidden; display: flex;">
+              <div style="width: 61%; background: #0073bb;" title="Disco ocupado: 44 GB"></div>
+              <div style="width: 39%; background: #cbd5e1;" title="Disco libre: 29 GB"></div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #065f46;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Ocupación: 44 GB por imágenes Docker, logs y SQLite (2.45 GB).
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie de Tarjeta 1: Métricas de Hardware Clave -->
+      <div style="border-top: 1px solid rgba(255, 153, 0, 0.2); padding-top: 10px; margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            Cómputo
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: var(--aws-navy); margin-top: 1px;">3 vCPU</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 8h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/></svg>
+            RAM Sostenida
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #b45309; margin-top: 1px;">60% (2.1 GiB)</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Swap Virtual
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #dc2626; margin-top: 1px;">0 B (Crítico)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TARJETA DERECHA: Cargas Docker, Servicios y Superficie de Red -->
+    <div class="glass-card telemetria-card-right fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.88) 100%); border: 1.5px solid rgba(99, 102, 241, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 2 con Icono de Docker -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <!-- Icono Oficial Docker Whale -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.186.185.186zm0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186zm-2.953 2.714h2.118a.186.186 0 00.186-.185V9.006a.185.185 0 00-.186-.186H8.076a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185zm0-2.714h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185H8.076a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186zm-2.955 2.714h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186H5.12a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185zm-2.954 0h2.119a.186.186 0 00.186-.185V9.006a.185.185 0 00-.186-.186H2.167a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185zm19.866 1.158c-.378-.268-1.5-.37-2.35-.145-.14-.724-.627-1.37-1.127-1.785l-.36-.297-.282.377c-.57.76-1.042 2.01-.84 3.093-.728.406-1.786.634-2.882.634H1.365c-.244 0-.465.105-.62.274a.89.89 0 00-.236.63c.27 3.018 2.088 5.485 5.56 5.485 4.887 0 8.435-2.28 10.158-6.52.996.064 2.628-.158 3.518-1.402.13-.186.136-.264.13-.306a.31.31 0 00-.113-.217z"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0284c7;">
+                Docker Engine & Cargas
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                11 Contenedores Coexistiendo
+              </div>
+            </div>
+          </div>
+          <span class="pill-badge danger" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(239, 68, 68, 0.12); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25);">
+            Sin Aislamiento
+          </span>
+        </div>
+
+        <!-- Sub-bloque 1: Cargas Internas (Ecosistema SOFI) -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(37, 99, 235, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(37, 99, 235, 0.14); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+                <!-- Icono Terminal / Código -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              </div>
+              Ecosistema Interno SOFI (5 Contenedores)
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #1d4ed8; background: rgba(37, 99, 235, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Uso Formativo
+            </span>
+          </div>
+          <!-- Chips de Contenedores SOFI -->
+          <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(37, 99, 235, 0.08); color: #1d4ed8; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(37, 99, 235, 0.2);">sofi-backend</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(37, 99, 235, 0.08); color: #1d4ed8; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(37, 99, 235, 0.2);">discord_bot</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(37, 99, 235, 0.08); color: #1d4ed8; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(37, 99, 235, 0.2);">spring_backend</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(37, 99, 235, 0.08); color: #1d4ed8; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(37, 99, 235, 0.2);">react_frontend</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #047857; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.25);">postgres_db</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #1e40af;">
+            <!-- Icono Base de Datos -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Motor RDBMS: <strong>PostgreSQL 16 (Alpine)</strong> &middot; Puerto 5432 expuesto.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 2: Cargas Externas (Clientes Comerciales RPsoft) -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(99, 102, 241, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(99, 102, 241, 0.14); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+                <!-- Icono Clientes / Mundo -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              Clientes Comerciales B2B (6 Contenedores)
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #4338ca; background: rgba(99, 102, 241, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Producción Clientes
+            </span>
+          </div>
+          <!-- Chips de Contenedores Clientes -->
+          <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(99, 102, 241, 0.08); color: #4338ca; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2);">reflexo4-nginx</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(99, 102, 241, 0.08); color: #4338ca; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2);">reflexo4-api</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(99, 102, 241, 0.08); color: #4338ca; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2);">reflexo4-web</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(99, 102, 241, 0.08); color: #4338ca; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2);">arteideas-api</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(99, 102, 241, 0.08); color: #4338ca; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2);">arteideas-web</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(245, 158, 11, 0.12); color: #b45309; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.25);">arteideas-db</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #3730a3;">
+            <!-- Icono Base de Datos -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Motores: <strong>MySQL 8.0 (:3307)</strong> + <strong>SQLite (2.45 GB)</strong> en contención continua.
+          </div>
+        </div>
+
+        <!-- Sub-bloque 3: Red Docker & Puertos Expuestos (Sin VPC) -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(239, 68, 68, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+                <!-- Icono Red / Puertos -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              </div>
+              Red Docker Plana & Superficie Expuesta
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Sin VPC / DMZ
+            </span>
+          </div>
+          <!-- Chips de Puertos Expuestos -->
+          <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(239, 68, 68, 0.08); color: #dc2626; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.2);">:5432 PG</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(239, 68, 68, 0.08); color: #dc2626; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.2);">:3307 MySQL</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(239, 68, 68, 0.08); color: #dc2626; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.2);">:8085 Nginx</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(239, 68, 68, 0.08); color: #dc2626; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.2);">:3000 Web</span>
+            <span style="font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; background: rgba(239, 68, 68, 0.08); color: #dc2626; padding: 1px 5px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.2);">:9000 API</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #991b1b;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Vulnerabilidad: Mismo bridge virtual (docker0); sin subredes privadas para bases de datos.
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta Diagnóstica: Colisión de RDBMS y Contención de RAM -->
+      <div style="background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 9px 12px; margin-top: 10px; display: flex; align-items: flex-start; gap: 10px;">
+        <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
+          <!-- Icono Alerta Triángulo -->
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div style="font-size: 0.70rem; font-weight: 800; text-transform: uppercase; color: #dc2626; letter-spacing: 0.04em;">
+            Colisión Crítica: Motores RDBMS Compitiendo en 3.7 GiB
+          </div>
+          <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">
+            <strong>PostgreSQL 16</strong> y <strong>MySQL 8.0</strong> compiten por memoria y buffer pools sin límites de cgroups. Un reporte pesado en clientes colapsa la asistencia SOFI.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

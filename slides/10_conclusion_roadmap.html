@@ -1,15 +1,235 @@
-<!-- SLIDE 10: CONCLUSIÓN Y PRÓXIMOS PASOS -->
-      <section>
-        <div class="glass-card" style="max-width: 820px; margin: 0 auto; text-align: center; padding: 48px;">
-          <div class="pill-badge success" style="margin-bottom: 16px;">Etapa 1 Cumplida</div>
-          <h2 style="font-size: 2.2rem !important; margin: 0 0 16px !important;">Bases Listas para la Etapa 2</h2>
-          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px;">
-            El diagnóstico técnico de <strong>RPsoft</strong> demuestra con telemetría real la urgencia de abandonar el VPS compartido. La propuesta en AWS brinda aislamiento total, alta disponibilidad y la plataforma necesaria para lanzar el módulo de cursos para practicantes.
-          </p>
+<!-- SLIDE 10: CONCLUSIÓN Y CIERRE -->
+<section class="slide-conclusion">
+  <style>
+    /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
+    .reveal .slides section.slide-conclusion .conclusion-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
 
-          <div style="display: inline-flex; gap: 16px;">
-            <div class="pill-badge navy">Siguiente: Cómputo Core &amp; RDS Multi-AZ</div>
-            <div class="pill-badge">Semana 7</div>
+    .reveal .slides section.slide-conclusion .conclusion-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-conclusion .conclusion-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    /* Borde / Trazo blanco alrededor de las letras para máximo contraste */
+    .reveal .slides section.slide-conclusion .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Entrada escalonada fluida para las tarjetas */
+    .reveal .slides section.slide-conclusion .conclusion-card-left.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.18s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.18s !important;
+    }
+
+    .reveal .slides section.slide-conclusion .conclusion-card-right.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.32s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.32s !important;
+    }
+  </style>
+
+  <!-- Encabezado del Slide con Animación Fragment -->
+  <div class="conclusion-header-wrapper">
+    <div class="conclusion-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        7. Conclusiones y Cierre: <span style="color: #0073bb;">RPsoft en AWS Cloud</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal en Grid de 2 Columnas -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1180px; margin: 0 auto;">
+
+    <!-- TARJETA IZQUIERDA: Conclusiones Técnicas y Financieras -->
+    <div class="glass-card conclusion-card-left fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(239, 246, 255, 0.88) 100%); border: 1.5px solid rgba(0, 115, 187, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 1 -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(0, 115, 187, 0.14); display: flex; align-items: center; justify-content: center; color: #0073bb;">
+              <!-- Icono Check Síntesis -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0073bb;">
+                Síntesis Arquitectónica
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                Conclusiones Clave
+              </div>
+            </div>
           </div>
+          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(0, 115, 187, 0.12); color: #0073bb; border: 1px solid rgba(0, 115, 187, 0.25);">
+            Resultados
+          </span>
         </div>
-      </section>
+
+        <!-- Conclusión 1: Desacoplamiento & Fin del SPOF -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(0, 115, 187, 0.22); border-radius: 12px; padding: 11px 13px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: var(--aws-navy); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(0, 115, 187, 0.12); display: flex; align-items: center; justify-content: center; color: #0073bb;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              </div>
+              Desacoplamiento &amp; Cero SPOF
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #0073bb; background: rgba(0, 115, 187, 0.1); padding: 2px 7px; border-radius: 6px;">
+              Alta Disponibilidad
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
+            Se erradicó el colapso por contención de memoria en el nodo único VPS (Hetzner). Cómputo (EC2), base de datos relacional (RDS PostgreSQL) y almacenamiento LMS (S3) operan con aislamiento total e independiente.
+          </p>
+        </div>
+
+        <!-- Conclusión 2: Viabilidad Económica Validada -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 12px; padding: 11px 13px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: #92400e; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); display: flex; align-items: center; justify-content: center; color: #b45309;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+              </div>
+              Inversión Mensual Predecible: $36.07 USD
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #b45309; background: rgba(245, 158, 11, 0.12); padding: 2px 7px; border-radius: 6px;">
+              TCO Optimizado
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
+            Presupuesto 100% reproducible en AWS Calculator. Se sustituyen los costos ocultos por interrupciones imprevistas por un modelo elástico que puede reducirse hasta ~$27 USD/mes mediante <em>Instance Scheduler</em>.
+          </p>
+        </div>
+
+        <!-- Conclusión 3: Blindaje de Seguridad & Zero Trust -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 11px 13px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="font-size: 0.84rem; font-weight: 800; color: #065f46; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              Seguridad Defensiva &amp; Zero Trust
+            </div>
+            <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 6px;">
+              Sin Puerto 22
+            </span>
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
+            Cuenta Root protegida con MFA obligatorio, RBAC estricto para practicantes, credenciales rotativas por roles IAM y administración por SSM Session Manager sin puertos de gestión abiertos a Internet.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Pie Métrico de Garantías -->
+      <div style="border-top: 1px solid rgba(0, 115, 187, 0.2); padding-top: 10px; margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Disponibilidad</div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #10b981; margin-top: 1px;">99.9% SLA</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Inversión Base</div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #b45309; margin-top: 1px;">$36.07/mes</div>
+        </div>
+        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Soberanía BD</div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: #0073bb; margin-top: 1px;">100% Aislada</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TARJETA DERECHA: Impacto Organizacional & Cierre Ejecutivo -->
+    <div class="glass-card conclusion-card-right fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 251, 235, 0.88) 100%); border: 1.5px solid rgba(245, 158, 11, 0.35); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+
+      <div>
+        <!-- Cabecera de la Tarjeta 2 -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #b45309;">
+              <!-- Icono Cohete / Impacto -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 9v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #b45309;">
+                Valor Organizacional &amp; Sostenibilidad
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
+                Impacto en RPsoft &amp; SOFI
+              </div>
+            </div>
+          </div>
+          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(245, 158, 11, 0.12); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.28);">
+            Cierre Ejecutivo
+          </span>
+        </div>
+
+        <!-- Bloque 1: Garantía Comercial y Formativa -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 12px; padding: 11px 13px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+          <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 7px;">
+            <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(245, 158, 11, 0.14); display: flex; align-items: center; justify-content: center; color: #b45309;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            Continuidad B2B y Formación Segura de Practicantes
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
+            Los clientes comerciales (Reflexo4, Arte Ideas) ya no comparten recursos con la plataforma interna de SENATI. Se protege la reputación de la empresa y se garantiza el registro ininterrumpido de asistencias y notas.
+          </p>
+        </div>
+
+        <!-- Bloque 2: Escalabilidad sin Fricciones Técnicas -->
+        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(0, 115, 187, 0.25); border-radius: 12px; padding: 11px 13px; margin-bottom: 0; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+          <div style="font-size: 0.84rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px; display: flex; align-items: center; gap: 7px;">
+            <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(0, 115, 187, 0.14); display: flex; align-items: center; justify-content: center; color: #0073bb;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            Habilitación del Módulo Formativo LMS
+          </div>
+          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
+            El módulo de inducción y cursos en video/PDF se apoya en <strong>Amazon S3</strong> y <strong>CloudFront</strong>, desbordando el límite de 29 GB del disco local y entregando contenido con baja latencia.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Cierre y Agradecimiento (Estilo Glassmorphism Claro) -->
+      <div style="background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 235, 0.92) 100%); border: 1.5px solid rgba(255, 153, 0, 0.35); border-radius: 14px; padding: 22px 20px; text-align: center; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08); margin-top: 12px;">
+        <div style="font-size: 1.75rem; font-weight: 800; color: var(--aws-navy); letter-spacing: -0.02em; margin-bottom: 6px;">
+          ¡Muchas Gracias!
+        </div>
+        <p style="font-size: 0.84rem; color: #78350f; line-height: 1.45; margin: 0 0 12px 0;">
+          Arquitectura Cloud profesional, resiliente y financieramente viable para <strong>RPsoft</strong>.
+        </p>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309; background: rgba(255, 153, 0, 0.14); padding: 5px 14px; border-radius: 9999px; border: 1px solid rgba(255, 153, 0, 0.3);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Propuesta Validada &middot; Telemetría Real en AWS
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
