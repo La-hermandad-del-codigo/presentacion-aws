@@ -1,5 +1,13 @@
 <!-- SLIDE 4: DESARROLLO EXTERNO - CLIENTES COMERCIALES -->
-      <section>
+      <section class="slide-externo">
+        <style>
+          /* Título con el mismo estilo que la diapositiva de telemetría */
+          .reveal .slides section.slide-externo .slide-title {
+            paint-order: stroke fill;
+            -webkit-text-stroke: 4px #ffffff;
+            text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+          }
+        </style>
         <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 4 (idéntica a slide 3) -->
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
@@ -10,12 +18,11 @@
               <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
               Área de Proyectos Comerciales (Externa)
             </div>
-            <h2 class="slide-title" style="margin-top: 0 !important; margin-bottom: 4px !important; font-size: 2.1rem !important; color: #0f172a !important;">Desarrollo externo - Clientes Comerciales</h2>
-            <p class="slide-subtitle" style="color: #1e293b !important; margin-bottom: 0 !important; font-size: 0.94rem !important; font-weight: 600;">Cargas de producción B2B alojadas simultáneamente en el mismo servidor VPS de APM Inversiones EIRL</p>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo externo - <span style="color: #b45309;">Clientes Comerciales</span></h2>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
-          <div style="position: relative; width: 1160px; height: 490px; margin: 0 auto;">
+          <div style="position: relative; width: 1160px; height: 490px; margin: 28px auto 0;">
             
             <!-- CAPA 1: SVG Completo (Círculos Venn, Núcleo VPS, Insignias y Líneas) -->
             <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
@@ -58,13 +65,13 @@
               <!-- ========================================== -->
 
               <!-- 1. Reflexo Perú (Top-Left: Celeste Cielo Vívido) -->
-              <circle cx="515" cy="175" r="95" fill="#38bdf8" fill-opacity="0.92" stroke="#0284c7" stroke-width="3.5"/>
+              <circle cx="515" cy="175" r="95" fill="#38bdf8" fill-opacity="0.75" stroke="#0284c7" stroke-width="3.5"/>
 
               <!-- 2. Arte & Ideas (Top-Right: Índigo Vívido) -->
-              <circle cx="645" cy="175" r="95" fill="#818cf8" fill-opacity="0.92" stroke="#4f46e5" stroke-width="3.5"/>
+              <circle cx="645" cy="175" r="95" fill="#818cf8" fill-opacity="0.75" stroke="#4f46e5" stroke-width="3.5"/>
 
               <!-- 3. Sublitex (Bottom: Esmeralda Vívido) -->
-              <circle cx="580" cy="285" r="95" fill="#34d399" fill-opacity="0.92" stroke="#059669" stroke-width="3.5"/>
+              <circle cx="580" cy="285" r="95" fill="#34d399" fill-opacity="0.75" stroke="#059669" stroke-width="3.5"/>
 
               <!-- TEXTOS INTERNOS CENTRADOS DENTRO DE CADA CÍRCULO -->
               <!-- Reflexo Perú -->
