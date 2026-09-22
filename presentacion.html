@@ -2261,300 +2261,456 @@
 </section>
 
       <!-- Slide: 08_arquitectura_aws.html -->
-      <!-- SLIDE 7: ARQUITECTURA CONCEPTUAL EN AWS -->
-<section class="slide-arquitectura">
+      <!-- SLIDE 8: DIAGRAMA DE ARQUITECTURA DE RED PROPUESTO (NIVEL CONCEPTUAL) -->
+<section class="slide-red-arquitectura" style="position: relative;">
   <style>
-    /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
-    .reveal .slides section.slide-arquitectura .arquitectura-header-wrapper {
-      max-width: 1180px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
-    }
-
-    .reveal .slides section.slide-arquitectura .arquitectura-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
-    }
-
-    .reveal .slides section.slide-arquitectura .arquitectura-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
-    }
-
-    /* Borde / Trazo blanco alrededor de las letras para máximo contraste */
-    .reveal .slides section.slide-arquitectura .slide-title {
+    /* Título con el mismo estilo de alto contraste */
+    .reveal .slides section.slide-red-arquitectura .slide-title {
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
-
-    /* Entrada escalonada fluida para las tarjetas */
-    .reveal .slides section.slide-arquitectura .arquitectura-card-left.fragment.fade-up {
-      transition: opacity 0.8s ease-out 0.18s,
-                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.18s !important;
-    }
-
-    .reveal .slides section.slide-arquitectura .arquitectura-card-right.fragment.fade-up {
-      transition: opacity 0.8s ease-out 0.32s,
-                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.32s !important;
-    }
   </style>
+  
+  <!-- Capa de oscurecimiento y blur para el fondo -->
+  <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
-  <!-- Encabezado del Slide con Animación Fragment -->
-  <div class="arquitectura-header-wrapper">
-    <div class="arquitectura-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        4. Arquitectura de Red: <span style="color: #0073bb;">Amazon VPC</span>
-      </h2>
-    </div>
-  </div>
-
-  <!-- Contenedor Principal en Grid de 2 Columnas -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1180px; margin: 0 auto;">
-
-    <!-- TARJETA IZQUIERDA: Segmentación por Capas en Amazon VPC -->
-    <div class="glass-card arquitectura-card-left fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(239, 246, 255, 0.88) 100%); border: 1.5px solid rgba(0, 115, 187, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
-
-      <div>
-        <!-- Cabecera de la Tarjeta 1 -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(0, 115, 187, 0.16); display: flex; align-items: center; justify-content: center; color: #0073bb;">
-              <!-- Icono VPC / Red -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0073bb;">
-                Segmentación &amp; Aislamiento
-              </div>
-              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Capas de Red en Amazon VPC
-              </div>
-            </div>
-          </div>
-          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(0, 115, 187, 0.12); color: #0073bb; border: 1px solid rgba(0, 115, 187, 0.25);">
-            CIDR 10.0.0.0/16
-          </span>
-        </div>
-
-        <!-- Sub-bloque 1: Subred Pública -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(0, 115, 187, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(0, 115, 187, 0.14); display: flex; align-items: center; justify-content: center; color: #0073bb;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </div>
-              Subred Pública &middot; ALB + IGW (10.0.1.0/24)
-            </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #0073bb; background: rgba(0, 115, 187, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Perímetro Seguro
-            </span>
-          </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            El <strong>Application Load Balancer (ALB)</strong> es el único punto de entrada público. Gestiona la terminación HTTPS con certificados SSL/TLS emitidos por AWS Certificate Manager (ACM).
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #0369a1;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0073bb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Defensa: Ningún servidor de aplicaciones ni base de datos queda expuesto a Internet.
-          </div>
-        </div>
-
-        <!-- Sub-bloque 2: Subred Privada de Cómputo -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(255, 153, 0, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(255, 153, 0, 0.14); display: flex; align-items: center; justify-content: center; color: #ff9900;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
-              </div>
-              Subred Privada de Cómputo (10.0.10.0/24)
-            </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #b45309; background: rgba(255, 153, 0, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Sin IP Pública
-            </span>
-          </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            Instancia <strong>Amazon EC2 (t3.small)</strong> alojando <code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> y el bot de Discord. Solo recibe tráfico interno reenviado por el ALB mediante Security Groups.
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #78350f;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Aislamiento: Cero puertos de cómputo abiertos; administración segura vía AWS SSM.
-          </div>
-        </div>
-
-        <!-- Sub-bloque 3: Subred Privada Aislada de Datos -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-              </div>
-              Subred Privada de Datos (10.0.100.0/24)
-            </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Blindaje RDBMS
-            </span>
-          </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            Aloja <strong>Amazon RDS for PostgreSQL 16</strong>. Sin ruta hacia el Internet Gateway (acceso público bloqueado al 100%). Solo atiende consultas SQL originadas en la subred de cómputo.
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #065f46;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Resiliencia: Snapshots automáticos diarios, retención inmutable y tolerancia a fallos.
-          </div>
-        </div>
-      </div>
-
-      <!-- Pie de Tarjeta 1: Métricas de Red -->
-      <div style="border-top: 1px solid rgba(0, 115, 187, 0.2); padding-top: 10px; margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
-          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/></svg>
-            Topología
-          </div>
-          <div style="font-size: 0.85rem; font-weight: 800; color: var(--aws-navy); margin-top: 1px;">3 Subredes</div>
-        </div>
-        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
-          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            IP Pública BD
-          </div>
-          <div style="font-size: 0.85rem; font-weight: 800; color: #10b981; margin-top: 1px;">0 (Bloqueada)</div>
-        </div>
-        <div style="text-align: center; background: rgba(255, 255, 255, 0.75); padding: 5px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
-          <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0073bb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Gestión
-          </div>
-          <div style="font-size: 0.85rem; font-weight: 800; color: #0073bb; margin-top: 1px;">AWS SSM</div>
-        </div>
-      </div>
-
+  <div style="position: relative; z-index: 1;">
+    <!-- Encabezado de la diapositiva -->
+    <div style="margin-bottom: 8px;">
+      <h2 class="slide-title" style="font-size: 2.25rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Diagrama de Red - <span style="color: #0073bb;">Amazon VPC</span></h2>
     </div>
 
-    <!-- TARJETA DERECHA: Servicios Cloud Gestionados & Assets LMS -->
-    <div class="glass-card arquitectura-card-right fragment fade-up" data-fragment-index="1" style="padding: 20px 22px 18px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.88) 100%); border: 1.5px solid rgba(99, 102, 241, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08); min-height: 480px;">
+    <!-- Contenedor Maestro con separación limpia y holgada respecto al título -->
+    <div style="position: relative; width: 1180px; height: 615px; margin: 16px auto 0;">
+      
+      <!-- CAPA 1: SVG de Arquitectura Completa (z-index: 3 para que las líneas y pines queden SIEMPRE por encima) -->
+      <svg viewBox="0 0 1180 615" style="position: absolute; top: 0; left: 0; width: 1180px; height: 615px; z-index: 3; pointer-events: none;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Filtros de Sombra Suave -->
+          <filter id="v-card-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.10"/>
+          </filter>
+          <filter id="box-shadow-sm" x="-15%" y="-15%" width="130%" height="130%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
 
-      <div>
-        <!-- Cabecera de la Tarjeta 2 -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
-              <!-- Icono Global / Edge -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <!-- Icono AWS Route 53 (Púrpura / DNS) -->
+          <g id="icon-aws-route53">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#8c4fff" />
+            <circle cx="0" cy="0" r="7.5" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <line x1="-7.5" y1="0" x2="7.5" y2="0" stroke="#ffffff" stroke-width="1.2"/>
+            <ellipse cx="0" cy="0" rx="3.5" ry="7.5" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+            <polygon points="0,-7.5 2.5,-11 -2.5,-11" fill="#ffffff"/>
+            <polygon points="0,7.5 2.5,11 -2.5,11" fill="#ffffff"/>
+          </g>
+
+          <!-- Icono AWS CloudFront (Púrpura / CDN) -->
+          <g id="icon-aws-cloudfront">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#8c4fff" />
+            <circle cx="0" cy="0" r="6.5" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+            <circle cx="-8" cy="-4" r="1.8" fill="#ffffff"/>
+            <circle cx="8" cy="-4" r="1.8" fill="#ffffff"/>
+            <circle cx="0" cy="8" r="1.8" fill="#ffffff"/>
+            <line x1="-6" y1="-3" x2="-2" y2="-1" stroke="#ffffff" stroke-width="1.2"/>
+            <line x1="6" y1="-3" x2="2" y2="-1" stroke="#ffffff" stroke-width="1.2"/>
+            <line x1="0" y1="6" x2="0" y2="2" stroke="#ffffff" stroke-width="1.2"/>
+          </g>
+
+          <!-- Icono AWS Internet Gateway (IGW) -->
+          <g id="icon-aws-igw">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#8c4fff" />
+            <rect x="-8" y="-8" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+            <polyline points="-4,-1 0,-5 4,-1" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+            <polyline points="-4,1 0,5 4,1" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+          </g>
+
+          <!-- Icono AWS ALB (Application Load Balancer - Azul) -->
+          <g id="icon-aws-alb">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#0284c7" />
+            <line x1="-9" y1="0" x2="-3" y2="0" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="-1" cy="0" r="2.8" fill="#ffffff"/>
+            <path d="M 2 0 L 6 -4.5 L 10 -4.5" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M 2 0 L 6 4.5 L 10 4.5" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+
+          <!-- Icono AWS EC2 (Cómputo - Naranja) -->
+          <g id="icon-aws-ec2">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#ff9900" />
+            <rect x="-7.5" y="-7.5" width="15" height="15" rx="2" fill="#ffffff" fill-opacity="0.2" stroke="#ffffff" stroke-width="1.6"/>
+            <rect x="-3.5" y="-3.5" width="7" height="7" rx="1" fill="#ffffff"/>
+            <line x1="-4.5" y1="-10.5" x2="-4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="-10.5" x2="4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-4.5" y1="7.5" x2="-4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="7.5" x2="4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="-4.5" x2="-7.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="4.5" x2="-7.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="-4.5" x2="10.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="4.5" x2="10.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+          </g>
+
+          <!-- Icono AWS RDS (Bases de Datos - Azul Índigo) -->
+          <g id="icon-aws-rds">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#3b48cc" />
+            <ellipse cx="0" cy="-5.5" rx="8" ry="2.8" fill="#ffffff"/>
+            <path d="M -8 -5.5 L -8 0 A 8 2.8 0 0 0 8 0 L 8 -5.5 Z" fill="#ffffff" fill-opacity="0.65"/>
+            <path d="M -8 0 L -8 5.5 A 8 2.8 0 0 0 8 5.5 L 8 0 Z" fill="#ffffff"/>
+          </g>
+
+          <!-- Icono AWS S3 (Almacenamiento - Verde Esmeralda) -->
+          <g id="icon-aws-s3">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#10b981" />
+            <path d="M -8 -6 L 8 -6 L 6.5 6 L -6.5 6 Z" fill="#ffffff"/>
+            <line x1="-5.5" y1="-2" x2="5.5" y2="-2" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="-4.5" y1="2" x2="4.5" y2="2" stroke="#10b981" stroke-width="1.5"/>
+          </g>
+
+          <!-- Icono AWS Systems Manager (SSM) -->
+          <g id="icon-aws-ssm">
+            <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#e11d48" />
+            <path d="M 0 -6.5 L 5 -4 L 5 1 C 5 4 2.5 6 0 7.5 C -2.5 6 -5 4 -5 1 L -5 -4 Z" fill="#ffffff"/>
+            <circle cx="0" cy="0" r="1.2" fill="#e11d48"/>
+          </g>
+
+          <!-- Icono AWS CloudWatch -->
+          <g id="icon-aws-cloudwatch">
+            <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#f43f5e" />
+            <polyline points="-7,1 -4,1 -2,-3 1,4 3,-2 5,1 7,1" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </defs>
+
+        <!-- 1. CAPA INFERIOR: CONTENEDORES, SUBREDES Y COMPONENTES -->
+
+        <!-- ZONA SUPERIOR: INGRESS DE USUARIOS Y BORDE GLOBAL (R53/CF) -->
+        <!-- Practicantes y Supervisores SOFI -->
+        <g transform="translate(425, 14)" font-family="'Plus Jakarta Sans', sans-serif">
+          <rect x="-70" y="-12" width="140" height="24" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.6" filter="url(#v-card-shadow)"/>
+          <text x="0" y="4.5" text-anchor="middle" font-size="9" font-weight="800" fill="#b45309">SOFI (Discord / Web)</text>
+          <line x1="25" y1="12" x2="65" y2="28" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="3 3"/>
+        </g>
+
+        <!-- Clientes Comerciales B2B -->
+        <g transform="translate(755, 14)" font-family="'Plus Jakarta Sans', sans-serif">
+          <rect x="-75" y="-12" width="150" height="24" rx="12" fill="#ffffff" stroke="#6366f1" stroke-width="1.6" filter="url(#v-card-shadow)"/>
+          <text x="0" y="4.5" text-anchor="middle" font-size="9" font-weight="800" fill="#312e81">Clientes B2B (Reflexo / Arte)</text>
+          <line x1="-25" y1="12" x2="-65" y2="28" stroke="#6366f1" stroke-width="1.8" stroke-dasharray="3 3"/>
+        </g>
+
+        <!-- NODO BORDE: Route 53 & CloudFront Edge -->
+        <g transform="translate(590, 46)" filter="url(#v-card-shadow)">
+          <rect x="-165" y="-18" width="330" height="36" rx="18" fill="#ffffff" stroke="#8c4fff" stroke-width="2"/>
+          <g transform="translate(-135, 0) scale(0.75)">
+            <use href="#icon-aws-route53"/>
+          </g>
+          <g transform="translate(-102, 0) scale(0.75)">
+            <use href="#icon-aws-cloudfront"/>
+          </g>
+          <text x="32" y="-1.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#232f3e">Amazon Route 53 · CloudFront</text>
+          <text x="32" y="11.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#8c4fff">DNS Multidominio (SOFI / Clientes) · Caché CDN</text>
+        </g>
+
+        <!-- Flecha de Entrada de CloudFront a Internet Gateway -->
+        <line x1="590" y1="64" x2="590" y2="82" stroke="#8c4fff" stroke-width="2.4" stroke-linecap="round"/>
+        <polygon points="586,80 590,88 594,80" fill="#8c4fff"/>
+
+        <!-- INTERNET GATEWAY (IGW) - Separado arriba de la VPC -->
+        <g transform="translate(590, 94)" filter="url(#v-card-shadow)">
+          <rect x="-85" y="-13" width="170" height="26" rx="13" fill="#ffffff" stroke="#8c4fff" stroke-width="1.8"/>
+          <g transform="translate(-65, 0) scale(0.65)">
+            <use href="#icon-aws-igw"/>
+          </g>
+          <text x="10" y="4.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#232f3e">Internet Gateway (IGW)</text>
+        </g>
+
+        <!-- Flecha de IGW hacia Subred Pública -->
+        <line x1="590" y1="107" x2="590" y2="132" stroke="#0284c7" stroke-width="2.4" stroke-linecap="round"/>
+        <polygon points="586,131 590,139 594,131" fill="#0284c7"/>
+
+        <!-- CONTENEDOR MAESTRO: AMAZON VPC (ANCHO 630px, ALTO 465px) -->
+        <g transform="translate(590, 118)">
+          <rect x="-315" y="0" width="630" height="465" rx="16" fill="rgba(255, 255, 255, 0.85)" stroke="#8c4fff" stroke-width="2" stroke-dasharray="8 5"/>
+          
+          <!-- Encabezado de la VPC -->
+          <g transform="translate(-300, 12)">
+            <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
+            <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
+            <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
+            <line x1="11" y1="3" x2="11" y2="19" stroke="#ffffff" stroke-width="1.1"/>
+            <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="900" fill="#232f3e" letter-spacing="0.02em">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · Región us-east-1)</tspan></text>
+          </g>
+
+          <!-- 1. SUBRED PÚBLICA (10.0.1.0/24) -->
+          <g transform="translate(0, 34)">
+            <rect x="-297" y="0" width="594" height="84" rx="12" fill="rgba(224, 242, 254, 0.70)" stroke="#0284c7" stroke-width="1.8"/>
+            
+            <g transform="translate(-285, 8)">
+              <rect x="0" y="0" width="175" height="17" rx="8.5" fill="#0284c7"/>
+              <text x="87.5" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PÚBLICA · 10.0.1.0/24</text>
+            </g>
+
+            <!-- Conectores hacia TG SOFI y TG Clientes (renderizados por debajo del ALB) -->
+            <path d="M -50 50 L -109 70" fill="none" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M 50 50 L 109 70" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
+
+            <g transform="translate(0, 50)" filter="url(#box-shadow-sm)">
+              <rect x="-250" y="-19" width="500" height="38" rx="9" fill="#ffffff" stroke="#0284c7" stroke-width="1.6"/>
+              <g transform="translate(-225, 0) scale(0.82)">
+                <use href="#icon-aws-alb"/>
+              </g>
+              <text x="-192" y="-1.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Application Load Balancer (ALB) · Host Routing</text>
+              <text x="-192" y="11" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#0369a1">*.sofi.edu.pe ➔ TG SOFI | *.reflexo / *.arteideas ➔ TG Clientes</text>
+              <rect x="150" y="-11" width="86" height="22" rx="6" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+              <text x="193" y="4" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#0284c7">HTTPS :443</text>
+            </g>
+          </g>
+
+          <!-- 2. CAPA DE CÓMPUTO SEGREGADA: 2 SUBREDES EN PARALELO (y=146, alto 162) -->
+          <!-- 2A. SUBRED PRIVADA CÓMPUTO SOFI (10.0.10.0/24) -->
+          <g transform="translate(-150, 146)">
+            <rect x="-147" y="0" width="294" height="162" rx="12" fill="rgba(254, 243, 199, 0.65)" stroke="#f59e0b" stroke-width="1.8"/>
+            
+            <g transform="translate(-138, 7)">
+              <rect x="0" y="0" width="180" height="17" rx="8.5" fill="#f59e0b"/>
+              <text x="90" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.02em">SUBRED SOFI · 10.0.10.0/24</text>
+            </g>
+
+            <g transform="translate(0, 86)" filter="url(#box-shadow-sm)">
+              <rect x="-138" y="-52" width="276" height="112" rx="9" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5"/>
+              <g transform="translate(-115, -31) scale(0.8)">
+                <use href="#icon-aws-ec2"/>
+              </g>
+              <text x="-90" y="-33" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+              <text x="-90" y="-20" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+
+              <!-- 3 Contenedores Docker de SOFI -->
+              <g transform="translate(-130, -10)">
+                <rect x="0" y="0" width="80" height="52" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.2"/>
+                <text x="40" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#065f46">sofi-backend</text>
+                <text x="40" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#059669">NestJS/Prisma</text>
+
+                <rect x="88" y="0" width="80" height="52" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+                <text x="128" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0c4a6e">SOFI-WEB</text>
+                <text x="128" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#0284c7">Next.js LMS</text>
+
+                <rect x="176" y="0" width="84" height="52" rx="6" fill="#f5f3ff" stroke="#6366f1" stroke-width="1.2"/>
+                <text x="218" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#312e81">Bot-Asistencia</text>
+                <text x="218" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#6366f1">Node Discord</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- 2B. SUBRED PRIVADA CÓMPUTO CLIENTES COMERCIALES (10.0.20.0/24) -->
+          <g transform="translate(150, 146)">
+            <rect x="-147" y="0" width="294" height="162" rx="12" fill="rgba(238, 242, 255, 0.70)" stroke="#6366f1" stroke-width="1.8"/>
+            
+            <g transform="translate(-138, 7)">
+              <rect x="0" y="0" width="195" height="17" rx="8.5" fill="#6366f1"/>
+              <text x="97.5" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.02em">SUBRED CLIENTES · 10.0.20.0/24</text>
+            </g>
+
+            <g transform="translate(0, 86)" filter="url(#box-shadow-sm)">
+              <rect x="-138" y="-52" width="276" height="112" rx="9" fill="#ffffff" stroke="#6366f1" stroke-width="1.5"/>
+              <g transform="translate(-115, -31) scale(0.8)">
+                <use href="#icon-aws-ec2"/>
+              </g>
+              <text x="-90" y="-33" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+              <text x="-90" y="-20" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">Host Clientes · 2 vCPU / 2 GiB</text>
+
+              <!-- 2 Cargas Comerciales Aisladas -->
+              <g transform="translate(-130, -10)">
+                <rect x="0" y="0" width="126" height="52" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+                <text x="63" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">Reflexo Perú (Reflexo4)</text>
+                <text x="63" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#0284c7">Next.js + NestJS + SQLite</text>
+
+                <rect x="134" y="0" width="126" height="52" rx="6" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+                <text x="197" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#6b21a8">Arte &amp; Ideas (ERP)</text>
+                <text x="197" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#9333ea">React + Django + MySQL 8</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- 3. SUBRED PRIVADA DE DATOS (10.0.100.0/24) -->
+          <g transform="translate(0, 340)">
+            <rect x="-297" y="0" width="594" height="106" rx="12" fill="rgba(209, 250, 229, 0.65)" stroke="#059669" stroke-width="1.8"/>
+            
+            <g transform="translate(-285, 8)">
+              <rect x="0" y="0" width="230" height="18" rx="9" fill="#059669"/>
+              <text x="115" y="12.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
+            </g>
+
+            <g transform="translate(-90, 60)" filter="url(#box-shadow-sm)">
+              <rect x="-185" y="-24" width="370" height="48" rx="9" fill="#ffffff" stroke="#059669" stroke-width="1.6"/>
+              <g transform="translate(-160, 0) scale(0.85)">
+                <use href="#icon-aws-rds"/>
+              </g>
+              <text x="-135" y="-2" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+              <text x="-135" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
+            </g>
+
+            <g transform="translate(195, 60)" filter="url(#box-shadow-sm)">
+              <rect x="-85" y="-24" width="170" height="48" rx="9" fill="#ffffff" stroke="#10b981" stroke-width="1.6"/>
+              <g transform="translate(-62, 0) scale(0.85)">
+                <use href="#icon-aws-s3"/>
+              </g>
+              <text x="-38" y="-2" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon S3</text>
+              <text x="-38" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#047857">Cursos LMS &amp; Backups</text>
+            </g>
+          </g>
+
+        </g>
+
+        <!-- SERVICIOS TRANSVERSALES DE GOBIERNO (SSM & CLOUDWATCH) -->
+        <g transform="translate(420, 600)" filter="url(#v-card-shadow)">
+          <rect x="-95" y="-13" width="190" height="26" rx="13" fill="#ffffff" stroke="#e11d48" stroke-width="1.6"/>
+          <g transform="translate(-78, 0) scale(0.68)">
+            <use href="#icon-aws-ssm"/>
+          </g>
+          <text x="10" y="4.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#9f1239">AWS SSM: Cero Puertos SSH</text>
+        </g>
+
+        <g transform="translate(760, 600)" filter="url(#v-card-shadow)">
+          <rect x="-95" y="-13" width="190" height="26" rx="13" fill="#ffffff" stroke="#f43f5e" stroke-width="1.6"/>
+          <g transform="translate(-78, 0) scale(0.68)">
+            <use href="#icon-aws-cloudwatch"/>
+          </g>
+          <text x="10" y="4.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#881337">CloudWatch: Métricas &amp; Alarmas</text>
+        </g>
+
+        <!-- ============================================================ -->
+        <!-- 2. CAPA SUPERIOR: FLUJOS ENTRE SECCIONES Y CONECTORES DE TARJETAS -->
+        <!-- ============================================================ -->
+
+        <!-- A. FLUJOS ENTRE SECCIONES INTERNAS (ALB hacia ambas subredes) -->
+        <!-- Flecha de ALB a Subred SOFI (Izquierda) -->
+        <g transform="translate(490, 240)">
+          <!-- Línea y punta de flecha apuntando hacia abajo a la Subred SOFI -->
+          <line x1="-9" y1="-2" x2="-9" y2="18" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
+          <polygon points="-14,16 -9,24 -4,16" fill="#f59e0b"/>
+          <!-- Badge TG SOFI -->
+          <rect x="-50" y="-18" width="82" height="16" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3" filter="url(#box-shadow-sm)"/>
+          <text x="-9" y="-6.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="800" fill="#b45309">TG SOFI</text>
+        </g>
+
+        <!-- Flecha de ALB a Subred Clientes (Derecha) -->
+        <g transform="translate(690, 240)">
+          <!-- Línea y punta de flecha apuntando hacia abajo a la Subred Clientes -->
+          <line x1="9" y1="-2" x2="9" y2="18" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
+          <polygon points="4,16 9,24 14,16" fill="#6366f1"/>
+          <!-- Badge TG Clientes -->
+          <rect x="-32" y="-18" width="82" height="16" rx="8" fill="#ffffff" stroke="#6366f1" stroke-width="1.3" filter="url(#box-shadow-sm)"/>
+          <text x="9" y="-6.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="800" fill="#4338ca">TG Clientes</text>
+        </g>
+
+        <!-- Flecha de Subred SOFI a Subred de Datos RDS -->
+        <g transform="translate(470, 442)">
+          <line x1="0" y1="-14" x2="0" y2="14" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+          <polygon points="-5,13 0,20 5,13" fill="#059669"/>
+          <rect x="-56" y="-8" width="112" height="17" rx="8.5" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#box-shadow-sm)"/>
+          <text x="0" y="3.5" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#047857">SQL TCP :5432</text>
+        </g>
+
+        <!-- Conectores hacia SSM y CloudWatch -->
+        <path d="M 440 583 L 440 587" fill="none" stroke="#e11d48" stroke-width="2.2" stroke-dasharray="4 3"/>
+        <path d="M 740 583 L 740 587" fill="none" stroke="#f43f5e" stroke-width="2.2" stroke-dasharray="4 3"/>
+
+        <!-- B. LÍNEAS DE CONEXIÓN PRINCIPALES A LAS 4 TARJETAS LATERALES -->
+        <!-- 1. Conexión Card 1 (Top-Left: Route 53 & CloudFront -> x=255, y=105) -->
+        <path d="M 425 46 L 315 105 L 255 105" fill="none" stroke="#0284c7" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="425" cy="46" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2.2"/>
+        <circle cx="255" cy="105" r="5.5" fill="#0284c7" stroke="#ffffff" stroke-width="2.5"/>
+
+        <!-- 2. Conexión Card 2 (Bottom-Left: EC2 Segregado -> x=255, y=505) -->
+        <path d="M 310 360 L 275 505 L 255 505" fill="none" stroke="#f59e0b" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="310" cy="360" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.2"/>
+        <circle cx="255" cy="505" r="5.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5"/>
+
+        <!-- 3. Conexión Card 3 (Top-Right: ALB Host Routing -> x=925, y=105) -->
+        <path d="M 770 166 L 855 105 L 925 105" fill="none" stroke="#6366f1" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="770" cy="166" r="5" fill="#6366f1" stroke="#ffffff" stroke-width="2.2"/>
+        <circle cx="925" cy="105" r="5.5" fill="#6366f1" stroke="#ffffff" stroke-width="2.5"/>
+
+        <!-- 4. Conexión Card 4 (Bottom-Right: RDS + S3 -> x=925, y=505) -->
+        <path d="M 810 505 L 925 505" fill="none" stroke="#059669" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="810" cy="505" r="5" fill="#059669" stroke="#ffffff" stroke-width="2.2"/>
+        <circle cx="925" cy="505" r="5.5" fill="#059669" stroke="#ffffff" stroke-width="2.5"/>
+
+      </svg>
+
+      <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas (z-index: 2, con fondo blanco extendido y sombras) -->
+      <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 255px 1fr 255px; width: 1180px; height: 615px; gap: 0; align-items: stretch; pointer-events: none;">
+        
+        <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=105) y Tarjeta 2 (y=505) -->
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 615px; pointer-events: auto;">
+          <!-- Tarjeta 1: Perímetro Global & DNS -->
+          <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
+            <div style="margin-bottom: 1px;">
+              <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.60rem; padding: 1px 6px; font-weight: 800;">BORDE GLOBAL</span>
             </div>
-            <div>
-              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #4338ca;">
-                Perímetro &amp; Assets Formativos
-              </div>
-              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Servicios Cloud Gestionados
-              </div>
-            </div>
+            <div style="font-size: 0.86rem; color: #0f172a; font-weight: 800; line-height: 1.15;">Route 53 &amp; CloudFront</div>
+            <div style="font-size: 0.68rem; font-weight: 700; color: #0284c7; margin-bottom: 2px;">DNS Multidominio · Caché CDN</div>
+            <ul style="font-size: 0.68rem; color: #0f172a; line-height: 1.25; padding-left: 13px; margin: 0; font-weight: 600;">
+              <li>DNS: SOFI, Reflexo Perú y Arte &amp; Ideas</li>
+              <li>Caché Edge para Next.js LMS y React SPA</li>
+              <li>Mitigación DDoS con AWS Shield Standard</li>
+              <li>Certificados SSL/TLS vía AWS ACM</li>
+            </ul>
           </div>
-          <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(99, 102, 241, 0.12); color: #4338ca; border: 1px solid rgba(99, 102, 241, 0.25);">
-            Alta Disponibilidad
-          </span>
+
+          <!-- Tarjeta 2: Capa de Cómputo Segregada -->
+          <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #f59e0b; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
+            <div style="margin-bottom: 1px;">
+              <span class="pill-badge" style="background: #fef3c7; color: #b45309; border: 1.5px solid #f59e0b; font-size: 0.60rem; padding: 1px 6px; font-weight: 800;">CÓMPUTO SEGREGADO</span>
+            </div>
+            <div style="font-size: 0.86rem; color: #0f172a; font-weight: 800; line-height: 1.15;">2x Amazon EC2 (t3.small)</div>
+            <div style="font-size: 0.68rem; font-weight: 700; color: #b45309; margin-bottom: 2px;">Subredes 10.0.10.0 y 10.0.20.0</div>
+            <ul style="font-size: 0.68rem; color: #0f172a; line-height: 1.25; padding-left: 13px; margin: 0; font-weight: 600;">
+              <li>SOFI aislado de Reflexo y Arte &amp; Ideas</li>
+              <li>Cero colisión RAM: fin de Vecino Ruidoso</li>
+              <li>Instancias privadas sin IP pública directa</li>
+              <li>Security Groups dedicados por capa y servicio</li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Sub-bloque 1: Route 53 + CloudFront CDN -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(99, 102, 241, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(99, 102, 241, 0.14); display: flex; align-items: center; justify-content: center; color: #6366f1;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              </div>
-              Amazon Route 53 &middot; CloudFront (CDN)
+        <!-- COLUMNA CENTRAL: Espacio transparente amplio -->
+        <div></div>
+
+        <!-- COLUMNA DERECHA: Tarjeta 3 (y=105) y Tarjeta 4 (y=505) -->
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 615px; pointer-events: auto;">
+          <!-- Tarjeta 3: Perímetro de Entrada VPC -->
+          <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
+            <div style="margin-bottom: 1px;">
+              <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.60rem; padding: 1px 6px; font-weight: 800;">INGRESS SEGURO</span>
             </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #4338ca; background: rgba(99, 102, 241, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Caché en el Borde
-            </span>
+            <div style="font-size: 0.86rem; color: #0f172a; font-weight: 800; line-height: 1.15;">ALB Multi-Dominio</div>
+            <div style="font-size: 0.68rem; font-weight: 700; color: #4338ca; margin-bottom: 2px;">Subred Pública · 10.0.1.0/24</div>
+            <ul style="font-size: 0.68rem; color: #0f172a; line-height: 1.25; padding-left: 13px; margin: 0; font-weight: 600;">
+              <li>Host Routing: desvío por subdominio web</li>
+              <li>Terminación SSL/TLS y redirección HTTPS :443</li>
+              <li>Target Groups para EC2 SOFI y EC2 Clientes</li>
+              <li>Health Checks activos para aislar fallos</li>
+            </ul>
           </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            Resolución DNS autoritativa de dominios institucionales y distribución de contenido estático de <code>SOFI-WEB</code> mediante Edge Locations, amortiguando ataques de denegación de servicio (DDoS).
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #3730a3;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Eficiencia: Descarga del 70% del tráfico estático sin impactar la CPU del backend.
+
+          <!-- Tarjeta 4: Persistencia y Gestión -->
+          <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
+            <div style="margin-bottom: 1px;">
+              <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.60rem; padding: 1px 6px; font-weight: 800;">DATOS Y GOBIERNO</span>
+            </div>
+            <div style="font-size: 0.86rem; color: #0f172a; font-weight: 800; line-height: 1.15;">RDS · S3 · Systems Mgr</div>
+            <div style="font-size: 0.68rem; font-weight: 700; color: #059669; margin-bottom: 2px;">PostgreSQL 16 · 10.0.100.0/24</div>
+            <ul style="font-size: 0.68rem; color: #0f172a; line-height: 1.25; padding-left: 13px; margin: 0; font-weight: 600;">
+              <li>Postgres 16 exclusivo para SOFI (aislado)</li>
+              <li>Amazon S3 para cursos LMS y backups</li>
+              <li>Cero puertos SSH: administración vía AWS SSM</li>
+              <li>Métricas y alarmas en CloudWatch integradas</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Sub-bloque 2: Amazon S3 (LMS & Assets) -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-              </div>
-              Amazon S3 &middot; Material Formativo &amp; LMS
-            </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Escalabilidad Ilimitada
-            </span>
-          </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            Almacenamiento elástico de videos instructivos, manuales en PDF y copias de seguridad. Desbloquea la restricción de los 29 GB del disco raíz del VPS y elimina el riesgo de saturación.
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #065f46;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Capacidad: 99.999999999% (11 nueves) de durabilidad sin mantenimiento de discos físicos.
-          </div>
-        </div>
-
-        <!-- Sub-bloque 3: AWS Systems Manager & CloudWatch -->
-        <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(225, 29, 72, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-            <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(225, 29, 72, 0.14); display: flex; align-items: center; justify-content: center; color: #e11d48;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              </div>
-              AWS SSM &middot; CloudWatch (Sin Puerto 22)
-            </div>
-            <span style="font-size: 0.66rem; font-weight: 700; color: #be123c; background: rgba(225, 29, 72, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Cero Puertos SSH
-            </span>
-          </div>
-          <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.35; margin: 0 0 6px 0;">
-            Administración de servidores mediante túneles seguros HTTPS de <strong>AWS Systems Manager</strong> sin abrir SSH (puerto 22). Métricas en tiempo real y alertas de umbral con <strong>CloudWatch</strong>.
-          </p>
-          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #881337;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Operación: Trazabilidad total de comandos y respuesta inmediata ante picos de uso.
-          </div>
-        </div>
-      </div>
-
-      <!-- Alerta / Conclusión Arquitectónica -->
-      <div style="background: rgba(239, 246, 255, 0.92); border: 1.5px solid rgba(0, 115, 187, 0.35); border-radius: 12px; padding: 9px 12px; margin-top: 10px; display: flex; align-items: flex-start; gap: 10px;">
-        <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(0, 115, 187, 0.15); display: flex; align-items: center; justify-content: center; color: #0073bb; flex-shrink: 0; margin-top: 1px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div>
-          <div style="font-size: 0.70rem; font-weight: 800; text-transform: uppercase; color: #0073bb; letter-spacing: 0.04em;">
-            Transformación Arquitectónica: De Monolito VPS a Cloud Nativo
-          </div>
-          <div style="font-size: 0.76rem; color: #0c4a6e; line-height: 1.35; margin-top: 2px;">
-            Se erradica el Punto Único de Fallo (SPOF) y la contención de memoria. Cada capa opera aislada, escalable y tolerante a fallos para el ecosistema <strong>SOFI</strong> y clientes de <strong>APM Inversiones EIRL</strong>.
-          </div>
-        </div>
       </div>
 
     </div>
-
   </div>
 </section>
 
@@ -2950,56 +3106,56 @@
         <div style="background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(255, 153, 0, 0.35); border-radius: 14px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);">
           <div>
             <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #b45309; letter-spacing: 0.05em;">
-              Costo Mensual Oficial Consolidado
+              Costo Mensual Consolidado (SOFI + Clientes)
             </div>
             <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-top: 2px;">
-              $36.07 <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); font-family: 'Plus Jakarta Sans', sans-serif;">USD / mes</span>
+              $53.65 <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); font-family: 'Plus Jakarta Sans', sans-serif;">USD / mes</span>
             </div>
           </div>
           <div style="text-align: right;">
             <span style="font-size: 0.70rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.14); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.25);">
-              100% Reproducible
+              SOFI + Clientes Aislados
             </span>
             <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px;">
-              730 h/mes continuas
+              SOFI ($36.07) + Clientes ($17.58)
             </div>
           </div>
         </div>
 
-        <!-- Sub-bloque 1: Cómputo & Base de Datos (85%) -->
+        <!-- Sub-bloque 1: Cómputo Segregado & RDBMS (90%) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(0, 115, 187, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy); display: flex; align-items: center; gap: 7px;">
               <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(0, 115, 187, 0.14); display: flex; align-items: center; justify-content: center; color: #0073bb;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
               </div>
-              Cómputo &amp; RDBMS Administrado: <strong>$30.62 USD</strong>
+              Cómputo Segregado &amp; RDS: <strong>$48.20 USD</strong>
             </div>
             <span style="font-size: 0.66rem; font-weight: 700; color: #0073bb; background: rgba(0, 115, 187, 0.1); padding: 1px 6px; border-radius: 5px;">
-              85% Total
+              90% Total
             </span>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.34; margin: 0;">
-            <strong>EC2 t3.small ($15.18):</strong> Aloja <code>sofi-backend</code>, <code>SOFI-WEB</code> y bot de Discord. <br>
-            <strong>RDS PostgreSQL ($15.44):</strong> Instancia <code>db.t3.micro</code> + 20 GB <code>gp3</code> con aislamiento absoluto.
+            <strong>2x EC2 t3.small ($30.36):</strong> Hosts separados para SOFI ($15.18) y Clientes B2B ($15.18). <br>
+            <strong>RDS Postgres ($15.44) + EBS Clientes ($2.40):</strong> Persistencia y RDBMS aislados.
           </p>
         </div>
 
-        <!-- Sub-bloque 2: Almacenamiento, Red y Monitoreo (15%) -->
+        <!-- Sub-bloque 2: Almacenamiento, Red y Monitoreo (10%) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy); display: flex; align-items: center; gap: 7px;">
               <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
               </div>
-              Disco, Tráfico &amp; Operaciones: <strong>$5.45 USD</strong>
+              Disco SOFI, Tráfico &amp; Ops: <strong>$5.45 USD</strong>
             </div>
             <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.1); padding: 1px 6px; border-radius: 5px;">
-              15% Total
+              10% Total
             </span>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.34; margin: 0;">
-            EBS 30 GB <code>gp3</code> ($2.40), S3 Standard 15 GB ($0.35), CloudWatch ($1.21), Route 53 ($0.50), Transferencia DTO ($0.99) y AWS SSM ($0.00).
+            EBS SOFI ($2.40), S3 Standard 15 GB ($0.35), CloudWatch ($1.21), Route 53 ($0.50), DTO ($0.99) y SSM ($0.00).
           </p>
         </div>
       </div>
@@ -3011,10 +3167,10 @@
         </div>
         <div>
           <div style="font-size: 0.70rem; font-weight: 800; text-transform: uppercase; color: #b45309; letter-spacing: 0.04em;">
-            Retorno TCO vs. Costo Oculto de Hetzner
+            Aislamiento de Cargas &amp; Retorno TCO
           </div>
           <div style="font-size: 0.76rem; color: #78350f; line-height: 1.35; margin-top: 2px;">
-            El VPS actual aparenta ser barato, pero una caída crítica destruye horas-hombre y reputación comercial. Por <strong>$36.07 USD/mes</strong> se obtiene resiliencia, copias inmutables y soporte de clase mundial.
+            Por solo <strong>$53.65 USD/mes</strong> se migran SOFI y los clientes comerciales en subredes e instancias independientes, resolviendo al 100% el colapso por Vecino Ruidoso sin sobredimensionar la inversión.
           </div>
         </div>
       </div>
@@ -3037,74 +3193,79 @@
                 Desglose Técnico y Financiero
               </div>
               <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Detalle de Servicios AWS
+                Detalle Consolidado de Servicios
               </div>
             </div>
           </div>
           <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(35, 47, 62, 0.08); color: var(--aws-navy); border: 1px solid rgba(35, 47, 62, 0.2);">
-            8 Servicios
+            9 Servicios
           </span>
         </div>
 
         <!-- Tabla Estilizada de Costos -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(226, 232, 240, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.76rem;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
             <thead>
               <tr style="background: rgba(241, 245, 249, 0.9); border-bottom: 1.5px solid rgba(226, 232, 240, 0.9); color: var(--text-muted);">
-                <th style="padding: 6px 10px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Componente Cloud</th>
-                <th style="padding: 6px 8px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Configuración Clave</th>
-                <th style="padding: 6px 10px; text-align: right; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Costo Mensual</th>
+                <th style="padding: 5px 8px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Componente Cloud</th>
+                <th style="padding: 5px 6px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Configuración Clave</th>
+                <th style="padding: 5px 8px; text-align: right; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Costo Mensual</th>
               </tr>
             </thead>
             <tbody style="color: var(--text-main);">
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon EC2</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);"><code>t3.small</code> (2 vCPU, 2 GiB) 730h</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.18</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon EC2 (SOFI)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>t3.small</code> (2 vCPU, 2 GiB) 730h</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.18</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon RDS Postgres</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);"><code>db.t3.micro</code> + 20 GB <code>gp3</code></td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.44</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: #4338ca;">Amazon EC2 (Clientes)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>t3.small</code> (Reflexo + Arte) 730h</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #4338ca;">$15.18</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon EBS</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">30 GB <code>gp3</code> (3000 IOPS base)</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$2.40</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon RDS Postgres</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>db.t3.micro</code> + 20 GB <code>gp3</code></td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.44</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon CloudWatch</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">2 Alarmas + 2 GB Logs retención</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$1.21</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon EBS (x2)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">2x 30 GB <code>gp3</code> (SOFI + Clientes)</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$4.80</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Data Transfer (DTO)</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">11 GB de salida a Internet</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.99</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon CloudWatch</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">2 Alarmas + 2 GB Logs retención</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$1.21</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon Route 53</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">1 Hosted Zone pública autoritativa</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.50</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Data Transfer (DTO)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">11 GB salida Internet</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.99</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon S3</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">15 GB Standard + 11k requests</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.35</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon Route 53</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">1 Hosted Zone pública</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.50</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon S3</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">15 GB Standard + 11k requests</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.35</td>
               </tr>
               <tr>
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">AWS Systems Manager</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">SSM Session Manager estándar</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #10b981;">$0.00</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">AWS Systems Manager</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">SSM Session Manager estándar</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #10b981;">$0.00</td>
               </tr>
             </tbody>
             <tfoot>
               <tr style="background: rgba(254, 243, 199, 0.75); border-top: 1.5px solid rgba(245, 158, 11, 0.35);">
-                <td colspan="2" style="padding: 7px 10px; font-weight: 800; color: #b45309; text-transform: uppercase; font-size: 0.72rem;">
-                  Total Mensual Verificado
+                <td colspan="2" style="padding: 6px 8px; font-weight: 800; color: #b45309; text-transform: uppercase; font-size: 0.70rem;">
+                  Total Mensual Consolidado
                 </td>
-                <td style="padding: 7px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #b45309; font-size: 0.88rem;">
-                  $36.07 USD
+                <td style="padding: 6px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #b45309; font-size: 0.85rem;">
+                  $53.65 USD
                 </td>
               </tr>
             </tfoot>
@@ -3122,7 +3283,7 @@
             Optimización FinOps: AWS Instance Scheduler
           </div>
           <div style="font-size: 0.76rem; color: #065f46; line-height: 1.35; margin-top: 2px;">
-            Apagando la instancia EC2 fuera del horario formativo (noches y fines de semana), el costo de cómputo se reduce un <strong>60%</strong> (~$6 USD), situando la factura mensual en apenas <strong>~$27 USD</strong>.
+            Apagando únicamente la instancia de SOFI fuera del horario formativo (noches y fines de semana), el costo se reduce en <strong>~$9 USD</strong>, situando la factura mensual en apenas <strong>~$44 USD</strong> con clientes 24/7.
           </div>
         </div>
       </div>

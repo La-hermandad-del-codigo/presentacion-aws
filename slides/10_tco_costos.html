@@ -93,56 +93,56 @@
         <div style="background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(255, 153, 0, 0.35); border-radius: 14px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);">
           <div>
             <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #b45309; letter-spacing: 0.05em;">
-              Costo Mensual Oficial Consolidado
+              Costo Mensual Consolidado (SOFI + Clientes)
             </div>
             <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-top: 2px;">
-              $36.07 <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); font-family: 'Plus Jakarta Sans', sans-serif;">USD / mes</span>
+              $53.65 <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); font-family: 'Plus Jakarta Sans', sans-serif;">USD / mes</span>
             </div>
           </div>
           <div style="text-align: right;">
             <span style="font-size: 0.70rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.14); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.25);">
-              100% Reproducible
+              SOFI + Clientes Aislados
             </span>
             <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px;">
-              730 h/mes continuas
+              SOFI ($36.07) + Clientes ($17.58)
             </div>
           </div>
         </div>
 
-        <!-- Sub-bloque 1: Cómputo & Base de Datos (85%) -->
+        <!-- Sub-bloque 1: Cómputo Segregado & RDBMS (90%) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(0, 115, 187, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy); display: flex; align-items: center; gap: 7px;">
               <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(0, 115, 187, 0.14); display: flex; align-items: center; justify-content: center; color: #0073bb;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
               </div>
-              Cómputo &amp; RDBMS Administrado: <strong>$30.62 USD</strong>
+              Cómputo Segregado &amp; RDS: <strong>$48.20 USD</strong>
             </div>
             <span style="font-size: 0.66rem; font-weight: 700; color: #0073bb; background: rgba(0, 115, 187, 0.1); padding: 1px 6px; border-radius: 5px;">
-              85% Total
+              90% Total
             </span>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.34; margin: 0;">
-            <strong>EC2 t3.small ($15.18):</strong> Aloja <code>sofi-backend</code>, <code>SOFI-WEB</code> y bot de Discord. <br>
-            <strong>RDS PostgreSQL ($15.44):</strong> Instancia <code>db.t3.micro</code> + 20 GB <code>gp3</code> con aislamiento absoluto.
+            <strong>2x EC2 t3.small ($30.36):</strong> Hosts separados para SOFI ($15.18) y Clientes B2B ($15.18). <br>
+            <strong>RDS Postgres ($15.44) + EBS Clientes ($2.40):</strong> Persistencia y RDBMS aislados.
           </p>
         </div>
 
-        <!-- Sub-bloque 2: Almacenamiento, Red y Monitoreo (15%) -->
+        <!-- Sub-bloque 2: Almacenamiento, Red y Monitoreo (10%) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 0; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy); display: flex; align-items: center; gap: 7px;">
               <div style="width: 20px; height: 20px; border-radius: 5px; background: rgba(16, 185, 129, 0.14); display: flex; align-items: center; justify-content: center; color: #10b981;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
               </div>
-              Disco, Tráfico &amp; Operaciones: <strong>$5.45 USD</strong>
+              Disco SOFI, Tráfico &amp; Ops: <strong>$5.45 USD</strong>
             </div>
             <span style="font-size: 0.66rem; font-weight: 700; color: #047857; background: rgba(16, 185, 129, 0.1); padding: 1px 6px; border-radius: 5px;">
-              15% Total
+              10% Total
             </span>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.34; margin: 0;">
-            EBS 30 GB <code>gp3</code> ($2.40), S3 Standard 15 GB ($0.35), CloudWatch ($1.21), Route 53 ($0.50), Transferencia DTO ($0.99) y AWS SSM ($0.00).
+            EBS SOFI ($2.40), S3 Standard 15 GB ($0.35), CloudWatch ($1.21), Route 53 ($0.50), DTO ($0.99) y SSM ($0.00).
           </p>
         </div>
       </div>
@@ -154,10 +154,10 @@
         </div>
         <div>
           <div style="font-size: 0.70rem; font-weight: 800; text-transform: uppercase; color: #b45309; letter-spacing: 0.04em;">
-            Retorno TCO vs. Costo Oculto de Hetzner
+            Aislamiento de Cargas &amp; Retorno TCO
           </div>
           <div style="font-size: 0.76rem; color: #78350f; line-height: 1.35; margin-top: 2px;">
-            El VPS actual aparenta ser barato, pero una caída crítica destruye horas-hombre y reputación comercial. Por <strong>$36.07 USD/mes</strong> se obtiene resiliencia, copias inmutables y soporte de clase mundial.
+            Por solo <strong>$53.65 USD/mes</strong> se migran SOFI y los clientes comerciales en subredes e instancias independientes, resolviendo al 100% el colapso por Vecino Ruidoso sin sobredimensionar la inversión.
           </div>
         </div>
       </div>
@@ -180,74 +180,79 @@
                 Desglose Técnico y Financiero
               </div>
               <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Detalle de Servicios AWS
+                Detalle Consolidado de Servicios
               </div>
             </div>
           </div>
           <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(35, 47, 62, 0.08); color: var(--aws-navy); border: 1px solid rgba(35, 47, 62, 0.2);">
-            8 Servicios
+            9 Servicios
           </span>
         </div>
 
         <!-- Tabla Estilizada de Costos -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(226, 232, 240, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.76rem;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
             <thead>
               <tr style="background: rgba(241, 245, 249, 0.9); border-bottom: 1.5px solid rgba(226, 232, 240, 0.9); color: var(--text-muted);">
-                <th style="padding: 6px 10px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Componente Cloud</th>
-                <th style="padding: 6px 8px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Configuración Clave</th>
-                <th style="padding: 6px 10px; text-align: right; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.04em;">Costo Mensual</th>
+                <th style="padding: 5px 8px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Componente Cloud</th>
+                <th style="padding: 5px 6px; text-align: left; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Configuración Clave</th>
+                <th style="padding: 5px 8px; text-align: right; font-weight: 800; text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.04em;">Costo Mensual</th>
               </tr>
             </thead>
             <tbody style="color: var(--text-main);">
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon EC2</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);"><code>t3.small</code> (2 vCPU, 2 GiB) 730h</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.18</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon EC2 (SOFI)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>t3.small</code> (2 vCPU, 2 GiB) 730h</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.18</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon RDS Postgres</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);"><code>db.t3.micro</code> + 20 GB <code>gp3</code></td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.44</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: #4338ca;">Amazon EC2 (Clientes)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>t3.small</code> (Reflexo + Arte) 730h</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #4338ca;">$15.18</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon EBS</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">30 GB <code>gp3</code> (3000 IOPS base)</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$2.40</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon RDS Postgres</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);"><code>db.t3.micro</code> + 20 GB <code>gp3</code></td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$15.44</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon CloudWatch</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">2 Alarmas + 2 GB Logs retención</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$1.21</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon EBS (x2)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">2x 30 GB <code>gp3</code> (SOFI + Clientes)</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$4.80</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Data Transfer (DTO)</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">11 GB de salida a Internet</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.99</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon CloudWatch</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">2 Alarmas + 2 GB Logs retención</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$1.21</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon Route 53</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">1 Hosted Zone pública autoritativa</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.50</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Data Transfer (DTO)</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">11 GB salida Internet</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.99</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">Amazon S3</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">15 GB Standard + 11k requests</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.35</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon Route 53</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">1 Hosted Zone pública</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.50</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(241, 245, 249, 0.9); background: rgba(248, 250, 252, 0.4);">
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">Amazon S3</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">15 GB Standard + 11k requests</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--aws-navy);">$0.35</td>
               </tr>
               <tr>
-                <td style="padding: 5px 10px; font-weight: 700; color: var(--aws-navy);">AWS Systems Manager</td>
-                <td style="padding: 5px 8px; color: var(--text-muted);">SSM Session Manager estándar</td>
-                <td style="padding: 5px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #10b981;">$0.00</td>
+                <td style="padding: 4px 8px; font-weight: 700; color: var(--aws-navy);">AWS Systems Manager</td>
+                <td style="padding: 4px 6px; color: var(--text-muted);">SSM Session Manager estándar</td>
+                <td style="padding: 4px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #10b981;">$0.00</td>
               </tr>
             </tbody>
             <tfoot>
               <tr style="background: rgba(254, 243, 199, 0.75); border-top: 1.5px solid rgba(245, 158, 11, 0.35);">
-                <td colspan="2" style="padding: 7px 10px; font-weight: 800; color: #b45309; text-transform: uppercase; font-size: 0.72rem;">
-                  Total Mensual Verificado
+                <td colspan="2" style="padding: 6px 8px; font-weight: 800; color: #b45309; text-transform: uppercase; font-size: 0.70rem;">
+                  Total Mensual Consolidado
                 </td>
-                <td style="padding: 7px 10px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #b45309; font-size: 0.88rem;">
-                  $36.07 USD
+                <td style="padding: 6px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #b45309; font-size: 0.85rem;">
+                  $53.65 USD
                 </td>
               </tr>
             </tfoot>
@@ -265,7 +270,7 @@
             Optimización FinOps: AWS Instance Scheduler
           </div>
           <div style="font-size: 0.76rem; color: #065f46; line-height: 1.35; margin-top: 2px;">
-            Apagando la instancia EC2 fuera del horario formativo (noches y fines de semana), el costo de cómputo se reduce un <strong>60%</strong> (~$6 USD), situando la factura mensual en apenas <strong>~$27 USD</strong>.
+            Apagando únicamente la instancia de SOFI fuera del horario formativo (noches y fines de semana), el costo se reduce en <strong>~$9 USD</strong>, situando la factura mensual en apenas <strong>~$44 USD</strong> con clientes 24/7.
           </div>
         </div>
       </div>

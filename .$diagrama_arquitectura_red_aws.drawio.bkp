@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" modified="2026-09-21T19:35:00.000Z" agent="Antigravity" version="21.0.0" type="device">
+  <diagram id="aws-vpc-architecture" name="Arquitectura de Red AWS - SOFI">
+    <mxGraphModel dx="1422" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        
+        <!-- CLIENTES Y USUARIOS EXTERNOS               -->
+        
+        <mxCell id="client-discord" value="&lt;b&gt;Practicantes Remotos&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#4338ca&quot;&gt;Bot Discord (Registro de Asistencia)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#6366F1;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="30" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="client-web" value="&lt;b&gt;Supervisores y Directivos&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#0369a1&quot;&gt;Navegador Web (HTTPS · Portal SOFI)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="30" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- BORDE GLOBAL Y DNS (ROUTE 53 & CLOUDFRONT) -->
+        
+        <mxCell id="edge-group" value="&lt;b&gt;Perímetro de Borde Global AWS (Edge Locations)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#8C4FFF;strokeWidth=1.5;dashed=1;verticalAlign=top;align=left;spacingLeft=15;spacingTop=8;fontFamily=Helvetica;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="210" y="125" width="700" height="95" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="route53" value="&lt;b&gt;Amazon Route 53&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#475569&quot;&gt;DNS Autoritativo Institucional&lt;br&gt;admin.sofi · api.sofi&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="150" width="280" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cloudfront" value="&lt;b&gt;Amazon CloudFront (CDN)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#475569&quot;&gt;Aceleración Perimetral · Caché Frontend&lt;br&gt;Mitigación DDoS Nativa (AWS Shield)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="150" width="290" height="55" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- REGIÓN AWS                                 -->
+        
+        <mxCell id="aws-region" value="&lt;b&gt;AWS Cloud · Región US East (N. Virginia) us-east-1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFB;strokeColor=#232F3E;strokeWidth=2;dashed=1;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontFamily=Helvetica;fontSize=12;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="90" y="250" width="940" height="550" as="geometry"/>
+        </mxCell>
+
+        <!-- Internet Gateway -->
+        <mxCell id="igw" value="&lt;b&gt;Internet Gateway (IGW)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#475569&quot;&gt;Puerta de Enlace a Internet&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="275" width="200" height="45" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- AMAZON VPC                                 -->
+        
+        <mxCell id="vpc" value="&lt;b&gt;Amazon VPC (CIDR: 10.0.0.0/16)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontFamily=Helvetica;fontSize=12;fontColor=#8C4FFF;" vertex="1" parent="1">
+          <mxGeometry x="120" y="340" width="880" height="430" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- 1. SUBRED PÚBLICA                          -->
+        
+        <mxCell id="subnet-public" value="&lt;b&gt;Subred Pública · CIDR: 10.0.1.0/24 (Perímetro Ingress Protegido)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontFamily=Helvetica;fontSize=11;fontColor=#0284C7;" vertex="1" parent="1">
+          <mxGeometry x="145" y="375" width="830" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="alb" value="&lt;b&gt;Application Load Balancer (ALB)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#0369a1&quot;&gt;Terminación SSL/TLS (AWS ACM) · Puerto 443 HTTPS · Enrutamiento Seguro hacia EC2&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="275" y="405" width="570" height="42" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- 2. SUBRED PRIVADA DE CÓMPUTO               -->
+        
+        <mxCell id="subnet-compute" value="&lt;b&gt;Subred Privada de Cómputo · CIDR: 10.0.10.0/24 (Aislada de Internet · Sin IP Pública)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontFamily=Helvetica;fontSize=11;fontColor=#B45309;" vertex="1" parent="1">
+          <mxGeometry x="145" y="480" width="830" height="135" as="geometry"/>
+        </mxCell>
+
+        <!-- Instancia EC2 Host Docker -->
+        <mxCell id="ec2-host" value="&lt;b&gt;Amazon EC2 (t3.small · 2 vCPU, 2 GiB RAM, 30 GB EBS gp3)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#78350f&quot;&gt;Host Docker Unificado · IAM Instance Profile (Sin credenciales en código) · Cero Puertos Expuestos&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F59E0B;strokeWidth=2;verticalAlign=top;align=center;spacingTop=6;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="175" y="510" width="560" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- Contenedores Docker -->
+        <mxCell id="cnt-backend" value="&lt;b&gt;sofi-backend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot; color=&quot;#065f46&quot;&gt;NestJS · Prisma ORM&lt;br&gt;API Core REST / WS&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#059669;strokeWidth=1.5;fontFamily=Helvetica;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="195" y="545" width="155" height="48" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cnt-web" value="&lt;b&gt;SOFI-WEB&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot; color=&quot;#0369a1&quot;&gt;Next.js · TailwindCSS&lt;br&gt;Panel Admin &amp; LMS&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;strokeWidth=1.5;fontFamily=Helvetica;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="545" width="155" height="48" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cnt-bot" value="&lt;b&gt;Bot-Asistencia&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot; color=&quot;#4338ca&quot;&gt;Node.js · Discord.js&lt;br&gt;Turnos &amp; Asistencias&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#6366F1;strokeWidth=1.5;fontFamily=Helvetica;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="565" y="545" width="150" height="48" as="geometry"/>
+        </mxCell>
+
+        <!-- AWS Systems Manager Card -->
+        <mxCell id="ssm" value="&lt;b&gt;AWS Systems Manager&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#881337&quot;&gt;SSM Session Manager&lt;br&gt;&lt;b&gt;Cero Puertos SSH (22)&lt;/b&gt;&lt;br&gt;Túnel Seguro IAM cifrado&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.8;fontFamily=Helvetica;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="765" y="522" width="185" height="70" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- 3. SUBRED PRIVADA DE DATOS                 -->
+        
+        <mxCell id="subnet-data" value="&lt;b&gt;Subred Privada Aislada de Datos · CIDR: 10.0.100.0/24 (Blindaje RDBMS · Sin Ruta a Internet)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontFamily=Helvetica;fontSize=11;fontColor=#059669;" vertex="1" parent="1">
+          <mxGeometry x="145" y="635" width="830" height="115" as="geometry"/>
+        </mxCell>
+
+        <!-- Amazon RDS -->
+        <mxCell id="rds" value="&lt;b&gt;Amazon RDS for PostgreSQL 16&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#065f46&quot;&gt;Instancia: db.t3.micro · Almacenamiento: 20 GB gp3 SSD&lt;br&gt;Security Group: Solo acepta conexiones TCP :5432 desde Subred EC2&lt;br&gt;&lt;b&gt;IP Pública: Bloqueada (0.0.0.0) · Backups automáticos incluidos&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontFamily=Helvetica;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="175" y="668" width="460" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Amazon S3 Bucket -->
+        <mxCell id="s3" value="&lt;b&gt;Amazon S3 Standard&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot; color=&quot;#047857&quot;&gt;Bucket Cursos LMS &amp; Backups&lt;br&gt;Videos, PDFs instructivos&lt;br&gt;Durabilidad: 99.999999999%&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;strokeWidth=2;fontFamily=Helvetica;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="668" width="160" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Amazon CloudWatch -->
+        <mxCell id="cloudwatch" value="&lt;b&gt;Amazon CloudWatch&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9.5px;&quot; color=&quot;#881337&quot;&gt;Telemetría &amp; Métricas&lt;br&gt;Alarmas de CPU/RAM&lt;br&gt;Logs centralizados&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F43F5E;strokeWidth=1.8;fontFamily=Helvetica;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="835" y="668" width="120" height="65" as="geometry"/>
+        </mxCell>
+
+        
+        <!-- LÍNEAS DE CONEXIÓN Y FLUJOS                -->
+        
+
+        <!-- Clientes a Route 53 / CloudFront -->
+        <mxCell id="flow-disc-r53" value="Eventos Discord" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;strokeColor=#6366F1;strokeWidth=1.8;fontFamily=Helvetica;fontSize=9.5;fontColor=#4338ca;" edge="1" parent="1" source="client-discord" target="edge-group">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="flow-web-cf" value="HTTPS :443" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#0284C7;strokeWidth=1.8;fontFamily=Helvetica;fontSize=9.5;fontColor=#0369a1;" edge="1" parent="1" source="client-web" target="edge-group">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Edge a IGW -->
+        <mxCell id="flow-edge-igw" value="Tráfico Web Seguro" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#8C4FFF;" edge="1" parent="1" source="edge-group" target="igw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- IGW a ALB -->
+        <mxCell id="flow-igw-alb" value="Ingress HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#0284C7;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#0284C7;" edge="1" parent="1" source="igw" target="alb">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ALB a EC2 -->
+        <mxCell id="flow-alb-ec2" value="HTTP Interno (Target Groups)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#F59E0B;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#B45309;" edge="1" parent="1" source="alb" target="ec2-host">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- EC2 a RDS -->
+        <mxCell id="flow-ec2-rds" value="SQL TCP :5432 (Prisma ORM)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#059669;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ec2-host" target="rds">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- EC2 a S3 -->
+        <mxCell id="flow-ec2-s3" value="API SDK (LMS)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#10B981;strokeWidth=1.8;strokeDasharray=4 3;fontFamily=Helvetica;fontSize=9.5;fontColor=#047857;" edge="1" parent="1" source="ec2-host" target="s3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- SSM a EC2 -->
+        <mxCell id="flow-ssm-ec2" value="Túnel HTTPS IAM" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E11D48;strokeWidth=1.8;strokeDasharray=4 3;fontFamily=Helvetica;fontSize=9.5;fontColor=#881337;" edge="1" parent="1" source="ssm" target="ec2-host">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- EC2 / RDS a CloudWatch -->
+        <mxCell id="flow-ec2-cw" value="Métricas / Logs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#F43F5E;strokeWidth=1.6;strokeDasharray=3 3;fontFamily=Helvetica;fontSize=9.5;fontColor=#881337;" edge="1" parent="1" source="ssm" target="cloudwatch">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

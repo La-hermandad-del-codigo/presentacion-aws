@@ -200,23 +200,24 @@ La arquitectura inicial en AWS traslada la inversión hacia un esquema de alta d
 
 Las tarifas han sido calculadas y verificadas oficialmente en la herramienta **AWS Pricing Calculator** para la región de referencia **US East (N. Virginia)** (`us-east-1`), garantizando reproducibilidad paso a paso sin sobrecostos ocultos ni aprovisionamientos redundantes:
 
-| # | Servicio AWS | Tipo / Configuración Exacta | Propósito Técnico en SOFI | Costo Mensual Oficial |
+| # | Servicio AWS | Tipo / Configuración Exacta | Propósito Técnico | Costo Mensual Oficial |
 | :-: | :--- | :--- | :--- | :---: |
-| 1 | **Amazon EC2** | `t3.small` (2 vCPU, 2 GiB RAM)<br>Linux, On-Demand (730 h continuas) | Cómputo desacoplado de `sofi-backend`, `SOFI-WEB` y bot de Discord. | **$15.18 USD** |
-| 2 | **Amazon EBS** | 30 GB `gp3` (SSD Uso General)<br>3,000 IOPS y 125 MB/s base incluidos | Almacenamiento persistente del sistema operativo Linux y contenedores Docker. | **$2.40 USD** |
-| 3 | **Amazon RDS for PostgreSQL** | `db.t3.micro` Single-AZ ($13.14)<br>20 GB almacenamiento `gp3` ($2.30) | Base de datos relacional administrada, aislada y con retención de copias de seguridad. | **$15.44 USD** |
-| 4 | **Amazon S3** | S3 Standard: 15 GB almacenamiento<br>1,000 peticiones PUT + 10,000 GET | Repositorio elástico para materiales del LMS (videos/PDFs) y respaldos históricos. | **$0.35 USD** |
-| 5 | **AWS Systems Manager** | SSM Session Manager estándar<br>10 parámetros en Parameter Store | Administración remota cifrada por túnel IAM sin requerir apertura del puerto SSH (22). | **$0.00 USD** |
-| 6 | **Amazon CloudWatch** | 2 Alarmas de salud/CPU ($0.20)<br>2 GB Logs ingeridos y 1 mes retención | Monitoreo de disponibilidad del backend y alerta inmediata ante caídas del bot. | **$1.21 USD** |
-| 7 | **Amazon Route 53** | 1 Hosted Zone pública<br>(Consultas estándar dentro de cuota) | Resolución DNS de subdominios institucionales (`api.sofi` y `admin.sofi`). | **$0.50 USD** |
-| 8 | **Data Transfer (DTO)** | 11 GB de tráfico de salida a Internet<br>(Tráfico entrante e intra-AZ a $0.00) | Ancho de banda saliente hacia practicantes remotos y administradores de SOFI. | **$0.99 USD** |
-| | **TOTAL MENSUAL VERIFICADO** | | **Inversión mensual base consolidada en AWS** | **`$36.07 USD`** |
+| 1 | **Amazon EC2 (SOFI)** | `t3.small` (2 vCPU, 2 GiB RAM)<br>Linux, On-Demand (730 h continuas) | Cómputo desacoplado de `sofi-backend`, `SOFI-WEB` y bot de Discord. | **$15.18 USD** |
+| 2 | **Amazon EC2 (Clientes)** | `t3.small` (2 vCPU, 2 GiB RAM)<br>Linux, On-Demand (730 h continuas) | Cómputo aislado para Reflexo Perú (Next/Nest/SQLite) y Arte & Ideas (Django/MySQL). | **$15.18 USD** |
+| 3 | **Amazon EBS (x2)** | 2x 30 GB `gp3` (SSD Uso General)<br>3,000 IOPS y 125 MB/s base incluidos | Almacenamiento persistente de SO Linux y contenedores para ambas instancias. | **$4.80 USD** |
+| 4 | **Amazon RDS for PostgreSQL** | `db.t3.micro` Single-AZ ($13.14)<br>20 GB almacenamiento `gp3` ($2.30) | Base de datos relacional administrada, exclusiva y aislada para SOFI. | **$15.44 USD** |
+| 5 | **Amazon S3** | S3 Standard: 15 GB almacenamiento<br>1,000 peticiones PUT + 10,000 GET | Repositorio elástico para materiales del LMS (videos/PDFs) y respaldos históricos. | **$0.35 USD** |
+| 6 | **AWS Systems Manager** | SSM Session Manager estándar<br>10 parámetros en Parameter Store | Administración remota cifrada por túnel IAM sin requerir apertura del puerto SSH (22). | **$0.00 USD** |
+| 7 | **Amazon CloudWatch** | 2 Alarmas de salud/CPU ($0.20)<br>2 GB Logs ingeridos y 1 mes retención | Monitoreo de disponibilidad del backend y alerta inmediata ante caídas del bot. | **$1.21 USD** |
+| 8 | **Amazon Route 53** | 1 Hosted Zone pública<br>(Consultas estándar dentro de cuota) | Resolución DNS de subdominios institucionales (`sofi`) y comerciales (`reflexo`, `arteideas`). | **$0.50 USD** |
+| 9 | **Data Transfer (DTO)** | 11 GB de tráfico de salida a Internet<br>(Tráfico entrante e intra-AZ a $0.00) | Ancho de banda saliente hacia practicantes remotos y clientes comerciales. | **$0.99 USD** |
+| | **TOTAL MENSUAL VERIFICADO** | | **Inversión mensual base consolidada en AWS (SOFI + Clientes)** | **`$53.65 USD`** |
 
 > **Criterios Clave de Optimización Financiera:**
 > 1. **Uso de volúmenes de última generación (`gp3`):** Tanto en EBS como en RDS se seleccionó almacenamiento `gp3` en lugar del antiguo `gp2`, obteniendo un rendimiento superior (3,000 IOPS garantizados sin depender de ráfagas) y un ahorro directo de hasta 20% por GB.
 > 2. **Eliminación de trampas de sobrecosto en RDS:** Se prescindió de *RDS Proxy* (ahorro de $21.90 USD/mes) al manejarse el pool de conexiones eficientemente desde Prisma/NestJS, y de *Database Insights* (ahorro de $18.25 USD/mes) por no requerirse telemetría avanzada de kernel para esta escala. Asimismo, al usar PostgreSQL 16 no aplica tarifa de *Extended Support*.
 > 3. **Aprovechamiento de cuotas y retenciones gratuitas:** Las copias de seguridad automáticas de RDS están incluidas sin costo adicional hasta el 100% del tamaño de la base de datos (20 GB a $0.00). Systems Manager es un servicio nativo gratuito para instancias EC2, y Parameter Store no genera cobros para sus primeros 10,000 parámetros estándar.
-> 4. **Optimización Operativa Futura:** Se contempla la implementación de **AWS Instance Scheduler** para suspender la instancia EC2 fuera del horario de prácticas (noches y fines de semana), reduciendo el costo de cómputo en hasta un **60%** en entornos formativos no productivos (llegando a ~$6.00 USD en cómputo EC2).
+> 4. **Optimización Operativa Futura:** Se contempla la implementación de **AWS Instance Scheduler** para suspender únicamente la instancia EC2 de SOFI fuera del horario de prácticas (noches y fines de semana), reduciendo el costo de cómputo formativo en un **60%** (~$9.00 USD de ahorro), situando la factura consolidada en apenas **~$44.00 USD/mes** manteniendo los sistemas de clientes comerciales en línea 24/7.
 
 ---
 
@@ -264,56 +265,67 @@ flowchart TB
 
 ### 3.4 Diagrama de Arquitectura de Red Propuesto (Nivel Conceptual)
 
-La red virtual se implementa mediante **Amazon Virtual Private Cloud (VPC)**, garantizando la segmentación por capas lógicas y el aislamiento de datos:
+La red virtual se implementa mediante **Amazon Virtual Private Cloud (VPC)**, garantizando la segmentación por capas lógicas, el aislamiento de cómputo entre proyectos y la protección de datos:
 
 ```mermaid
 flowchart TD
-    PRACT_DISCORD(("Practicantes en Discord<br/>Marcado de Asistencia Remota"))
-    ADMIN_WEB(("Supervisores y Administradores<br/>Acceso a SOFI-WEB"))
+    USERS_SOFI(("Practicantes & Supervisores<br/>Acceso a SOFI y Discord"))
+    USERS_CLIENTES(("Usuarios Clientes Comerciales<br/>Reflexo Perú y Arte & Ideas"))
 
-    R53["Amazon Route 53 (DNS)<br/>admin.sofi / api.sofi"]
-    CF["Amazon CloudFront (CDN)<br/>Aceleración Perimetral"]
+    R53["Amazon Route 53 (DNS Multidominio)<br/>sofi.edu.pe / reflexo / arteideas"]
+    CF["Amazon CloudFront (CDN)<br/>Aceleración Perimetral y Caché"]
     IGW["Internet Gateway (IGW)"]
 
     subgraph VPC["Amazon VPC (CIDR: 10.0.0.0/16)"]
         subgraph SUB_PUB["Subred Pública (10.0.1.0/24)"]
-            ALB["Application Load Balancer (ALB)<br/>Terminación HTTPS"]
+            ALB["Application Load Balancer (ALB)<br/>Host Routing: *.sofi vs *.reflexo / *.arteideas"]
         end
         
-        subgraph SUB_PRIV_APP["Subred Privada de Cómputo (10.0.10.0/24)"]
+        subgraph SUB_PRIV_SOFI["Subred Privada Cómputo SOFI (10.0.10.0/24)"]
             EC2_SOFI["Amazon EC2 (t3.small)<br/>sofi-backend, SOFI-WEB y Bot"]
+        end
+
+        subgraph SUB_PRIV_CLIENTES["Subred Privada Cómputo Clientes (10.0.20.0/24)"]
+            EC2_CLIENTES["Amazon EC2 (t3.small)<br/>Reflexo4 (Next/Nest/SQLite) y Arte & Ideas (Django/MySQL)"]
         end
         
         subgraph SUB_PRIV_DATA["Subred Privada Aislada de Datos (10.0.100.0/24)"]
-            RDS_PG[("Amazon RDS PostgreSQL<br/>Asistencias, Usuarios y Cursos")]
+            RDS_PG[("Amazon RDS PostgreSQL 16<br/>Exclusivo SOFI (Aislado de Clientes)")]
         end
     end
 
     subgraph SERVICIOS_GESTIONADOS["Servicios Gestionados de AWS"]
         S3_MEDIA[("Amazon S3<br/>Respaldos y Material de Cursos")]
-        SSM["AWS Systems Manager<br/>Administración sin Puertos Expuestos"]
+        SSM["AWS Systems Manager<br/>Administración sin Puertos SSH"]
         CW["Amazon CloudWatch<br/>Telemetría y Alarmas"]
     end
 
-    ADMIN_WEB -->|Acceso HTTPS| R53
+    USERS_SOFI -->|Acceso HTTPS / Eventos| R53
+    USERS_CLIENTES -->|Acceso HTTPS B2B| R53
     R53 --> CF
     CF --> IGW
     IGW --> ALB
-    ALB -->|Enrutamiento Privado| EC2_SOFI
+
+    ALB -->|Enrutamiento Host *.sofi| EC2_SOFI
+    ALB -->|Enrutamiento Host Clientes| EC2_CLIENTES
     
-    PRACT_DISCORD -->|Comandos de Asistencia| EC2_SOFI
-    
-    EC2_SOFI -->|Consultas SQL Privadas| RDS_PG
+    EC2_SOFI -->|Consultas SQL Privadas :5432| RDS_PG
     EC2_SOFI -.->|Almacenamiento de Cursos y Backups| S3_MEDIA
+    EC2_CLIENTES -.->|Backups Periódicos de BDs| S3_MEDIA
+
     EC2_SOFI -.->|Túnel Seguro de Gestión| SSM
+    EC2_CLIENTES -.->|Túnel Seguro de Gestión| SSM
+
     EC2_SOFI -.->|Métricas y Logs| CW
+    EC2_CLIENTES -.->|Métricas y Logs| CW
 ```
 
-#### Fundamentos del Diseño de Red para la Plataforma SOFI:
+#### Fundamentos del Diseño de Red con Segregación de Cargas:
 
-1. **Amazon Route 53 y CloudFront:** El acceso al portal administrativo de `SOFI-WEB` y la futura entrega de recursos formativos se optimizan perimetralmente, distribuyendo archivos estáticos desde puntos de presencia cercanos sin recargar el servidor.
-2. **Subred Pública Dedicada al Balanceador (ALB):** El balanceador recibe el tráfico web entrante bajo HTTPS con certificados gestionados por AWS Certificate Manager (ACM). Ningún servidor de backend posee IP pública.
-3. **Subred Privada de Cómputo:** Aloja la instancia donde corren `sofi-backend`, `SOFI-WEB` y `Bot-Asistencia-APM`. Esta instancia no está expuesta directamente a Internet y solo acepta tráfico del balanceador y eventos del bot a través de canales protegidos.
-4. **Subred Privada Aislada de Datos:** Aloja la base de datos **Amazon RDS for PostgreSQL**. Al carecer de ruta al Internet Gateway, queda blindada frente a accesos externos y solo se comunica con la subred privada de cómputo.
-5. **Soporte para el Módulo de Cursos con Amazon S3:** Los contenidos didácticos y recursos multimedia para los practicantes se gestionan directamente en S3, evitando el agotamiento del disco del servidor y asegurando escalabilidad independiente.
-6. **Administración Segura sin Exposición:** Toda gestión administrativa sobre la infraestructura se realiza mediante **AWS Systems Manager**, asegurando que **no existan puertos expuestos directamente a Internet**.
+1. **Amazon Route 53 y CloudFront:** Resolución de subdominios institucionales y comerciales con aceleración perimetral, protegiendo las aplicaciones de ataques DDoS con AWS Shield Standard.
+2. **Subred Pública Dedicada al Balanceador (ALB):** El balanceador inspecciona los encabezados HTTP `Host` para enrutar el tráfico dinámicamente hacia la subred correspondiente: tráfico formativo a `10.0.10.x` y comercial a `10.0.20.x`.
+3. **Subred Privada Cómputo SOFI (`10.0.10.0/24`):** Aloja `sofi-backend`, `SOFI-WEB` y `Bot-Asistencia-APM`. No tiene IP pública y sus recursos de memoria/CPU están protegidos contra saturaciones externas.
+4. **Subred Privada Cómputo Clientes (`10.0.20.0/24`):** Instancia EC2 independiente que aloja los contenedores de Reflexo Perú y Arte & Ideas. Al estar en su propio host, se erradica el efecto del *Vecino Ruidoso* (*Noisy Neighbor*).
+5. **Subred Privada Aislada de Datos (`10.0.100.0/24`):** Aloja el motor **Amazon RDS for PostgreSQL**. Al no poseer ruta al IGW ni acceso desde la subred de clientes, garantiza la total privacidad de los registros académicos.
+6. **Soporte Elástico con Amazon S3:** Cursos interactivos, manuales y copias de seguridad de las bases de datos SQLite y MySQL se depositan en S3, evitando la saturación del almacenamiento local de las instancias.
+7. **Administración Segura sin Exposición:** Toda gestión administrativa se ejecuta mediante **AWS Systems Manager (SSM)**, garantizando que **no existan puertos SSH (22) expuestos a Internet**.
