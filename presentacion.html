@@ -719,19 +719,25 @@
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
 
-          /* Entrada fluida y ligera para el contenido (acelerada por GPU) */
+          /* Quitar backdrop-filter redundante en tarjetas opacas para liberar GPU */
+          .reveal .slides section.slide-interno .glass-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
+
+          /* Entrada fluida sin desplazamiento para evitar re-rasterizar vectores SVG */
           .reveal .slides section.slide-interno .interno-content.fragment.fade-up {
-            transform: translate3d(0, 16px, 0);
-            will-change: transform, opacity;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transition: opacity 0.4s ease-out 0.08s,
-                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s !important;
+            transform: none !important;
+            opacity: 0;
+            visibility: hidden;
+            will-change: opacity;
+            transition: opacity 0.5s ease-out 0.15s, visibility 0.5s ease-out 0.15s !important;
           }
 
           .reveal .slides section.slide-interno .interno-content.fragment.fade-up.visible {
-            transform: translate3d(0, 0, 0);
+            transform: none !important;
             opacity: 1;
+            visibility: inherit;
           }
 
           /* Estilo para slide 3 con centrado vertical limpio */
@@ -1016,19 +1022,25 @@
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
 
-          /* Entrada fluida y ligera para el contenido (acelerada por GPU) */
+          /* Quitar backdrop-filter redundante en tarjetas opacas para liberar GPU */
+          .reveal .slides section.slide-externo .glass-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
+
+          /* Entrada fluida sin desplazamiento para evitar re-rasterizar vectores SVG */
           .reveal .slides section.slide-externo .externo-content.fragment.fade-up {
-            transform: translate3d(0, 16px, 0);
-            will-change: transform, opacity;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transition: opacity 0.4s ease-out 0.08s,
-                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s !important;
+            transform: none !important;
+            opacity: 0;
+            visibility: hidden;
+            will-change: opacity;
+            transition: opacity 0.5s ease-out 0.15s, visibility 0.5s ease-out 0.15s !important;
           }
 
           .reveal .slides section.slide-externo .externo-content.fragment.fade-up.visible {
-            transform: translate3d(0, 0, 0);
+            transform: none !important;
             opacity: 1;
+            visibility: inherit;
           }
 
           /* Estilo para slide 4 con centrado vertical limpio */
@@ -2255,19 +2267,25 @@
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
 
-    /* Entrada fluida y ligera para el contenido de la red (acelerada por GPU) */
+    /* Quitar backdrop-filter redundante en tarjetas opacas para liberar GPU */
+    .reveal .slides section.slide-red-arquitectura .glass-card {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Entrada fluida sin desplazamiento para evitar re-rasterizar vectores SVG */
     .reveal .slides section.slide-red-arquitectura .red-content.fragment.fade-up {
-      transform: translate3d(0, 16px, 0);
-      will-change: transform, opacity;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transition: opacity 0.4s ease-out 0.08s,
-                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s !important;
+      transform: none !important;
+      opacity: 0;
+      visibility: hidden;
+      will-change: opacity;
+      transition: opacity 0.5s ease-out 0.15s, visibility 0.5s ease-out 0.15s !important;
     }
 
     .reveal .slides section.slide-red-arquitectura .red-content.fragment.fade-up.visible {
-      transform: translate3d(0, 0, 0);
+      transform: none !important;
       opacity: 1;
+      visibility: inherit;
     }
   </style>
 
@@ -3569,27 +3587,31 @@
         currentSlide.classList.contains('slide-red-arquitectura')
       );
 
-      bg.style.transition = 'filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease';
+      let targetFilter = 'blur(2.31px)';
+      let targetOpacity = '0.92';
+      let targetOverlayOpacity = '0';
 
       if (isFirstSlide) {
         const slide1 = document.querySelector('.slide-portada');
         const visibleFragments = slide1 ? slide1.querySelectorAll('.fragment.visible') : [];
         if (visibleFragments.length === 0) {
-          bg.style.filter = 'blur(0px)';
-          bg.style.opacity = '0.92';
-        } else {
-          bg.style.filter = 'blur(2.31px)';
-          bg.style.opacity = '0.92';
+          targetFilter = 'blur(0px)';
         }
-        if (diagramOverlay) diagramOverlay.style.opacity = '0';
       } else if (isDiagramSlide) {
-        bg.style.filter = 'blur(6px)';
-        bg.style.opacity = '0.65';
-        if (diagramOverlay) diagramOverlay.style.opacity = '1';
-      } else {
-        bg.style.filter = 'blur(2.31px)';
-        bg.style.opacity = '0.92';
-        if (diagramOverlay) diagramOverlay.style.opacity = '0';
+        targetFilter = 'blur(6px)';
+        targetOpacity = '0.65';
+        targetOverlayOpacity = '1';
+      }
+
+      if (bg.style.filter !== targetFilter) {
+        bg.style.transition = 'filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease';
+        bg.style.filter = targetFilter;
+      }
+      if (bg.style.opacity !== targetOpacity) {
+        bg.style.opacity = targetOpacity;
+      }
+      if (diagramOverlay && diagramOverlay.style.opacity !== targetOverlayOpacity) {
+        diagramOverlay.style.opacity = targetOverlayOpacity;
       }
     }
 

@@ -40,19 +40,25 @@
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
 
-    /* Entrada fluida y ligera para el contenido de la red (acelerada por GPU) */
+    /* Quitar backdrop-filter redundante en tarjetas opacas para liberar GPU */
+    .reveal .slides section.slide-red-arquitectura .glass-card {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Entrada fluida sin desplazamiento para evitar re-rasterizar vectores SVG */
     .reveal .slides section.slide-red-arquitectura .red-content.fragment.fade-up {
-      transform: translate3d(0, 16px, 0);
-      will-change: transform, opacity;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transition: opacity 0.4s ease-out 0.08s,
-                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s !important;
+      transform: none !important;
+      opacity: 0;
+      visibility: hidden;
+      will-change: opacity;
+      transition: opacity 0.5s ease-out 0.15s, visibility 0.5s ease-out 0.15s !important;
     }
 
     .reveal .slides section.slide-red-arquitectura .red-content.fragment.fade-up.visible {
-      transform: translate3d(0, 0, 0);
+      transform: none !important;
       opacity: 1;
+      visibility: inherit;
     }
   </style>
 
