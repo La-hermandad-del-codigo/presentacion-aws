@@ -736,6 +736,10 @@
                 <filter id="center-shadow" x="-30%" y="-30%" width="160%" height="160%">
                   <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
                 </filter>
+                <radialGradient id="sofi-core-light" cx="50%" cy="35%" r="80%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#d7dee8"/>
+                </radialGradient>
                 <clipPath id="sofi-head-clip">
                   <circle cx="0" cy="-6" r="31"/>
                 </clipPath>
@@ -826,23 +830,23 @@
               </g>
 
               <!-- ========================================== -->
-              <!-- NÚCLEO CENTRAL: TONO #273141 + ÍCONO + "SOFI" -->
+              <!-- NÚCLEO CENTRAL: MISMO ESTILO QUE EL DE LA DIA 4 -->
               <!-- ========================================== -->
               <g transform="translate(580, 220)" filter="url(#center-shadow)">
-                <!-- Disco maestro en tono #273141 con borde blanco -->
-                <circle cx="0" cy="0" r="46" fill="#273141" stroke="#ffffff" stroke-width="4"/>
-                
-                <!-- Fondo circular blanco para el avatar -->
-                <circle cx="0" cy="-6" r="31" fill="#ffffff"/>
+                <!-- Anillo exterior de pulso (hub central) -->
+                <circle cx="0" cy="0" r="52" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.35"/>
+
+                <!-- Disco maestro con degradado sutil -->
+                <circle cx="0" cy="0" r="46" fill="url(#sofi-core-light)" stroke="#000000" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="42.5" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
 
                 <!-- Imagen oficial de SOFI -->
                 <g clip-path="url(#sofi-head-clip)">
                   <image href="favicon.ico" xlink:href="favicon.ico" width="56" height="56" x="-28" y="-34" preserveAspectRatio="xMidYMid meet" style="image-rendering: pixelated;"/>
                 </g>
 
-                <!-- Pastilla blanca con texto "SOFI" en tono #273141 -->
-                <rect x="-25" y="17" width="50" height="18" rx="5" fill="#ffffff" stroke="#273141" stroke-width="1.2"/>
-                <text x="0" y="30" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="900" fill="#273141" letter-spacing="0.1em">SOFI</text>
+                <!-- Texto "SOFI" dentro del círculo (sin fondo ni borde) -->
+                <text x="0" y="31" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="900" fill="#000000" letter-spacing="0.1em">SOFI</text>
               </g>
             </svg>
 
@@ -852,7 +856,7 @@
               <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 1: SOFI-WEB -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PLANIFICADO</span>
@@ -868,7 +872,7 @@
                 </div>
 
                 <!-- Tarjeta 2: sofi-backend -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
@@ -890,7 +894,7 @@
               <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 3: Bot-Asistencia -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
@@ -906,7 +910,7 @@
                 </div>
 
                 <!-- Tarjeta 4: Propósito del Área TI -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #f1f5f9; color: #273141; border: 1.5px solid #273141; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PROPÓSITO TI</span>
@@ -951,12 +955,13 @@
             <!-- CAPA 1: SVG Completo (Círculos Venn, Núcleo VPS, Insignias y Líneas) -->
             <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <filter id="ext-card-shadow" x="-25%" y="-25%" width="150%" height="150%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
-                </filter>
                 <filter id="vps-shadow" x="-30%" y="-30%" width="160%" height="160%">
                   <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
                 </filter>
+                <radialGradient id="vps-core-light" cx="50%" cy="35%" r="80%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#d7dee8"/>
+                </radialGradient>
               </defs>
 
               <!-- ========================================== -->
@@ -968,7 +973,7 @@
               <circle cx="450" cy="120" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
               <circle cx="270" cy="80" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
 
-              <!-- 2. Conexión Fragmentación BD (Verde -> Tarjeta 2 Izq Inferior: x=270, y=390) -->
+              <!-- 2. Conexión Sublitex (Verde -> Tarjeta 2 Izq Inferior: x=270, y=390) -->
               <path d="M 513 352 L 350 390 L 270 390" fill="none" stroke="#059669" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
               <circle cx="513" cy="352" r="5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
               <circle cx="270" cy="390" r="4.5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
@@ -993,7 +998,7 @@
               <!-- 2. Arte & Ideas (Top-Right: Índigo Vívido) -->
               <circle cx="645" cy="175" r="95" fill="#818cf8" fill-opacity="0.92" stroke="#4f46e5" stroke-width="3.5"/>
 
-              <!-- 3. Ecosistema SOFI (Bottom: Esmeralda Vívido) -->
+              <!-- 3. Sublitex (Bottom: Esmeralda Vívido) -->
               <circle cx="580" cy="285" r="95" fill="#34d399" fill-opacity="0.92" stroke="#059669" stroke-width="3.5"/>
 
               <!-- TEXTOS INTERNOS CENTRADOS DENTRO DE CADA CÍRCULO -->
@@ -1009,64 +1014,38 @@
                 <text y="16" font-size="11" font-weight="800" fill="#312e81">React · Django</text>
               </g>
 
-              <!-- Ecosistema SOFI -->
+              <!-- Sublitex -->
               <g transform="translate(580, 322)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
-                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">ECOSISTEMA SOFI</text>
-                <text y="16" font-size="11" font-weight="800" fill="#065f46">PostgreSQL · Discord</text>
-              </g>
-
-              <!-- ========================================== -->
-              <!-- INSIGNIAS DE INTERSECCIÓN -->
-              <!-- ========================================== -->
-
-              <!-- Intersección 1: Reflexo + Arte & Ideas (Superior) -->
-              <g transform="translate(580, 42)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
-                <line x1="0" y1="12" x2="0" y2="82" stroke="#475569" stroke-width="1.8" stroke-dasharray="3 3"/>
-                <circle cx="0" cy="82" r="4" fill="#475569"/>
-                <rect x="-78" y="-13" width="156" height="26" rx="13" fill="#ffffff" stroke="#273141" stroke-width="1.8" filter="url(#ext-card-shadow)"/>
-                <text y="4.5" font-size="10.5" font-weight="800" fill="#273141">6 Contenedores B2B</text>
-              </g>
-
-              <!-- Intersección 2: Reflexo + SOFI (Hueco libre izquierdo: y=235) -->
-              <g transform="translate(365, 235)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
-                <line x1="60" y1="0" x2="168" y2="8" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="3 3"/>
-                <circle cx="168" cy="8" r="4" fill="#0284c7"/>
-                <rect x="-65" y="-13" width="130" height="26" rx="13" fill="#ffffff" stroke="#0284c7" stroke-width="1.8" filter="url(#ext-card-shadow)"/>
-                <text y="4.5" font-size="10.5" font-weight="800" fill="#0284c7">SQLite (2.45 GB)</text>
-              </g>
-
-              <!-- Intersección 3: Arte & Ideas + SOFI (Hueco libre derecho: y=235) -->
-              <g transform="translate(795, 235)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
-                <line x1="-65" y1="0" x2="-168" y2="8" stroke="#059669" stroke-width="1.8" stroke-dasharray="3 3"/>
-                <circle cx="-168" cy="8" r="4" fill="#059669"/>
-                <rect x="-68" y="-13" width="136" height="26" rx="13" fill="#ffffff" stroke="#059669" stroke-width="1.8" filter="url(#ext-card-shadow)"/>
-                <text y="4.5" font-size="10.5" font-weight="800" fill="#047857">MySQL 8.0 (350MB)</text>
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">SUBLITEX</text>
+                <text y="16" font-size="11" font-weight="800" fill="#065f46">React · Node.js</text>
               </g>
 
               <!-- ========================================== -->
               <!-- NÚCLEO CENTRAL: NODO HOST VPS HETZNER -->
               <!-- ========================================== -->
               <g transform="translate(580, 220)" filter="url(#vps-shadow)">
-                <!-- Disco maestro en tono #273141 con borde blanco -->
-                <circle cx="0" cy="0" r="46" fill="#273141" stroke="#ffffff" stroke-width="4"/>
-                
-                <!-- Fondo circular blanco para el icono -->
-                <circle cx="0" cy="-6" r="31" fill="#ffffff"/>
+                <!-- Anillo exterior de pulso (hub central) -->
+                <circle cx="0" cy="0" r="52" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.35"/>
 
-                <!-- Icono de Servidor / Cómputo Host -->
-                <g transform="translate(0, -6)">
-                  <rect x="-16" y="-14" width="32" height="12" rx="3" fill="none" stroke="#273141" stroke-width="2"/>
-                  <circle cx="-9" cy="-8" r="1.5" fill="#273141"/>
-                  <line x1="-2" y1="-8" x2="9" y2="-8" stroke="#273141" stroke-width="1.8" stroke-linecap="round"/>
-                  
-                  <rect x="-16" y="2" width="32" height="12" rx="3" fill="none" stroke="#273141" stroke-width="2"/>
-                  <circle cx="-9" cy="8" r="1.5" fill="#273141"/>
-                  <line x1="-2" y1="8" x2="9" y2="8" stroke="#273141" stroke-width="1.8" stroke-linecap="round"/>
+                <!-- Disco maestro con degradado sutil -->
+                <circle cx="0" cy="0" r="46" fill="url(#vps-core-light)" stroke="#000000" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="42.5" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+
+                <!-- Icono de Servidor / Cómputo Host (2 unidades) -->
+                <g transform="translate(0, -9)">
+                  <rect x="-16" y="-16" width="32" height="12" rx="3" fill="none" stroke="#000000" stroke-width="2.2"/>
+                  <circle cx="-10" cy="-10" r="1.6" fill="#000000"/>
+                  <line x1="-4" y1="-10" x2="9" y2="-10" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="11" cy="-10" r="1.9" fill="#000000" fill-opacity="0.85"/>
+
+                  <rect x="-16" y="2" width="32" height="12" rx="3" fill="none" stroke="#000000" stroke-width="2.2"/>
+                  <circle cx="-10" cy="8" r="1.6" fill="#000000"/>
+                  <line x1="-4" y1="8" x2="9" y2="8" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="11" cy="8" r="1.9" fill="#000000" fill-opacity="0.85"/>
                 </g>
 
-                <!-- Pastilla blanca con texto "VPS HETZNER" en tono #273141 -->
-                <rect x="-31" y="17" width="62" height="18" rx="5" fill="#ffffff" stroke="#273141" stroke-width="1.2"/>
-                <text x="0" y="30" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="900" fill="#273141" letter-spacing="0.06em">VPS HETZNER</text>
+                <!-- Texto "VPS HETZNER" dentro del círculo (sin fondo ni borde) -->
+                <text x="0" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="900" fill="#000000" letter-spacing="0.04em">VPS HETZNER</text>
               </g>
             </svg>
 
@@ -1076,34 +1055,34 @@
               <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 1: Reflexo Perú -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
                       <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">SALUD INTEGRAL</span>
                       <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Reflexo Perú</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #0284c7; margin-bottom: 6px;">Next.js · NestJS · SQLite (2.45 GB)</div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #0284c7; margin-bottom: 4px;">Plataforma de salud y bienestar integral</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
-                    <li>Gestión de historias clínicas y citas</li>
-                    <li>Generación PDF pesada (timeout 300s)</li>
-                    <li>Dominio: <code>sistema4.reflexoperu.com.pe</code></li>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Historias clínicas y citas médicas</li>
+                    <li>Agenda de terapeutas y control de sedes</li>
+                    <li>Reportes clínicos y control financiero</li>
                   </ul>
                 </div>
 
-                <!-- Tarjeta 2: Fragmentación de Bases de Datos -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                <!-- Tarjeta 2: Sublitex -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">3 MOTORES BD</span>
-                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Fragmentación I/O</strong>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">E-COMMERCE</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Sublitex</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #059669; margin-bottom: 6px;">Postgres + MySQL 8.0 + SQLite</div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #059669; margin-bottom: 4px;">Camisetas deportivas sublimadas</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
-                    <li>Disputa continua por el caché de disco</li>
-                    <li>Degradación de rendimiento transaccional</li>
-                    <li>Cero segregación de almacenamiento</li>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Venta online de indumentaria deportiva</li>
+                    <li>Sublimación a medida (diseño y dorsal)</li>
+                    <li>Pedidos personalizados vía catálogo online</li>
                   </ul>
                 </div>
               </div>
@@ -1114,34 +1093,34 @@
               <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 3: Arte & Ideas -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
                       <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">FOTOGRAFÍA &amp; EVENTOS</span>
                       <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Arte &amp; Ideas</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 6px;">React 18 · Django REST · MySQL 8.0</div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #4338ca; margin-bottom: 4px;">Fotografía, eventos y producción audiovisual</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
-                    <li>CRM comercial, agenda y flujo de producción</li>
-                    <li>MySQL consume ~350 MiB RAM en reposo</li>
-                    <li>Dominio: <code>app.arteideas.pe</code> (puerto 3000)</li>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>CRM comercial y agenda de producción</li>
+                    <li>Control de pedidos y flujo de producción</li>
+                    <li>Seguimiento de ventas y rendimiento comercial</li>
                   </ul>
                 </div>
 
                 <!-- Tarjeta 4: Riesgo Arquitectónico Crítico -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #fecaca; border-left: 5px solid #ef4444; box-shadow: 0 10px 25px -4px rgba(239, 68, 68, 0.15); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
                       <span class="pill-badge danger" style="background: #fef2f2; color: #dc2626; border: 1.5px solid #ef4444; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">RIESGO CRÍTICO</span>
                       <strong style="font-size: 0.86rem; color: #991b1b; font-weight: 800;">Vecino Ruidoso</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #dc2626; margin-bottom: 6px;">3.7 GiB RAM · 0 Swap · OOM Killer</div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #dc2626; margin-bottom: 4px;">Riesgo por cargas compartidas</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
-                    <li>Pico de carga comercial tumba a SOFI</li>
-                    <li>Puerto MySQL 3307 expuesto a Internet</li>
-                    <li>Exige aislamiento urgente en AWS VPC</li>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Picos de demanda afectan a otros servicios</li>
+                    <li>Aplicaciones sin aislamiento entre sí</li>
+                    <li>Riesgo de interrupciones en horario pico</li>
                   </ul>
                 </div>
               </div>

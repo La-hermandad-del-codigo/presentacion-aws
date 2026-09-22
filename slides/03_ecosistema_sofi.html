@@ -26,6 +26,10 @@
                 <filter id="center-shadow" x="-30%" y="-30%" width="160%" height="160%">
                   <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
                 </filter>
+                <radialGradient id="sofi-core-light" cx="50%" cy="35%" r="80%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#d7dee8"/>
+                </radialGradient>
                 <clipPath id="sofi-head-clip">
                   <circle cx="0" cy="-6" r="31"/>
                 </clipPath>
@@ -116,23 +120,23 @@
               </g>
 
               <!-- ========================================== -->
-              <!-- NÚCLEO CENTRAL: TONO #273141 + ÍCONO + "SOFI" -->
+              <!-- NÚCLEO CENTRAL: MISMO ESTILO QUE EL DE LA DIA 4 -->
               <!-- ========================================== -->
               <g transform="translate(580, 220)" filter="url(#center-shadow)">
-                <!-- Disco maestro en tono #273141 con borde blanco -->
-                <circle cx="0" cy="0" r="46" fill="#273141" stroke="#ffffff" stroke-width="4"/>
-                
-                <!-- Fondo circular blanco para el avatar -->
-                <circle cx="0" cy="-6" r="31" fill="#ffffff"/>
+                <!-- Anillo exterior de pulso (hub central) -->
+                <circle cx="0" cy="0" r="52" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.35"/>
+
+                <!-- Disco maestro con degradado sutil -->
+                <circle cx="0" cy="0" r="46" fill="url(#sofi-core-light)" stroke="#000000" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="42.5" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
 
                 <!-- Imagen oficial de SOFI -->
                 <g clip-path="url(#sofi-head-clip)">
                   <image href="favicon.ico" xlink:href="favicon.ico" width="56" height="56" x="-28" y="-34" preserveAspectRatio="xMidYMid meet" style="image-rendering: pixelated;"/>
                 </g>
 
-                <!-- Pastilla blanca con texto "SOFI" en tono #273141 -->
-                <rect x="-25" y="17" width="50" height="18" rx="5" fill="#ffffff" stroke="#273141" stroke-width="1.2"/>
-                <text x="0" y="30" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="900" fill="#273141" letter-spacing="0.1em">SOFI</text>
+                <!-- Texto "SOFI" dentro del círculo (sin fondo ni borde) -->
+                <text x="0" y="31" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="900" fill="#000000" letter-spacing="0.1em">SOFI</text>
               </g>
             </svg>
 
@@ -142,7 +146,7 @@
               <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 1: SOFI-WEB -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PLANIFICADO</span>
@@ -158,7 +162,7 @@
                 </div>
 
                 <!-- Tarjeta 2: sofi-backend -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
@@ -180,7 +184,7 @@
               <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 3: Bot-Asistencia -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
@@ -196,7 +200,7 @@
                 </div>
 
                 <!-- Tarjeta 4: Propósito del Área TI -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; border-left: 5px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                       <span class="pill-badge" style="background: #f1f5f9; color: #273141; border: 1.5px solid #273141; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PROPÓSITO TI</span>
