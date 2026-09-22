@@ -5,8 +5,7 @@ Cada archivo en esta carpeta representa una diapositiva (`<section>...</section>
 | Archivo | Diapositiva | Descripción |
 | :--- | :--- | :--- |
 | `01_portada.html` | Slide 1 | Título, autor (Jhefry Cabanillas), SENATI, APM Inversiones EIRL |
-| `02_modelo_negocio.html` | Slide 2 | Modelo B2B y segregación del área TI |
-| `03_ecosistema_sofi.html` | Slide 3 | Ecosistema SOFI (Diagrama de convergencia: Web, Discord, Backend y Usuarios) |
+| `03_ecosistema_sofi.html` | Slide 2 | Ecosistema SOFI (Diagrama de convergencia: Web, Discord, Backend y Usuarios) |
 | `04_telemetria_vps.html` | Slide 4 | Diagnóstico real del VPS (vCPUs, RAM, Swap 0B, Docker) |
 | `05_limitaciones_criticas.html` | Slide 5 | Puntos de falla, OOM killer y puertos públicos expuestos |
 | `06_aws_caf.html` | Slide 6 | Marco de Adopción de la Nube (6 perspectivas) |

@@ -7,25 +7,31 @@
             -webkit-text-stroke: 4px #ffffff;
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
+          /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
+             se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
+          .reveal .slides section.slide-interno {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: flex-start;
+            top: 0 !important;
+            height: 100% !important;
+            box-sizing: border-box;
+          }
         </style>
         <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 3 (tono calibrado, desenfoque sutil) -->
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
-        <div style="position: relative; z-index: 1;">
+        <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1 1 auto; width: 100%;">
           <!-- Encabezado de la diapositiva con alto contraste -->
           <div style="margin-bottom: 12px;">
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 49, 65, 0.08); border: 1.5px solid #273141; border-radius: 20px; padding: 3px 12px; font-size: 0.72rem; font-weight: 800; color: #273141; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
-              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
-              Área de Desarrollo de Soluciones de TI
-            </div>
-            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
-          <div style="position: relative; width: 1160px; height: 490px; margin: 28px auto 0;">
+          <div style="position: relative; width: 1160px; height: 490px; margin: 14px auto 0;">
             
             <!-- CAPA 1: SVG Completo (Círculos Tonos Claros, Núcleo #273141, Insignias y Líneas) -->
-            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1; transform: none;" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <filter id="v-card-shadow" x="-25%" y="-25%" width="150%" height="150%">
                   <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
@@ -148,20 +154,20 @@
             </svg>
 
             <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas Armonizadas -->
-            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none;">
+            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none; transform: none;">
               
               <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 1: SOFI-WEB -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 12px 16px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 185px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                      <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PLANIFICADO</span>
-                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">SOFI-WEB (LMS)</strong>
+                      <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.7rem; padding: 2px 8px; font-weight: 800;">PLANIFICADO</span>
+                      <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">SOFI-WEB (LMS)</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #0284c7; margin-bottom: 6px;">Frontend Web · Next.js / Tailwind</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #0284c7; margin-bottom: 6px;">Frontend Web · Next.js / Tailwind</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                  <ul style="font-size: 0.83rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
                     <li>Portal administrativo de supervisores</li>
                     <li>Módulo LMS formativo *(Planificado)*</li>
                     <li>Capacitación técnica de practicantes</li>
@@ -169,15 +175,15 @@
                 </div>
 
                 <!-- Tarjeta 2: sofi-backend -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 12px 16px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 185px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
-                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">sofi-backend</strong>
+                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.7rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
+                      <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">sofi-backend</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #059669; margin-bottom: 6px;">API Core · NestJS / PostgreSQL</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #059669; margin-bottom: 6px;">API Core · NestJS / PostgreSQL</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                  <ul style="font-size: 0.83rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
                     <li>Motor transaccional del área interna</li>
                     <li>APIs REST y control de acceso seguro</li>
                     <li>Persistencia centralizada relacional</li>
@@ -191,15 +197,15 @@
               <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
                 <!-- Tarjeta 3: Bot-Asistencia -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 12px 16px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 185px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                      <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
-                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Bot-Asistencia</strong>
+                      <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.7rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
+                      <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">Bot-Asistencia</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 6px;">Servicio Discord · Node.js</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #4338ca; margin-bottom: 6px;">Servicio Discord · Node.js</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                  <ul style="font-size: 0.83rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
                     <li>Captura diaria de marcas de turno</li>
                     <li>Canal remoto ágil para practicantes</li>
                     <li>Despacho y sincronización con backend</li>
@@ -207,15 +213,15 @@
                 </div>
 
                 <!-- Tarjeta 4: Propósito del Área TI -->
-                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                <div class="glass-card" style="background: #ffffff !important; padding: 12px 16px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 185px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                      <span class="pill-badge" style="background: #f1f5f9; color: #273141; border: 1.5px solid #273141; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PROPÓSITO TI</span>
-                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Solución In-House</strong>
+                      <span class="pill-badge" style="background: #f1f5f9; color: #273141; border: 1.5px solid #273141; font-size: 0.7rem; padding: 2px 8px; font-weight: 800;">PROPÓSITO TI</span>
+                      <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">Solución In-House</strong>
                     </div>
-                    <div style="font-size: 0.74rem; font-weight: 800; color: #273141; margin-bottom: 6px;">Gestión de Talento y Formación</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #273141; margin-bottom: 6px;">Gestión de Talento y Formación</div>
                   </div>
-                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                  <ul style="font-size: 0.83rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
                     <li>Automatización de procesos internos</li>
                     <li>Soporte a la formación de practicantes</li>
                     <li>Supervisión y métricas de rendimiento</li>
@@ -225,6 +231,17 @@
 
             </div>
 
+          </div>
+
+          <!-- Hallazgo Crítico: Contención en VPS Compartido -->
+          <div style="margin: auto auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
+            <div style="width: 24px; height: 24px; border-radius: 7px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #dc2626; letter-spacing: 0.04em;">Hallazgo Crítico: Contención en VPS Compartido</div>
+              <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">El área de desarrollo interno comparte el mismo servidor Hetzner con el desarrollo externo. Una saturación de los servicios externos puede afectar el rendimiento de la plataforma interna SOFI.</div>
+            </div>
           </div>
         </div>
       </section>
