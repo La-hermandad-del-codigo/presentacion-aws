@@ -196,21 +196,27 @@ El análisis de Costo Total de Propiedad (TCO) revela que el ahorro aparente de 
 
 La arquitectura inicial en AWS traslada la inversión hacia un esquema de alta disponibilidad que independiza la base de datos y provee almacenamiento elástico sin costos fijos sobredimensionados:
 
-#### 3.2.2 Estimación Mensual de la Arquitectura Base
+#### 3.2.2 Estimación Mensual de la Arquitectura Base (AWS Pricing Calculator)
 
-| Servicio AWS | Tipo / Configuración | Propósito Técnico | Costo Mensual Aprox. (USD) |
-| :--- | :--- | :--- | :---: |
-| **Amazon EC2** | `t3.small` (2 vCPU, 2 GiB RAM)<br>Bajo demanda con opción a *Savings Plans* | Ejecución de contenedores para `sofi-backend`, `SOFI-WEB` y el bot de Discord. | ~$15.20 |
-| **Amazon EBS** | 30 GB `gp3` (3000 IOPS, 125 MB/s) | Almacenamiento raíz persistente para el sistema operativo y dependencias de ejecución. | ~$2.40 |
-| **Amazon RDS for PostgreSQL** | `db.t3.micro` Single-AZ<br>20 GB almacenamiento `gp3` | Base de datos administrada y desacoplada para los registros de asistencia y usuarios de SOFI. | ~$18.50 |
-| **Amazon S3** | Standard + Glacier<br>(Almacenamiento inicial de 15 GB) | Resguardo inmutable de copias de seguridad y repositorio para los materiales del módulo de cursos. | ~$1.30 |
-| **AWS Systems Manager** | SSM Session Manager (Servicio sin costo) | Administración segura y túneles de gestión sin requerir puertos abiertos a Internet. | $0.00 |
-| **Amazon CloudWatch** | Métricas estándar y alarmas básicas | Monitoreo de disponibilidad del backend y alerta inmediata ante caídas del bot. | ~$1.50 |
-| **Amazon Route 53** | 1 Hosted Zone | Resolución de subdominios institucionales de la plataforma (ej. `sofi.apminversiones.com`). | ~$0.50 |
-| **Transferencia de Datos** | Tráfico saliente de Internet básico | Tráfico web para la interfaz de administración y consultas de API. | ~$1.00 |
-| **TOTAL MENSUAL ESTIMADO** | | **Inversión base mensual optimizada** | **~$40.40 USD** |
+Las tarifas han sido calculadas y verificadas oficialmente en la herramienta **AWS Pricing Calculator** para la región de referencia **US East (N. Virginia)** (`us-east-1`), garantizando reproducibilidad paso a paso sin sobrecostos ocultos ni aprovisionamientos redundantes:
 
-> **Optimización Operativa:** Se contempla la implementación de **AWS Instance Scheduler** para suspender instancias de prueba fuera de los horarios de prácticas, logrando un ahorro de hasta el 60% en costos de cómputo en entornos no productivos.
+| # | Servicio AWS | Tipo / Configuración Exacta | Propósito Técnico en SOFI | Costo Mensual Oficial |
+| :-: | :--- | :--- | :--- | :---: |
+| 1 | **Amazon EC2** | `t3.small` (2 vCPU, 2 GiB RAM)<br>Linux, On-Demand (730 h continuas) | Cómputo desacoplado de `sofi-backend`, `SOFI-WEB` y bot de Discord. | **$15.18 USD** |
+| 2 | **Amazon EBS** | 30 GB `gp3` (SSD Uso General)<br>3,000 IOPS y 125 MB/s base incluidos | Almacenamiento persistente del sistema operativo Linux y contenedores Docker. | **$2.40 USD** |
+| 3 | **Amazon RDS for PostgreSQL** | `db.t3.micro` Single-AZ ($13.14)<br>20 GB almacenamiento `gp3` ($2.30) | Base de datos relacional administrada, aislada y con retención de copias de seguridad. | **$15.44 USD** |
+| 4 | **Amazon S3** | S3 Standard: 15 GB almacenamiento<br>1,000 peticiones PUT + 10,000 GET | Repositorio elástico para materiales del LMS (videos/PDFs) y respaldos históricos. | **$0.35 USD** |
+| 5 | **AWS Systems Manager** | SSM Session Manager estándar<br>10 parámetros en Parameter Store | Administración remota cifrada por túnel IAM sin requerir apertura del puerto SSH (22). | **$0.00 USD** |
+| 6 | **Amazon CloudWatch** | 2 Alarmas de salud/CPU ($0.20)<br>2 GB Logs ingeridos y 1 mes retención | Monitoreo de disponibilidad del backend y alerta inmediata ante caídas del bot. | **$1.21 USD** |
+| 7 | **Amazon Route 53** | 1 Hosted Zone pública<br>(Consultas estándar dentro de cuota) | Resolución DNS de subdominios institucionales (`api.sofi` y `admin.sofi`). | **$0.50 USD** |
+| 8 | **Data Transfer (DTO)** | 11 GB de tráfico de salida a Internet<br>(Tráfico entrante e intra-AZ a $0.00) | Ancho de banda saliente hacia practicantes remotos y administradores de SOFI. | **$0.99 USD** |
+| | **TOTAL MENSUAL VERIFICADO** | | **Inversión mensual base consolidada en AWS** | **`$36.07 USD`** |
+
+> **Criterios Clave de Optimización Financiera:**
+> 1. **Uso de volúmenes de última generación (`gp3`):** Tanto en EBS como en RDS se seleccionó almacenamiento `gp3` en lugar del antiguo `gp2`, obteniendo un rendimiento superior (3,000 IOPS garantizados sin depender de ráfagas) y un ahorro directo de hasta 20% por GB.
+> 2. **Eliminación de trampas de sobrecosto en RDS:** Se prescindió de *RDS Proxy* (ahorro de $21.90 USD/mes) al manejarse el pool de conexiones eficientemente desde Prisma/NestJS, y de *Database Insights* (ahorro de $18.25 USD/mes) por no requerirse telemetría avanzada de kernel para esta escala. Asimismo, al usar PostgreSQL 16 no aplica tarifa de *Extended Support*.
+> 3. **Aprovechamiento de cuotas y retenciones gratuitas:** Las copias de seguridad automáticas de RDS están incluidas sin costo adicional hasta el 100% del tamaño de la base de datos (20 GB a $0.00). Systems Manager es un servicio nativo gratuito para instancias EC2, y Parameter Store no genera cobros para sus primeros 10,000 parámetros estándar.
+> 4. **Optimización Operativa Futura:** Se contempla la implementación de **AWS Instance Scheduler** para suspender la instancia EC2 fuera del horario de prácticas (noches y fines de semana), reduciendo el costo de cómputo en hasta un **60%** en entornos formativos no productivos (llegando a ~$6.00 USD en cómputo EC2).
 
 ---
 
