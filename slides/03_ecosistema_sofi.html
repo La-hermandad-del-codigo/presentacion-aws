@@ -20,7 +20,7 @@
             visibility: inherit !important;
             white-space: nowrap;
             pointer-events: none;
-            transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
             will-change: transform;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -41,14 +41,22 @@
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
 
-          /* Entrada fluida para el contenido */
+          /* Entrada fluida y ligera para el contenido (acelerada por GPU) */
           .reveal .slides section.slide-interno .interno-content.fragment.fade-up {
-            transition: opacity 0.8s ease-out 0.2s,
-                        transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.2s !important;
+            transform: translate3d(0, 16px, 0);
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: opacity 0.4s ease-out 0.08s,
+                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s !important;
           }
 
-          /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
-             se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
+          .reveal .slides section.slide-interno .interno-content.fragment.fade-up.visible {
+            transform: translate3d(0, 0, 0);
+            opacity: 1;
+          }
+
+          /* Estilo para slide 3 con centrado vertical limpio */
           .reveal .slides section.slide-interno.present {
             display: flex !important;
             flex-direction: column;
@@ -58,8 +66,8 @@
             box-sizing: border-box;
           }
         </style>
-        <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 3 (tono calibrado, desenfoque sutil) -->
-        <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
+        <!-- Capa de contraste ligera sin blur masivo -->
+        <div style="position: absolute; inset: 0; background: rgba(15, 23, 42, 0.04); z-index: 0; pointer-events: none;"></div>
 
         <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1 1 auto; width: 100%;">
           <!-- Encabezado de la diapositiva con Animación Fragment -->
