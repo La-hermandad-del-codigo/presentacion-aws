@@ -1,12 +1,52 @@
 <!-- SLIDE 3: DESARROLLO INTERNO - SOFI -->
       <section class="slide-interno">
         <style>
+          /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
+          .reveal .slides section.slide-interno .interno-header-wrapper {
+            max-width: 1160px;
+            margin: 0 auto;
+            position: relative;
+            height: 48px;
+            width: 100%;
+          }
+
+          .reveal .slides section.slide-interno .interno-hero-title.fragment {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate3d(calc(580px - 50%), 270px, 0) scale(1.22);
+            transform-origin: center center;
+            opacity: 1 !important;
+            visibility: inherit !important;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+            z-index: 50;
+          }
+
+          .reveal .slides section.slide-interno .interno-hero-title.fragment.visible {
+            transform: translate3d(0, 0, 0) scale(1);
+            transform-origin: center center;
+            pointer-events: auto;
+          }
+
           /* Título con el mismo estilo que la diapositiva de telemetría */
           .reveal .slides section.slide-interno .slide-title {
             paint-order: stroke fill;
             -webkit-text-stroke: 4px #ffffff;
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
+
+          /* Entrada fluida para el contenido */
+          .reveal .slides section.slide-interno .interno-content.fragment.fade-up {
+            transition: opacity 0.8s ease-out 0.2s,
+                        transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.2s !important;
+          }
+
           /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
              se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
           .reveal .slides section.slide-interno.present {
@@ -22,13 +62,15 @@
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
         <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1 1 auto; width: 100%;">
-          <!-- Encabezado de la diapositiva con alto contraste -->
-          <div style="margin-bottom: 12px;">
-            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
+          <!-- Encabezado de la diapositiva con Animación Fragment -->
+          <div class="interno-header-wrapper">
+            <div class="interno-hero-title fragment" data-fragment-index="1">
+              <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
+            </div>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
-          <div style="position: relative; width: 1160px; height: 490px; margin: 14px auto 0;">
+          <div class="interno-content fragment fade-up" data-fragment-index="1" style="position: relative; width: 1160px; height: 490px; margin: 14px auto 0;">
             
             <!-- CAPA 1: SVG Completo (Círculos Tonos Claros, Núcleo #273141, Insignias y Líneas) -->
             <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1; transform: none;" xmlns="http://www.w3.org/2000/svg">
@@ -234,7 +276,7 @@
           </div>
 
           <!-- Hallazgo Crítico: Contención en VPS Compartido -->
-          <div style="margin: auto auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
+          <div class="interno-content fragment fade-up" data-fragment-index="1" style="margin: auto auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
             <div style="width: 24px; height: 24px; border-radius: 7px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>

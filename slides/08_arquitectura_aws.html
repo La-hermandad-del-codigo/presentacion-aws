@@ -1,11 +1,49 @@
 <!-- SLIDE 8: DIAGRAMA DE ARQUITECTURA DE RED PROPUESTO (NIVEL CONCEPTUAL) -->
 <section class="slide-red-arquitectura">
   <style>
+    /* Animación del Título Héroe: Del centro hacia la parte superior sin temblores */
+    .reveal .slides section.slide-red-arquitectura .red-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-red-arquitectura .red-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-red-arquitectura .red-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
     /* Título con el mismo estilo de alto contraste */
     .reveal .slides section.slide-red-arquitectura .slide-title {
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Entrada fluida para el contenido de la red */
+    .reveal .slides section.slide-red-arquitectura .red-content.fragment.fade-up {
+      transition: opacity 0.8s ease-out 0.2s,
+                  transform 1.05s cubic-bezier(0.34, 1.35, 0.65, 1) 0.2s !important;
     }
   </style>
   
@@ -13,13 +51,15 @@
   <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
   <div style="position: relative; z-index: 1;">
-    <!-- Encabezado de la diapositiva -->
-    <div style="margin-bottom: 8px; text-align: left;">
-      <h2 class="slide-title" style="font-size: 2.25rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Diagrama de Red - <span style="color: #0073bb;">Amazon VPC</span></h2>
+    <!-- Encabezado de la diapositiva con Animación Fragment -->
+    <div class="red-header-wrapper">
+      <div class="red-hero-title fragment" data-fragment-index="1">
+        <h2 class="slide-title" style="font-size: 2.25rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy); text-align: left;">Diagrama de Red - <span style="color: #0073bb;">Amazon VPC</span></h2>
+      </div>
     </div>
 
     <!-- Contenedor Maestro con separación limpia y holgada respecto al título -->
-    <div style="position: relative; width: 1180px; height: 625px; margin: 10px auto 0;">
+    <div class="red-content fragment fade-up" data-fragment-index="1" style="position: relative; width: 1180px; height: 625px; margin: 10px auto 0;">
       
       <!-- CAPA 1: SVG de Arquitectura Completa (z-index: 3 para que las líneas y pines queden SIEMPRE por encima) -->
       <svg viewBox="0 0 1180 625" style="position: absolute; top: 0; left: 0; width: 1180px; height: 625px; z-index: 3; pointer-events: none;" xmlns="http://www.w3.org/2000/svg">
