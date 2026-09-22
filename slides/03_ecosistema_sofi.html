@@ -7,12 +7,12 @@
             -webkit-text-stroke: 4px #ffffff;
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
-          /* Centrado vertical real: el overlay absoluto gigante infla scrollHeight y Rompe el centrado nativo de Reveal,
-             así que se fuerza flex centrado sobre el lienzo completo (700px). */
+          /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
+             se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
           .reveal .slides section.slide-interno {
             display: flex !important;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             top: 0 !important;
             height: 100% !important;
             box-sizing: border-box;
@@ -21,17 +21,17 @@
         <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 3 (tono calibrado, desenfoque sutil) -->
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
-        <div style="position: relative; z-index: 1;">
+        <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1 1 auto; width: 100%;">
           <!-- Encabezado de la diapositiva con alto contraste -->
           <div style="margin-bottom: 12px;">
             <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
-          <div style="position: relative; width: 1160px; height: 490px; margin: 28px auto 0;">
+          <div style="position: relative; width: 1160px; height: 490px; margin: 14px auto 0;">
             
             <!-- CAPA 1: SVG Completo (Círculos Tonos Claros, Núcleo #273141, Insignias y Líneas) -->
-            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1; transform: none;" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <filter id="v-card-shadow" x="-25%" y="-25%" width="150%" height="150%">
                   <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
@@ -154,7 +154,7 @@
             </svg>
 
             <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas Armonizadas -->
-            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none;">
+            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none; transform: none;">
               
               <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
               <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
@@ -234,7 +234,7 @@
           </div>
 
           <!-- Hallazgo Crítico: Contención en VPS Compartido -->
-          <div style="margin: 12px auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
+          <div style="margin: auto auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
             <div style="width: 24px; height: 24px; border-radius: 7px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
