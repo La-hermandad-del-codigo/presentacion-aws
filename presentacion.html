@@ -2282,10 +2282,10 @@
     </div>
 
     <!-- Contenedor Maestro con separación limpia y holgada respecto al título -->
-    <div style="position: relative; width: 1180px; height: 615px; margin: 16px auto 0;">
+    <div style="position: relative; width: 1180px; height: 625px; margin: 10px auto 0;">
       
       <!-- CAPA 1: SVG de Arquitectura Completa (z-index: 3 para que las líneas y pines queden SIEMPRE por encima) -->
-      <svg viewBox="0 0 1180 615" style="position: absolute; top: 0; left: 0; width: 1180px; height: 615px; z-index: 3; pointer-events: none;" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1180 625" style="position: absolute; top: 0; left: 0; width: 1180px; height: 625px; z-index: 3; pointer-events: none;" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <!-- Filtros de Sombra Suave -->
           <filter id="v-card-shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -2423,15 +2423,15 @@
         </g>
 
         <!-- Flecha de IGW hacia Subred Pública -->
-        <line x1="590" y1="107" x2="590" y2="132" stroke="#0284c7" stroke-width="2.4" stroke-linecap="round"/>
-        <polygon points="586,131 590,139 594,131" fill="#0284c7"/>
+        <line x1="590" y1="105" x2="590" y2="126" stroke="#0284c7" stroke-width="2.4" stroke-linecap="round"/>
+        <polygon points="586,125 590,133 594,125" fill="#0284c7"/>
 
-        <!-- CONTENEDOR MAESTRO: AMAZON VPC (ANCHO 630px, ALTO 465px) -->
-        <g transform="translate(590, 118)">
-          <rect x="-315" y="0" width="630" height="465" rx="16" fill="rgba(255, 255, 255, 0.85)" stroke="#8c4fff" stroke-width="2" stroke-dasharray="8 5"/>
+        <!-- CONTENEDOR MAESTRO: AMAZON VPC (AMPLIADO A ANCHO 650px, ALTO 484px) -->
+        <g transform="translate(590, 112)">
+          <rect x="-325" y="0" width="650" height="484" rx="16" fill="rgba(255, 255, 255, 0.88)" stroke="#8c4fff" stroke-width="2" stroke-dasharray="8 5"/>
           
           <!-- Encabezado de la VPC -->
-          <g transform="translate(-300, 12)">
+          <g transform="translate(-310, 12)">
             <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
             <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
             <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
@@ -2439,128 +2439,128 @@
             <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="900" fill="#232f3e" letter-spacing="0.02em">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · Región us-east-1)</tspan></text>
           </g>
 
-          <!-- 1. SUBRED PÚBLICA (10.0.1.0/24) -->
+          <!-- 1. SUBRED PÚBLICA (10.0.1.0/24) - Ancho 614px, Alto 86px -->
           <g transform="translate(0, 34)">
-            <rect x="-297" y="0" width="594" height="84" rx="12" fill="rgba(224, 242, 254, 0.70)" stroke="#0284c7" stroke-width="1.8"/>
+            <rect x="-307" y="0" width="614" height="86" rx="12" fill="rgba(224, 242, 254, 0.70)" stroke="#0284c7" stroke-width="1.8"/>
             
-            <g transform="translate(-285, 8)">
+            <g transform="translate(-295, 8)">
               <rect x="0" y="0" width="175" height="17" rx="8.5" fill="#0284c7"/>
               <text x="87.5" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PÚBLICA · 10.0.1.0/24</text>
             </g>
 
             <!-- Conectores hacia TG SOFI y TG Clientes (renderizados por debajo del ALB) -->
-            <path d="M -50 50 L -109 70" fill="none" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
-            <path d="M 50 50 L 109 70" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M -55 50 L -105 72" fill="none" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M 55 50 L 105 72" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
 
             <g transform="translate(0, 50)" filter="url(#box-shadow-sm)">
-              <rect x="-250" y="-19" width="500" height="38" rx="9" fill="#ffffff" stroke="#0284c7" stroke-width="1.6"/>
-              <g transform="translate(-225, 0) scale(0.82)">
+              <rect x="-260" y="-19" width="520" height="38" rx="9" fill="#ffffff" stroke="#0284c7" stroke-width="1.6"/>
+              <g transform="translate(-235, 0) scale(0.82)">
                 <use href="#icon-aws-alb"/>
               </g>
-              <text x="-192" y="-1.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Application Load Balancer (ALB) · Host Routing</text>
-              <text x="-192" y="11" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#0369a1">*.sofi.edu.pe ➔ TG SOFI | *.reflexo / *.arteideas ➔ TG Clientes</text>
-              <rect x="150" y="-11" width="86" height="22" rx="6" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
-              <text x="193" y="4" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#0284c7">HTTPS :443</text>
+              <text x="-202" y="-1.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Application Load Balancer (ALB) · Host Routing</text>
+              <text x="-202" y="11" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#0369a1">*.sofi.edu.pe ➔ TG SOFI | *.reflexo / *.arteideas ➔ TG Clientes</text>
+              <rect x="160" y="-11" width="86" height="22" rx="6" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+              <text x="203" y="4" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#0284c7">HTTPS :443</text>
             </g>
           </g>
 
-          <!-- 2. CAPA DE CÓMPUTO SEGREGADA: 2 SUBREDES EN PARALELO (y=146, alto 162) -->
-          <!-- 2A. SUBRED PRIVADA CÓMPUTO SOFI (10.0.10.0/24) -->
-          <g transform="translate(-150, 146)">
-            <rect x="-147" y="0" width="294" height="162" rx="12" fill="rgba(254, 243, 199, 0.65)" stroke="#f59e0b" stroke-width="1.8"/>
+          <!-- 2. CAPA DE CÓMPUTO SEGREGADA: 2 SUBREDES EN PARALELO (y=146, alto 170) -->
+          <!-- 2A. SUBRED PRIVADA CÓMPUTO SOFI (10.0.10.0/24) - Ancho 300px -->
+          <g transform="translate(-155, 146)">
+            <rect x="-150" y="0" width="300" height="170" rx="12" fill="rgba(254, 243, 199, 0.65)" stroke="#f59e0b" stroke-width="1.8"/>
             
-            <g transform="translate(-138, 7)">
+            <g transform="translate(-141, 7)">
               <rect x="0" y="0" width="180" height="17" rx="8.5" fill="#f59e0b"/>
               <text x="90" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.02em">SUBRED SOFI · 10.0.10.0/24</text>
             </g>
 
-            <g transform="translate(0, 86)" filter="url(#box-shadow-sm)">
-              <rect x="-138" y="-52" width="276" height="112" rx="9" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5"/>
-              <g transform="translate(-115, -31) scale(0.8)">
+            <g transform="translate(0, 92)" filter="url(#box-shadow-sm)">
+              <rect x="-142" y="-55" width="284" height="120" rx="9" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5"/>
+              <g transform="translate(-120, -34) scale(0.8)">
                 <use href="#icon-aws-ec2"/>
               </g>
-              <text x="-90" y="-33" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
-              <text x="-90" y="-20" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+              <text x="-95" y="-36" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+              <text x="-95" y="-23" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
 
               <!-- 3 Contenedores Docker de SOFI -->
-              <g transform="translate(-130, -10)">
-                <rect x="0" y="0" width="80" height="52" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.2"/>
-                <text x="40" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#065f46">sofi-backend</text>
-                <text x="40" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#059669">NestJS/Prisma</text>
+              <g transform="translate(-134, -10)">
+                <rect x="0" y="0" width="84" height="56" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.2"/>
+                <text x="42" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#065f46">sofi-backend</text>
+                <text x="42" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#059669">NestJS/Prisma</text>
 
-                <rect x="88" y="0" width="80" height="52" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
-                <text x="128" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0c4a6e">SOFI-WEB</text>
-                <text x="128" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#0284c7">Next.js LMS</text>
+                <rect x="92" y="0" width="84" height="56" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+                <text x="134" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0c4a6e">SOFI-WEB</text>
+                <text x="134" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#0284c7">Next.js LMS</text>
 
-                <rect x="176" y="0" width="84" height="52" rx="6" fill="#f5f3ff" stroke="#6366f1" stroke-width="1.2"/>
-                <text x="218" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#312e81">Bot-Asistencia</text>
-                <text x="218" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#6366f1">Node Discord</text>
+                <rect x="184" y="0" width="84" height="56" rx="6" fill="#f5f3ff" stroke="#6366f1" stroke-width="1.2"/>
+                <text x="226" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#312e81">Bot-Asistencia</text>
+                <text x="226" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="600" fill="#6366f1">Node Discord</text>
               </g>
             </g>
           </g>
 
-          <!-- 2B. SUBRED PRIVADA CÓMPUTO CLIENTES COMERCIALES (10.0.20.0/24) -->
-          <g transform="translate(150, 146)">
-            <rect x="-147" y="0" width="294" height="162" rx="12" fill="rgba(238, 242, 255, 0.70)" stroke="#6366f1" stroke-width="1.8"/>
+          <!-- 2B. SUBRED PRIVADA CÓMPUTO CLIENTES COMERCIALES (10.0.20.0/24) - Ancho 300px -->
+          <g transform="translate(155, 146)">
+            <rect x="-150" y="0" width="300" height="170" rx="12" fill="rgba(238, 242, 255, 0.70)" stroke="#6366f1" stroke-width="1.8"/>
             
-            <g transform="translate(-138, 7)">
+            <g transform="translate(-141, 7)">
               <rect x="0" y="0" width="195" height="17" rx="8.5" fill="#6366f1"/>
               <text x="97.5" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.02em">SUBRED CLIENTES · 10.0.20.0/24</text>
             </g>
 
-            <g transform="translate(0, 86)" filter="url(#box-shadow-sm)">
-              <rect x="-138" y="-52" width="276" height="112" rx="9" fill="#ffffff" stroke="#6366f1" stroke-width="1.5"/>
-              <g transform="translate(-115, -31) scale(0.8)">
+            <g transform="translate(0, 92)" filter="url(#box-shadow-sm)">
+              <rect x="-142" y="-55" width="284" height="120" rx="9" fill="#ffffff" stroke="#6366f1" stroke-width="1.5"/>
+              <g transform="translate(-120, -34) scale(0.8)">
                 <use href="#icon-aws-ec2"/>
               </g>
-              <text x="-90" y="-33" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
-              <text x="-90" y="-20" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">Host Clientes · 2 vCPU / 2 GiB</text>
+              <text x="-95" y="-36" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+              <text x="-95" y="-23" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">Host Clientes · 2 vCPU / 2 GiB</text>
 
               <!-- 2 Cargas Comerciales Aisladas -->
-              <g transform="translate(-130, -10)">
-                <rect x="0" y="0" width="126" height="52" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
-                <text x="63" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">Reflexo Perú (Reflexo4)</text>
-                <text x="63" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#0284c7">Next.js + NestJS + SQLite</text>
+              <g transform="translate(-134, -10)">
+                <rect x="0" y="0" width="130" height="56" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+                <text x="65" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">Reflexo Perú (Reflexo4)</text>
+                <text x="65" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#0284c7">Next.js + NestJS + SQLite</text>
 
-                <rect x="134" y="0" width="126" height="52" rx="6" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
-                <text x="197" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#6b21a8">Arte &amp; Ideas (ERP)</text>
-                <text x="197" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#9333ea">React + Django + MySQL 8</text>
+                <rect x="138" y="0" width="130" height="56" rx="6" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+                <text x="203" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#6b21a8">Arte &amp; Ideas (ERP)</text>
+                <text x="203" y="40" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.6" font-weight="600" fill="#9333ea">React + Django + MySQL 8</text>
               </g>
             </g>
           </g>
 
-          <!-- 3. SUBRED PRIVADA DE DATOS (10.0.100.0/24) -->
-          <g transform="translate(0, 340)">
-            <rect x="-297" y="0" width="594" height="106" rx="12" fill="rgba(209, 250, 229, 0.65)" stroke="#059669" stroke-width="1.8"/>
+          <!-- 3. SUBRED PRIVADA DE DATOS (10.0.100.0/24) - Ancho 614px, Alto 114px -->
+          <g transform="translate(0, 348)">
+            <rect x="-307" y="0" width="614" height="114" rx="12" fill="rgba(209, 250, 229, 0.65)" stroke="#059669" stroke-width="1.8"/>
             
-            <g transform="translate(-285, 8)">
+            <g transform="translate(-295, 8)">
               <rect x="0" y="0" width="230" height="18" rx="9" fill="#059669"/>
               <text x="115" y="12.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
             </g>
 
-            <g transform="translate(-90, 60)" filter="url(#box-shadow-sm)">
-              <rect x="-185" y="-24" width="370" height="48" rx="9" fill="#ffffff" stroke="#059669" stroke-width="1.6"/>
-              <g transform="translate(-160, 0) scale(0.85)">
+            <g transform="translate(-95, 64)" filter="url(#box-shadow-sm)">
+              <rect x="-192" y="-26" width="384" height="52" rx="9" fill="#ffffff" stroke="#059669" stroke-width="1.6"/>
+              <g transform="translate(-167, 0) scale(0.85)">
                 <use href="#icon-aws-rds"/>
               </g>
-              <text x="-135" y="-2" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
-              <text x="-135" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
+              <text x="-142" y="-3" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+              <text x="-142" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
             </g>
 
-            <g transform="translate(195, 60)" filter="url(#box-shadow-sm)">
-              <rect x="-85" y="-24" width="170" height="48" rx="9" fill="#ffffff" stroke="#10b981" stroke-width="1.6"/>
-              <g transform="translate(-62, 0) scale(0.85)">
+            <g transform="translate(200, 64)" filter="url(#box-shadow-sm)">
+              <rect x="-92" y="-26" width="184" height="52" rx="9" fill="#ffffff" stroke="#10b981" stroke-width="1.6"/>
+              <g transform="translate(-69, 0) scale(0.85)">
                 <use href="#icon-aws-s3"/>
               </g>
-              <text x="-38" y="-2" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon S3</text>
-              <text x="-38" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#047857">Cursos LMS &amp; Backups</text>
+              <text x="-45" y="-3" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon S3</text>
+              <text x="-45" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#047857">Cursos LMS &amp; Backups</text>
             </g>
           </g>
 
         </g>
 
         <!-- SERVICIOS TRANSVERSALES DE GOBIERNO (SSM & CLOUDWATCH) -->
-        <g transform="translate(420, 600)" filter="url(#v-card-shadow)">
+        <g transform="translate(420, 606)" filter="url(#v-card-shadow)">
           <rect x="-95" y="-13" width="190" height="26" rx="13" fill="#ffffff" stroke="#e11d48" stroke-width="1.6"/>
           <g transform="translate(-78, 0) scale(0.68)">
             <use href="#icon-aws-ssm"/>
@@ -2568,7 +2568,7 @@
           <text x="10" y="4.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#9f1239">AWS SSM: Cero Puertos SSH</text>
         </g>
 
-        <g transform="translate(760, 600)" filter="url(#v-card-shadow)">
+        <g transform="translate(760, 606)" filter="url(#v-card-shadow)">
           <rect x="-95" y="-13" width="190" height="26" rx="13" fill="#ffffff" stroke="#f43f5e" stroke-width="1.6"/>
           <g transform="translate(-78, 0) scale(0.68)">
             <use href="#icon-aws-cloudwatch"/>
@@ -2582,7 +2582,7 @@
 
         <!-- A. FLUJOS ENTRE SECCIONES INTERNAS (ALB hacia ambas subredes) -->
         <!-- Flecha de ALB a Subred SOFI (Izquierda) -->
-        <g transform="translate(490, 240)">
+        <g transform="translate(485, 234)">
           <!-- Línea y punta de flecha apuntando hacia abajo a la Subred SOFI -->
           <line x1="-9" y1="-2" x2="-9" y2="18" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
           <polygon points="-14,16 -9,24 -4,16" fill="#f59e0b"/>
@@ -2592,7 +2592,7 @@
         </g>
 
         <!-- Flecha de ALB a Subred Clientes (Derecha) -->
-        <g transform="translate(690, 240)">
+        <g transform="translate(695, 234)">
           <!-- Línea y punta de flecha apuntando hacia abajo a la Subred Clientes -->
           <line x1="9" y1="-2" x2="9" y2="18" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
           <polygon points="4,16 9,24 14,16" fill="#6366f1"/>
@@ -2602,7 +2602,7 @@
         </g>
 
         <!-- Flecha de Subred SOFI a Subred de Datos RDS -->
-        <g transform="translate(470, 442)">
+        <g transform="translate(470, 440)">
           <line x1="0" y1="-14" x2="0" y2="14" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
           <polygon points="-5,13 0,20 5,13" fill="#059669"/>
           <rect x="-56" y="-8" width="112" height="17" rx="8.5" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#box-shadow-sm)"/>
@@ -2610,8 +2610,8 @@
         </g>
 
         <!-- Conectores hacia SSM y CloudWatch -->
-        <path d="M 440 583 L 440 587" fill="none" stroke="#e11d48" stroke-width="2.2" stroke-dasharray="4 3"/>
-        <path d="M 740 583 L 740 587" fill="none" stroke="#f43f5e" stroke-width="2.2" stroke-dasharray="4 3"/>
+        <path d="M 420 596 L 420 600" fill="none" stroke="#e11d48" stroke-width="2.2" stroke-dasharray="4 3"/>
+        <path d="M 760 596 L 760 600" fill="none" stroke="#f43f5e" stroke-width="2.2" stroke-dasharray="4 3"/>
 
         <!-- B. LÍNEAS DE CONEXIÓN PRINCIPALES A LAS 4 TARJETAS LATERALES -->
         <!-- 1. Conexión Card 1 (Top-Left: Route 53 & CloudFront -> x=255, y=105) -->
@@ -2620,27 +2620,27 @@
         <circle cx="255" cy="105" r="5.5" fill="#0284c7" stroke="#ffffff" stroke-width="2.5"/>
 
         <!-- 2. Conexión Card 2 (Bottom-Left: EC2 Segregado -> x=255, y=505) -->
-        <path d="M 310 360 L 275 505 L 255 505" fill="none" stroke="#f59e0b" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
-        <circle cx="310" cy="360" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.2"/>
+        <path d="M 290 365 L 265 505 L 255 505" fill="none" stroke="#f59e0b" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="290" cy="365" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.2"/>
         <circle cx="255" cy="505" r="5.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5"/>
 
         <!-- 3. Conexión Card 3 (Top-Right: ALB Host Routing -> x=925, y=105) -->
-        <path d="M 770 166 L 855 105 L 925 105" fill="none" stroke="#6366f1" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <path d="M 770 166 L 860 105 L 925 105" fill="none" stroke="#6366f1" stroke-width="2.8" stroke-linecap="round"/>
         <circle cx="770" cy="166" r="5" fill="#6366f1" stroke="#ffffff" stroke-width="2.2"/>
         <circle cx="925" cy="105" r="5.5" fill="#6366f1" stroke="#ffffff" stroke-width="2.5"/>
 
         <!-- 4. Conexión Card 4 (Bottom-Right: RDS + S3 -> x=925, y=505) -->
-        <path d="M 810 505 L 925 505" fill="none" stroke="#059669" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
-        <circle cx="810" cy="505" r="5" fill="#059669" stroke="#ffffff" stroke-width="2.2"/>
+        <path d="M 830 505 L 925 505" fill="none" stroke="#059669" stroke-width="2.8" stroke-dasharray="6 4" stroke-linecap="round"/>
+        <circle cx="830" cy="505" r="5" fill="#059669" stroke="#ffffff" stroke-width="2.2"/>
         <circle cx="925" cy="505" r="5.5" fill="#059669" stroke="#ffffff" stroke-width="2.5"/>
 
       </svg>
 
       <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas (z-index: 2, con fondo blanco extendido y sombras) -->
-      <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 255px 1fr 255px; width: 1180px; height: 615px; gap: 0; align-items: stretch; pointer-events: none;">
+      <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 255px 1fr 255px; width: 1180px; height: 625px; gap: 0; align-items: stretch; pointer-events: none;">
         
         <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=105) y Tarjeta 2 (y=505) -->
-        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 615px; pointer-events: auto;">
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 625px; pointer-events: auto;">
           <!-- Tarjeta 1: Perímetro Global & DNS -->
           <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
             <div style="margin-bottom: 1px;">
@@ -2676,7 +2676,7 @@
         <div></div>
 
         <!-- COLUMNA DERECHA: Tarjeta 3 (y=105) y Tarjeta 4 (y=505) -->
-        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 615px; pointer-events: auto;">
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 625px; pointer-events: auto;">
           <!-- Tarjeta 3: Perímetro de Entrada VPC -->
           <div class="glass-card" style="background: #ffffff !important; padding: 6px 14px 8px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 236px; min-height: 236px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 0px;">
             <div style="margin-bottom: 1px;">
