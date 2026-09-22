@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Propuesta Cloud AWS | APM Inversiones - Etapa 1</title>
+  <title>Propuesta Cloud AWS | APM Inversiones EIRL - Etapa 1</title>
   
   <!-- Reveal.js CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
@@ -286,7 +286,7 @@
   <div class="header-bar">
     <div class="logo-tag">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-      <span>APM INVERSIONES <strong>· AWS CLOUD</strong></span>
+      <span>APM INVERSIONES EIRL <strong>· AWS CLOUD</strong></span>
     </div>
     <div class="pill-badge navy">Semana 6 · Etapa 1</div>
   </div>
@@ -495,12 +495,12 @@
       <div>
         <!-- Título Principal -->
         <h1 class="slide-title" style="font-size: 2.35rem !important; margin-top: 2px; margin-bottom: 12px !important; line-height: 1.15; color: var(--aws-navy);">
-          Diseño e Implementación de Infraestructura Cloud en AWS para <span style="color: #b45309;">APM Inversiones</span>
+          Diseño e Implementación de Infraestructura Cloud en AWS para <span style="color: #b45309;">APM Inversiones EIRL</span>
         </h1>
 
         <!-- Introducción Ampliada: Alcance de Migración Integral -->
         <p style="font-size: 0.96rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
-          Estrategia integral de modernización cloud para la totalidad de las cargas de trabajo de <strong>APM Inversiones</strong>, transitando desde un único VPS hacia microservicios elásticos, desacoplados y con alta disponibilidad:
+          Estrategia integral de modernización cloud para la totalidad de las cargas de trabajo de <strong>APM Inversiones EIRL</strong>, transitando desde un único VPS hacia microservicios elásticos, desacoplados y con alta disponibilidad:
         </p>
 
         <!-- Desglose de Alcance: Cargas Internas y Externas -->
@@ -678,7 +678,7 @@
   <!-- Encabezado del Slide -->
   <div style="margin-bottom: 20px;">
     <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">
-      1. La Organización: <span style="color: #b45309;">RPsoft</span>
+      1. La Organización: <span style="color: #b45309;">APM Inversiones EIRL</span>
     </h2>
     <p class="slide-subtitle" style="font-size: 0.96rem !important; margin: 0 !important; color: var(--text-muted); line-height: 1.4;">
       Modelo comercial B2B enfocado en desarrollo de software y segregación operativa del departamento de TI
@@ -885,43 +885,444 @@
 </section>
 
       <!-- Slide: 03_ecosistema_sofi.html -->
-      <!-- SLIDE 3: ECOSISTEMA SOFI -->
-      <section>
-        <h2 class="slide-title">Ecosistema Institucional SOFI</h2>
-        <p class="slide-subtitle">Arquitectura del sistema interno de formación práctica y control operativo</p>
+      <!-- SLIDE 3: DESARROLLO INTERNO - SOFI -->
+      <section class="slide-interno" style="position: relative;">
+        <style>
+          /* Título con el mismo estilo que la diapositiva de telemetría */
+          .reveal .slides section.slide-interno .slide-title {
+            paint-order: stroke fill;
+            -webkit-text-stroke: 4px #ffffff;
+            text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+          }
+        </style>
+        <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 3 (tono calibrado, desenfoque sutil) -->
+        <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
 
-        <div class="grid-3">
-          <!-- Componente 1: Backend -->
-          <div class="glass-card">
-            <div class="pill-badge navy" style="margin-bottom: 12px;">NestJS + Prisma</div>
-            <h4 style="font-size: 1.15rem !important; margin: 0 0 8px !important;">sofi-backend</h4>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              Núcleo transaccional modular en TypeScript. Procesa marcas de asistencia, lógica de usuarios y reglas operativas hacia PostgreSQL.
-            </p>
+        <div style="position: relative; z-index: 1;">
+          <!-- Encabezado de la diapositiva con alto contraste -->
+          <div style="margin-bottom: 12px;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 49, 65, 0.08); border: 1.5px solid #273141; border-radius: 20px; padding: 3px 12px; font-size: 0.72rem; font-weight: 800; color: #273141; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
+              Área de Desarrollo de Soluciones de TI
+            </div>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
           </div>
 
-          <!-- Componente 2: Web Admin & LMS -->
-          <div class="glass-card">
-            <div class="pill-badge" style="margin-bottom: 12px;">Next.js + Tailwind</div>
-            <h4 style="font-size: 1.15rem !important; margin: 0 0 8px !important;">SOFI-WEB</h4>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              <strong>Actual:</strong> Tablero administrativo para supervisión y métricas.<br>
-              <strong>Hoja de ruta:</strong> Módulo formativo de cursos técnicos para practicantes.
-            </p>
-          </div>
+          <!-- Contenedor Maestro unificado con proporciones balanceadas -->
+          <div style="position: relative; width: 1160px; height: 490px; margin: 28px auto 0;">
+            
+            <!-- CAPA 1: SVG Completo (Círculos Tonos Claros, Núcleo #273141, Insignias y Líneas) -->
+            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="v-card-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
+                </filter>
+                <filter id="center-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
+                </filter>
+                <radialGradient id="sofi-core-light" cx="50%" cy="35%" r="80%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#d7dee8"/>
+                </radialGradient>
+                <clipPath id="sofi-head-clip">
+                  <circle cx="0" cy="-6" r="31"/>
+                </clipPath>
+              </defs>
 
-          <!-- Componente 3: Bot Asistencia -->
-          <div class="glass-card">
-            <div class="pill-badge success" style="margin-bottom: 12px;">Discord Bot</div>
-            <h4 style="font-size: 1.15rem !important; margin: 0 0 8px !important;">Bot-Asistencia-RPsoft</h4>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
-              Canal operativo diario. Registro remoto de jornadas (ingreso, pausas, salida) conectado directamente a las APIs internas.
-            </p>
+              <!-- ========================================== -->
+              <!-- LÍNEAS DE CONEXIÓN A LAS 4 TARJETAS LATERALES -->
+              <!-- ========================================== -->
+
+              <!-- 1. Conexión SOFI-WEB (Azul -> Tarjeta 1 Izq Superior: x=270, y=80) -->
+              <path d="M 450 120 L 340 80 L 270 80" fill="none" stroke="#0284c7" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="450" cy="120" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="270" cy="80" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 2. Conexión sofi-backend (Verde -> Tarjeta 2 Izq Inferior: x=270, y=390) -->
+              <path d="M 520 335 L 350 390 L 270 390" fill="none" stroke="#059669" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="520" cy="335" r="5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="270" cy="390" r="4.5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 3. Conexión Bot-Asistencia (Violeta -> Tarjeta 3 Der Superior: x=890, y=80) -->
+              <path d="M 710 120 L 820 80 L 890 80" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="710" cy="120" r="5" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="890" cy="80" r="4.5" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 4. Conexión Propósito / SOFI (#273141 -> Tarjeta 4 Der Inferior: x=890, y=390) -->
+              <path d="M 622 230 L 780 390 L 890 390" fill="none" stroke="#273141" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="622" cy="230" r="5" fill="#273141" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="890" cy="390" r="4.5" fill="#273141" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- ========================================== -->
+              <!-- CÍRCULOS DE VENN CENTRALES (Tonos Medios Vívidos con Presencia, Ligeros ante el Núcleo #273141) -->
+              <!-- ========================================== -->
+
+              <!-- 1. SOFI-WEB (Top-Left: Celeste Cielo Vívido) -->
+              <circle cx="515" cy="175" r="95" fill="#38bdf8" fill-opacity="0.75" stroke="#0284c7" stroke-width="3.5"/>
+
+              <!-- 2. Bot-Asistencia (Top-Right: Índigo Discord Vívido) -->
+              <circle cx="645" cy="175" r="95" fill="#818cf8" fill-opacity="0.75" stroke="#4f46e5" stroke-width="3.5"/>
+
+              <!-- 3. sofi-backend (Bottom: Esmeralda Vívido) -->
+              <circle cx="580" cy="285" r="95" fill="#34d399" fill-opacity="0.75" stroke="#059669" stroke-width="3.5"/>
+
+              <!-- TEXTOS INTERNOS CENTRADOS DENTRO DE CADA CÍRCULO -->
+              <!-- SOFI-WEB: Centrado en el lóbulo azul -->
+              <g transform="translate(488, 155)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">SOFI-WEB</text>
+                <text y="16" font-size="11" font-weight="800" fill="#0369a1">Next.js · UI</text>
+              </g>
+
+              <!-- Bot-Asistencia: Centrado en el lóbulo violeta (con margen holgado del borde) -->
+              <g transform="translate(670, 155)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">BOT DISCORD</text>
+                <text y="16" font-size="11" font-weight="800" fill="#312e81">Bot-Asistencia</text>
+              </g>
+
+              <!-- sofi-backend: Centrado verticalmente en el lóbulo verde -->
+              <g transform="translate(580, 322)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">BACKEND API</text>
+                <text y="16" font-size="11" font-weight="800" fill="#065f46">sofi-backend</text>
+              </g>
+
+              <!-- ========================================== -->
+              <!-- INSIGNIAS DE INTERSECCIÓN -->
+              <!-- ========================================== -->
+
+              <!-- Intersección 1: Web + Bot (Superior) -->
+              <g transform="translate(580, 42)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <line x1="0" y1="12" x2="0" y2="82" stroke="#475569" stroke-width="1.8" stroke-dasharray="3 3"/>
+                <circle cx="0" cy="82" r="4" fill="#475569"/>
+                <rect x="-74" y="-13" width="148" height="26" rx="13" fill="#ffffff" stroke="#273141" stroke-width="1.8" filter="url(#v-card-shadow)"/>
+                <text y="4.5" font-size="11" font-weight="800" fill="#273141">Sincronización en Vivo</text>
+              </g>
+
+              <!-- Intersección 2: Web + Backend (Hueco libre izquierdo: y=235) -->
+              <g transform="translate(365, 235)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <line x1="60" y1="0" x2="168" y2="8" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="3 3"/>
+                <circle cx="168" cy="8" r="4" fill="#0284c7"/>
+                <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#ffffff" stroke="#0284c7" stroke-width="1.8" filter="url(#v-card-shadow)"/>
+                <text y="4.5" font-size="11" font-weight="800" fill="#0284c7">APIs REST &amp; LMS</text>
+              </g>
+
+              <!-- Intersección 3: Bot + Backend (Hueco libre derecho: y=235) -->
+              <g transform="translate(795, 235)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <line x1="-65" y1="0" x2="-168" y2="8" stroke="#059669" stroke-width="1.8" stroke-dasharray="3 3"/>
+                <circle cx="-168" cy="8" r="4" fill="#059669"/>
+                <rect x="-68" y="-13" width="136" height="26" rx="13" fill="#ffffff" stroke="#059669" stroke-width="1.8" filter="url(#v-card-shadow)"/>
+                <text y="4.5" font-size="11" font-weight="800" fill="#047857">Eventos Asistencia</text>
+              </g>
+
+              <!-- ========================================== -->
+              <!-- NÚCLEO CENTRAL: MISMO ESTILO QUE EL DE LA DIA 4 -->
+              <!-- ========================================== -->
+              <g transform="translate(580, 220)" filter="url(#center-shadow)">
+                <!-- Anillo exterior de pulso (hub central) -->
+                <circle cx="0" cy="0" r="52" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.35"/>
+
+                <!-- Disco maestro con degradado sutil -->
+                <circle cx="0" cy="0" r="46" fill="url(#sofi-core-light)" stroke="#000000" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="42.5" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+
+                <!-- Imagen oficial de SOFI -->
+                <g clip-path="url(#sofi-head-clip)">
+                  <image href="favicon.ico" xlink:href="favicon.ico" width="56" height="56" x="-28" y="-34" preserveAspectRatio="xMidYMid meet" style="image-rendering: pixelated;"/>
+                </g>
+
+                <!-- Texto "SOFI" dentro del círculo (sin fondo ni borde) -->
+                <text x="0" y="31" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="900" fill="#000000" letter-spacing="0.1em">SOFI</text>
+              </g>
+            </svg>
+
+            <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas Armonizadas -->
+            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none;">
+              
+              <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
+                <!-- Tarjeta 1: SOFI-WEB -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                      <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PLANIFICADO</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">SOFI-WEB (LMS)</strong>
+                    </div>
+                    <div style="font-size: 0.74rem; font-weight: 800; color: #0284c7; margin-bottom: 6px;">Frontend Web · Next.js / Tailwind</div>
+                  </div>
+                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Portal administrativo de supervisores</li>
+                    <li>Módulo LMS formativo *(Planificado)*</li>
+                    <li>Capacitación técnica de practicantes</li>
+                  </ul>
+                </div>
+
+                <!-- Tarjeta 2: sofi-backend -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">sofi-backend</strong>
+                    </div>
+                    <div style="font-size: 0.74rem; font-weight: 800; color: #059669; margin-bottom: 6px;">API Core · NestJS / PostgreSQL</div>
+                  </div>
+                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Motor transaccional del área interna</li>
+                    <li>APIs REST y control de acceso seguro</li>
+                    <li>Persistencia centralizada relacional</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- COLUMNA CENTRAL: Espacio transparente amplio -->
+              <div></div>
+
+              <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
+                <!-- Tarjeta 3: Bot-Asistencia -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                      <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">EN PRODUCCIÓN</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Bot-Asistencia</strong>
+                    </div>
+                    <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 6px;">Servicio Discord · Node.js</div>
+                  </div>
+                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Captura diaria de marcas de turno</li>
+                    <li>Canal remoto ágil para practicantes</li>
+                    <li>Despacho y sincronización con backend</li>
+                  </ul>
+                </div>
+
+                <!-- Tarjeta 4: Propósito del Área TI -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 14px 16px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                      <span class="pill-badge" style="background: #f1f5f9; color: #273141; border: 1.5px solid #273141; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">PROPÓSITO TI</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Solución In-House</strong>
+                    </div>
+                    <div style="font-size: 0.74rem; font-weight: 800; color: #273141; margin-bottom: 6px;">Gestión de Talento y Formación</div>
+                  </div>
+                  <ul style="font-size: 0.79rem; color: #0f172a; line-height: 1.45; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Automatización de procesos internos</li>
+                    <li>Soporte a la formación de practicantes</li>
+                    <li>Supervisión y métricas de rendimiento</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </section>
 
-      <!-- Slide: 04_telemetria_vps.html -->
+      <!-- Slide: 04_proyectos_externos.html -->
+      <!-- SLIDE 4: DESARROLLO EXTERNO - CLIENTES COMERCIALES -->
+      <section class="slide-externo">
+        <style>
+          /* Título con el mismo estilo que la diapositiva de telemetría */
+          .reveal .slides section.slide-externo .slide-title {
+            paint-order: stroke fill;
+            -webkit-text-stroke: 4px #ffffff;
+            text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+          }
+        </style>
+        <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 4 (idéntica a slide 3) -->
+        <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
+
+        <div style="position: relative; z-index: 1;">
+          <!-- Encabezado de la diapositiva -->
+          <div style="margin-bottom: 12px;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 49, 65, 0.08); border: 1.5px solid #273141; border-radius: 20px; padding: 3px 12px; font-size: 0.72rem; font-weight: 800; color: #273141; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
+              Área de Proyectos Comerciales (Externa)
+            </div>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo externo - <span style="color: #b45309;">Clientes Comerciales</span></h2>
+          </div>
+
+          <!-- Contenedor Maestro unificado con proporciones balanceadas -->
+          <div style="position: relative; width: 1160px; height: 490px; margin: 28px auto 0;">
+            
+            <!-- CAPA 1: SVG Completo (Círculos Venn, Núcleo VPS, Insignias y Líneas) -->
+            <svg viewBox="0 0 1160 490" style="position: absolute; top: 0; left: 0; width: 1160px; height: 490px; z-index: 1;" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="vps-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
+                </filter>
+                <radialGradient id="vps-core-light" cx="50%" cy="35%" r="80%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#d7dee8"/>
+                </radialGradient>
+              </defs>
+
+              <!-- ========================================== -->
+              <!-- LÍNEAS DE CONEXIÓN A LAS 4 TARJETAS LATERALES -->
+              <!-- ========================================== -->
+
+              <!-- 1. Conexión Reflexo Perú (Azul -> Tarjeta 1 Izq Superior: x=270, y=80) -->
+              <path d="M 450 120 L 340 80 L 270 80" fill="none" stroke="#0284c7" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="450" cy="120" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="270" cy="80" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 2. Conexión Sublitex (Verde -> Tarjeta 2 Izq Inferior: x=270, y=390) -->
+              <path d="M 513 352 L 350 390 L 270 390" fill="none" stroke="#059669" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="513" cy="352" r="5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="270" cy="390" r="4.5" fill="#059669" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 3. Conexión Arte & Ideas (Violeta -> Tarjeta 3 Der Superior: x=890, y=80) -->
+              <path d="M 710 120 L 820 80 L 890 80" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="710" cy="120" r="5" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="890" cy="80" r="4.5" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- 4. Conexión Vecino Ruidoso (#273141 -> Tarjeta 4 Der Inferior: x=890, y=390) -->
+              <path d="M 622 230 L 780 390 L 890 390" fill="none" stroke="#273141" stroke-width="2.4" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <circle cx="622" cy="230" r="5" fill="#273141" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="890" cy="390" r="4.5" fill="#273141" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- ========================================== -->
+              <!-- CÍRCULOS DE VENN CENTRALES -->
+              <!-- ========================================== -->
+
+              <!-- 1. Reflexo Perú (Top-Left: Celeste Cielo Vívido) -->
+              <circle cx="515" cy="175" r="95" fill="#38bdf8" fill-opacity="0.75" stroke="#0284c7" stroke-width="3.5"/>
+
+              <!-- 2. Arte & Ideas (Top-Right: Índigo Vívido) -->
+              <circle cx="645" cy="175" r="95" fill="#818cf8" fill-opacity="0.75" stroke="#4f46e5" stroke-width="3.5"/>
+
+              <!-- 3. Sublitex (Bottom: Esmeralda Vívido) -->
+              <circle cx="580" cy="285" r="95" fill="#34d399" fill-opacity="0.75" stroke="#059669" stroke-width="3.5"/>
+
+              <!-- TEXTOS INTERNOS CENTRADOS DENTRO DE CADA CÍRCULO -->
+              <!-- Reflexo Perú -->
+              <g transform="translate(488, 155)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">REFLEXO PERÚ</text>
+                <text y="16" font-size="11" font-weight="800" fill="#0369a1">Next.js · NestJS</text>
+              </g>
+
+              <!-- Arte & Ideas -->
+              <g transform="translate(670, 155)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">ARTE &amp; IDEAS</text>
+                <text y="16" font-size="11" font-weight="800" fill="#312e81">React · Django</text>
+              </g>
+
+              <!-- Sublitex -->
+              <g transform="translate(580, 322)" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">
+                <text y="-2" font-size="14.5" font-weight="900" fill="#0f172a" letter-spacing="0.05em">SUBLITEX</text>
+                <text y="16" font-size="11" font-weight="800" fill="#065f46">React · Node.js</text>
+              </g>
+
+              <!-- ========================================== -->
+              <!-- NÚCLEO CENTRAL: NODO HOST VPS HETZNER -->
+              <!-- ========================================== -->
+              <g transform="translate(580, 220)" filter="url(#vps-shadow)">
+                <!-- Anillo exterior de pulso (hub central) -->
+                <circle cx="0" cy="0" r="52" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.35"/>
+
+                <!-- Disco maestro con degradado sutil -->
+                <circle cx="0" cy="0" r="46" fill="url(#vps-core-light)" stroke="#000000" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="42.5" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+
+                <!-- Icono de Servidor / Cómputo Host (2 unidades) -->
+                <g transform="translate(0, -9)">
+                  <rect x="-16" y="-16" width="32" height="12" rx="3" fill="none" stroke="#000000" stroke-width="2.2"/>
+                  <circle cx="-10" cy="-10" r="1.6" fill="#000000"/>
+                  <line x1="-4" y1="-10" x2="9" y2="-10" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="11" cy="-10" r="1.9" fill="#000000" fill-opacity="0.85"/>
+
+                  <rect x="-16" y="2" width="32" height="12" rx="3" fill="none" stroke="#000000" stroke-width="2.2"/>
+                  <circle cx="-10" cy="8" r="1.6" fill="#000000"/>
+                  <line x1="-4" y1="8" x2="9" y2="8" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="11" cy="8" r="1.9" fill="#000000" fill-opacity="0.85"/>
+                </g>
+
+                <!-- Texto "VPS HETZNER" dentro del círculo (sin fondo ni borde) -->
+                <text x="0" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="900" fill="#000000" letter-spacing="0.04em">VPS HETZNER</text>
+              </g>
+            </svg>
+
+            <!-- CAPA 2: Cuadrícula HTML con las 4 Tarjetas -->
+            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 270px 1fr 270px; width: 1160px; height: 470px; gap: 0; align-items: stretch; pointer-events: none;">
+              
+              <!-- COLUMNA IZQUIERDA: Tarjeta 1 (y=80) y Tarjeta 2 (y=390) -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
+                <!-- Tarjeta 1: Reflexo Perú -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #0284c7; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <span class="pill-badge" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #0284c7; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">SALUD INTEGRAL</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Reflexo Perú</strong>
+                    </div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #0284c7; margin-bottom: 4px;">Plataforma de salud y bienestar integral</div>
+                  </div>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Historias clínicas y citas médicas</li>
+                    <li>Agenda de terapeutas y control de sedes</li>
+                    <li>Reportes clínicos y control financiero</li>
+                  </ul>
+                </div>
+
+                <!-- Tarjeta 2: Sublitex -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #059669; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <span class="pill-badge" style="background: #d1fae5; color: #065f46; border: 1.5px solid #059669; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">E-COMMERCE</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Sublitex</strong>
+                    </div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #059669; margin-bottom: 4px;">Camisetas deportivas sublimadas</div>
+                  </div>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Venta online de indumentaria deportiva</li>
+                    <li>Sublimación a medida (diseño y dorsal)</li>
+                    <li>Pedidos personalizados vía catálogo online</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- COLUMNA CENTRAL: Espacio transparente amplio -->
+              <div></div>
+
+              <!-- COLUMNA DERECHA: Tarjeta 3 (y=80) y Tarjeta 4 (y=390) -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 470px; pointer-events: auto;">
+                <!-- Tarjeta 3: Arte & Ideas -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #6366f1; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <span class="pill-badge" style="background: #ede9fe; color: #4338ca; border: 1.5px solid #6366f1; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">FOTOGRAFÍA &amp; EVENTOS</span>
+                      <strong style="font-size: 0.86rem; color: #0f172a; font-weight: 800;">Arte &amp; Ideas</strong>
+                    </div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #4338ca; margin-bottom: 4px;">Fotografía, eventos y producción audiovisual</div>
+                  </div>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>CRM comercial y agenda de producción</li>
+                    <li>Control de pedidos y flujo de producción</li>
+                    <li>Seguimiento de ventas y rendimiento comercial</li>
+                  </ul>
+                </div>
+
+                <!-- Tarjeta 4: Riesgo Arquitectónico Crítico -->
+                <div class="glass-card" style="background: #ffffff !important; padding: 11px 15px; border-radius: 14px; border: 2px solid #273141; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12); height: 160px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                      <span class="pill-badge danger" style="background: #fef2f2; color: #dc2626; border: 1.5px solid #ef4444; font-size: 0.65rem; padding: 2px 8px; font-weight: 800;">RIESGO CRÍTICO</span>
+                      <strong style="font-size: 0.86rem; color: #991b1b; font-weight: 800;">Vecino Ruidoso</strong>
+                    </div>
+                    <div style="font-size: 0.73rem; font-weight: 800; color: #dc2626; margin-bottom: 4px;">Riesgo por cargas compartidas</div>
+                  </div>
+                  <ul style="font-size: 0.75rem; color: #0f172a; line-height: 1.35; padding-left: 14px; margin: 0; font-weight: 600;">
+                    <li>Picos de demanda afectan a otros servicios</li>
+                    <li>Aplicaciones sin aislamiento entre sí</li>
+                    <li>Riesgo de interrupciones en horario pico</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide: 05_telemetria_vps.html -->
       <!-- SLIDE 4: TELEMETRÍA REAL DEL SERVIDOR ACTUAL -->
 <section class="slide-telemetria">
   <style>
@@ -1183,7 +1584,7 @@
           </div>
         </div>
 
-        <!-- Sub-bloque 2: Cargas Externas (Clientes Comerciales RPsoft) -->
+        <!-- Sub-bloque 2: Cargas Externas (Clientes Comerciales APM Inversiones) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(99, 102, 241, 0.28); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
@@ -1263,7 +1664,7 @@
   </div>
 </section>
 
-      <!-- Slide: 05_limitaciones_criticas.html -->
+      <!-- Slide: 06_limitaciones_criticas.html -->
       <!-- SLIDE 5: LIMITACIONES Y ENFOQUE CRÍTICO -->
 <section class="slide-limitaciones">
   <style>
@@ -1561,7 +1962,7 @@
   </div>
 </section>
 
-      <!-- Slide: 06_aws_caf.html -->
+      <!-- Slide: 07_aws_caf.html -->
       <!-- SLIDE 6: AWS CAF (Cloud Adoption Framework) -->
 <section class="slide-caf">
   <style>
@@ -1849,7 +2250,7 @@
             Alineación Metodológica con AWS CAF
           </div>
           <div style="font-size: 0.76rem; color: #312e81; line-height: 1.35; margin-top: 2px;">
-            El marco CAF garantiza que la modernización de RPsoft no sea solo técnica: protege el flujo de caja, capacita al equipo humano y provee una base elástica y segura para <strong>APM Inversiones</strong>.
+            El marco CAF garantiza que la modernización de APM Inversiones EIRL no sea solo técnica: protege el flujo de caja, capacita al equipo humano y provee una base elástica y segura para <strong>APM Inversiones</strong>.
           </div>
         </div>
       </div>
@@ -1859,7 +2260,7 @@
   </div>
 </section>
 
-      <!-- Slide: 07_arquitectura_aws.html -->
+      <!-- Slide: 08_arquitectura_aws.html -->
       <!-- SLIDE 7: ARQUITECTURA CONCEPTUAL EN AWS -->
 <section class="slide-arquitectura">
   <style>
@@ -2147,7 +2548,7 @@
             Transformación Arquitectónica: De Monolito VPS a Cloud Nativo
           </div>
           <div style="font-size: 0.76rem; color: #0c4a6e; line-height: 1.35; margin-top: 2px;">
-            Se erradica el Punto Único de Fallo (SPOF) y la contención de memoria. Cada capa opera aislada, escalable y tolerante a fallos para el ecosistema <strong>SOFI</strong> y clientes de <strong>RPsoft</strong>.
+            Se erradica el Punto Único de Fallo (SPOF) y la contención de memoria. Cada capa opera aislada, escalable y tolerante a fallos para el ecosistema <strong>SOFI</strong> y clientes de <strong>APM Inversiones EIRL</strong>.
           </div>
         </div>
       </div>
@@ -2157,7 +2558,7 @@
   </div>
 </section>
 
-      <!-- Slide: 08_seguridad_gobierno.html -->
+      <!-- Slide: 09_seguridad_gobierno.html -->
       <!-- SLIDE 8: SEGURIDAD Y GOBIERNO -->
 <section class="slide-seguridad">
   <style>
@@ -2235,13 +2636,9 @@
               <!-- Icono Escudo Seguridad -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <div>
-              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #dc2626;">
-                División Operativa y de Cumplimiento
-              </div>
-              <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Responsabilidad Compartida
-              </div>
+<div style="background: rgba(254, 243, 199, 0.5); border-radius: 12px; padding: 14px;">
+              <strong style="color: #b45309; font-size: 0.88rem;">APM Inversiones EIRL (Seguridad 'EN' la Nube):</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 4px 0 0;">Datos de practicantes, políticas IAM, Security Groups y cifrado.</p>
             </div>
           </div>
           <span class="pill-badge" style="font-size: 0.68rem; padding: 3px 10px; background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25);">
@@ -2271,17 +2668,17 @@
           </div>
         </div>
 
-        <!-- Sub-bloque 2: RPsoft (Seguridad "EN" la Nube) -->
+        <!-- Sub-bloque 2: APM Inversiones EIRL (Seguridad "EN" la Nube) -->
         <div style="background: rgba(255, 255, 255, 0.88); border: 1.5px solid rgba(239, 68, 68, 0.28); border-radius: 12px; padding: 11px 13px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
             <div style="font-size: 0.84rem; font-weight: 800; color: #991b1b; display: flex; align-items: center; gap: 8px;">
               <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); display: flex; align-items: center; justify-content: center; color: #dc2626;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
-              RPsoft &middot; Seguridad 'EN' la Nube
+              APM Inversiones EIRL &middot; Seguridad 'EN' la Nube
             </div>
             <span style="font-size: 0.66rem; font-weight: 700; color: #991b1b; background: rgba(239, 68, 68, 0.12); padding: 2px 7px; border-radius: 6px;">
-              Control de RPsoft
+              Control de APM Inversiones EIRL
             </span>
           </div>
           <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0 0 6px 0;">
@@ -2289,7 +2686,7 @@
           </p>
           <div style="display: flex; align-items: center; gap: 6px; font-size: 0.73rem; font-weight: 700; color: #b91c1c;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Soberanía: RPsoft es dueño absoluto del acceso y la privacidad de los datos formativos.
+            Soberanía: APM Inversiones EIRL es dueño absoluto del acceso y la privacidad de los datos formativos.
           </div>
         </div>
 
@@ -2331,7 +2728,7 @@
               Alivio Operativo Frente a Hetzner
             </div>
             <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">
-              Se erradica el riesgo de caída de hipervisor y fallos de hardware no atendidos. RPsoft delega la carga no diferenciada a AWS y enfoca su esfuerzo en la seguridad lógica de la aplicación.
+              Se erradica el riesgo de caída de hipervisor y fallos de hardware no atendidos. APM Inversiones EIRL delega la carga no diferenciada a AWS y enfoca su esfuerzo en la seguridad lógica de la aplicación.
             </div>
           </div>
         </div>
@@ -2457,7 +2854,7 @@
   </div>
 </section>
 
-      <!-- Slide: 09_tco_costos.html -->
+      <!-- Slide: 10_tco_costos.html -->
       <!-- SLIDE 9: ESTIMACIÓN ECONÓMICA Y TCO -->
 <section class="slide-costos">
   <style>
@@ -2735,7 +3132,7 @@
   </div>
 </section>
 
-      <!-- Slide: 10_conclusion_roadmap.html -->
+      <!-- Slide: 11_conclusion_roadmap.html -->
       <!-- SLIDE 10: CONCLUSIÓN Y CIERRE -->
 <section class="slide-conclusion">
   <style>
@@ -2794,7 +3191,7 @@
   <div class="conclusion-header-wrapper">
     <div class="conclusion-hero-title fragment" data-fragment-index="1">
       <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        7. Conclusiones y Cierre: <span style="color: #0073bb;">RPsoft en AWS Cloud</span>
+        7. Conclusiones y Cierre: <span style="color: #0073bb;">APM Inversiones EIRL en AWS Cloud</span>
       </h2>
     </div>
   </div>
@@ -2917,7 +3314,7 @@
                 Valor Organizacional &amp; Sostenibilidad
               </div>
               <div style="font-size: 1.15rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">
-                Impacto en RPsoft &amp; SOFI
+                Impacto en APM Inversiones &amp; SOFI
               </div>
             </div>
           </div>
@@ -2959,7 +3356,7 @@
           ¡Muchas Gracias!
         </div>
         <p style="font-size: 0.84rem; color: #78350f; line-height: 1.45; margin: 0 0 12px 0;">
-          Arquitectura Cloud profesional, resiliente y financieramente viable para <strong>RPsoft</strong>.
+          Arquitectura Cloud profesional, resiliente y financieramente viable para <strong>APM Inversiones EIRL</strong>.
         </p>
         <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309; background: rgba(255, 153, 0, 0.14); padding: 5px 14px; border-radius: 9999px; border: 1px solid rgba(255, 153, 0, 0.3);">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
