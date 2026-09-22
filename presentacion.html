@@ -525,7 +525,7 @@
               Proyectos Externos (Clientes)
             </div>
             <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
-              Sistemas comerciales activos (Reflexo4, Arte Ideas) y motores relacionales MySQL.
+              Sistemas comerciales activos (Reflexo Perú, Arte Ideas) y motores relacionales MySQL.
             </div>
           </div>
         </div>
@@ -833,7 +833,7 @@
             </span>
           </div>
           <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0 0 8px 0;">
-            Programación y entrega de plataformas activas en producción para terceros: <strong>Reflexo4</strong> (Clínica) y <strong>Arte & Ideas</strong> (Estudio).
+            Programación y entrega de plataformas activas en producción para terceros: <strong>Reflexo Perú</strong> (Clínica) y <strong>Arte &amp; Ideas</strong> (Estudio).
           </p>
           <div style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: #3730a3;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
@@ -894,6 +894,16 @@
             -webkit-text-stroke: 4px #ffffff;
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
+          /* Centrado vertical real: el overlay absoluto gigante infla scrollHeight y Rompe el centrado nativo de Reveal,
+             así que se fuerza flex centrado sobre el lienzo completo (700px). */
+          .reveal .slides section.slide-interno {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            top: 0 !important;
+            height: 100% !important;
+            box-sizing: border-box;
+          }
         </style>
         <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 3 (tono calibrado, desenfoque sutil) -->
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
@@ -901,11 +911,7 @@
         <div style="position: relative; z-index: 1;">
           <!-- Encabezado de la diapositiva con alto contraste -->
           <div style="margin-bottom: 12px;">
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 49, 65, 0.08); border: 1.5px solid #273141; border-radius: 20px; padding: 3px 12px; font-size: 0.72rem; font-weight: 800; color: #273141; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
-              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
-              Área de Desarrollo de Soluciones de TI
-            </div>
-            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo interno - <span style="color: #b45309;">SOFI</span></h2>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
@@ -1113,6 +1119,17 @@
             </div>
 
           </div>
+
+          <!-- Hallazgo Crítico: Contención en VPS Compartido -->
+          <div style="margin: 12px auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
+            <div style="width: 24px; height: 24px; border-radius: 7px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #dc2626; letter-spacing: 0.04em;">Hallazgo Crítico: Contención en VPS Compartido</div>
+              <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">El área de desarrollo interno comparte el mismo servidor Hetzner con el desarrollo externo. Una saturación de los servicios externos puede afectar el rendimiento de la plataforma interna SOFI.</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1126,6 +1143,16 @@
             -webkit-text-stroke: 4px #ffffff;
             text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
           }
+          /* Centrado vertical real: el overlay absoluto gigante infla scrollHeight y Rompe el centrado nativo de Reveal,
+             así que se fuerza flex centrado sobre el lienzo completo (700px). */
+          .reveal .slides section.slide-externo {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            top: 0 !important;
+            height: 100% !important;
+            box-sizing: border-box;
+          }
         </style>
         <!-- Capa de oscurecimiento y blur para TODO el fondo de la diapositiva 4 (idéntica a slide 3) -->
         <div style="position: absolute; top: -1000px; left: -1000px; width: 4000px; height: 3000px; background: rgba(15, 23, 42, 0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 0; pointer-events: none;"></div>
@@ -1133,11 +1160,7 @@
         <div style="position: relative; z-index: 1;">
           <!-- Encabezado de la diapositiva -->
           <div style="margin-bottom: 12px;">
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 49, 65, 0.08); border: 1.5px solid #273141; border-radius: 20px; padding: 3px 12px; font-size: 0.72rem; font-weight: 800; color: #273141; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
-              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #273141;"></span>
-              Área de Proyectos Comerciales (Externa)
-            </div>
-            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo externo - <span style="color: #b45309;">Clientes Comerciales</span></h2>
+            <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 8px 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Desarrollo externo - <span style="color: #b45309;">Clientes Comerciales</span></h2>
           </div>
 
           <!-- Contenedor Maestro unificado con proporciones balanceadas -->
@@ -1318,6 +1341,17 @@
 
             </div>
 
+          </div>
+
+          <!-- Hallazgo Crítico: Contención en VPS Compartido -->
+          <div style="margin: 12px auto 0; max-width: 1160px; background: rgba(254, 242, 242, 0.92); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.18);">
+            <div style="width: 24px; height: 24px; border-radius: 7px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0; margin-top: 1px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #dc2626; letter-spacing: 0.04em;">Hallazgo Crítico: Contención en VPS Compartido</div>
+              <div style="font-size: 0.76rem; color: #991b1b; line-height: 1.35; margin-top: 2px;">El área de desarrollo externo comparte el mismo servidor Hetzner con el desarrollo interno. Una saturación de la plataforma interna SOFI puede afectar los recursos disponibles para los servicios externos.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -3332,7 +3366,7 @@
             Continuidad B2B y Formación Segura de Practicantes
           </div>
           <p style="font-size: 0.80rem; color: var(--text-muted); line-height: 1.38; margin: 0;">
-            Los clientes comerciales (Reflexo4, Arte Ideas) ya no comparten recursos con la plataforma interna de SENATI. Se protege la reputación de la empresa y se garantiza el registro ininterrumpido de asistencias y notas.
+            Los clientes comerciales (Reflexo Perú, Arte Ideas) ya no comparten recursos con la plataforma interna de SENATI. Se protege la reputación de la empresa y se garantiza el registro ininterrumpido de asistencias y notas.
           </p>
         </div>
 
