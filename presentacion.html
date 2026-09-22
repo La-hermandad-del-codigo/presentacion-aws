@@ -674,7 +674,7 @@
 
       <!-- Slide: 03_ecosistema_sofi.html -->
       <!-- SLIDE 3: DESARROLLO INTERNO - SOFI -->
-      <section class="slide-interno" style="position: relative;">
+      <section class="slide-interno">
         <style>
           /* Título con el mismo estilo que la diapositiva de telemetría */
           .reveal .slides section.slide-interno .slide-title {
@@ -684,7 +684,7 @@
           }
           /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
              se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
-          .reveal .slides section.slide-interno {
+          .reveal .slides section.slide-interno.present {
             display: flex !important;
             flex-direction: column;
             justify-content: flex-start;
@@ -933,7 +933,7 @@
           }
           /* El overlay absoluto gigante infla scrollHeight y rompe el centrado nativo de Reveal:
              se fuerza flex con anclaje arriba y tarjetas del pie al fondo del lienzo (700px). */
-          .reveal .slides section.slide-externo {
+          .reveal .slides section.slide-externo.present {
             display: flex !important;
             flex-direction: column;
             justify-content: flex-start;
@@ -2115,7 +2115,7 @@
 
       <!-- Slide: 08_arquitectura_aws.html -->
       <!-- SLIDE 8: DIAGRAMA DE ARQUITECTURA DE RED PROPUESTO (NIVEL CONCEPTUAL) -->
-<section class="slide-red-arquitectura" style="position: relative;">
+<section class="slide-red-arquitectura">
   <style>
     /* Título con el mismo estilo de alto contraste */
     .reveal .slides section.slide-red-arquitectura .slide-title {
@@ -2130,7 +2130,7 @@
 
   <div style="position: relative; z-index: 1;">
     <!-- Encabezado de la diapositiva -->
-    <div style="margin-bottom: 8px;">
+    <div style="margin-bottom: 8px; text-align: center;">
       <h2 class="slide-title" style="font-size: 2.25rem !important; margin: 0 0 6px !important; line-height: 1.15; color: var(--aws-navy);">Diagrama de Red - <span style="color: #0073bb;">Amazon VPC</span></h2>
     </div>
 
