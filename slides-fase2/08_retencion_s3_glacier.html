@@ -1,0 +1,97 @@
+<!-- SLIDE 8: POLÍTICAS DE RETENCIÓN CON AMAZON S3 GLACIER -->
+<section class="slide-retencion-glacier">
+  <div style="max-width: 1180px; margin: 0 auto;">
+    
+    <div style="text-align: center; margin-bottom: 22px;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px; background: rgba(14, 165, 233, 0.12); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 999px; margin-bottom: 8px;">
+        <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0284c7;">Gobernanza y FinOps</span>
+      </div>
+      <h2 class="slide-title" style="font-size: 2.15rem !important; margin: 0; color: var(--aws-navy);">
+        Amazon S3 Glacier: <span style="color: #0284c7;">Políticas de Retención y Archivado</span>
+      </h2>
+      <p style="font-size: 0.94rem; color: var(--text-muted); margin-top: 6px;">
+        Ciclo de vida automatizado para respaldos históricos de base de datos con hasta un 84% de reducción de costo
+      </p>
+    </div>
+
+    <!-- Pipeline Visual de 4 Pasos del Ciclo de Vida -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+      
+      <!-- Paso 1: S3 Standard -->
+      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.74rem; font-weight: 800; color: #047857; text-transform: uppercase; margin-bottom: 8px;">Día 0 a 30 · Caliente</div>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">S3 Standard</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
+            Respaldos diarios de PostgreSQL y clientes con disponibilidad inmediata ante contingencias.
+          </p>
+        </div>
+        <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.78rem; font-weight: 800; color: #047857;">
+          $0.023 / GB-mes
+        </div>
+      </div>
+
+      <!-- Paso 2: S3 Standard-IA -->
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 22px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(14, 165, 233, 0.35); box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.74rem; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 8px;">Día 31 a 90 · Tibio</div>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">S3 Standard-IA</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
+            Acceso poco frecuente pero en milisegundos para auditorías mensuales y controles periódicos.
+          </p>
+        </div>
+        <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.78rem; font-weight: 800; color: #0284c7;">
+          $0.0125 / GB-mes (-45%)
+        </div>
+      </div>
+
+      <!-- Paso 3: S3 Glacier Flexible -->
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 22px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; text-transform: uppercase; margin-bottom: 8px;">Día 91 a 365 · Frío</div>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">S3 Glacier</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
+            Archivo legal e histórico. Recuperación configurable en horas con costo ultra bajo.
+          </p>
+        </div>
+        <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.78rem; font-weight: 800; color: #4338ca;">
+          $0.0036 / GB-mes (-84%)
+        </div>
+      </div>
+
+      <!-- Paso 4: Purga Automática -->
+      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 22px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(239, 68, 68, 0.35); box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.05); display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.74rem; font-weight: 800; color: #dc2626; text-transform: uppercase; margin-bottom: 8px;">> 365 Días · Expiración</div>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">Purga Definitiva</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
+            Eliminación automática de respaldos obsoletos tras cumplir un año de retención legal y académica.
+          </p>
+        </div>
+        <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.78rem; font-weight: 800; color: #dc2626;">
+          Cero Costo Residual
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Banner Inferior: Automatización Desatendida -->
+    <div class="glass-card fragment fade-up" data-fragment-index="5" style="padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.88) 100%); border: 1.5px solid rgba(14, 165, 233, 0.35); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(14, 165, 233, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Reglas S3 Lifecycle: Transición 100% Desatendida</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">
+            No requiere intervención humana ni scripts de mantenimiento; AWS aplica las transiciones de clase de almacenamiento automáticamente cada medianoche.
+          </div>
+        </div>
+      </div>
+      <div style="padding: 6px 14px; border-radius: 8px; background: #0284c7; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
+        S3 Lifecycle Policy
+      </div>
+    </div>
+
+  </div>
+</section>
