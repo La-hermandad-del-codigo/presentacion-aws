@@ -1,0 +1,127 @@
+<!-- SLIDE 13: RESUMEN Y ROADMAP FASE 3 -->
+<section class="slide-resumen-roadmap">
+  <style>
+    .reveal .slides section.slide-resumen-roadmap .roadmap-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-resumen-roadmap .roadmap-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-resumen-roadmap .roadmap-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    .reveal .slides section.slide-resumen-roadmap .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado con Animación Hero Title -->
+  <div class="roadmap-header-wrapper">
+    <div class="roadmap-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        Consolidado Fase 2 y <span style="color: #b45309;">Roadmap Hacia Fase 3</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor: 2 Columnas (Consolidado Fase 2 vs Roadmap Fase 3) -->
+  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto;">
+    
+    <!-- Columna Izquierda: Logros Arquitectónicos Fase 2 -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px; border-radius: 16px; border-top: 4px solid #10b981; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Arquitectura Consolidada (Fase 2)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Cómputo, Almacenamiento y Persistencia</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #ff9900;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Cómputo Segregado & Spot FinOps</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Instancias dedicadas para SOFI y Clientes; Staging en EC2 Spot (-90% costo); Workstations Dev homogéneas.</div>
+          </div>
+
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #10b981;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Almacenamiento Desacoplado & EFS</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">S3 para LMS seguro con OAC y versionado; EFS multi-AZ para workspaces compartidos; Glacier para archivo legal.</div>
+          </div>
+
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #2563eb;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">RDS PostgreSQL 16 Administrado</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Subred privada 10.0.100.0/24 sin Internet; cero OOM Killer; Backups diarios y PITR (RPO &lt; 5m, RTO &lt; 30m).</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.75rem; color: #047857; font-weight: 700;">
+        ✓ Resueltos los 3 dolores críticos diagnosticados en la Fase 1
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Objetivos Fase 3 -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px; border-radius: 16px; border-top: 4px solid #b45309; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Hacia la Fase 3</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Redes Avanzadas y Seguridad Perimetral</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Topología de Red VPC Multi-AZ</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Subredes públicas y privadas redundantes, NAT Gateway e Internet Gateway dedicados.</div>
+          </div>
+
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Application Load Balancer (ALB)</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Distribución inteligente de tráfico HTTP/HTTPS y terminación TLS con certificados ACM.</div>
+          </div>
+
+          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">CloudFront CDN & AWS WAF</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Aceleración global de contenidos y filtrado contra ataques DDoS, OWASP Top 10 y bots maliciosos.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.75rem; color: #b45309; font-weight: 700;">
+        → Siguiente entrega: Alta disponibilidad y blindaje perimetral
+      </div>
+    </div>
+
+  </div>
+</section>

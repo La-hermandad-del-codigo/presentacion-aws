@@ -1,0 +1,119 @@
+<!-- SLIDE 8: AMAZON EFS -->
+<section class="slide-almacenamiento-efs">
+  <style>
+    .reveal .slides section.slide-almacenamiento-efs .efs-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-almacenamiento-efs .efs-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 270px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-almacenamiento-efs .efs-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    .reveal .slides section.slide-almacenamiento-efs .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado con Animación Hero Title -->
+  <div class="efs-header-wrapper">
+    <div class="efs-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        Amazon EFS: <span style="color: #059669;">Sistema de Archivos Compartido NFS</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor: 4 Tarjetas de Pilares Técnicos -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1180px; margin: 0 auto;">
+    
+    <!-- Tarjeta 1: Espacio Unificado -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; border-top: 4px solid #10b981; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Workspace Unificado</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Directorio compartido <code>/shared/workspace</code> montado simultáneamente en todas las estaciones virtuales y servidor de staging.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #047857;">
+        Plantillas y guías estandarizadas
+      </div>
+    </div>
+
+    <!-- Tarjeta 2: Protocolo NFSv4 y Multi-AZ -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; border-top: 4px solid #0284c7; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">NFSv4 & Multi-AZ</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Acceso concurrente de lectura y escritura con bloqueo de archivos POSIX. Replicación redundante entre múltiples Zonas de Disponibilidad.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(2, 132, 199, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #0369a1;">
+        Cero riesgo de corrupción de archivos
+      </div>
+    </div>
+
+    <!-- Tarjeta 3: Optimización de Almacenamiento -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; border-top: 4px solid #6366f1; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; color: #6366f1; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Ahorro de Disco EBS</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Evita duplicar dependencias pesadas (node_modules, caches de compilación) en cada disco individual de 25 GB de los practicantes.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #4338ca;">
+        Elasticidad: se paga por GB real
+      </div>
+    </div>
+
+    <!-- Tarjeta 4: Rendimiento y Gobernanza -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; border-top: 4px solid #f59e0b; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Throughput Bursting</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Modo General Purpose con picos de ancho de banda dinámicos ante compilaciones concurrentes y lecturas de datasets de prueba.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
+        Permisos POSIX nativos Linux
+      </div>
+    </div>
+
+  </div>
+</section>
