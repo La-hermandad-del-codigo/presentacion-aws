@@ -1554,265 +1554,526 @@
 
       <!-- Slide: 11_base_datos_rds.html -->
       <!-- SLIDE 11: BASE DE DATOS RDS POSTGRESQL -->
-<section class="slide-base-datos-rds">
+<section class="slide-base-datos-rds" data-transition="slide-in none-out">
   <style>
+    .reveal .slides section.slide-base-datos-rds {
+      padding-top: 15px !important;
+    }
+
     .reveal .slides section.slide-base-datos-rds .rds-header-wrapper {
-      max-width: 1185px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
-    }
-
-    .reveal .slides section.slide-base-datos-rds .rds-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
-    }
-
-    .reveal .slides section.slide-base-datos-rds .rds-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
+      max-width: 1180px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .reveal .slides section.slide-base-datos-rds .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
+
+    .rds-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 
-  <!-- Encabezado con Animación Hero Title -->
+  <!-- Encabezado Fijo -->
   <div class="rds-header-wrapper">
-    <div class="rds-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Amazon RDS: <span style="color: #2563eb;">Motor PostgreSQL 16 Administrado</span>
-      </h2>
-    </div>
+    <h2 class="slide-title">
+      Amazon RDS: <span style="color: #2563eb;">Motor PostgreSQL 16 Administrado</span>
+    </h2>
+    <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 12px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">
+      Persistencia Transaccional · Parte 1
+    </span>
   </div>
 
-  <!-- Contenedor: 4 Pilares de la Solución de Base de Datos -->
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto 16px;">
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.15fr 0.95fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Tarjeta 1: Compatibilidad de Stack -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #2563eb; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center; color: #2563eb; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Especificación y Stack SOFI -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon RDS PostgreSQL 16</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">db.t3.micro · 20 GB gp3 autoescalable</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Producción SOFI</span>
         </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Compatibilidad Stack</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          100% nativo con NestJS y Prisma ORM. Cero cambios de código ni reescritura de modelos o consultas relacionales.
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Compatibilidad 100% nativa:</strong> Integración directa con NestJS y Prisma ORM sin refactorizar esquemas relacionales.</li>
+          <li><strong>Cumplimiento ACID estricto:</strong> Integridad en asistencia, cursos y usuarios; descarta NoSQL (DynamoDB) por inconsistencia.</li>
+          <li><strong>FinOps predecible:</strong> Costo base controlado de ~$15.44 USD/mes, evitando sobredimensionar en Aurora (~$50/mes).</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Aislamiento y Estabilidad -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Aislamiento de Red & Fin del OOM Killer</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Subred Privada 10.0.100.0/24 · Cifrado KMS</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Seguridad</span>
         </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Segmentación sin IP pública:</strong> Subred privada aislada; tráfico filtrado estrictamente por Security Group al puerto 5432.</li>
+          <li><strong>Recursos dedicados garantizados:</strong> Erradica la competencia destructiva de memoria del VPS que antes forzaba reinicios.</li>
+          <li><strong>Parches y mantenimiento gestionado:</strong> AWS aplica actualizaciones del motor y monitoriza salud en CloudWatch.</li>
+        </ul>
       </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(37, 99, 235, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">
-        Transición sin fricción
-      </div>
+
     </div>
 
-    <!-- Tarjeta 2: Dimensionamiento -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #0284c7; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">db.t3.micro + gp3</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          1 vCPU y 1 GiB RAM dedicados con 20 GB gp3 autoescalable. Costo altamente accesible para el presupuesto formativo.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(2, 132, 199, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #0369a1;">
-        ~$15.44 USD / mes
-      </div>
+    <!-- Columna Derecha: Diagrama de Arquitectura Oficial AWS -->
+    <div class="rds-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Filtro de Sombra Suave -->
+          <filter id="diag-shadow-s11" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+
+          <!-- Icono Oficial AWS EC2 -->
+          <g id="icon-ec2-s11">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#ff9900" />
+            <rect x="-7.5" y="-7.5" width="15" height="15" rx="2" fill="#ffffff" fill-opacity="0.2" stroke="#ffffff" stroke-width="1.6"/>
+            <rect x="-3.5" y="-3.5" width="7" height="7" rx="1" fill="#ffffff"/>
+            <line x1="-4.5" y1="-10.5" x2="-4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="-10.5" x2="4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-4.5" y1="7.5" x2="-4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="7.5" x2="4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="-4.5" x2="-7.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="4.5" x2="-7.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="-4.5" x2="10.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="4.5" x2="10.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+          </g>
+
+          <!-- Icono Oficial AWS RDS -->
+          <g id="icon-rds-s11">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#3b48cc" />
+            <ellipse cx="0" cy="-5.5" rx="8" ry="2.8" fill="#ffffff"/>
+            <path d="M -8 -5.5 L -8 0 A 8 2.8 0 0 0 8 0 L 8 -5.5 Z" fill="#ffffff" fill-opacity="0.65"/>
+            <path d="M -8 0 L -8 5.5 A 8 2.8 0 0 0 8 5.5 L 8 0 Z" fill="#ffffff"/>
+          </g>
+        </defs>
+
+        <!-- 1. Contenedor Maestro: Amazon VPC -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#8c4fff" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado VPC -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
+          <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
+          <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
+          <line x1="11" y1="3" x2="11" y2="19" stroke="#ffffff" stroke-width="1.1"/>
+          <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
+        </g>
+
+        <!-- 2. Subred Privada Cómputo (SOFI) -->
+        <g transform="translate(20, 48)">
+          <rect x="0" y="0" width="450" height="142" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.6"/>
+          
+          <!-- Pill de Subred -->
+          <rect x="12" y="7" width="185" height="18" rx="9" fill="#f59e0b"/>
+          <text x="104.5" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
+          
+          <!-- Tarjeta EC2 Host SOFI -->
+          <g transform="translate(12, 32)" filter="url(#diag-shadow-s11)">
+            <rect x="0" y="0" width="426" height="100" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+            <g transform="translate(22, 22) scale(0.8)">
+              <use href="#icon-ec2-s11"/>
+            </g>
+            <text x="44" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+            <text x="44" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+
+            <!-- Contenedor App Interno -->
+            <rect x="12" y="44" width="402" height="46" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="1.2"/>
+            <text x="213" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
+            <text x="213" y="80" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
+          </g>
+        </g>
+
+        <!-- 3. Conector SQL TLS :5432 con Flecha -->
+        <g transform="translate(245, 190)">
+          <line x1="0" y1="0" x2="0" y2="48" stroke="#059669" stroke-width="1.8"/>
+          <!-- Punta de flecha hacia abajo -->
+          <polygon points="0,52 -4,44 4,44" fill="#059669"/>
+          
+          <!-- Pill de Conexión Segura -->
+          <g filter="url(#diag-shadow-s11)">
+            <rect x="-65" y="14" width="130" height="20" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            <text x="0" y="27.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
+          </g>
+        </g>
+
+        <!-- 4. Subred Privada de Datos (RDS PostgreSQL 16) -->
+        <g transform="translate(20, 244)">
+          <rect x="0" y="0" width="450" height="206" rx="10" fill="rgba(209, 250, 229, 0.45)" stroke="#059669" stroke-width="1.6"/>
+          
+          <!-- Pill de Subred -->
+          <rect x="12" y="7" width="230" height="18" rx="9" fill="#059669"/>
+          <text x="127" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
+          
+          <!-- Tarjeta RDS PostgreSQL -->
+          <g transform="translate(12, 34)" filter="url(#diag-shadow-s11)">
+            <rect x="0" y="0" width="426" height="158" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            
+            <g transform="translate(26, 26) scale(0.9)">
+              <use href="#icon-rds-s11"/>
+            </g>
+            <text x="50" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+            <text x="50" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
+
+            <!-- 4 Chips de Especificación Técnicos -->
+            <g transform="translate(14, 52)">
+              <!-- Chip 1: Cifrado -->
+              <rect x="0" y="0" width="190" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+              <text x="12" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Cifrado KMS (AES-256)</text>
+              <text x="12" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Almacenamiento en reposo blindado</text>
+
+              <!-- Chip 2: Zero-Trust -->
+              <rect x="202" y="0" width="196" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+              <text x="214" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Sin IP Pública (Zero-Trust)</text>
+              <text x="214" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Solo accesible desde SG de sofi</text>
+
+              <!-- Chip 3: Rendimiento -->
+              <rect x="0" y="48" width="190" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+              <text x="12" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Memoria Dedicada 1 GiB</text>
+              <text x="12" y="79" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Cero riesgo de OOM Killer</text>
+
+              <!-- Chip 4: Mantenimiento -->
+              <rect x="202" y="48" width="196" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+              <text x="214" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Actualizaciones Gestionadas</text>
+              <text x="214" y="79" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Parches administrados por AWS</text>
+            </g>
+          </g>
+        </g>
+      </svg>
     </div>
 
-    <!-- Tarjeta 3: Aislamiento y Red -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #10b981; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Subred Privada Datos</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          Segmentada en <code>10.0.100.0/24</code> sin salida a Internet. Tráfico TLS puerto 5432 filtrado por Security Group.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #047857;">
-        Cifrado KMS (AES-256)
-      </div>
-    </div>
-
-    <!-- Tarjeta 4: Estabilidad y Mantenimiento -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #f59e0b; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Fin del OOM Killer</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          Elimina la competencia destructiva de memoria del VPS único. Memoria dedicada y parches administrados por AWS.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
-        Monitoreo en CloudWatch
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Barra de Comparativa Rápida -->
-  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 12px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.95); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #2563eb;">
-    <div style="font-size: 0.8rem; font-weight: 700; color: var(--aws-navy);">
-      ¿Por qué descartamos DynamoDB y Aurora en esta fase?
-    </div>
-    <div style="font-size: 0.76rem; color: var(--text-muted);">
-      <strong style="color: #ef4444;">DynamoDB:</strong> incompatible con Prisma y modelos relacionales. <strong style="color: #f59e0b;">Aurora:</strong> costo triplicado innecesario para la escala actual.
-    </div>
   </div>
 </section>
 
       <!-- Slide: 12_resiliencia_backups_pitr.html -->
       <!-- SLIDE 12: RESILIENCIA, BACKUPS Y PITR -->
-<section class="slide-resiliencia-backups">
+<section class="slide-resiliencia-backups" data-transition="none-in slide-out">
   <style>
+    .reveal .slides section.slide-resiliencia-backups {
+      padding-top: 15px !important;
+    }
+
     .reveal .slides section.slide-resiliencia-backups .resil-header-wrapper {
-      max-width: 1185px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
-    }
-
-    .reveal .slides section.slide-resiliencia-backups .resil-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
-    }
-
-    .reveal .slides section.slide-resiliencia-backups .resil-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
+      max-width: 1180px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .reveal .slides section.slide-resiliencia-backups .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
+
+    /* Animación de Desplazamiento del Diagrama hacia la Izquierda */
+    .reveal .slides section.slide-resiliencia-backups.present .rds-diagram-wrapper-animated {
+      animation: slideDiagramLeft 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform;
+    }
+
+    @keyframes slideDiagramLeft {
+      from {
+        transform: translateX(653px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Animación de Expansión del Nodo S3 al llegar */
+    .reveal .slides section.slide-resiliencia-backups.present .diagram-s3-extension {
+      animation: fadeInS3Node 0.6s ease-out 0.4s both;
+      will-change: opacity;
+    }
+
+    @keyframes fadeInS3Node {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Animación de Entrada de las Tarjetas de la Derecha */
+    .reveal .slides section.slide-resiliencia-backups.present .resil-cards-container {
+      animation: fadeInRightCards 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+      will-change: opacity, transform;
+    }
+
+    @keyframes fadeInRightCards {
+      from {
+        opacity: 0;
+        transform: translateX(35px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .rds-diagram-wrapper-animated {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 
-  <!-- Encabezado con Animación Hero Title -->
+  <!-- Encabezado Fijo -->
   <div class="resil-header-wrapper">
-    <div class="resil-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Resiliencia y Continuidad: <span style="color: #2563eb;">Backups Diarios y PITR</span>
-      </h2>
-    </div>
+    <h2 class="slide-title">
+      Resiliencia y Continuidad: <span style="color: #2563eb;">Backups Diarios y PITR</span>
+    </h2>
+    <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 12px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); color: #047857;">
+      Persistencia Transaccional · Parte 2
+    </span>
   </div>
 
-  <!-- Contenedor: 4 Bloques Estratégicos -->
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto 16px;">
+  <!-- Contenedor Principal: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 0.95fr 1.15fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Bloque 1: Snapshots Diarios -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #2563eb; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center; color: #2563eb; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Backups Diarios</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          Instantáneas automáticas de almacenamiento completo ejecutadas en la ventana de menor tráfico nocturno.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(37, 99, 235, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">
-        Retención activa: 7 días
-      </div>
+    <!-- Columna Izquierda: Diagrama Completo con Extensión a S3 -->
+    <div class="rds-diagram-wrapper-animated">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Filtro de Sombra Suave -->
+          <filter id="diag-shadow-s12" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+
+          <!-- Icono Oficial AWS EC2 -->
+          <g id="icon-ec2-s12">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#ff9900" />
+            <rect x="-7.5" y="-7.5" width="15" height="15" rx="2" fill="#ffffff" fill-opacity="0.2" stroke="#ffffff" stroke-width="1.6"/>
+            <rect x="-3.5" y="-3.5" width="7" height="7" rx="1" fill="#ffffff"/>
+            <line x1="-4.5" y1="-10.5" x2="-4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="-10.5" x2="4.5" y2="-7.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-4.5" y1="7.5" x2="-4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="4.5" y1="7.5" x2="4.5" y2="10.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="-4.5" x2="-7.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="-10.5" y1="4.5" x2="-7.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="-4.5" x2="10.5" y2="-4.5" stroke="#ffffff" stroke-width="1.4"/>
+            <line x1="7.5" y1="4.5" x2="10.5" y2="4.5" stroke="#ffffff" stroke-width="1.4"/>
+          </g>
+
+          <!-- Icono Oficial AWS RDS -->
+          <g id="icon-rds-s12">
+            <rect x="-15" y="-15" width="30" height="30" rx="6" fill="#3b48cc" />
+            <ellipse cx="0" cy="-5.5" rx="8" ry="2.8" fill="#ffffff"/>
+            <path d="M -8 -5.5 L -8 0 A 8 2.8 0 0 0 8 0 L 8 -5.5 Z" fill="#ffffff" fill-opacity="0.65"/>
+            <path d="M -8 0 L -8 5.5 A 8 2.8 0 0 0 8 5.5 L 8 0 Z" fill="#ffffff"/>
+          </g>
+
+          <!-- Icono Oficial AWS S3 -->
+          <g id="icon-s3-s12">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#10b981" />
+            <path d="M -8 -6 L 8 -6 L 6.5 6 L -6.5 6 Z" fill="#ffffff"/>
+            <line x1="-5.5" y1="-2" x2="5.5" y2="-2" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="-4.5" y1="2" x2="4.5" y2="2" stroke="#10b981" stroke-width="1.5"/>
+          </g>
+        </defs>
+
+        <!-- 1. Contenedor Maestro: Amazon VPC -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#8c4fff" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado VPC -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
+          <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
+          <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
+          <line x1="11" y1="3" x2="11" y2="19" stroke="#ffffff" stroke-width="1.1"/>
+          <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
+        </g>
+
+        <!-- 2. Subred Privada Cómputo (SOFI) -->
+        <g transform="translate(20, 48)">
+          <rect x="0" y="0" width="450" height="136" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.6"/>
+          
+          <!-- Pill de Subred -->
+          <rect x="12" y="7" width="185" height="18" rx="9" fill="#f59e0b"/>
+          <text x="104.5" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
+          
+          <!-- Tarjeta EC2 Host SOFI -->
+          <g transform="translate(12, 30)" filter="url(#diag-shadow-s12)">
+            <rect x="0" y="0" width="426" height="96" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+            <g transform="translate(22, 20) scale(0.8)">
+              <use href="#icon-ec2-s12"/>
+            </g>
+            <text x="44" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+            <text x="44" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+
+            <!-- Contenedor App Interno -->
+            <rect x="12" y="40" width="402" height="46" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="1.2"/>
+            <text x="213" y="60" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
+            <text x="213" y="76" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
+          </g>
+        </g>
+
+        <!-- 3. Conector SQL TLS :5432 con Flecha -->
+        <g transform="translate(245, 184)">
+          <line x1="0" y1="0" x2="0" y2="40" stroke="#059669" stroke-width="1.8"/>
+          <!-- Punta de flecha hacia abajo -->
+          <polygon points="0,44 -4,36 4,36" fill="#059669"/>
+          
+          <!-- Pill de Conexión Segura -->
+          <g filter="url(#diag-shadow-s12)">
+            <rect x="-65" y="10" width="130" height="20" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            <text x="0" y="23.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
+          </g>
+        </g>
+
+        <!-- 4. Subred Privada de Datos (RDS PostgreSQL + S3 Backups) -->
+        <g transform="translate(20, 228)">
+          <rect x="0" y="0" width="450" height="224" rx="10" fill="rgba(209, 250, 229, 0.45)" stroke="#059669" stroke-width="1.6"/>
+          
+          <!-- Pill de Subred -->
+          <rect x="12" y="7" width="230" height="18" rx="9" fill="#059669"/>
+          <text x="127" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
+          
+          <!-- Tarjeta RDS PostgreSQL (Compactada) -->
+          <g transform="translate(12, 32)" filter="url(#diag-shadow-s12)">
+            <rect x="0" y="0" width="426" height="74" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            
+            <g transform="translate(24, 24) scale(0.85)">
+              <use href="#icon-rds-s12"/>
+            </g>
+            <text x="48" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+            <text x="48" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · 20 GB gp3 · Cifrado KMS (AES-256)</text>
+            
+            <text x="48" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#475569">
+              Logs WAL continuos cada 5 min · Aislamiento total de clientes
+            </text>
+          </g>
+
+          <!-- 5. Conector Desplegable a S3: Instantáneas automáticas (Dashed) -->
+          <g transform="translate(225, 106)" class="diagram-s3-extension">
+            <line x1="0" y1="0" x2="0" y2="40" stroke="#10b981" stroke-width="1.8" stroke-dasharray="4 3"/>
+            <!-- Punta de flecha hacia abajo -->
+            <polygon points="0,44 -4,36 4,36" fill="#10b981"/>
+            
+            <!-- Pill de Instantáneas Automáticas -->
+            <g filter="url(#diag-shadow-s12)">
+              <rect x="-85" y="10" width="170" height="20" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
+              <text x="0" y="23.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#047857">Instantáneas automáticas a S3</text>
+            </g>
+          </g>
+
+          <!-- 6. Tarjeta S3 Backups & PITR -->
+          <g transform="translate(12, 150)" class="diagram-s3-extension" filter="url(#diag-shadow-s12)">
+            <rect x="0" y="0" width="426" height="66" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
+            
+            <g transform="translate(24, 24) scale(0.85)">
+              <use href="#icon-s3-s12"/>
+            </g>
+            <text x="48" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon S3 (Backups &amp; PITR Inmutable)</text>
+            <text x="48" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#047857">Retención 7 días · Point-In-Time Restore al segundo exacto</text>
+            <text x="48" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#059669">
+              ✓ Cifrado en reposo SSE-KMS · Almacenamiento desacoplado duradero
+            </text>
+          </g>
+        </g>
+      </svg>
     </div>
 
-    <!-- Bloque 2: Point-In-Time Restore -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #0284c7; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <!-- Columna Derecha: Tarjetas con Estilo Homogéneo -->
+    <div class="resil-cards-container" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Backups & Point-In-Time Restore -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Backups Diarios & PITR</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">Ventana 7 Días · Granularidad por Segundo</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Continuidad</span>
         </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Point-In-Time (PITR)</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          Captura continua de registros WAL cada 5 minutos. Permite retroceder la BD al segundo exacto antes de un error humano.
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Snapshots automáticos diarios:</strong> Instantánea nocturna completa del almacenamiento transferida a Amazon S3.</li>
+          <li><strong>Point-In-Time Restore (PITR):</strong> Captura continua de logs de transacciones (WAL) cada 5 min para volver a cualquier segundo.</li>
+          <li><strong>Snapshots manuales inmutables:</strong> Copias estáticas previas a releases que persisten aún si se destruye la instancia RDS.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Métricas SLA y Cifrado -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Garantías SLA & Recuperación</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">RPO &lt; 5 min · RTO &lt; 30 min · Cifrado KMS</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas SLA</span>
         </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>RPO &lt; 5 minutos:</strong> Margen máximo de pérdida tolerable de datos transaccionales ante cualquier contingencia.</li>
+          <li><strong>RTO &lt; 30 minutos:</strong> Tiempo total para aprovisionar y levantar una nueva base de datos totalmente operativa.</li>
+          <li><strong>Cifrado en reposo KMS:</strong> Todos los snapshots y transacciones se protegen mediante encriptación nativa AES-256.</li>
+        </ul>
       </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(2, 132, 199, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #0369a1;">
-        Granularidad por segundo
-      </div>
+
     </div>
 
-    <!-- Bloque 3: RPO y RTO -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #10b981; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Métricas SLA</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          <strong>RPO &lt; 5 min:</strong> pérdida máxima admisible de datos transaccionales.<br/>
-          <strong>RTO &lt; 30 min:</strong> tiempo de restauración de nueva instancia.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #047857;">
-        Alta continuidad garantizada
-      </div>
-    </div>
-
-    <!-- Bloque 4: Snapshots Manuales -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #f59e0b; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 12px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        </div>
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Snapshots Manuales</div>
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
-          Copias persistentes previas a despliegues o migraciones mayores. No se eliminan al destruir la instancia RDS.
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
-        Inmutables y versionados
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Barra de Flujo de Recuperación -->
-  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 12px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.95); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #10b981;">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <span style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Escenario de Contingencia:</span>
-      <span style="font-size: 0.78rem; color: var(--text-muted);">Borrado accidental o corrupción de tabla en producción → Selección de timestamp PITR → Nueva instancia operativa en &lt; 30 min.</span>
-    </div>
-    <div style="font-size: 0.82rem; font-weight: 800; color: #047857;">
-      Cero pérdida de registros críticos
-    </div>
   </div>
 </section>
 
