@@ -703,132 +703,8 @@
   </div>
 </section>
 
-      <!-- Slide: 03_pilares_fase2.html -->
-      <!-- SLIDE 3: PILARES ESTRATÉGICOS -->
-<section class="slide-pilares-estrategicos">
-  <style>
-    .reveal .slides section.slide-pilares-estrategicos {
-      padding-top: 15px !important;
-    }
-
-    .reveal .slides section.slide-pilares-estrategicos .pilares-header-wrapper {
-      max-width: 1180px;
-      margin: 0 auto 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .reveal .slides section.slide-pilares-estrategicos .slide-title {
-      font-size: 2.15rem !important;
-      margin: 0 !important;
-      line-height: 1.15;
-      color: var(--aws-navy);
-      paint-order: stroke fill;
-      -webkit-text-stroke: 4px #ffffff;
-      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
-    }
-  </style>
-
-  <!-- Encabezado Fijo -->
-  <div class="pilares-header-wrapper">
-    <h2 class="slide-title">
-      Pilares Estratégicos: <span style="color: #d97706;">Cómputo, Storage y Persistencia</span>
-    </h2>
-  </div>
-
-  <!-- Contenedor: 3 Tarjetas de Pilares con Estilo Homogéneo -->
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
-    
-    <!-- Pilar 1: Cómputo Elástico -->
-    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon EC2 &amp; Spot</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Pilar 1 · Cómputo Elástico</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Cómputo</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Aislamiento de producción:</strong> Cargas internas SOFI y sitios de clientes comerciales en instancias EC2 totalmente desacopladas.</li>
-          <li><strong>Cloud Workstations:</strong> Estaciones Ubuntu estandarizadas para practicantes con apagado automático fuera de jornada.</li>
-          <li><strong>Testing con EC2 Spot:</strong> Validación continua de staging con hasta 90% de ahorro frente a tarifas On-Demand.</li>
-        </ul>
-      </div>
-
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #b45309;">
-        ✓ Aislamiento de fallas · Discos EBS gp3 (3,000 IOPS)
-      </div>
-    </div>
-
-    <!-- Pilar 2: Almacenamiento Estructurado -->
-    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">S3, EFS &amp; Glacier</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Pilar 2 · Almacenamiento</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Storage</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Amazon S3 Standard:</strong> Repositorio para videos y manuales formativos LMS distribuidos vía CloudFront con OAC.</li>
-          <li><strong>Amazon EFS (NFSv4):</strong> Espacio de trabajo unificado montado concurrentemente en <code>/shared/workspace</code> multi-AZ.</li>
-          <li><strong>S3 Glacier Flexible:</strong> Retención histórica de respaldos de base de datos con ahorro superior al 84%.</li>
-        </ul>
-      </div>
-
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #047857;">
-        ✓ Ciclo de vida declarativo · Durabilidad 11 9's
-      </div>
-    </div>
-
-    <!-- Pilar 3: Persistencia Administrada -->
-    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">RDS PostgreSQL 16</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">Pilar 3 · Persistencia</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Datos</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Compatibilidad 100% Prisma:</strong> Modelos relacionales intactos en NestJS sin requerir reescritura de esquemas.</li>
-          <li><strong>Subred Privada Blindada:</strong> Aislamiento total en CIDR <code>10.0.100.0/24</code> sin IP pública y filtrado por SG.</li>
-          <li><strong>Backups Continuos y PITR:</strong> Instantáneas automáticas diarias a S3 y restauración al segundo exacto (7 días).</li>
-        </ul>
-      </div>
-
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #1d4ed8;">
-        ✓ Cero riesgo de OOM Killer · Cifrado KMS
-      </div>
-    </div>
-
-  </div>
-</section>
-
-      <!-- Slide: 04_computo_ec2_ambientes.html -->
-      <!-- SLIDE 4: AMAZON EC2 (DEV -> PROD) Y ALMACENAMIENTO GP3 -->
+      <!-- Slide: 03_computo_ec2_ambientes.html -->
+      <!-- SLIDE 3: AMAZON EC2 (DEV -> PROD) Y ALMACENAMIENTO GP3 -->
 <section class="slide-computo-ec2-ambientes" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-computo-ec2-ambientes {
@@ -879,7 +755,7 @@
     <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
     <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
-      <!-- Tarjeta 1: Ambientes Dev & Testing Spot -->
+      <!-- Tarjeta 1: Equipos de Desarrollo y Despliegue (Dev & QA Spot) -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -887,21 +763,21 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Desarrollo y Testing con EC2 Spot</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cloud Workstations &amp; QA · Hasta 90% de Ahorro</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Desarrollo y Despliegue (Dev &amp; QA)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Configuración de Instancias y Opciones EBS</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Dev &amp; QA</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Dev &amp; Staging</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Cloud Workstations:</strong> Plantilla Ubuntu estandarizada (Node 20, Docker) para practicantes; conexión segura vía AWS SSM sin SSH abierto.</li>
-          <li><strong>FinOps en Desarrollo:</strong> Apagado programado fuera de jornada para practicantes (160 h/mes), reduciendo el costo de cómputo en 60%.</li>
-          <li><strong>Staging con EC2 Spot:</strong> Validación de releases e integración continua con hasta 90% de descuento y persistencia en volumen EBS.</li>
+          <li><strong>Cloud Workstations (Desarrollo):</strong> Instancia <code>t3.small</code> (2 vCPU, 2 GiB RAM) con volumen de <strong>25 GB EBS gp3</strong> (3,000 IOPS base, 125 MB/s); plantilla Ubuntu unificada y apagado automático (160 h/mes; 60% ahorro).</li>
+          <li><strong>EC2 Staging (Despliegue y QA):</strong> Instancia <code>t3.micro</code> (1 vCPU, 1 GiB) en modalidad <strong>EC2 Spot</strong> con hasta 90% de ahorro; volumen de <strong>20 GB EBS gp3</strong> con persistencia en Stop para validación pre-producción.</li>
+          <li><strong>Acceso Seguro Zero-Trust:</strong> Conexión exclusiva mediante AWS Systems Manager (SSM) sin puertos SSH (22) abiertos a Internet.</li>
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Producción Aislada & Discos gp3 -->
+      <!-- Tarjeta 2: Producción Aislada & Almacenamiento gp3 -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -917,9 +793,9 @@
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>EC2 SOFI (Área Interna):</strong> 2 vCPU / 2 GiB en subred <code>10.0.10.0/24</code>; ejecuta <code>sofi-backend</code>, <code>SOFI-WEB</code> y Bot de Discord.</li>
-          <li><strong>EC2 Clientes (Área Comercial):</strong> 2 vCPU / 2 GiB en subred <code>10.0.20.0/24</code>; aísla Reflexo Perú y Arte &amp; Ideas con Blast Radius cero.</li>
-          <li><strong>Estándar EBS gp3:</strong> 30 GB con 3,000 IOPS base y 125 MB/s garantizados; 20% más económico que gp2 ($0.08 vs $0.10/GB).</li>
+          <li><strong>EC2 SOFI (Área Interna):</strong> <code>t3.small</code> (2 vCPU, 2 GiB) con <strong>30 GB EBS gp3</strong> en subred privada <code>10.0.10.0/24</code>; ejecuta <code>sofi-backend</code>, <code>SOFI-WEB</code> y Bot de Discord.</li>
+          <li><strong>EC2 Clientes (Área Comercial):</strong> <code>t3.small</code> (2 vCPU, 2 GiB) con <strong>30 GB EBS gp3</strong> en subred privada <code>10.0.20.0/24</code>; aísla Reflexo Perú y Arte &amp; Ideas con Blast Radius cero.</li>
+          <li><strong>Ventaja del Estándar gp3:</strong> 3,000 IOPS base y 125 MB/s de throughput garantizado independiente del tamaño del disco; 20% más económico que gp2 ($0.08 vs $0.10/GB).</li>
         </ul>
       </div>
 
@@ -981,10 +857,10 @@
               <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(2, 132, 199, 0.15)"/>
               <text x="17" y="22" text-anchor="middle" font-size="12">💻</text>
               <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0369a1">Dev Workstations</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">t3.small / t3.medium</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Ubuntu unificado (Node 20, Docker)</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Acceso SSM · Sin puertos SSH</text>
-              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">160 h/mes · Apagado nocturno</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">t3.small · 25 GB gp3</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM Ubuntu</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Acceso SSM · Cero puertos SSH</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">160 h/mes · Apagado automático</text>
             </g>
 
             <!-- Sub-Tarjeta 2: EC2 Staging QA Spot -->
@@ -993,9 +869,9 @@
               <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
               <text x="17" y="22" text-anchor="middle" font-size="12">⚡</text>
               <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">EC2 Staging (QA Spot)</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">t3.micro Spot · -90% Ahorro</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Validación de builds y Docker</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Pruebas continuas de integración</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">t3.micro Spot · 20 GB gp3</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Hasta 90% de ahorro de cómputo</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Validación de builds continuos</text>
               <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#92400e">Persistencia Stop en disco EBS</text>
             </g>
           </g>
@@ -1029,12 +905,12 @@
                 <use href="#icon-ec2-c4"/>
               </g>
               <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 SOFI Producción</text>
-              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">t3.small · Subred 10.0.10.0/24</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">t3.small · 30 GB gp3</text>
               
               <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ sofi-backend (NestJS / Prisma)</text>
               <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ SOFI-WEB (Portal Next.js)</text>
               <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Bot-Asistencia-APM (Discord)</text>
-              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Subred privada 10.0.10.0/24</text>
               <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">Área Interna Académica</text>
             </g>
 
@@ -1045,12 +921,12 @@
                 <use href="#icon-ec2-c4"/>
               </g>
               <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 Clientes Producción</text>
-              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">t3.small · Subred 10.0.20.0/24</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">t3.small · 30 GB gp3</text>
               
               <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Reflexo Perú &amp; Arte e Ideas</text>
               <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Docker multi-tenant comercial</text>
               <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Blast Radius 0 frente a SOFI</text>
-              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Subred privada 10.0.20.0/24</text>
               <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#4338ca">Área Comercial Externa</text>
             </g>
           </g>
@@ -1062,7 +938,7 @@
               <use href="#icon-ebs-c4"/>
             </g>
             <text x="36" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#0f172a">Almacenamiento en Bloque: Amazon EBS (gp3)</text>
-            <text x="36" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0d9488">30 GB por host · 3,000 IOPS base · 125 MB/s throughput</text>
+            <text x="36" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0d9488">20-30 GB por host · 3,000 IOPS base · 125 MB/s throughput</text>
             
             <rect x="330" y="11" width="90" height="20" rx="4" fill="#0d9488"/>
             <text x="375" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#ffffff">3,000 IOPS</text>
@@ -1074,7 +950,7 @@
   </div>
 </section>
 
-      <!-- Slide: 05_evaluacion_arquitecturas.html -->
+      <!-- Slide: 04_evaluacion_arquitecturas.html -->
       <!-- SLIDE 6: EVALUACIÓN DE CARGAS Y DECISIÓN ARQUITECTÓNICA -->
 <section class="slide-eval-cargas">
   <style>
@@ -1389,7 +1265,7 @@
   </div>
 </section>
 
-      <!-- Slide: 06_seccion2_almacenamiento.html -->
+      <!-- Slide: 05_seccion2_almacenamiento.html -->
       <!-- SLIDE 6: SEPARADOR SECCIÓN 2 -->
 <section class="slide-seccion-2">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
@@ -1417,7 +1293,7 @@
   </div>
 </section>
 
-      <!-- Slide: 07_almacenamiento_s3_efs.html -->
+      <!-- Slide: 06_almacenamiento_s3_efs.html -->
       <!-- SLIDE 7: AMAZON S3 & EFS -->
 <section class="slide-almacenamiento-s3-efs" data-transition="slide-in none-out">
   <style>
@@ -1698,7 +1574,7 @@
   </div>
 </section>
 
-      <!-- Slide: 08_retencion_s3_glacier.html -->
+      <!-- Slide: 07_retencion_s3_glacier.html -->
       <!-- SLIDE 8: CICLO DE VIDA Y RETENCIÓN CON S3 GLACIER -->
 <section class="slide-retencion-glacier" data-transition="none-in slide-out">
   <style>
@@ -2069,7 +1945,7 @@
   </div>
 </section>
 
-      <!-- Slide: 09_seccion3_bases_datos.html -->
+      <!-- Slide: 08_seccion3_bases_datos.html -->
       <!-- SLIDE 10: SEPARADOR SECCIÓN 3 -->
 <section class="slide-seccion-3">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
@@ -2097,7 +1973,7 @@
   </div>
 </section>
 
-      <!-- Slide: 10_base_datos_rds.html -->
+      <!-- Slide: 09_base_datos_rds.html -->
       <!-- SLIDE 10: BASE DE DATOS RDS POSTGRESQL -->
 <section class="slide-base-datos-rds" data-transition="slide-in none-out">
   <style>
@@ -2325,7 +2201,7 @@
   </div>
 </section>
 
-      <!-- Slide: 11_resiliencia_backups_pitr.html -->
+      <!-- Slide: 10_resiliencia_backups_pitr.html -->
       <!-- SLIDE 11: RESILIENCIA, BACKUPS Y PITR -->
 <section class="slide-resiliencia-backups" data-transition="none-in slide-out">
   <style>
@@ -2616,7 +2492,7 @@
   </div>
 </section>
 
-      <!-- Slide: 12_resumen_fase2.html -->
+      <!-- Slide: 11_resumen_fase2.html -->
       <!-- SLIDE 13: RESUMEN CONSOLIDADO FASE 2 -->
 <section class="slide-resumen-roadmap">
   <style>

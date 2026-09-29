@@ -1,4 +1,4 @@
-<!-- SLIDE 4: AMAZON EC2 (DEV -> PROD) Y ALMACENAMIENTO GP3 -->
+<!-- SLIDE 3: AMAZON EC2 (DEV -> PROD) Y ALMACENAMIENTO GP3 -->
 <section class="slide-computo-ec2-ambientes" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-computo-ec2-ambientes {
@@ -49,7 +49,7 @@
     <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
     <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
-      <!-- Tarjeta 1: Ambientes Dev & Testing Spot -->
+      <!-- Tarjeta 1: Equipos de Desarrollo y Despliegue (Dev & QA Spot) -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -57,21 +57,21 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Desarrollo y Testing con EC2 Spot</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cloud Workstations &amp; QA · Hasta 90% de Ahorro</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Desarrollo y Despliegue (Dev &amp; QA)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Configuración de Instancias y Opciones EBS</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Dev &amp; QA</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Dev &amp; Staging</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Cloud Workstations:</strong> Plantilla Ubuntu estandarizada (Node 20, Docker) para practicantes; conexión segura vía AWS SSM sin SSH abierto.</li>
-          <li><strong>FinOps en Desarrollo:</strong> Apagado programado fuera de jornada para practicantes (160 h/mes), reduciendo el costo de cómputo en 60%.</li>
-          <li><strong>Staging con EC2 Spot:</strong> Validación de releases e integración continua con hasta 90% de descuento y persistencia en volumen EBS.</li>
+          <li><strong>Cloud Workstations (Desarrollo):</strong> Instancia <code>t3.small</code> (2 vCPU, 2 GiB RAM) con volumen de <strong>25 GB EBS gp3</strong> (3,000 IOPS base, 125 MB/s); plantilla Ubuntu unificada y apagado automático (160 h/mes; 60% ahorro).</li>
+          <li><strong>EC2 Staging (Despliegue y QA):</strong> Instancia <code>t3.micro</code> (1 vCPU, 1 GiB) en modalidad <strong>EC2 Spot</strong> con hasta 90% de ahorro; volumen de <strong>20 GB EBS gp3</strong> con persistencia en Stop para validación pre-producción.</li>
+          <li><strong>Acceso Seguro Zero-Trust:</strong> Conexión exclusiva mediante AWS Systems Manager (SSM) sin puertos SSH (22) abiertos a Internet.</li>
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Producción Aislada & Discos gp3 -->
+      <!-- Tarjeta 2: Producción Aislada & Almacenamiento gp3 -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -87,9 +87,9 @@
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>EC2 SOFI (Área Interna):</strong> 2 vCPU / 2 GiB en subred <code>10.0.10.0/24</code>; ejecuta <code>sofi-backend</code>, <code>SOFI-WEB</code> y Bot de Discord.</li>
-          <li><strong>EC2 Clientes (Área Comercial):</strong> 2 vCPU / 2 GiB en subred <code>10.0.20.0/24</code>; aísla Reflexo Perú y Arte &amp; Ideas con Blast Radius cero.</li>
-          <li><strong>Estándar EBS gp3:</strong> 30 GB con 3,000 IOPS base y 125 MB/s garantizados; 20% más económico que gp2 ($0.08 vs $0.10/GB).</li>
+          <li><strong>EC2 SOFI (Área Interna):</strong> <code>t3.small</code> (2 vCPU, 2 GiB) con <strong>30 GB EBS gp3</strong> en subred privada <code>10.0.10.0/24</code>; ejecuta <code>sofi-backend</code>, <code>SOFI-WEB</code> y Bot de Discord.</li>
+          <li><strong>EC2 Clientes (Área Comercial):</strong> <code>t3.small</code> (2 vCPU, 2 GiB) con <strong>30 GB EBS gp3</strong> en subred privada <code>10.0.20.0/24</code>; aísla Reflexo Perú y Arte &amp; Ideas con Blast Radius cero.</li>
+          <li><strong>Ventaja del Estándar gp3:</strong> 3,000 IOPS base y 125 MB/s de throughput garantizado independiente del tamaño del disco; 20% más económico que gp2 ($0.08 vs $0.10/GB).</li>
         </ul>
       </div>
 
@@ -151,10 +151,10 @@
               <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(2, 132, 199, 0.15)"/>
               <text x="17" y="22" text-anchor="middle" font-size="12">💻</text>
               <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0369a1">Dev Workstations</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">t3.small / t3.medium</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Ubuntu unificado (Node 20, Docker)</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Acceso SSM · Sin puertos SSH</text>
-              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">160 h/mes · Apagado nocturno</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">t3.small · 25 GB gp3</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM Ubuntu</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Acceso SSM · Cero puertos SSH</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">160 h/mes · Apagado automático</text>
             </g>
 
             <!-- Sub-Tarjeta 2: EC2 Staging QA Spot -->
@@ -163,9 +163,9 @@
               <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
               <text x="17" y="22" text-anchor="middle" font-size="12">⚡</text>
               <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">EC2 Staging (QA Spot)</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">t3.micro Spot · -90% Ahorro</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Validación de builds y Docker</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Pruebas continuas de integración</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">t3.micro Spot · 20 GB gp3</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Hasta 90% de ahorro de cómputo</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Validación de builds continuos</text>
               <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#92400e">Persistencia Stop en disco EBS</text>
             </g>
           </g>
@@ -199,12 +199,12 @@
                 <use href="#icon-ec2-c4"/>
               </g>
               <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 SOFI Producción</text>
-              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">t3.small · Subred 10.0.10.0/24</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">t3.small · 30 GB gp3</text>
               
               <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ sofi-backend (NestJS / Prisma)</text>
               <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ SOFI-WEB (Portal Next.js)</text>
               <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Bot-Asistencia-APM (Discord)</text>
-              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Subred privada 10.0.10.0/24</text>
               <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">Área Interna Académica</text>
             </g>
 
@@ -215,12 +215,12 @@
                 <use href="#icon-ec2-c4"/>
               </g>
               <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 Clientes Producción</text>
-              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">t3.small · Subred 10.0.20.0/24</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">t3.small · 30 GB gp3</text>
               
               <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Reflexo Perú &amp; Arte e Ideas</text>
               <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Docker multi-tenant comercial</text>
               <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Blast Radius 0 frente a SOFI</text>
-              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Subred privada 10.0.20.0/24</text>
               <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#4338ca">Área Comercial Externa</text>
             </g>
           </g>
@@ -232,7 +232,7 @@
               <use href="#icon-ebs-c4"/>
             </g>
             <text x="36" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#0f172a">Almacenamiento en Bloque: Amazon EBS (gp3)</text>
-            <text x="36" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0d9488">30 GB por host · 3,000 IOPS base · 125 MB/s throughput</text>
+            <text x="36" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0d9488">20-30 GB por host · 3,000 IOPS base · 125 MB/s throughput</text>
             
             <rect x="330" y="11" width="90" height="20" rx="4" fill="#0d9488"/>
             <text x="375" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#ffffff">3,000 IOPS</text>
