@@ -1,4 +1,4 @@
-<!-- SLIDE 12: RESILIENCIA, BACKUPS Y PITR -->
+<!-- SLIDE 11: RESILIENCIA, BACKUPS Y PITR -->
 <section class="slide-resiliencia-backups" data-transition="none-in slide-out">
   <style>
     .reveal .slides section.slide-resiliencia-backups {
@@ -91,7 +91,7 @@
   </div>
 
   <!-- Contenedor Principal: Diagrama a la Izquierda + Tarjetas a la Derecha -->
-  <div style="display: grid; grid-template-columns: 0.95fr 1.15fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
     <!-- Columna Izquierda: Diagrama Completo con Extensión a S3 -->
     <div class="rds-diagram-wrapper-animated">
@@ -139,47 +139,47 @@
         
         <!-- Encabezado VPC -->
         <g transform="translate(18, 16)">
-          <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
-          <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
-          <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
-          <line x1="11" y1="3" x2="11" y2="19" stroke="#ffffff" stroke-width="1.1"/>
-          <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#8c4fff"/>
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="#ffffff" stroke-width="1.4"/>
+          <line x1="3" y1="12" x2="21" y2="12" stroke="#ffffff" stroke-width="1.2"/>
+          <line x1="12" y1="3" x2="12" y2="21" stroke="#ffffff" stroke-width="1.2"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
         </g>
 
         <!-- 2. Subred Privada Cómputo (SOFI) -->
         <g transform="translate(20, 48)">
-          <rect x="0" y="0" width="450" height="136" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.6"/>
+          <rect x="0" y="0" width="450" height="142" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.6"/>
           
           <!-- Pill de Subred -->
-          <rect x="12" y="7" width="185" height="18" rx="9" fill="#f59e0b"/>
-          <text x="104.5" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
+          <rect x="12" y="6" width="205" height="19" rx="9.5" fill="#f59e0b"/>
+          <text x="114.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
           
           <!-- Tarjeta EC2 Host SOFI -->
-          <g transform="translate(12, 30)" filter="url(#diag-shadow-s12)">
-            <rect x="0" y="0" width="426" height="96" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
-            <g transform="translate(22, 20) scale(0.8)">
+          <g transform="translate(12, 32)" filter="url(#diag-shadow-s12)">
+            <rect x="0" y="0" width="426" height="100" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
+            <g transform="translate(24, 22) scale(0.9)">
               <use href="#icon-ec2-s12"/>
             </g>
-            <text x="44" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
-            <text x="44" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+            <text x="48" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+            <text x="48" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
 
             <!-- Contenedor App Interno -->
-            <rect x="12" y="40" width="402" height="46" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="1.2"/>
-            <text x="213" y="60" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
-            <text x="213" y="76" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
+            <rect x="12" y="44" width="402" height="46" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="1.2"/>
+            <text x="213" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
+            <text x="213" y="80" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
           </g>
         </g>
 
         <!-- 3. Conector SQL TLS :5432 con Flecha -->
-        <g transform="translate(245, 184)">
-          <line x1="0" y1="0" x2="0" y2="40" stroke="#059669" stroke-width="1.8"/>
+        <g transform="translate(245, 190)">
+          <line x1="0" y1="0" x2="0" y2="38" stroke="#059669" stroke-width="2"/>
           <!-- Punta de flecha hacia abajo -->
-          <polygon points="0,44 -4,36 4,36" fill="#059669"/>
+          <polygon points="0,42 -4.5,34 4.5,34" fill="#059669"/>
           
           <!-- Pill de Conexión Segura -->
           <g filter="url(#diag-shadow-s12)">
-            <rect x="-65" y="10" width="130" height="20" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
-            <text x="0" y="23.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
+            <rect x="-72" y="8" width="144" height="22" rx="11" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            <text x="0" y="23" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
           </g>
         </g>
 
@@ -188,47 +188,47 @@
           <rect x="0" y="0" width="450" height="224" rx="10" fill="rgba(209, 250, 229, 0.45)" stroke="#059669" stroke-width="1.6"/>
           
           <!-- Pill de Subred -->
-          <rect x="12" y="7" width="230" height="18" rx="9" fill="#059669"/>
-          <text x="127" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
+          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#059669"/>
+          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
           
           <!-- Tarjeta RDS PostgreSQL (Compactada) -->
-          <g transform="translate(12, 32)" filter="url(#diag-shadow-s12)">
+          <g transform="translate(12, 30)" filter="url(#diag-shadow-s12)">
             <rect x="0" y="0" width="426" height="74" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
             
-            <g transform="translate(24, 24) scale(0.85)">
+            <g transform="translate(24, 24) scale(0.9)">
               <use href="#icon-rds-s12"/>
             </g>
-            <text x="48" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
-            <text x="48" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · 20 GB gp3 · Cifrado KMS (AES-256)</text>
+            <text x="50" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+            <text x="50" y="35" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#059669">db.t3.micro · 20 GB gp3 · Cifrado KMS (AES-256)</text>
             
-            <text x="48" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#475569">
+            <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#334155">
               Logs WAL continuos cada 5 min · Aislamiento total de clientes
             </text>
           </g>
 
           <!-- 5. Conector Desplegable a S3: Instantáneas automáticas (Dashed) -->
-          <g transform="translate(225, 106)" class="diagram-s3-extension">
-            <line x1="0" y1="0" x2="0" y2="40" stroke="#10b981" stroke-width="1.8" stroke-dasharray="4 3"/>
+          <g transform="translate(225, 104)" class="diagram-s3-extension">
+            <line x1="0" y1="0" x2="0" y2="40" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3"/>
             <!-- Punta de flecha hacia abajo -->
-            <polygon points="0,44 -4,36 4,36" fill="#10b981"/>
+            <polygon points="0,44 -4.5,36 4.5,36" fill="#10b981"/>
             
             <!-- Pill de Instantáneas Automáticas -->
             <g filter="url(#diag-shadow-s12)">
-              <rect x="-85" y="10" width="170" height="20" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
-              <text x="0" y="23.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#047857">Instantáneas automáticas a S3</text>
+              <rect x="-95" y="9" width="190" height="22" rx="11" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
+              <text x="0" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#047857">Instantáneas automáticas a S3</text>
             </g>
           </g>
 
           <!-- 6. Tarjeta S3 Backups & PITR -->
-          <g transform="translate(12, 150)" class="diagram-s3-extension" filter="url(#diag-shadow-s12)">
-            <rect x="0" y="0" width="426" height="66" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
+          <g transform="translate(12, 148)" class="diagram-s3-extension" filter="url(#diag-shadow-s12)">
+            <rect x="0" y="0" width="426" height="68" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.4"/>
             
-            <g transform="translate(24, 24) scale(0.85)">
+            <g transform="translate(24, 24) scale(0.9)">
               <use href="#icon-s3-s12"/>
             </g>
-            <text x="48" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon S3 (Backups &amp; PITR Inmutable)</text>
-            <text x="48" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#047857">Retención 7 días · Point-In-Time Restore al segundo exacto</text>
-            <text x="48" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#059669">
+            <text x="50" y="21" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#0f172a">Amazon S3 (Backups &amp; PITR Inmutable)</text>
+            <text x="50" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#047857">Retención 7 días · Point-In-Time Restore al segundo exacto</text>
+            <text x="50" y="54" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#059669">
               ✓ Cifrado en reposo SSE-KMS · Almacenamiento desacoplado duradero
             </text>
           </g>
@@ -261,25 +261,25 @@
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Métricas SLA y Cifrado -->
+      <!-- Tarjeta 2: Retención y Recuperación -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Garantías SLA & Recuperación</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">RPO &lt; 5 min · RTO &lt; 30 min · Cifrado KMS</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">RPO & RTO Garantizados</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Métricas Críticas de Recuperación ante Desastres</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas SLA</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Resiliencia</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>RPO &lt; 5 minutos:</strong> Margen máximo de pérdida tolerable de datos transaccionales ante cualquier contingencia.</li>
-          <li><strong>RTO &lt; 30 minutos:</strong> Tiempo total para aprovisionar y levantar una nueva base de datos totalmente operativa.</li>
-          <li><strong>Cifrado en reposo KMS:</strong> Todos los snapshots y transacciones se protegen mediante encriptación nativa AES-256.</li>
+          <li><strong>RPO ≤ 5 minutos:</strong> En caso de contingencia mayor, la pérdida máxima potencial de registros no excede los 5 minutos.</li>
+          <li><strong>RTO &lt; 15 minutos:</strong> Levantamiento de una nueva instancia funcional con almacenamiento clonado en minutos.</li>
+          <li><strong>Independencia total del EBS:</strong> Los respaldos residen en S3 desacoplados físicamente de la instancia computacional.</li>
         </ul>
       </div>
 

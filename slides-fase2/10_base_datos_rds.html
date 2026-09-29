@@ -1,4 +1,4 @@
-<!-- SLIDE 11: BASE DE DATOS RDS POSTGRESQL -->
+<!-- SLIDE 10: BASE DE DATOS RDS POSTGRESQL -->
 <section class="slide-base-datos-rds" data-transition="slide-in none-out">
   <style>
     .reveal .slides section.slide-base-datos-rds {
@@ -44,7 +44,7 @@
   </div>
 
   <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.15fr 0.95fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
     <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
     <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
@@ -58,38 +58,38 @@
             </div>
             <div>
               <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon RDS PostgreSQL 16</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">db.t3.micro · 20 GB gp3 autoescalable</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #2563eb;">Instancia db.t3.micro · gp3 20 GB ($15.44/mes)</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Producción SOFI</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Producción</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Compatibilidad 100% nativa:</strong> Integración directa con NestJS y Prisma ORM sin refactorizar esquemas relacionales.</li>
-          <li><strong>Cumplimiento ACID estricto:</strong> Integridad en asistencia, cursos y usuarios; descarta NoSQL (DynamoDB) por inconsistencia.</li>
-          <li><strong>FinOps predecible:</strong> Costo base controlado de ~$15.44 USD/mes, evitando sobredimensionar en Aurora (~$50/mes).</li>
+          <li><strong>Compatibilidad 100% nativa:</strong> Opera directo con NestJS y Prisma ORM (modelos relacionales <code>User</code>, <code>AttendanceRecord</code>, <code>Course</code>) con cero reescritura de código.</li>
+          <li><strong>Eliminación del riesgo OOM:</strong> 1 GiB de RAM y vCPU dedicadas con parámetros optimizados (<code>shared_buffers</code>, <code>work_mem</code>); erradica la saturación del VPS.</li>
+          <li><strong>Mantenimiento automatizado:</strong> Parches de seguridad del motor gestionados por AWS y monitoreo continuo de métricas en CloudWatch.</li>
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Aislamiento y Estabilidad -->
+      <!-- Tarjeta 2: Aislamiento y Subred Privada -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Aislamiento de Red & Fin del OOM Killer</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Subred Privada 10.0.100.0/24 · Cifrado KMS</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Seguridad Zero-Trust & Cifrado</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Subred Privada de Datos · CIDR 10.0.100.0/24</div>
             </div>
           </div>
           <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Seguridad</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Segmentación sin IP pública:</strong> Subred privada aislada; tráfico filtrado estrictamente por Security Group al puerto 5432.</li>
-          <li><strong>Recursos dedicados garantizados:</strong> Erradica la competencia destructiva de memoria del VPS que antes forzaba reinicios.</li>
-          <li><strong>Parches y mantenimiento gestionado:</strong> AWS aplica actualizaciones del motor y monitoriza salud en CloudWatch.</li>
+          <li><strong>Sin exposición a Internet:</strong> La base de datos no tiene IP pública; reside en subred privada inaccesible desde el exterior.</li>
+          <li><strong>Filtrado estricto por Security Group:</strong> Acepta tráfico exclusivamente en el puerto <code>5432</code> originado desde la instancia <code>EC2-SOFI-PROD</code>.</li>
+          <li><strong>Cifrado en reposo y tránsito:</strong> Volúmenes protegidos mediante AWS KMS (AES-256) y conexiones cifradas con TLS/SSL obligatorio.</li>
         </ul>
       </div>
 
@@ -133,11 +133,11 @@
         
         <!-- Encabezado VPC -->
         <g transform="translate(18, 16)">
-          <rect x="0" y="0" width="22" height="22" rx="4" fill="#8c4fff"/>
-          <rect x="3" y="3" width="16" height="16" rx="2" fill="none" stroke="#ffffff" stroke-width="1.3"/>
-          <line x1="3" y1="11" x2="19" y2="11" stroke="#ffffff" stroke-width="1.1"/>
-          <line x1="11" y1="3" x2="11" y2="19" stroke="#ffffff" stroke-width="1.1"/>
-          <text x="28" y="15.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#8c4fff"/>
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="#ffffff" stroke-width="1.4"/>
+          <line x1="3" y1="12" x2="21" y2="12" stroke="#ffffff" stroke-width="1.2"/>
+          <line x1="12" y1="3" x2="12" y2="21" stroke="#ffffff" stroke-width="1.2"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Amazon VPC <tspan font-weight="700" fill="#8c4fff">(CIDR: 10.0.0.0/16 · us-east-1)</tspan></text>
         </g>
 
         <!-- 2. Subred Privada Cómputo (SOFI) -->
@@ -145,35 +145,35 @@
           <rect x="0" y="0" width="450" height="142" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.6"/>
           
           <!-- Pill de Subred -->
-          <rect x="12" y="7" width="185" height="18" rx="9" fill="#f59e0b"/>
-          <text x="104.5" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
+          <rect x="12" y="6" width="205" height="19" rx="9.5" fill="#f59e0b"/>
+          <text x="114.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED SOFI · 10.0.10.0/24</text>
           
           <!-- Tarjeta EC2 Host SOFI -->
           <g transform="translate(12, 32)" filter="url(#diag-shadow-s11)">
-            <rect x="0" y="0" width="426" height="100" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
-            <g transform="translate(22, 22) scale(0.8)">
+            <rect x="0" y="0" width="426" height="100" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
+            <g transform="translate(24, 22) scale(0.9)">
               <use href="#icon-ec2-s11"/>
             </g>
-            <text x="44" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
-            <text x="44" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
+            <text x="48" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#0f172a">Amazon EC2 (t3.small)</text>
+            <text x="48" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#b45309">Host SOFI · 2 vCPU / 2 GiB</text>
 
             <!-- Contenedor App Interno -->
             <rect x="12" y="44" width="402" height="46" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="1.2"/>
-            <text x="213" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
-            <text x="213" y="80" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
+            <text x="213" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">sofi-backend (NestJS / Prisma ORM)</text>
+            <text x="213" y="80" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="600" fill="#059669">API Core Transaccional · Puerto Interno :3000</text>
           </g>
         </g>
 
         <!-- 3. Conector SQL TLS :5432 con Flecha -->
         <g transform="translate(245, 190)">
-          <line x1="0" y1="0" x2="0" y2="48" stroke="#059669" stroke-width="1.8"/>
+          <line x1="0" y1="0" x2="0" y2="48" stroke="#059669" stroke-width="2"/>
           <!-- Punta de flecha hacia abajo -->
-          <polygon points="0,52 -4,44 4,44" fill="#059669"/>
+          <polygon points="0,52 -4.5,44 4.5,44" fill="#059669"/>
           
           <!-- Pill de Conexión Segura -->
           <g filter="url(#diag-shadow-s11)">
-            <rect x="-65" y="14" width="130" height="20" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
-            <text x="0" y="27.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
+            <rect x="-72" y="13" width="144" height="22" rx="11" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+            <text x="0" y="28" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#047857">SQL TLS :5432</text>
           </g>
         </g>
 
@@ -182,40 +182,40 @@
           <rect x="0" y="0" width="450" height="206" rx="10" fill="rgba(209, 250, 229, 0.45)" stroke="#059669" stroke-width="1.6"/>
           
           <!-- Pill de Subred -->
-          <rect x="12" y="7" width="230" height="18" rx="9" fill="#059669"/>
-          <text x="127" y="19.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
+          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#059669"/>
+          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#ffffff" letter-spacing="0.03em">SUBRED PRIVADA DATOS · 10.0.100.0/24</text>
           
           <!-- Tarjeta RDS PostgreSQL -->
-          <g transform="translate(12, 34)" filter="url(#diag-shadow-s11)">
-            <rect x="0" y="0" width="426" height="158" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+          <g transform="translate(12, 32)" filter="url(#diag-shadow-s11)">
+            <rect x="0" y="0" width="426" height="160" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
             
-            <g transform="translate(26, 26) scale(0.9)">
+            <g transform="translate(26, 24) scale(0.95)">
               <use href="#icon-rds-s11"/>
             </g>
-            <text x="50" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
-            <text x="50" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
+            <text x="52" y="21" font-family="'Plus Jakarta Sans', sans-serif" font-size="13.5" font-weight="800" fill="#0f172a">Amazon RDS for PostgreSQL 16</text>
+            <text x="52" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#059669">db.t3.micro · gp3 20GB · Exclusivo SOFI (Aislado de Clientes)</text>
 
             <!-- 4 Chips de Especificación Técnicos -->
             <g transform="translate(14, 52)">
               <!-- Chip 1: Cifrado -->
-              <rect x="0" y="0" width="190" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-              <text x="12" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Cifrado KMS (AES-256)</text>
-              <text x="12" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Almacenamiento en reposo blindado</text>
+              <rect x="0" y="0" width="190" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+              <text x="12" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#1e293b">Cifrado KMS (AES-256)</text>
+              <text x="12" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#475569">Almacenamiento en reposo blindado</text>
 
               <!-- Chip 2: Zero-Trust -->
-              <rect x="202" y="0" width="196" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-              <text x="214" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Sin IP Pública (Zero-Trust)</text>
-              <text x="214" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Solo accesible desde SG de sofi</text>
+              <rect x="202" y="0" width="196" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+              <text x="214" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#1e293b">Sin IP Pública (Zero-Trust)</text>
+              <text x="214" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#475569">Solo accesible desde SG de sofi</text>
 
               <!-- Chip 3: Rendimiento -->
-              <rect x="0" y="48" width="190" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-              <text x="12" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Memoria Dedicada 1 GiB</text>
-              <text x="12" y="79" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Cero riesgo de OOM Killer</text>
+              <rect x="0" y="50" width="190" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+              <text x="12" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#1e293b">Memoria Dedicada 1 GiB</text>
+              <text x="12" y="83" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#475569">Cero riesgo de OOM Killer</text>
 
               <!-- Chip 4: Mantenimiento -->
-              <rect x="202" y="48" width="196" height="40" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-              <text x="214" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#1e293b">Actualizaciones Gestionadas</text>
-              <text x="214" y="79" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">Parches administrados por AWS</text>
+              <rect x="202" y="50" width="196" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+              <text x="214" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#1e293b">Actualizaciones Gestionadas</text>
+              <text x="214" y="83" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#475569">Parches administrados por AWS</text>
             </g>
           </g>
         </g>
