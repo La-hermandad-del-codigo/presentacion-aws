@@ -2,94 +2,89 @@
 <section class="slide-computo-f2">
   <div style="max-width: 1180px; margin: 0 auto;">
     
-    <div style="text-align: center; margin-bottom: 18px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px; background: rgba(255, 153, 0, 0.12); border: 1px solid rgba(255, 153, 0, 0.3); border-radius: 999px; margin-bottom: 8px;">
-        <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #b45309;">Capa de Cómputo</span>
-      </div>
-      <h2 class="slide-title" style="font-size: 2.15rem !important; margin: 0; color: var(--aws-navy);">
+    <!-- Encabezado de Diapositiva -->
+    <div style="text-align: center; margin-bottom: 22px;">
+      <h2 class="slide-title" style="font-size: 2.3rem !important; margin: 0; color: var(--aws-navy); line-height: 1.15;">
         Amazon EC2: <span style="color: #b45309;">Aislamiento por Ambiente y Almacenamiento gp3</span>
       </h2>
-      <p style="font-size: 0.94rem; color: var(--text-muted); margin-top: 6px;">
-        Desarrollo y pruebas programados por un lado, producción 24/7 por el otro: la validación nunca toca la carga real
-      </p>
     </div>
 
     <!-- Pipeline: DESARROLLO Y PRUEBAS  ->  VALIDACIÓN  ->  PRODUCCIÓN -->
-    <div style="display: grid; grid-template-columns: 1fr 136px 1fr; align-items: stretch; gap: 0; margin-bottom: 18px;">
+    <div style="display: grid; grid-template-columns: 1fr 136px 1fr; align-items: stretch; gap: 0; margin-bottom: 20px;">
 
       <!-- ===== CONTENEDOR 1: DESARROLLO Y PRUEBAS (NO PRODUCTIVOS) ===== -->
-      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(2, 132, 199, 0.38); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 9px;">
-            <div style="width: 30px; height: 30px; border-radius: 9px; background: rgba(2, 132, 199, 0.14); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.38); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 34px; height: 34px; border-radius: 9px; background: rgba(2, 132, 199, 0.14); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambientes de Desarrollo y Pruebas</div>
+            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambientes de Desarrollo y Pruebas</div>
           </div>
-          <span style="padding: 3px 9px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1; font-size: 0.7rem; font-weight: 800; white-space: nowrap;">No Productivos</span>
+          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">No Productivos</span>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
           <!-- EC2 Dev Workstations -->
-          <div style="padding: 13px 14px; border-radius: 11px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
-            <div style="font-size: 0.86rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 2px;">EC2 Dev Workstations</div>
-            <div style="font-size: 0.7rem; font-weight: 800; color: #0369a1; margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">t3.small / t3.medium</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">Plantilla Ubuntu unificada con Node 20, Docker y CLI preinstalados.</div>
-            <div style="margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.71rem; font-weight: 700; color: #0369a1;">160 h/mes · Apagado automático</div>
+          <div style="padding: 16px 15px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
+            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Dev Workstations</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small / t3.medium</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Plantilla Ubuntu unificada con Node 20, Docker y CLI preinstalados.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">160 h/mes · Apagado automático</div>
           </div>
 
           <!-- EC2 Staging / QA -->
-          <div style="padding: 13px 14px; border-radius: 11px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
-            <div style="font-size: 0.86rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 2px;">EC2 Staging / QA</div>
-            <div style="font-size: 0.7rem; font-weight: 800; color: #0369a1; margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">t3.micro</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">Réplica funcional de pre-producción para validar cada entrega.</div>
-            <div style="margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.71rem; font-weight: 700; color: #0369a1;">Pruebas de integración continuas</div>
+          <div style="padding: 16px 15px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
+            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Staging / QA</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.micro</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Réplica funcional de pre-producción para validar cada entrega.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">Pruebas de integración continuas</div>
           </div>
         </div>
       </div>
 
       <!-- ===== CONECTOR: VALIDACIÓN ===== -->
       <div class="fragment fade-up" data-fragment-index="2" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 0 12px;">
-        <div style="font-size: 0.72rem; font-weight: 800; color: #475569; text-align: center; line-height: 1.35;">Validación<br>antes del pase<br>a producción</div>
-        <svg width="100" height="18" viewBox="0 0 100 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-align: center; line-height: 1.35;">Validación<br>antes del pase<br>a producción</div>
+        <svg width="104" height="18" viewBox="0 0 100 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <line x1="0" y1="9" x2="88" y2="9" stroke="#475569" stroke-width="2.6" stroke-linecap="round"/>
           <polygon points="100,9 88,2.5 88,15.5" fill="#475569"/>
         </svg>
       </div>
 
       <!-- ===== CONTENEDOR 2: PRODUCCIÓN AISLADA (24/7) ===== -->
-      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(255, 153, 0, 0.45); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 9px;">
-            <div style="width: 30px; height: 30px; border-radius: 9px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.45); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 34px; height: 34px; border-radius: 9px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
             </div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambiente de Producción Aislado</div>
+            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambiente de Producción Aislado</div>
           </div>
-          <span style="padding: 3px 9px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 800; white-space: nowrap;">24/7</span>
+          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">24/7</span>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
           <!-- EC2 SOFI Producción -->
-          <div style="padding: 13px 14px; border-radius: 11px; background: #fffbeb; border: 1.2px solid rgba(245, 158, 11, 0.4);">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px;">
-              <div style="font-size: 0.86rem; font-weight: 800; color: var(--aws-navy);">EC2 SOFI Producción</div>
-              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.66rem; font-weight: 800; white-space: nowrap;">Área Interna</span>
+          <div style="padding: 16px 15px; border-radius: 12px; background: #fffbeb; border: 1.2px solid rgba(245, 158, 11, 0.4);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 SOFI Producción</div>
+              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Interna</span>
             </div>
-            <div style="font-size: 0.7rem; font-weight: 800; color: #b45309; margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;"><code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> y Bot de Discord.</div>
-            <div style="margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(245, 158, 11, 0.4); font-size: 0.71rem; font-weight: 700; color: #b45309;">2 vCPU / 2 GiB · 10.0.10.0/24 · 30 GB gp3</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #b45309; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;"><code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> y Bot de Discord.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(245, 158, 11, 0.4); font-size: 0.74rem; font-weight: 700; color: #b45309;">2 vCPU / 2 GiB · 10.0.10.0/24 · 30 GB gp3</div>
           </div>
 
           <!-- EC2 Clientes Producción -->
-          <div style="padding: 13px 14px; border-radius: 11px; background: #eef2ff; border: 1.2px solid rgba(99, 102, 241, 0.38);">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px;">
-              <div style="font-size: 0.86rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes Producción</div>
-              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(99, 102, 241, 0.12); color: #4338ca; font-size: 0.66rem; font-weight: 800; white-space: nowrap;">Área Comercial</span>
+          <div style="padding: 16px 15px; border-radius: 12px; background: #eef2ff; border: 1.2px solid rgba(99, 102, 241, 0.38);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes Producción</div>
+              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(99, 102, 241, 0.12); color: #4338ca; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Comercial</span>
             </div>
-            <div style="font-size: 0.7rem; font-weight: 800; color: #4338ca; margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">Reflexo Perú y Arte &amp; Ideas en Docker aislado.</div>
-            <div style="margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(99, 102, 241, 0.38); font-size: 0.71rem; font-weight: 700; color: #4338ca;">2 vCPU / 2 GiB · 10.0.20.0/24 · 30 GB gp3</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Reflexo Perú y Arte &amp; Ideas en Docker aislado.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(99, 102, 241, 0.38); font-size: 0.74rem; font-weight: 700; color: #4338ca;">2 vCPU / 2 GiB · 10.0.20.0/24 · 30 GB gp3</div>
           </div>
         </div>
       </div>

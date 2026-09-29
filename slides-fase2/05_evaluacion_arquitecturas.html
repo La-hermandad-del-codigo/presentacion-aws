@@ -1,18 +1,12 @@
 <!-- SLIDE 5: EVALUACIÓN DE ARQUITECTURAS MODERNAS -->
 <section class="slide-arquitecturas-modernas">
-  <div style="max-width: 1180px; margin: 0 auto;">
+  <div style="max-width: 1180px; margin: 0 auto; transform: translateY(-28px);">
     
     <!-- Encabezado de Diapositiva -->
-    <div style="text-align: center; margin-bottom: 16px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 16px; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 999px; margin-bottom: 6px;">
-        <span style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #4338ca;">Diseño Arquitectónico · Matriz de Decisión ADR</span>
-      </div>
-      <h2 class="slide-title" style="font-size: 2.25rem !important; margin: 0; color: var(--aws-navy); line-height: 1.15;">
+    <div style="text-align: center; margin-bottom: 18px;">
+      <h2 class="slide-title" style="font-size: 2.3rem !important; margin: 0; color: var(--aws-navy); line-height: 1.15;">
         Contenedores vs Serverless: <span style="color: #4338ca;">Decisión Técnica Justificada</span>
       </h2>
-      <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 0;">
-        Evaluación técnica de viabilidad para NestJS, Next.js y Bot de Discord: Procesos Vivos vs Funciones Efímeras
-      </p>
     </div>
 
     <!-- Contenedor Maestro: Pipeline de Decisión Arquitectónica -->
@@ -37,12 +31,12 @@
       </div>
 
       <!-- Las 4 Filas del Pipeline de Decisión -->
-      <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; flex-direction: column; gap: 11px;">
 
         <!-- FILA 1: NESTJS (API REST Y GRAPHQL) -->
         <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
           <!-- Col 1: Carga -->
-          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(245, 158, 11, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(245, 158, 11, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
             <div style="width: 38px; height: 38px; border-radius: 8px; background: #fef3c7; border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: center; color: #b45309; flex-shrink: 0;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             </div>
@@ -64,7 +58,7 @@
           </div>
 
           <!-- Col 2: Criterio & Trade-off -->
-          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(254, 243, 199, 0.40); border: 1.2px solid rgba(245, 158, 11, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+          <div style="padding: 11px 14px; border-radius: 10px; background: rgba(254, 243, 199, 0.40); border: 1.2px solid rgba(245, 158, 11, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 0.72rem; font-weight: 800; color: #b45309; text-transform: uppercase;">¿Proceso continuo y baja latencia?</span>
               <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #fffbeb; color: #b45309; border: 1px solid #f59e0b;">Pool MySQL</span>
@@ -84,7 +78,7 @@
           </div>
 
           <!-- Col 3: Servicio AWS Asignado -->
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-radius: 10px; background: #fffbeb; border: 1.6px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-radius: 10px; background: #fffbeb; border: 1.6px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);">
             <div style="display: flex; align-items: center; gap: 11px;">
               <div style="width: 38px; height: 38px; border-radius: 8px; background: #ff9900; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(255, 153, 0, 0.35);">
                 <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
@@ -104,7 +98,7 @@
         <!-- FILA 2: BOT DISCORD GATEWAY (CASO CRÍTICO) -->
         <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
           <!-- Col 1: Carga -->
-          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(220, 38, 38, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(220, 38, 38, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
             <div style="width: 38px; height: 38px; border-radius: 8px; background: #fee2e2; border: 1px solid #dc2626; display: flex; align-items: center; justify-content: center; color: #dc2626; flex-shrink: 0;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
             </div>
@@ -126,7 +120,7 @@
           </div>
 
           <!-- Col 2: Criterio & Trade-off -->
-          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(254, 226, 226, 0.40); border: 1.2px solid rgba(220, 38, 38, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+          <div style="padding: 11px 14px; border-radius: 10px; background: rgba(254, 226, 226, 0.40); border: 1.2px solid rgba(220, 38, 38, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 0.72rem; font-weight: 800; color: #b91c1c; text-transform: uppercase;">¿Conexión bidireccional continua?</span>
               <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #fee2e2; color: #b91c1c; border: 1px solid #dc2626;">WebSocket</span>
@@ -146,7 +140,7 @@
           </div>
 
           <!-- Col 3: Servicio AWS Asignado -->
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-radius: 10px; background: #fef2f2; border: 1.6px solid #dc2626; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.06);">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-radius: 10px; background: #fef2f2; border: 1.6px solid #dc2626; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.06);">
             <div style="display: flex; align-items: center; gap: 11px;">
               <div style="width: 38px; height: 38px; border-radius: 8px; background: #dc2626; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);">
                 <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -166,7 +160,7 @@
         <!-- FILA 3: AUTOMATIZACIÓN Y FINOPS (SERVERLESS PURO) -->
         <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
           <!-- Col 1: Carga -->
-          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(99, 102, 241, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(99, 102, 241, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
             <div style="width: 38px; height: 38px; border-radius: 8px; background: #e0e7ff; border: 1px solid #6366f1; display: flex; align-items: center; justify-content: center; color: #4338ca; flex-shrink: 0;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </div>
@@ -188,7 +182,7 @@
           </div>
 
           <!-- Col 2: Criterio & Trade-off -->
-          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(238, 242, 255, 0.40); border: 1.2px solid rgba(99, 102, 241, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+          <div style="padding: 11px 14px; border-radius: 10px; background: rgba(238, 242, 255, 0.40); border: 1.2px solid rgba(99, 102, 241, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 0.72rem; font-weight: 800; color: #4338ca; text-transform: uppercase;">¿Invocación puntual y efímera?</span>
               <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #e0e7ff; color: #4338ca; border: 1px solid #6366f1;">Cron Event</span>
@@ -208,7 +202,7 @@
           </div>
 
           <!-- Col 3: Servicio AWS Asignado -->
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-radius: 10px; background: #eef2ff; border: 1.6px solid #6366f1; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-radius: 10px; background: #eef2ff; border: 1.6px solid #6366f1; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);">
             <div style="display: flex; align-items: center; gap: 11px;">
               <div style="width: 38px; height: 38px; border-radius: 8px; background: #6366f1; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);">
                 <span style="font-size: 1.30rem; font-weight: 900; font-family: 'Plus Jakarta Sans', Arial;">λ</span>
@@ -228,7 +222,7 @@
         <!-- FILA 4: SOFI-WEB FRONTEND (NEXT.JS & EDGE) -->
         <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
           <!-- Col 1: Carga -->
-          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(16, 185, 129, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(16, 185, 129, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
             <div style="width: 38px; height: 38px; border-radius: 8px; background: #d1fae5; border: 1px solid #059669; display: flex; align-items: center; justify-content: center; color: #047857; flex-shrink: 0;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
@@ -250,7 +244,7 @@
           </div>
 
           <!-- Col 2: Criterio & Trade-off -->
-          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(209, 250, 229, 0.40); border: 1.2px solid rgba(5, 150, 105, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+          <div style="padding: 11px 14px; border-radius: 10px; background: rgba(209, 250, 229, 0.40); border: 1.2px solid rgba(5, 150, 105, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 3px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 0.72rem; font-weight: 800; color: #047857; text-transform: uppercase;">¿Entrega estática y SSR en Edge?</span>
               <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #d1fae5; color: #047857; border: 1px solid #059669;">Edge CDN</span>
@@ -270,7 +264,7 @@
           </div>
 
           <!-- Col 3: Servicio AWS Asignado -->
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-radius: 10px; background: #ecfdf5; border: 1.6px solid #059669; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.06);">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-radius: 10px; background: #ecfdf5; border: 1.6px solid #059669; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.06);">
             <div style="display: flex; align-items: center; gap: 11px;">
               <div style="width: 38px; height: 38px; border-radius: 8px; background: #059669; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(5, 150, 105, 0.35);">
                 <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
