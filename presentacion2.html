@@ -2078,7 +2078,7 @@
 </section>
 
       <!-- Slide: 13_resumen_roadmap_fase3.html -->
-      <!-- SLIDE 13: RESUMEN Y ROADMAP FASE 3 -->
+      <!-- SLIDE 13: RESUMEN CONSOLIDADO FASE 2 -->
 <section class="slide-resumen-roadmap">
   <style>
     .reveal .slides section.slide-resumen-roadmap .roadmap-header-wrapper {
@@ -2123,83 +2123,98 @@
   <div class="roadmap-header-wrapper">
     <div class="roadmap-hero-title fragment" data-fragment-index="1">
       <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Consolidado Fase 2 y <span style="color: #b45309;">Roadmap Hacia Fase 3</span>
+        Resumen Ejecutivo: <span style="color: #059669;">Infraestructura Consolidada Fase 2</span>
       </h2>
     </div>
   </div>
 
-  <!-- Contenedor: 2 Columnas (Consolidado Fase 2 vs Roadmap Fase 3) -->
-  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; max-width: 1185px; margin: 0 auto;">
+  <!-- Contenedor: 3 Columnas de Pilares Arquitectónicos -->
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Logros Arquitectónicos Fase 2 -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px; border-radius: 16px; border-top: 4px solid #10b981; display: flex; flex-direction: column; justify-content: space-between;">
+    <!-- Pilar 1: Cómputo y Ambientes Segregados -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
       <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Cómputo & Ambientes</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Amazon EC2 · Spot · SSM</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Arquitectura Consolidada (Fase 2)</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">Cómputo, Almacenamiento y Persistencia</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); color: #b45309;">Cómputo</span>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #ff9900;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Cómputo Segregado & Spot FinOps</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Instancias dedicadas para SOFI y Clientes; Staging en EC2 Spot (-90% costo); Workstations Dev homogéneas.</div>
-          </div>
-
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #10b981;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Almacenamiento Desacoplado & EFS</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">S3 para LMS seguro con OAC y versionado; EFS multi-AZ para workspaces compartidos; Glacier para archivo legal.</div>
-          </div>
-
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px; border-left: 3px solid #2563eb;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">RDS PostgreSQL 16 Administrado</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Subred privada 10.0.100.0/24 sin Internet; cero OOM Killer; Backups diarios y PITR (RPO &lt; 5m, RTO &lt; 30m).</div>
-          </div>
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Segregación total:</strong> Instancias <code>t3.small</code> dedicadas para SOFI y Clientes, eliminando competencia de CPU/RAM.</li>
+          <li><strong>Staging Spot (-90% costo):</strong> Ambiente de pruebas sobre capacidad ociosa con persistencia en EBS.</li>
+          <li><strong>Cloud Workstations:</strong> Entorno idéntico para practicantes con túnel SSM y apagado automático nocturno.</li>
+          <li><strong>Docker en EC2:</strong> Traspaso limpio del código actual (NestJS, Next.js, Bot Discord) sin refactorizaciones complejas.</li>
+        </ul>
       </div>
 
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.75rem; color: #047857; font-weight: 700;">
-        ✓ Resueltos los 3 dolores críticos diagnosticados en la Fase 1
+      <div style="margin-top: 14px; padding: 8px 12px; background: rgba(245, 158, 11, 0.08); border-radius: 8px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
+        ✓ Cero "en mi máquina funciona" & FinOps activo
       </div>
     </div>
 
-    <!-- Columna Derecha: Objetivos Fase 3 -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px; border-radius: 16px; border-top: 4px solid #b45309; display: flex; flex-direction: column; justify-content: space-between;">
+    <!-- Pilar 2: Almacenamiento Elástico y Archivo -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
       <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Almacenamiento Desacoplado</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Amazon S3 · EFS · Glacier</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Hacia la Fase 3</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">Redes Avanzadas y Seguridad Perimetral</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.14); color: #047857;">Storage</span>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Topología de Red VPC Multi-AZ</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Subredes públicas y privadas redundantes, NAT Gateway e Internet Gateway dedicados.</div>
-          </div>
-
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Application Load Balancer (ALB)</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Distribución inteligente de tráfico HTTP/HTTPS y terminación TLS con certificados ACM.</div>
-          </div>
-
-          <div style="padding: 9px 12px; background: rgba(248, 250, 252, 0.85); border-radius: 8px;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">CloudFront CDN & AWS WAF</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Aceleración global de contenidos y filtrado contra ataques DDoS, OWASP Top 10 y bots maliciosos.</div>
-          </div>
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Amazon S3 con OAC:</strong> Entrega segura de videos y guías LMS mediante CloudFront y URLs prefirmadas.</li>
+          <li><strong>Versionado de objetos:</strong> Protección nativa contra borrados o sobrescrituras accidentales en cursos y backups.</li>
+          <li><strong>Amazon EFS Multi-AZ:</strong> Directorio compartido <code>/shared/workspace</code> para plantillas y dependencias comunes.</li>
+          <li><strong>Retención S3 Glacier:</strong> Transición automática a los 90 días con ahorro del 84% y purga a los 365 días.</li>
+        </ul>
       </div>
 
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.75rem; color: #b45309; font-weight: 700;">
-        → Siguiente entrega: Alta disponibilidad y blindaje perimetral
+      <div style="margin-top: 14px; padding: 8px 12px; background: rgba(16, 185, 129, 0.08); border-radius: 8px; font-size: 0.72rem; font-weight: 700; color: #047857;">
+        ✓ Durabilidad del 99.999999999% (11 9's)
+      </div>
+    </div>
+
+    <!-- Pilar 3: Persistencia Administrada y PITR -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Persistencia Gestionada</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">RDS PostgreSQL 16 · PITR</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Base de Datos</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Compatibilidad NestJS:</strong> Motor PostgreSQL 16 nativo con Prisma ORM y cumplimiento transaccional ACID.</li>
+          <li><strong>Subred privada 10.0.100.0/24:</strong> Sin IP pública ni salida a Internet; acceso exclusivo puerto 5432 con TLS.</li>
+          <li><strong>Fin del OOM Killer:</strong> Memoria dedicada que garantiza estabilidad operativa y parches automáticos.</li>
+          <li><strong>Backups & PITR continuo:</strong> Retención de 7 días con recuperación al segundo exacto (RPO &lt; 5m, RTO &lt; 30m).</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 14px; padding: 8px 12px; background: rgba(37, 99, 235, 0.08); border-radius: 8px; font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">
+        ✓ Disponibilidad transaccional & Cifrado KMS
       </div>
     </div>
 
