@@ -703,378 +703,683 @@
   </div>
 </section>
 
-      <!-- Slide: 03_computo_ec2_ambientes.html -->
-      <!-- SLIDE 3: CÓMPUTO EC2 Y ALMACENAMIENTO GP3 -->
-<section class="slide-computo-ec2">
+      <!-- Slide: 03_pilares_fase2.html -->
+      <!-- SLIDE 3: PILARES ESTRATÉGICOS -->
+<section class="slide-pilares-estrategicos">
   <style>
-    .reveal .slides section.slide-computo-ec2 .computo-header-wrapper {
-      max-width: 1185px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
+    .reveal .slides section.slide-pilares-estrategicos {
+      padding-top: 15px !important;
     }
 
-    .reveal .slides section.slide-computo-ec2 .computo-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
+    .reveal .slides section.slide-pilares-estrategicos .pilares-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .reveal .slides section.slide-computo-ec2 .computo-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
-    }
-
-    .reveal .slides section.slide-computo-ec2 .slide-title {
+    .reveal .slides section.slide-pilares-estrategicos .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
   </style>
 
-  <!-- Encabezado con Animación Hero Title -->
-  <div class="computo-header-wrapper">
-    <div class="computo-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Amazon EC2: <span style="color: #b45309;">Aislamiento de Cargas y Almacenamiento gp3</span>
-      </h2>
-    </div>
+  <!-- Encabezado Fijo -->
+  <div class="pilares-header-wrapper">
+    <h2 class="slide-title">
+      Pilares Estratégicos: <span style="color: #d97706;">Cómputo, Storage y Persistencia</span>
+    </h2>
   </div>
 
-  <!-- Grid de 2 Columnas de Producción -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1185px; margin: 0 auto 18px;">
+  <!-- Contenedor: 3 Tarjetas de Pilares con Estilo Homogéneo -->
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Instancia SOFI -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
-          </div>
-          <div>
-            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">EC2 SOFI (Producción)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Tipo: t3.small · On-Demand 24/7</div>
-          </div>
-        </div>
-        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Área Interna</span>
-      </div>
-
-      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-        <li><strong>Recursos asignados:</strong> 2 vCPUs dedicadas y 2 GiB de memoria RAM física.</li>
-        <li><strong>Cargas activas:</strong> <code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> (Next.js) y <code>Bot-Asistencia-APM</code>.</li>
-        <li><strong>Aislamiento de red:</strong> Subred privada <code>10.0.10.0/24</code> sin IP pública (acceso por SSM).</li>
-        <li><strong>Protección de memoria:</strong> Los picos de asistencia ya no colapsan sitios externos.</li>
-      </ul>
-    </div>
-
-    <!-- Instancia Clientes Comerciales -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <div>
-            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes (Producción)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Tipo: t3.small · On-Demand 24/7</div>
-          </div>
-        </div>
-        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">Área Comercial</span>
-      </div>
-
-      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-        <li><strong>Recursos asignados:</strong> 2 vCPUs dedicadas y 2 GiB de memoria RAM física.</li>
-        <li><strong>Cargas activas:</strong> Sitios y APIs de Reflexo Perú y Arte & Ideas (MySQL en contenedor).</li>
-        <li><strong>Aislamiento de red:</strong> Subred privada <code>10.0.20.0/24</code> independiente de SOFI.</li>
-        <li><strong>Garantía de servicio:</strong> SLA comercial protegido contra saturación formativa interna.</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- Banner Inferior: Amazon EBS gp3 -->
-  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.88) 100%); border: 1.5px solid rgba(13, 148, 136, 0.35); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(13, 148, 136, 0.14); display: flex; align-items: center; justify-content: center; color: #0d9488; flex-shrink: 0;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 14h6m-6 4h6m4-10h6m-6 4h6M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z"/></svg>
-      </div>
+    <!-- Pilar 1: Cómputo Elástico -->
+    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
       <div>
-        <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Estándar de Almacenamiento en Bloque: Amazon EBS (gp3)</div>
-        <div style="font-size: 0.82rem; color: var(--text-muted);">
-          3,000 IOPS base garantizados y 125 MB/s de throughput independiente del tamaño · 20% más económico que gp2 ($0.08 vs $0.10/GB).
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon EC2 &amp; Spot</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Pilar 1 · Cómputo Elástico</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Cómputo</span>
         </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Aislamiento de producción:</strong> Cargas internas SOFI y sitios de clientes comerciales en instancias EC2 totalmente desacopladas.</li>
+          <li><strong>Cloud Workstations:</strong> Estaciones Ubuntu estandarizadas para practicantes con apagado automático fuera de jornada.</li>
+          <li><strong>Testing con EC2 Spot:</strong> Validación continua de staging con hasta 90% de ahorro frente a tarifas On-Demand.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #b45309;">
+        ✓ Aislamiento de fallas · Discos EBS gp3 (3,000 IOPS)
       </div>
     </div>
-    <div style="padding: 6px 14px; border-radius: 8px; background: #0d9488; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
-      3,000 IOPS Base
-    </div>
-  </div>
 
+    <!-- Pilar 2: Almacenamiento Estructurado -->
+    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">S3, EFS &amp; Glacier</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Pilar 2 · Almacenamiento</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Storage</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Amazon S3 Standard:</strong> Repositorio para videos y manuales formativos LMS distribuidos vía CloudFront con OAC.</li>
+          <li><strong>Amazon EFS (NFSv4):</strong> Espacio de trabajo unificado montado concurrentemente en <code>/shared/workspace</code> multi-AZ.</li>
+          <li><strong>S3 Glacier Flexible:</strong> Retención histórica de respaldos de base de datos con ahorro superior al 84%.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #047857;">
+        ✓ Ciclo de vida declarativo · Durabilidad 11 9's
+      </div>
+    </div>
+
+    <!-- Pilar 3: Persistencia Administrada -->
+    <div class="glass-card" style="padding: 22px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">RDS PostgreSQL 16</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #1d4ed8;">Pilar 3 · Persistencia</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Datos</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Compatibilidad 100% Prisma:</strong> Modelos relacionales intactos en NestJS sin requerir reescritura de esquemas.</li>
+          <li><strong>Subred Privada Blindada:</strong> Aislamiento total en CIDR <code>10.0.100.0/24</code> sin IP pública y filtrado por SG.</li>
+          <li><strong>Backups Continuos y PITR:</strong> Instantáneas automáticas diarias a S3 y restauración al segundo exacto (7 días).</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.76rem; font-weight: 700; color: #1d4ed8;">
+        ✓ Cero riesgo de OOM Killer · Cifrado KMS
+      </div>
+    </div>
+
+  </div>
 </section>
 
-      <!-- Slide: 04_entornos_dev_testing_spot.html -->
-      <!-- SLIDE 4: ENTORNOS DEV & TESTING SPOT -->
+      <!-- Slide: 04_computo_ec2_ambientes.html -->
+      <!-- SLIDE 4: CAPA DE CÓMPUTO EC2 (DEV -> PROD) Y EBS GP3 -->
+<section class="slide-computo-f2">
+  <style>
+    .reveal .slides section.slide-computo-f2 {
+      padding-top: 15px !important;
+    }
+
+    .reveal .slides section.slide-computo-f2 .computo-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reveal .slides section.slide-computo-f2 .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="computo-header-wrapper">
+    <h2 class="slide-title">
+      Amazon EC2: <span style="color: #b45309;">Aislamiento por Ambiente y Almacenamiento gp3</span>
+    </h2>
+  </div>
+
+  <div style="max-width: 1180px; margin: 0 auto;">
+    
+    <!-- Pipeline: DESARROLLO Y PRUEBAS -> VALIDACIÓN -> PRODUCCIÓN -->
+    <div style="display: grid; grid-template-columns: 1fr 130px 1fr; align-items: stretch; gap: 0; margin-bottom: 16px;">
+
+      <!-- ===== CONTENEDOR 1: DESARROLLO Y PRUEBAS (NO PRODUCTIVOS) ===== -->
+      <div class="glass-card" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.14); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambientes de Desarrollo y Pruebas</div>
+          </div>
+          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">No Productivos</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <!-- EC2 Dev Workstations -->
+          <div style="padding: 16px 14px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
+            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Dev Workstations</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small / t3.medium</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Plantilla Ubuntu unificada con Node 20, Docker y CLI preinstalados.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">160 h/mes · Apagado automático</div>
+          </div>
+
+          <!-- EC2 Staging / QA -->
+          <div style="padding: 16px 14px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
+            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Staging / QA</div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.micro</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Réplica funcional de pre-producción para validar cada entrega.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">Pruebas continuas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CONECTOR: VALIDACIÓN ===== -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 0 10px;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #475569; text-align: center; line-height: 1.35;">Validación<br>antes del pase<br>a producción</div>
+        <svg width="90" height="18" viewBox="0 0 90 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="0" y1="9" x2="78" y2="9" stroke="#475569" stroke-width="2.6" stroke-linecap="round"/>
+          <polygon points="90,9 78,3 78,15" fill="#475569"/>
+        </svg>
+      </div>
+
+      <!-- ===== CONTENEDOR 2: PRODUCCIÓN AISLADA (24/7) ===== -->
+      <div class="glass-card" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.45); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambiente de Producción Aislado</div>
+          </div>
+          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">24/7</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <!-- EC2 SOFI Producción -->
+          <div style="padding: 16px 14px; border-radius: 12px; background: #fffbeb; border: 1.2px solid rgba(245, 158, 11, 0.4);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 SOFI Producción</div>
+              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Interna</span>
+            </div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #b45309; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;"><code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> y Bot Discord.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(245, 158, 11, 0.4); font-size: 0.74rem; font-weight: 700; color: #b45309;">2 vCPU / 2 GiB · 10.0.10.0/24 · 30 GB gp3</div>
+          </div>
+
+          <!-- EC2 Clientes Producción -->
+          <div style="padding: 16px 14px; border-radius: 12px; background: #eef2ff; border: 1.2px solid rgba(99, 102, 241, 0.38);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes Producción</div>
+              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(99, 102, 241, 0.12); color: #4338ca; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Comercial</span>
+            </div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Reflexo Perú y Arte &amp; Ideas en Docker aislado.</div>
+            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(99, 102, 241, 0.38); font-size: 0.74rem; font-weight: 700; color: #4338ca;">2 vCPU / 2 GiB · 10.0.20.0/24 · 30 GB gp3</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Banner Inferior: Amazon EBS gp3 -->
+    <div class="glass-card" style="padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.88) 100%); border: 1.5px solid rgba(13, 148, 136, 0.35); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(13, 148, 136, 0.14); display: flex; align-items: center; justify-content: center; color: #0d9488; flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 14h6m-6 4h6m4-10h6m-6 4h6M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z"/></svg>
+        </div>
+        <div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy);">Estándar de Almacenamiento en Bloque: Amazon EBS (gp3)</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">
+            3,000 IOPS base garantizados y 125 MB/s de throughput independiente del tamaño · 20% más económico que gp2 ($0.08 vs $0.10/GB).
+          </div>
+        </div>
+      </div>
+      <div style="padding: 6px 14px; border-radius: 8px; background: #0d9488; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
+        3,000 IOPS Base
+      </div>
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 05_entornos_dev_testing_spot.html -->
+      <!-- SLIDE 5: ENTORNOS DEV & TESTING SPOT -->
 <section class="slide-dev-testing">
   <style>
+    .reveal .slides section.slide-dev-testing {
+      padding-top: 15px !important;
+    }
+
     .reveal .slides section.slide-dev-testing .devtesting-header-wrapper {
-      max-width: 1185px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
-    }
-
-    .reveal .slides section.slide-dev-testing .devtesting-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
-    }
-
-    .reveal .slides section.slide-dev-testing .devtesting-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
+      max-width: 1180px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .reveal .slides section.slide-dev-testing .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
   </style>
 
-  <!-- Encabezado con Animación Hero Title -->
+  <!-- Encabezado Fijo -->
   <div class="devtesting-header-wrapper">
-    <div class="devtesting-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Desarrollo Estandarizado y <span style="color: #d97706;">Pruebas con EC2 Spot</span>
-      </h2>
-    </div>
+    <h2 class="slide-title">
+      Desarrollo Estandarizado y <span style="color: #d97706;">Pruebas con EC2 Spot</span>
+    </h2>
   </div>
 
   <!-- Grid de 2 Columnas: Dev vs Testing -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1185px; margin: 0 auto 18px;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1180px; margin: 0 auto;">
     
     <!-- Cloud Workstations (Desarrollo) -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+    <div class="glass-card" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Cloud Workstations (Dev)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Plantilla Unificada · 160 h/mes</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Cloud Workstations (Dev)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Plantilla Unificada · 160 h/mes</div>
-          </div>
+          <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(255, 153, 0, 0.12); color: #b45309;">Formación</span>
         </div>
-        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(255, 153, 0, 0.12); color: #b45309;">Formación</span>
+
+        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+          <li><strong>Fin de "en mi máquina funciona":</strong> Entorno Ubuntu idéntico con Node 20, Python 3 y Docker.</li>
+          <li><strong>Onboarding instantáneo:</strong> El practicante se conecta directo vía AWS Systems Manager (SSM).</li>
+          <li><strong>Seguridad de código:</strong> El código propietario no se descarga en laptops personales.</li>
+          <li><strong>FinOps:</strong> Apagado automático fuera del horario de prácticas (ahorro del 60%).</li>
+        </ul>
       </div>
 
-      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-        <li><strong>Fin de "en mi máquina funciona":</strong> Entorno Ubuntu idéntico con Node 20, Python 3 y Docker.</li>
-        <li><strong>Onboarding instantáneo:</strong> El practicante se conecta directo vía AWS Systems Manager (SSM).</li>
-        <li><strong>Seguridad de código:</strong> El código propietario no se descarga en laptops personales.</li>
-        <li><strong>FinOps:</strong> Apagado automático fuera del horario de prácticas (ahorro del 60%).</li>
-      </ul>
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.78rem; font-weight: 700; color: #b45309;">
+        ✓ Plantilla preconfigurada · Conexión segura sin SSH abierto
+      </div>
     </div>
 
     <!-- Ambiente de Pruebas (Spot Instances) -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <div>
-            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Staging / QA (Spot Instances)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #d97706;">Modalidad Spot · Hasta 90% Ahorro</div>
-          </div>
-        </div>
-        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); color: #d97706;">QA / Testing</span>
-      </div>
-
-      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-        <li><strong>Capacidad ociosa de AWS:</strong> Descuento masivo para validar builds y migraciones de BD.</li>
-        <li><strong>Aviso de 2 minutos:</strong> <em>Spot Interruption Notice</em> gestionado automáticamente.</li>
-        <li><strong>Stop Behavior:</strong> Conserva el disco EBS en lugar de borrarse ante interrupción.</li>
-        <li><strong>Cero impacto comercial:</strong> Si se interrumpe, producción sigue 100% activa sin afectación.</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- Banner Inferior: Impacto Económico Spot -->
-  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 243, 199, 0.88) 100%); border: 1.5px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #b45309; flex-shrink: 0;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      </div>
+    <div class="glass-card" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
       <div>
-        <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Estrategia Económica de Pruebas: EC2 Spot vs On-Demand</div>
-        <div style="font-size: 0.82rem; color: var(--text-muted);">
-          Instancia <code>t3.small</code>: On-Demand ($0.0208/h ≈ $3.33/mes) vs Spot ($0.0062/h ≈ <strong>$0.99/mes</strong>). Ahorro superior al <strong>70%</strong> en QA.
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Staging con EC2 Spot</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Hasta 90% de Ahorro · Cargas Interrumpibles</div>
+            </div>
+          </div>
+          <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps</span>
         </div>
+
+        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+          <li><strong>Capacidad ociosa de AWS:</strong> Uso de capacidad de cómputo sobrante con descuento agresivo.</li>
+          <li><strong>Idóneo para QA:</strong> Pruebas de integración, builds de Docker y testing de endpoints sin pagar tarifa On-Demand.</li>
+          <li><strong>Estrategia de resiliencia:</strong> Si la instancia es reclamada, el volumen EBS persiste con estado "Stop".</li>
+          <li><strong>Cero impacto en producción:</strong> Fallos o interrupciones en staging nunca afectan la operación real.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.9); font-size: 0.78rem; font-weight: 700; color: #047857;">
+        ✓ Descuento de hasta 90% · Persistencia en disco EBS
       </div>
     </div>
-    <div style="padding: 6px 14px; border-radius: 8px; background: #d97706; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
-      Ahorro > 70%
-    </div>
-  </div>
 
+  </div>
 </section>
 
-      <!-- Slide: 05_evaluacion_arquitecturas.html -->
-      <!-- SLIDE 5: EVALUACIÓN DE ARQUITECTURAS MODERNAS -->
-<section class="slide-arquitecturas-modernas">
+      <!-- Slide: 06_evaluacion_arquitecturas.html -->
+      <!-- SLIDE 6: EVALUACIÓN DE CARGAS Y DECISIÓN ARQUITECTÓNICA -->
+<section class="slide-eval-cargas">
   <style>
-    .reveal .slides section.slide-arquitecturas-modernas .evalarq-header-wrapper {
-      max-width: 1185px;
-      margin: 0 auto 20px;
-      position: relative;
-      height: 48px;
+    .reveal .slides section.slide-eval-cargas {
+      padding-top: 15px !important;
     }
 
-    .reveal .slides section.slide-arquitecturas-modernas .evalarq-hero-title.fragment {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
-      transform-origin: center center;
-      opacity: 1 !important;
-      visibility: inherit !important;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-font-smoothing: antialiased;
-      z-index: 50;
+    .reveal .slides section.slide-eval-cargas .evalarq-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .reveal .slides section.slide-arquitecturas-modernas .evalarq-hero-title.fragment.visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      transform-origin: center center;
-      pointer-events: auto;
-    }
-
-    .reveal .slides section.slide-arquitecturas-modernas .slide-title {
+    .reveal .slides section.slide-eval-cargas .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
     }
   </style>
 
-  <!-- Encabezado con Animación Hero Title -->
+  <!-- Encabezado Fijo -->
   <div class="evalarq-header-wrapper">
-    <div class="evalarq-hero-title fragment" data-fragment-index="1">
-      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
-        Contenedores vs Serverless: <span style="color: #4338ca;">Decisión Técnica Justificada</span>
-      </h2>
-    </div>
+    <h2 class="slide-title">
+      Evaluación de Cargas: <span style="color: #4338ca;">Decisión Arquitectónica Justificada</span>
+    </h2>
   </div>
 
-  <!-- Grid de 4 Tecnologías -->
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto 18px;">
+  <div style="max-width: 1180px; margin: 0 auto;">
     
-    <!-- Docker en EC2 (Selección Actual) -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 2px solid #ff9900; box-shadow: 0 10px 25px -6px rgba(255, 153, 0, 0.15); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <div style="font-size: 0.76rem; font-weight: 800; color: #b45309; text-transform: uppercase;">Selección Fase 2</div>
-          <span style="padding: 2px 8px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); color: #047857; font-size: 0.72rem; font-weight: 800;">Activo</span>
+    <!-- Contenedor Maestro: Pipeline de Decisión Técnica -->
+    <div class="glass-card" style="padding: 16px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+      
+      <!-- Fila de Encabezados de Columnas -->
+      <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px; margin-bottom: 10px; padding: 0 4px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.76rem; font-weight: 800; color: #475569; letter-spacing: 0.06em; text-transform: uppercase;">
+          <span style="width: 22px; height: 22px; border-radius: 6px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.74rem; font-weight: 800; color: #0f172a;">1</span>
+          Carga de Software
         </div>
-        <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">Docker en EC2</h4>
-        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
-          Transición sin fricción desde el VPS actual. Soporta WebSockets persistentes de Discord sin tiempo límite y reutiliza el pool de conexiones de Prisma.
-        </p>
+        <div></div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.76rem; font-weight: 800; color: #475569; letter-spacing: 0.06em; text-transform: uppercase;">
+          <span style="width: 22px; height: 22px; border-radius: 6px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.74rem; font-weight: 800; color: #0f172a;">2</span>
+          Criterio Técnico (Trade-Off / Matriz ADR)
+        </div>
+        <div></div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.76rem; font-weight: 800; color: #475569; letter-spacing: 0.06em; text-transform: uppercase;">
+          <span style="width: 22px; height: 22px; border-radius: 6px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.74rem; font-weight: 800; color: #0f172a;">3</span>
+          Servicio AWS Asignado &amp; Veredicto
+        </div>
       </div>
-      <div style="margin-top: 12px; font-size: 0.74rem; font-weight: 700; color: #047857;">
-        ✓ Compatibilidad 100%
-      </div>
-    </div>
 
-    <!-- AWS Elastic Beanstalk -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(226, 232, 240, 0.95); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="font-size: 0.76rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;">PaaS Administrado</div>
-        <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">Elastic Beanstalk</h4>
-        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
-          Automatiza despliegues pero oculta el control granular de subredes VPC y requiere archivos de configuración <code>.ebextensions</code> propietarios.
-        </p>
-      </div>
-      <div style="margin-top: 12px; font-size: 0.74rem; font-weight: 700; color: #b45309;">
-        ⚠️ Complejidad adicional
-      </div>
-    </div>
+      <!-- Las 4 Filas del Pipeline de Decisión -->
+      <div style="display: flex; flex-direction: column; gap: 10px;">
 
-    <!-- AWS Lambda (Serverless) -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(239, 68, 68, 0.35); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="font-size: 0.76rem; font-weight: 800; color: #dc2626; text-transform: uppercase; margin-bottom: 10px;">Serverless Puro</div>
-        <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">AWS Lambda</h4>
-        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
-          Límite máximo de 15 min de ejecución. <strong>Incompatible</strong> con el Bot de Discord (WebSockets continuos). Cold starts y saturación de conexiones en BD.
-        </p>
-      </div>
-      <div style="margin-top: 12px; font-size: 0.74rem; font-weight: 700; color: #dc2626;">
-        ✗ Inviable para el Bot
-      </div>
-    </div>
+        <!-- FILA 1: NESTJS (API REST Y GRAPHQL) -->
+        <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
+          <!-- Col 1: Carga -->
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(245, 158, 11, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #fef3c7; border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: center; color: #b45309; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.92rem; font-weight: 800; color: #0f172a;">sofi-backend</span>
+                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: #fef3c7; color: #b45309;">NestJS</span>
+              </div>
+              <div style="font-size: 0.74rem; font-weight: 600; color: #64748b; margin-top: 1px;">API REST &amp; GraphQL · Prisma ORM</div>
+            </div>
+          </div>
 
-    <!-- Amazon ECS / Fargate (Roadmap) -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(99, 102, 241, 0.35); display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div style="font-size: 0.76rem; font-weight: 800; color: #4338ca; text-transform: uppercase; margin-bottom: 10px;">Evolución Fase 3</div>
-        <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy); margin: 0 0 8px 0;">Amazon ECS</h4>
-        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0;">
-          Orquestación de microservicios con recuperación automática de contenedores caídos. Paso natural tras consolidar la arquitectura base.
-        </p>
+          <!-- Conector 1 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#f59e0b"/>
+            </svg>
+          </div>
+
+          <!-- Col 2: Criterio & Trade-off -->
+          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(254, 243, 199, 0.45); border: 1.2px solid rgba(245, 158, 11, 0.55); display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #b45309; text-transform: uppercase;">¿Proceso continuo y baja latencia?</span>
+              <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #fffbeb; color: #b45309; border: 1px solid #f59e0b;">Pool BD</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e293b; line-height: 1.25;">Requiere pool persistente de conexiones directas a BD</div>
+            <div style="font-size: 0.74rem; color: #78350f; line-height: 1.25;">
+              <strong style="color: #dc2626;">✗ Lambda descartada:</strong> Cold Starts y saturación de sockets sin RDS Proxy.
+            </div>
+          </div>
+
+          <!-- Conector 2 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#f59e0b"/>
+            </svg>
+          </div>
+
+          <!-- Col 3: Servicio AWS Asignado -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #fffbeb; border: 1.5px solid #f59e0b; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #ff9900; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(255, 153, 0, 0.35);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+              </div>
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Amazon EC2 Docker</div>
+                <div style="font-size: 0.74rem; font-weight: 600; color: #475569;">Instancia <code>t3.small</code> · Subred Privada <code>10.0.10.0/24</code></div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+              <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 5px; background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; white-space: nowrap;">✓ CONTENEDOR</span>
+              <span style="font-size: 0.68rem; font-weight: 700; color: #059669;">Baja latencia</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILA 2: BOT DISCORD GATEWAY (CASO CRÍTICO) -->
+        <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
+          <!-- Col 1: Carga -->
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(220, 38, 38, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #fee2e2; border: 1px solid #dc2626; display: flex; align-items: center; justify-content: center; color: #dc2626; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.92rem; font-weight: 800; color: #0f172a;">Bot-Asistencia-APM</span>
+                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: #fee2e2; color: #b91c1c;">Node.js</span>
+              </div>
+              <div style="font-size: 0.74rem; font-weight: 600; color: #64748b; margin-top: 1px;">Discord Gateway · WebSocket 24/7</div>
+            </div>
+          </div>
+
+          <!-- Conector 1 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#dc2626"/>
+            </svg>
+          </div>
+
+          <!-- Col 2: Criterio & Trade-off -->
+          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(254, 226, 226, 0.45); border: 1.2px solid rgba(239, 68, 68, 0.5); display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #991b1b; text-transform: uppercase;">¿Conexión persistente o timeout?</span>
+              <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #fff5f5; color: #b91c1c; border: 1px solid #ef4444;">WebSocket</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e293b; line-height: 1.25;">Socket bidireccional continuo con los servidores de Discord</div>
+            <div style="font-size: 0.74rem; color: #7f1d1d; line-height: 1.25;">
+              <strong style="color: #dc2626;">✗ Lambda inviable:</strong> Límite de 900s (15 min) desconectaría al bot recurrentemente.
+            </div>
+          </div>
+
+          <!-- Conector 2 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#dc2626" stroke-width="2.4" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#dc2626"/>
+            </svg>
+          </div>
+
+          <!-- Col 3: Servicio AWS Asignado -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #fff5f5; border: 1.5px solid #ef4444; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.06);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #ef4444; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </div>
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Amazon EC2 (Docker)</div>
+                <div style="font-size: 0.74rem; font-weight: 600; color: #475569;">Proceso demonio 24/7 sin reinicios ni suspensiones</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+              <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 5px; background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444; white-space: nowrap;">✓ PROCESO 24/7</span>
+              <span style="font-size: 0.68rem; font-weight: 700; color: #059669;">Sin desconexión</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILA 3: SOFI-WEB (NEXT.JS) -->
+        <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
+          <!-- Col 1: Carga -->
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(16, 185, 129, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #ecfdf5; border: 1px solid #10b981; display: flex; align-items: center; justify-content: center; color: #059669; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.92rem; font-weight: 800; color: #0f172a;">SOFI-WEB</span>
+                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: #ecfdf5; color: #047857;">Next.js</span>
+              </div>
+              <div style="font-size: 0.74rem; font-weight: 600; color: #64748b; margin-top: 1px;">Portal Web Practicantes · SSR &amp; LMS</div>
+            </div>
+          </div>
+
+          <!-- Conector 1 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#10b981" stroke-width="2.2" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#10b981"/>
+            </svg>
+          </div>
+
+          <!-- Col 2: Criterio & Trade-off -->
+          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(209, 250, 229, 0.45); border: 1.2px solid rgba(16, 185, 129, 0.5); display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #047857; text-transform: uppercase;">¿Serverless SSR vs Contenedor?</span>
+              <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #f0fdf4; color: #047857; border: 1px solid #10b981;">SSR Node</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e293b; line-height: 1.25;">Renderizado dinámico de páginas y panel de notas en Node.js</div>
+            <div style="font-size: 0.74rem; color: #064e3b; line-height: 1.25;">
+              <strong style="color: #047857;">✓ Despliegue unificado:</strong> Contenedor Docker en la misma VPC con caché en CloudFront.
+            </div>
+          </div>
+
+          <!-- Conector 2 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#10b981" stroke-width="2.4" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#10b981"/>
+            </svg>
+          </div>
+
+          <!-- Col 3: Servicio AWS Asignado -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #f0fdf4; border: 1.5px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.06);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #10b981; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Amazon EC2 + CloudFront</div>
+                <div style="font-size: 0.74rem; font-weight: 600; color: #475569;">Docker en EC2 SOFI · CloudFront para assets estáticos</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+              <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 5px; background: #d1fae5; color: #047857; border: 1px solid #10b981; white-space: nowrap;">✓ HÍBRIDO</span>
+              <span style="font-size: 0.68rem; font-weight: 700; color: #059669;">Caché Edge</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILA 4: SITIOS CLIENTES COMERCIALES -->
+        <div style="display: grid; grid-template-columns: 275px 30px 425px 30px 1fr; align-items: center; gap: 4px;">
+          <!-- Col 1: Carga -->
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; background: #ffffff; border: 1.5px solid rgba(99, 102, 241, 0.45); box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #eef2ff; border: 1px solid #6366f1; display: flex; align-items: center; justify-content: center; color: #4338ca; flex-shrink: 0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.92rem; font-weight: 800; color: #0f172a;">Sitios Clientes</span>
+                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: #eef2ff; color: #4338ca;">WordPress / PHP</span>
+              </div>
+              <div style="font-size: 0.74rem; font-weight: 600; color: #64748b; margin-top: 1px;">Reflexo Perú &amp; Arte e Ideas · Docker</div>
+            </div>
+          </div>
+
+          <!-- Conector 1 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#6366f1"/>
+            </svg>
+          </div>
+
+          <!-- Col 2: Criterio & Trade-off -->
+          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(238, 242, 255, 0.45); border: 1.2px solid rgba(99, 102, 241, 0.5); display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #4338ca; text-transform: uppercase;">¿Multi-tenancy compartido o aislado?</span>
+              <span style="font-size: 0.66rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #f8fafc; color: #4338ca; border: 1px solid #6366f1;">Aislamiento</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e293b; line-height: 1.25;">Eliminar competencia de recursos entre producción comercial y SOFI</div>
+            <div style="font-size: 0.74rem; color: #312e81; line-height: 1.25;">
+              <strong style="color: #4338ca;">✓ Blast Radius cero:</strong> Un fallo o tráfico en clientes jamás tumba el sistema académico.
+            </div>
+          </div>
+
+          <!-- Conector 2 -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="15" viewBox="0 0 26 15" fill="none">
+              <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round"/>
+              <polygon points="24,7.5 17,4 17,11" fill="#6366f1"/>
+            </svg>
+          </div>
+
+          <!-- Col 3: Servicio AWS Asignado -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #f5f3ff; border: 1.5px solid #6366f1; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #6366f1; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes Dedicado</div>
+                <div style="font-size: 0.74rem; font-weight: 600; color: #475569;">Instancia <code>t3.small</code> · Subred Clientes <code>10.0.20.0/24</code></div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+              <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 5px; background: #e0e7ff; color: #4338ca; border: 1px solid #6366f1; white-space: nowrap;">✓ DEDICADO</span>
+              <span style="font-size: 0.68rem; font-weight: 700; color: #059669;">Blast Radius 0</span>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div style="margin-top: 12px; font-size: 0.74rem; font-weight: 700; color: #4338ca;">
-        ➔ Roadmap Fase 3
-      </div>
+
     </div>
 
   </div>
-
-  <!-- Caja de Justificación Crítica -->
-  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 242, 242, 0.88) 100%); border: 1.5px solid rgba(239, 68, 68, 0.35); display: flex; align-items: center; gap: 18px;">
-    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #dc2626; flex-shrink: 0;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    </div>
-    <div style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5;">
-      <strong>Conclusión de Ingeniería:</strong> Las herramientas de asistencia en tiempo real con sockets persistentes (como Discord Gateway) requieren procesos vivos de larga duración. Por ello, se mantiene la orquestación en contenedores Docker sobre EC2, reservando Serverless (Lambda) exclusivamente para automatizaciones programadas de apagado FinOps.
-    </div>
-  </div>
-
 </section>
 
-      <!-- Slide: 06_seccion2_almacenamiento.html -->
+      <!-- Slide: 07_seccion2_almacenamiento.html -->
       <!-- SLIDE 6: SEPARADOR SECCIÓN 2 -->
 <section class="slide-seccion-2">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
@@ -1102,7 +1407,7 @@
   </div>
 </section>
 
-      <!-- Slide: 07_almacenamiento_s3_efs.html -->
+      <!-- Slide: 08_almacenamiento_s3_efs.html -->
       <!-- SLIDE 7: AMAZON S3 & EFS -->
 <section class="slide-almacenamiento-s3-efs" data-transition="slide-in none-out">
   <style>
@@ -1383,7 +1688,7 @@
   </div>
 </section>
 
-      <!-- Slide: 08_retencion_s3_glacier.html -->
+      <!-- Slide: 09_retencion_s3_glacier.html -->
       <!-- SLIDE 8: CICLO DE VIDA Y RETENCIÓN CON S3 GLACIER -->
 <section class="slide-retencion-glacier" data-transition="none-in slide-out">
   <style>
@@ -1754,7 +2059,7 @@
   </div>
 </section>
 
-      <!-- Slide: 09_seccion3_bases_datos.html -->
+      <!-- Slide: 10_seccion3_bases_datos.html -->
       <!-- SLIDE 10: SEPARADOR SECCIÓN 3 -->
 <section class="slide-seccion-3">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
@@ -1782,7 +2087,7 @@
   </div>
 </section>
 
-      <!-- Slide: 10_base_datos_rds.html -->
+      <!-- Slide: 11_base_datos_rds.html -->
       <!-- SLIDE 10: BASE DE DATOS RDS POSTGRESQL -->
 <section class="slide-base-datos-rds" data-transition="slide-in none-out">
   <style>
@@ -2010,7 +2315,7 @@
   </div>
 </section>
 
-      <!-- Slide: 11_resiliencia_backups_pitr.html -->
+      <!-- Slide: 12_resiliencia_backups_pitr.html -->
       <!-- SLIDE 11: RESILIENCIA, BACKUPS Y PITR -->
 <section class="slide-resiliencia-backups" data-transition="none-in slide-out">
   <style>
@@ -2301,7 +2606,7 @@
   </div>
 </section>
 
-      <!-- Slide: 12_resumen_fase2.html -->
+      <!-- Slide: 13_resumen_fase2.html -->
       <!-- SLIDE 13: RESUMEN CONSOLIDADO FASE 2 -->
 <section class="slide-resumen-roadmap">
   <style>
