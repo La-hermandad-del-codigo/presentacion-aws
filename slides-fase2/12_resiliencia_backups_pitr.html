@@ -1,0 +1,131 @@
+<!-- SLIDE 12: RESILIENCIA, BACKUPS Y PITR -->
+<section class="slide-resiliencia-backups">
+  <style>
+    .reveal .slides section.slide-resiliencia-backups .resil-header-wrapper {
+      max-width: 1185px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-resiliencia-backups .resil-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-resiliencia-backups .resil-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    .reveal .slides section.slide-resiliencia-backups .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado con Animación Hero Title -->
+  <div class="resil-header-wrapper">
+    <div class="resil-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        Resiliencia y Continuidad: <span style="color: #2563eb;">Backups Diarios y PITR</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor: 4 Bloques Estratégicos -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto 16px;">
+    
+    <!-- Bloque 1: Snapshots Diarios -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #2563eb; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center; color: #2563eb; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Backups Diarios</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Instantáneas automáticas de almacenamiento completo ejecutadas en la ventana de menor tráfico nocturno.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(37, 99, 235, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">
+        Retención activa: 7 días
+      </div>
+    </div>
+
+    <!-- Bloque 2: Point-In-Time Restore -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #0284c7; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Point-In-Time (PITR)</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Captura continua de registros WAL cada 5 minutos. Permite retroceder la BD al segundo exacto antes de un error humano.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(2, 132, 199, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #0369a1;">
+        Granularidad por segundo
+      </div>
+    </div>
+
+    <!-- Bloque 3: RPO y RTO -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #10b981; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Métricas SLA</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          <strong>RPO &lt; 5 min:</strong> pérdida máxima admisible de datos transaccionales.<br/>
+          <strong>RTO &lt; 30 min:</strong> tiempo de restauración de nueva instancia.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #047857;">
+        Alta continuidad garantizada
+      </div>
+    </div>
+
+    <!-- Bloque 4: Snapshots Manuales -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #f59e0b; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Snapshots Manuales</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Copias persistentes previas a despliegues o migraciones mayores. No se eliminan al destruir la instancia RDS.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
+        Inmutables y versionados
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Barra de Flujo de Recuperación -->
+  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 12px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.95); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #10b981;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 0.82rem; font-weight: 800; color: var(--aws-navy);">Escenario de Contingencia:</span>
+      <span style="font-size: 0.78rem; color: var(--text-muted);">Borrado accidental o corrupción de tabla en producción → Selección de timestamp PITR → Nueva instancia operativa en &lt; 30 min.</span>
+    </div>
+    <div style="font-size: 0.82rem; font-weight: 800; color: #047857;">
+      Cero pérdida de registros críticos
+    </div>
+  </div>
+</section>

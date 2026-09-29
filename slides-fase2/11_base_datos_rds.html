@@ -1,0 +1,129 @@
+<!-- SLIDE 11: BASE DE DATOS RDS POSTGRESQL -->
+<section class="slide-base-datos-rds">
+  <style>
+    .reveal .slides section.slide-base-datos-rds .rds-header-wrapper {
+      max-width: 1185px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-base-datos-rds .rds-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-base-datos-rds .rds-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    .reveal .slides section.slide-base-datos-rds .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado con Animación Hero Title -->
+  <div class="rds-header-wrapper">
+    <div class="rds-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
+        Amazon RDS: <span style="color: #2563eb;">Motor PostgreSQL 16 Administrado</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Contenedor: 4 Pilares de la Solución de Base de Datos -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1185px; margin: 0 auto 16px;">
+    
+    <!-- Tarjeta 1: Compatibilidad de Stack -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #2563eb; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center; color: #2563eb; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Compatibilidad Stack</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          100% nativo con NestJS y Prisma ORM. Cero cambios de código ni reescritura de modelos o consultas relacionales.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(37, 99, 235, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">
+        Transición sin fricción
+      </div>
+    </div>
+
+    <!-- Tarjeta 2: Dimensionamiento -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #0284c7; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">db.t3.micro + gp3</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          1 vCPU y 1 GiB RAM dedicados con 20 GB gp3 autoescalable. Costo altamente accesible para el presupuesto formativo.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(2, 132, 199, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #0369a1;">
+        ~$15.44 USD / mes
+      </div>
+    </div>
+
+    <!-- Tarjeta 3: Aislamiento y Red -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #10b981; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Subred Privada Datos</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Segmentada en <code>10.0.100.0/24</code> sin salida a Internet. Tráfico TLS puerto 5432 filtrado por Security Group.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #047857;">
+        Cifrado KMS (AES-256)
+      </div>
+    </div>
+
+    <!-- Tarjeta 4: Estabilidad y Mantenimiento -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 16px; border-radius: 14px; border-top: 4px solid #f59e0b; background: rgba(255, 255, 255, 0.92); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 6px;">Fin del OOM Killer</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;">
+          Elimina la competencia destructiva de memoria del VPS único. Memoria dedicada y parches administrados por AWS.
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 6px 10px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #b45309;">
+        Monitoreo en CloudWatch
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Barra de Comparativa Rápida -->
+  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 12px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.95); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #2563eb;">
+    <div style="font-size: 0.8rem; font-weight: 700; color: var(--aws-navy);">
+      ¿Por qué descartamos DynamoDB y Aurora en esta fase?
+    </div>
+    <div style="font-size: 0.76rem; color: var(--text-muted);">
+      <strong style="color: #ef4444;">DynamoDB:</strong> incompatible con Prisma y modelos relacionales. <strong style="color: #f59e0b;">Aurora:</strong> costo triplicado innecesario para la escala actual.
+    </div>
+  </div>
+</section>

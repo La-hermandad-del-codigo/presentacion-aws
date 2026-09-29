@@ -1,87 +1,120 @@
 <!-- SLIDE 4: ENTORNOS DEV & TESTING SPOT -->
 <section class="slide-dev-testing">
-  <div style="max-width: 1180px; margin: 0 auto;">
-    
-    <div style="text-align: center; margin-bottom: 22px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 999px; margin-bottom: 8px;">
-        <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #b45309;">Ambientes No Productivos</span>
-      </div>
-      <h2 class="slide-title" style="font-size: 2.15rem !important; margin: 0; color: var(--aws-navy);">
+  <style>
+    .reveal .slides section.slide-dev-testing .devtesting-header-wrapper {
+      max-width: 1185px;
+      margin: 0 auto 20px;
+      position: relative;
+      height: 48px;
+    }
+
+    .reveal .slides section.slide-dev-testing .devtesting-hero-title.fragment {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate3d(calc(590px - 50%), 185px, 0) scale(1.22);
+      transform-origin: center center;
+      opacity: 1 !important;
+      visibility: inherit !important;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      z-index: 50;
+    }
+
+    .reveal .slides section.slide-dev-testing .devtesting-hero-title.fragment.visible {
+      transform: translate3d(0, 0, 0) scale(1);
+      transform-origin: center center;
+      pointer-events: auto;
+    }
+
+    .reveal .slides section.slide-dev-testing .slide-title {
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado con Animación Hero Title -->
+  <div class="devtesting-header-wrapper">
+    <div class="devtesting-hero-title fragment" data-fragment-index="1">
+      <h2 class="slide-title" style="font-size: 2.2rem !important; margin: 0 !important; line-height: 1.15; color: var(--aws-navy);">
         Desarrollo Estandarizado y <span style="color: #d97706;">Pruebas con EC2 Spot</span>
       </h2>
-      <p style="font-size: 0.94rem; color: var(--text-muted); margin-top: 6px;">
-        Estandarización formativa en Cloud Workstations y reducción radical de costos en QA con capacidad Spot
-      </p>
+    </div>
+  </div>
+
+  <!-- Grid de 2 Columnas: Dev vs Testing -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; max-width: 1185px; margin: 0 auto 18px;">
+    
+    <!-- Cloud Workstations (Desarrollo) -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Cloud Workstations (Dev)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Plantilla Unificada · 160 h/mes</div>
+          </div>
+        </div>
+        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(255, 153, 0, 0.12); color: #b45309;">Formación</span>
+      </div>
+
+      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+        <li><strong>Fin de "en mi máquina funciona":</strong> Entorno Ubuntu idéntico con Node 20, Python 3 y Docker.</li>
+        <li><strong>Onboarding instantáneo:</strong> El practicante se conecta directo vía AWS Systems Manager (SSM).</li>
+        <li><strong>Seguridad de código:</strong> El código propietario no se descarga en laptops personales.</li>
+        <li><strong>FinOps:</strong> Apagado automático fuera del horario de prácticas (ahorro del 60%).</li>
+      </ul>
     </div>
 
-    <!-- Grid de 2 Columnas: Dev vs Testing -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-      
-      <!-- Cloud Workstations (Desarrollo) -->
-      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Cloud Workstations (Dev)</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Plantilla Unificada · 160 h/mes</div>
-            </div>
+    <!-- Ambiente de Pruebas (Spot Instances) -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </div>
-          <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(255, 153, 0, 0.12); color: #b45309;">Formación</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-          <li><strong>Fin de "en mi máquina funciona":</strong> Entorno Ubuntu idéntico con Node 20, Python 3 y Docker.</li>
-          <li><strong>Onboarding instantáneo:</strong> El practicante se conecta directo vía AWS Systems Manager (SSM).</li>
-          <li><strong>Seguridad de código:</strong> El código propietario no se descarga en laptops personales.</li>
-          <li><strong>FinOps:</strong> Apagado automático fuera del horario de prácticas (ahorro del 60%).</li>
-        </ul>
-      </div>
-
-      <!-- Ambiente de Pruebas (Spot Instances) -->
-      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 24px 26px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); border: 1.5px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Staging / QA (Spot Instances)</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #d97706;">Modalidad Spot · Hasta 90% Ahorro</div>
-            </div>
-          </div>
-          <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); color: #d97706;">QA / Testing</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-          <li><strong>Capacidad ociosa de AWS:</strong> Descuento masivo para validar builds y migraciones de BD.</li>
-          <li><strong>Aviso de 2 minutos:</strong> <em>Spot Interruption Notice</em> gestionado automáticamente.</li>
-          <li><strong>Stop Behavior:</strong> Conserva el disco EBS en lugar de borrarse ante interrupción.</li>
-          <li><strong>Cero impacto comercial:</strong> Si se interrumpe, producción sigue 100% activa sin afectación.</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Banner Inferior: Impacto Económico Spot -->
-    <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 243, 199, 0.88) 100%); border: 1.5px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #b45309; flex-shrink: 0;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div>
-          <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Estrategia Económica de Pruebas: EC2 Spot vs On-Demand</div>
-          <div style="font-size: 0.82rem; color: var(--text-muted);">
-            Instancia <code>t3.small</code>: On-Demand ($0.0208/h ≈ $3.33/mes) vs Spot ($0.0062/h ≈ <strong>$0.99/mes</strong>). Ahorro superior al <strong>70%</strong> en QA.
+          <div>
+            <div style="font-size: 1.12rem; font-weight: 800; color: var(--aws-navy);">Staging / QA (Spot Instances)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #d97706;">Modalidad Spot · Hasta 90% Ahorro</div>
           </div>
         </div>
+        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.14); color: #d97706;">QA / Testing</span>
       </div>
-      <div style="padding: 6px 14px; border-radius: 8px; background: #d97706; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
-        Ahorro > 70%
-      </div>
+
+      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+        <li><strong>Capacidad ociosa de AWS:</strong> Descuento masivo para validar builds y migraciones de BD.</li>
+        <li><strong>Aviso de 2 minutos:</strong> <em>Spot Interruption Notice</em> gestionado automáticamente.</li>
+        <li><strong>Stop Behavior:</strong> Conserva el disco EBS en lugar de borrarse ante interrupción.</li>
+        <li><strong>Cero impacto comercial:</strong> Si se interrumpe, producción sigue 100% activa sin afectación.</li>
+      </ul>
     </div>
 
   </div>
+
+  <!-- Banner Inferior: Impacto Económico Spot -->
+  <div class="glass-card fragment fade-up" data-fragment-index="1" style="max-width: 1185px; margin: 0 auto; padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 243, 199, 0.88) 100%); border: 1.5px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #b45309; flex-shrink: 0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div>
+        <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">Estrategia Económica de Pruebas: EC2 Spot vs On-Demand</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted);">
+          Instancia <code>t3.small</code>: On-Demand ($0.0208/h ≈ $3.33/mes) vs Spot ($0.0062/h ≈ <strong>$0.99/mes</strong>). Ahorro superior al <strong>70%</strong> en QA.
+        </div>
+      </div>
+    </div>
+    <div style="padding: 6px 14px; border-radius: 8px; background: #d97706; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
+      Ahorro > 70%
+    </div>
+  </div>
+
 </section>

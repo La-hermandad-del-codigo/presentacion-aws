@@ -49,10 +49,16 @@ def build_fase(fase=1):
     with open(TEMPLATE_FILE, "r", encoding="utf-8") as f:
         template = f.read()
 
-    # Reemplazar título de pestaña según la fase
+    # Reemplazar título de pestaña y badge superior según la fase
     if "<title>" in template:
         import re
         template = re.sub(r"<title>.*?</title>", f"<title>{cfg['title']}</title>", template)
+
+    if fase == 2:
+        template = template.replace(
+            '<div class="pill-badge navy">Semana 6 · Etapa 1</div>',
+            '<div class="pill-badge navy">Semana 7 · Etapa 2</div>'
+        )
 
     slide_files = sorted(glob.glob(os.path.join(slides_dir, "*.html")))
     if not slide_files:
