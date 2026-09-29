@@ -1,11 +1,11 @@
-<!-- SLIDE 4: CAPA DE CÓMPUTO EC2 (DEV -> PROD) Y EBS GP3 -->
-<section class="slide-computo-f2">
+<!-- SLIDE 4: AMAZON EC2 (DEV -> PROD) Y ALMACENAMIENTO GP3 -->
+<section class="slide-computo-ec2-ambientes" data-transition="slide-in slide-out">
   <style>
-    .reveal .slides section.slide-computo-f2 {
+    .reveal .slides section.slide-computo-ec2-ambientes {
       padding-top: 15px !important;
     }
 
-    .reveal .slides section.slide-computo-f2 .computo-header-wrapper {
+    .reveal .slides section.slide-computo-ec2-ambientes .computo-header-wrapper {
       max-width: 1180px;
       margin: 0 auto 16px;
       display: flex;
@@ -13,7 +13,7 @@
       align-items: center;
     }
 
-    .reveal .slides section.slide-computo-f2 .slide-title {
+    .reveal .slides section.slide-computo-ec2-ambientes .slide-title {
       font-size: 2.15rem !important;
       margin: 0 !important;
       line-height: 1.15;
@@ -21,6 +21,18 @@
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .computo-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 
@@ -31,106 +43,202 @@
     </h2>
   </div>
 
-  <div style="max-width: 1180px; margin: 0 auto;">
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Pipeline: DESARROLLO Y PRUEBAS -> VALIDACIÓN -> PRODUCCIÓN -->
-    <div style="display: grid; grid-template-columns: 1fr 130px 1fr; align-items: stretch; gap: 0; margin-bottom: 16px;">
-
-      <!-- ===== CONTENEDOR 1: DESARROLLO Y PRUEBAS (NO PRODUCTIVOS) ===== -->
-      <div class="glass-card" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.4); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Ambientes Dev & Testing Spot -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.14); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
-            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambientes de Desarrollo y Pruebas</div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Desarrollo y Testing con EC2 Spot</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cloud Workstations &amp; QA · Hasta 90% de Ahorro</div>
+            </div>
           </div>
-          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">No Productivos</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Dev &amp; QA</span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <!-- EC2 Dev Workstations -->
-          <div style="padding: 16px 14px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
-            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Dev Workstations</div>
-            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small / t3.medium</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Plantilla Ubuntu unificada con Node 20, Docker y CLI preinstalados.</div>
-            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">160 h/mes · Apagado automático</div>
-          </div>
-
-          <!-- EC2 Staging / QA -->
-          <div style="padding: 16px 14px; border-radius: 12px; background: #f0f9ff; border: 1.2px solid rgba(2, 132, 199, 0.3);">
-            <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 3px;">EC2 Staging / QA</div>
-            <div style="font-size: 0.74rem; font-weight: 800; color: #0369a1; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.micro</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Réplica funcional de pre-producción para validar cada entrega.</div>
-            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(2, 132, 199, 0.3); font-size: 0.74rem; font-weight: 700; color: #0369a1;">Pruebas continuas</div>
-          </div>
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Cloud Workstations:</strong> Plantilla Ubuntu estandarizada (Node 20, Docker) para practicantes; conexión segura vía AWS SSM sin SSH abierto.</li>
+          <li><strong>FinOps en Desarrollo:</strong> Apagado programado fuera de jornada para practicantes (160 h/mes), reduciendo el costo de cómputo en 60%.</li>
+          <li><strong>Staging con EC2 Spot:</strong> Validación de releases e integración continua con hasta 90% de descuento y persistencia en volumen EBS.</li>
+        </ul>
       </div>
 
-      <!-- ===== CONECTOR: VALIDACIÓN ===== -->
-      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 0 10px;">
-        <div style="font-size: 0.75rem; font-weight: 800; color: #475569; text-align: center; line-height: 1.35;">Validación<br>antes del pase<br>a producción</div>
-        <svg width="90" height="18" viewBox="0 0 90 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <line x1="0" y1="9" x2="78" y2="9" stroke="#475569" stroke-width="2.6" stroke-linecap="round"/>
-          <polygon points="90,9 78,3 78,15" fill="#475569"/>
-        </svg>
-      </div>
-
-      <!-- ===== CONTENEDOR 2: PRODUCCIÓN AISLADA (24/7) ===== -->
-      <div class="glass-card" style="padding: 20px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.45); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+      <!-- Tarjeta 2: Producción Aislada & Discos gp3 -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
             </div>
-            <div style="font-size: 1.02rem; font-weight: 800; color: var(--aws-navy); line-height: 1.2;">Ambiente de Producción Aislado</div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Producción Aislada &amp; Almacenamiento gp3</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Instancias On-Demand 24/7 · Subredes Privadas</div>
+            </div>
           </div>
-          <span style="padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.74rem; font-weight: 800; white-space: nowrap;">24/7</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(255, 153, 0, 0.12); color: #b45309;">Producción</span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <!-- EC2 SOFI Producción -->
-          <div style="padding: 16px 14px; border-radius: 12px; background: #fffbeb; border: 1.2px solid rgba(245, 158, 11, 0.4);">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
-              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 SOFI Producción</div>
-              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Interna</span>
-            </div>
-            <div style="font-size: 0.74rem; font-weight: 800; color: #b45309; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;"><code>sofi-backend</code> (NestJS), <code>SOFI-WEB</code> y Bot Discord.</div>
-            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(245, 158, 11, 0.4); font-size: 0.74rem; font-weight: 700; color: #b45309;">2 vCPU / 2 GiB · 10.0.10.0/24 · 30 GB gp3</div>
-          </div>
-
-          <!-- EC2 Clientes Producción -->
-          <div style="padding: 16px 14px; border-radius: 12px; background: #eef2ff; border: 1.2px solid rgba(99, 102, 241, 0.38);">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
-              <div style="font-size: 0.92rem; font-weight: 800; color: var(--aws-navy);">EC2 Clientes Producción</div>
-              <span style="padding: 2px 7px; border-radius: 5px; background: rgba(99, 102, 241, 0.12); color: #4338ca; font-size: 0.68rem; font-weight: 800; white-space: nowrap;">Área Comercial</span>
-            </div>
-            <div style="font-size: 0.74rem; font-weight: 800; color: #4338ca; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">t3.small · On-Demand</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.48;">Reflexo Perú y Arte &amp; Ideas en Docker aislado.</div>
-            <div style="margin-top: 11px; padding-top: 9px; border-top: 1px dashed rgba(99, 102, 241, 0.38); font-size: 0.74rem; font-weight: 700; color: #4338ca;">2 vCPU / 2 GiB · 10.0.20.0/24 · 30 GB gp3</div>
-          </div>
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>EC2 SOFI (Área Interna):</strong> 2 vCPU / 2 GiB en subred <code>10.0.10.0/24</code>; ejecuta <code>sofi-backend</code>, <code>SOFI-WEB</code> y Bot de Discord.</li>
+          <li><strong>EC2 Clientes (Área Comercial):</strong> 2 vCPU / 2 GiB en subred <code>10.0.20.0/24</code>; aísla Reflexo Perú y Arte &amp; Ideas con Blast Radius cero.</li>
+          <li><strong>Estándar EBS gp3:</strong> 30 GB con 3,000 IOPS base y 125 MB/s garantizados; 20% más económico que gp2 ($0.08 vs $0.10/GB).</li>
+        </ul>
       </div>
 
     </div>
 
-    <!-- Banner Inferior: Amazon EBS gp3 -->
-    <div class="glass-card" style="padding: 16px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.88) 100%); border: 1.5px solid rgba(13, 148, 136, 0.35); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(13, 148, 136, 0.14); display: flex; align-items: center; justify-content: center; color: #0d9488; flex-shrink: 0;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 14h6m-6 4h6m4-10h6m-6 4h6M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z"/></svg>
-        </div>
-        <div>
-          <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy);">Estándar de Almacenamiento en Bloque: Amazon EBS (gp3)</div>
-          <div style="font-size: 0.82rem; color: var(--text-muted);">
-            3,000 IOPS base garantizados y 125 MB/s de throughput independiente del tamaño · 20% más económico que gp2 ($0.08 vs $0.10/GB).
-          </div>
-        </div>
-      </div>
-      <div style="padding: 6px 14px; border-radius: 8px; background: #0d9488; color: #fff; font-size: 0.8rem; font-weight: 800; white-space: nowrap;">
-        3,000 IOPS Base
-      </div>
+    <!-- Columna Derecha: Diagrama Vertical Oficial AWS -->
+    <div class="computo-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Filtro de Sombra Suave -->
+          <filter id="diag-shadow-c4" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+
+          <!-- Icono Oficial AWS EC2 -->
+          <g id="icon-ec2-c4">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#ff9900" />
+            <rect x="-7" y="-7" width="14" height="14" rx="2" fill="#ffffff" fill-opacity="0.2" stroke="#ffffff" stroke-width="1.4"/>
+            <rect x="-3" y="-3" width="6" height="6" rx="1" fill="#ffffff"/>
+            <line x1="-4" y1="-9.5" x2="-4" y2="-7" stroke="#ffffff" stroke-width="1.2"/>
+            <line x1="4" y1="-9.5" x2="4" y2="-7" stroke="#ffffff" stroke-width="1.2"/>
+            <line x1="-4" y1="7" x2="-4" y2="9.5" stroke="#ffffff" stroke-width="1.2"/>
+            <line x1="4" y1="7" x2="4" y2="9.5" stroke="#ffffff" stroke-width="1.2"/>
+          </g>
+
+          <!-- Icono EBS Block Storage -->
+          <g id="icon-ebs-c4">
+            <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#0d9488" />
+            <rect x="-7" y="-6" width="14" height="5" rx="1.5" fill="#ffffff"/>
+            <rect x="-7" y="1" width="14" height="5" rx="1.5" fill="#ffffff"/>
+            <circle cx="4" cy="-3.5" r="1" fill="#0d9488"/>
+            <circle cx="4" cy="3.5" r="1" fill="#0d9488"/>
+          </g>
+        </defs>
+
+        <!-- 1. Contenedor Maestro: Amazon VPC -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado VPC -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#f59e0b"/>
+          <path d="M 4 7 L 20 7 L 18 18 L 6 18 Z" fill="#ffffff"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Arquitectura de Cómputo EC2 <tspan font-weight="700" fill="#b45309">(Ciclo Dev → Prod)</tspan></text>
+        </g>
+
+        <!-- 2. Contenedor Superior: Ambientes Dev & Testing (No Productivos) -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="130" rx="10" fill="rgba(240, 249, 255, 0.75)" stroke="#0284c7" stroke-width="1.5"/>
+          
+          <!-- Pill de Ambientes Dev/QA -->
+          <rect x="12" y="6" width="245" height="19" rx="9.5" fill="#0284c7"/>
+          <text x="134.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">DESARROLLO &amp; TESTING SPOT · NO PRODUCTIVO</text>
+          
+          <!-- 2 Sub-Tarjetas Dev & Staging -->
+          <g transform="translate(12, 29)">
+            <!-- Sub-Tarjeta 1: EC2 Dev Workstations -->
+            <g filter="url(#diag-shadow-c4)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(2, 132, 199, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">💻</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0369a1">Dev Workstations</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">t3.small / t3.medium</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Ubuntu unificado (Node 20, Docker)</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Acceso SSM · Sin puertos SSH</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">160 h/mes · Apagado nocturno</text>
+            </g>
+
+            <!-- Sub-Tarjeta 2: EC2 Staging QA Spot -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-c4)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">⚡</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">EC2 Staging (QA Spot)</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">t3.micro Spot · -90% Ahorro</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Validación de builds y Docker</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Pruebas continuas de integración</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#92400e">Persistencia Stop en disco EBS</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- 3. Conector Central: Validación antes de Pase a Producción -->
+        <g transform="translate(245, 174)">
+          <line x1="0" y1="0" x2="0" y2="34" stroke="#475569" stroke-width="2"/>
+          <polygon points="0,34 -4.5,26 4.5,26" fill="#475569"/>
+          <!-- Pill de Validación -->
+          <g filter="url(#diag-shadow-c4)">
+            <rect x="-105" y="8" width="210" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="1.3"/>
+            <text x="0" y="20.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#334155">Validación previa al pase a Producción ✓</text>
+          </g>
+        </g>
+
+        <!-- 4. Contenedor Inferior: Ambientes de Producción Aislados (24/7) -->
+        <g transform="translate(18, 208)">
+          <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(255, 251, 235, 0.75)" stroke="#f59e0b" stroke-width="1.5"/>
+          
+          <!-- Pill de Producción -->
+          <rect x="12" y="6" width="235" height="19" rx="9.5" fill="#f59e0b"/>
+          <text x="129.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">PRODUCCIÓN AISLADA 24/7 · ON-DEMAND</text>
+          
+          <!-- 2 Sub-Tarjetas Producción SOFI y Clientes -->
+          <g transform="translate(12, 29)">
+            <!-- Sub-Tarjeta 1: EC2 SOFI Producción -->
+            <g filter="url(#diag-shadow-c4)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-ec2-c4"/>
+              </g>
+              <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 SOFI Producción</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">t3.small · Subred 10.0.10.0/24</text>
+              
+              <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ sofi-backend (NestJS / Prisma)</text>
+              <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ SOFI-WEB (Portal Next.js)</text>
+              <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Bot-Asistencia-APM (Discord)</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#047857">Área Interna Académica</text>
+            </g>
+
+            <!-- Sub-Tarjeta 2: EC2 Clientes Producción -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-c4)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#6366f1" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-ec2-c4"/>
+              </g>
+              <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0f172a">EC2 Clientes Producción</text>
+              <text x="36" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#4338ca">t3.small · Subred 10.0.20.0/24</text>
+              
+              <text x="8" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Reflexo Perú &amp; Arte e Ideas</text>
+              <text x="8" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Docker multi-tenant comercial</text>
+              <text x="8" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Blast Radius 0 frente a SOFI</text>
+              <text x="8" y="96" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ 2 vCPU / 2 GiB RAM dedicada</text>
+              <text x="8" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="800" fill="#4338ca">Área Comercial Externa</text>
+            </g>
+          </g>
+
+          <!-- Banner Inferior de EBS gp3 -->
+          <g transform="translate(12, 196)" filter="url(#diag-shadow-c4)">
+            <rect x="0" y="0" width="430" height="42" rx="7" fill="#ffffff" stroke="#0d9488" stroke-width="1.3"/>
+            <g transform="translate(18, 21) scale(0.85)">
+              <use href="#icon-ebs-c4"/>
+            </g>
+            <text x="36" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#0f172a">Almacenamiento en Bloque: Amazon EBS (gp3)</text>
+            <text x="36" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0d9488">30 GB por host · 3,000 IOPS base · 125 MB/s throughput</text>
+            
+            <rect x="330" y="11" width="90" height="20" rx="4" fill="#0d9488"/>
+            <text x="375" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#ffffff">3,000 IOPS</text>
+          </g>
+        </g>
+      </svg>
     </div>
 
   </div>
