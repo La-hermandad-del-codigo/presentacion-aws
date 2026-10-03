@@ -10,101 +10,157 @@
 
 ## 1. Diseño de la Capa de Computación y Servidores Cloud
 
-El diseño de la capa de cómputo para **APM Inversiones EIRL** aborda de manera integral las necesidades del ciclo de vida del software (**Desarrollo, Pruebas y Producción**). La propuesta erradica la dependencia de un servidor monolítico compartido y la fragmentación de desarrollo en máquinas personales, implementando instancias virtuales escalables, seguras y especializadas en **Amazon Elastic Compute Cloud (Amazon EC2)**.
+El diseño de la capa de cómputo para **APM Inversiones EIRL** aborda de manera integral las necesidades del ciclo de vida del software (**Desarrollo, Pruebas y Producción**). La propuesta erradica la dependencia de un servidor monolítico compartido y la fragmentación en laptops personales mediante una arquitectura moderna y desacoplada: **Contenedores Serverless con Amazon ECS y AWS Fargate** para las cargas productivas y de staging, combinados con **instancias especializadas de Amazon Elastic Compute Cloud (Amazon EC2)** para las estaciones de desarrollo virtualizadas.
 
 ```mermaid
 flowchart TD
-    subgraph CAPA_COMPUTO["Capa de Cómputo Especializada en AWS (Amazon EC2)"]
+    subgraph CAPA_COMPUTO["Capa de Cómputo Híbrida y Especializada en AWS"]
         direction TB
 
-        subgraph DEV_STAGE["Ambientes de Desarrollo y Pruebas (No Productivos)"]
-            EC2_DEV["EC2 Dev Workstations (t3.small / t3.medium)<br/>Plantilla Ubuntu unificada (Node 20, Docker, CLI)<br/>Horario programado: 160 h/mes (Apagado automático)"]
-            EC2_STAGE["EC2 Staging / QA (t3.micro)<br/>Réplica funcional pre-producción<br/>Pruebas de integración continuas"]
+        subgraph FARGATE_CLUSTER["Amazon ECS sobre AWS Fargate (Cargas Containerizadas)"]
+            direction TB
+            subgraph PROD_TASKS["Ambiente de Producción (Aislamiento Multi-Contenedor)"]
+                FARGATE_SOFI["sofi-backend (NestJS) + SOFI-WEB (Next.js)<br/>Capacidad Granular: 0.50 vCPU / 1 GiB + 0.25 vCPU / 512 MiB"]
+                FARGATE_BOT["Bot-Asistencia-APM (Discord Bot)<br/>Capacidad Granular: 0.25 vCPU / 512 MiB (Socket 24/7)"]
+                FARGATE_CLIENTES["Reflexo Perú + Arte & Ideas<br/>Capacidad Granular: 0.50 vCPU / 1 GiB"]
+            end
+            subgraph STAGE_TASKS["Ambiente de Pruebas (QA Efímero)"]
+                FARGATE_STAGE["Staging QA Service<br/>Capacidad: 0.25 vCPU / 512 MiB (Bajo Demanda)"]
+            end
         end
 
-        subgraph PROD["Ambiente de Producción Aislado (24/7)"]
-            EC2_SOFI["EC2 SOFI Producción (t3.small)<br/>sofi-backend (NestJS), SOFI-WEB y Bot Discord<br/>30 GB EBS gp3"]
-            EC2_CLIENTES["EC2 Clientes Producción (t3.small)<br/>Reflexo Perú y Arte & Ideas (Docker aislado)<br/>30 GB EBS gp3"]
+        subgraph EC2_DEV_ENV["Ambiente de Desarrollo Estandarizado (Amazon EC2)"]
+            EC2_DEV["EC2 Cloud Workstations (t3.small / t3.medium)<br/>Plantilla Ubuntu 22.04 LTS (Node 20, Docker CLI, Git)<br/>Almacenamiento: 25 GB EBS gp3 + Montaje Amazon EFS<br/>Régimen: 160 h/mes con apagado automático (FinOps)"]
         end
     end
 
-    DEV_STAGE -->|Validación antes del pase a producción| PROD
+    EC2_DEV -->|Push de código y validación| FARGATE_STAGE
+    FARGATE_STAGE -->|Aprobación de pase| PROD_TASKS
 ```
 
 ---
 
-### 1.1 Selección y Configuración Propuesta de Instancias Amazon EC2
+### 1.1 Selección y Configuración Propuesta de Cómputo
 
-Para equilibrar costo, rendimiento predecible y aislamiento de fallas, se adopta la familia de instancias **T3 (Uso General con Capacidad de Ráfaga)** sustentadas sobre procesadores Intel Xeon Platinum de 2.5 GHz o AMD EPYC de hasta 3.1 GHz con tecnología de virtualización basada en el hipervisor **AWS Nitro System**:
+#### 1.1.1 Contenedores Serverless con Amazon ECS y AWS Fargate
 
-#### 1.1.1 Especificaciones de Instancias por Ambiente
+En lugar de aprovisionar máquinas virtuales completas de la familia T3 para alojar servicios web, se adopta **AWS Fargate** como motor de ejecución serverless para contenedores Docker administrados bajo **Amazon ECS**:
 
-| Servidor / Instancia | Tipo de Instancia | vCPU / RAM | Sistema Operativo | Almacenamiento EBS | Régimen / Modalidad de Compra | Propósito Arquitectónico |
-|:---|:---:|:---:|:---:|:---:|:---:|:---|
-| **EC2 SOFI (Producción)** | `t3.small` | 2 vCPU / 2 GiB | Ubuntu 22.04 LTS | 30 GB `gp3` | On-Demand (24/7 - 730 h/mes) | Aloja `sofi-backend` (NestJS/Prisma), `SOFI-WEB` (Next.js) y `Bot-Asistencia-APM`. Desacoplado de bases de datos y clientes. |
-| **EC2 Clientes (Producción)** | `t3.small` | 2 vCPU / 2 GiB | Ubuntu 22.04 LTS | 30 GB `gp3` | On-Demand (24/7 - 730 h/mes) | Aloja contenedores comerciales de Reflexo Perú y Arte & Ideas. Garantiza que picos de tráfico externo no degraden la plataforma formativa interna. |
-| **EC2 Staging (Pruebas / QA)** | `t3.small` / `t3.micro` | 1-2 vCPU / 1-2 GiB | Ubuntu 22.04 LTS | 20 GB `gp3` | **Spot Instance** (Bajo demanda / 160 h/mes) | Entorno espejo pre-producción bajo **Amazon EC2 Spot Instances** (hasta 70-90% de ahorro). Pruebas funcionales e integración tolerantes a interrupción temporal. |
-| **EC2 Cloud Workstations (Desarrollo y Capacitaciones)** | `t3.small` | 2 vCPU / 2 GiB | Ubuntu 22.04 LTS | 25 GB `gp3` + Amazon EFS | On-Demand programado (160 h/mes) | Estación virtual estandarizada para practicantes. Contiene Node.js 20, Python 3, Docker y herramientas unificadas, eliminando la disparidad de laptops personales. |
+* **Eliminación de la Sobrecarga Operativa:** Fargate abstrae por completo el sistema operativo subyacente. Se eliminan las tareas de parcheo del kernel de Linux, actualización de paquetes de seguridad, configuración de demonios Docker y mantenimiento de AMIs.
+* **Aprovisionamiento y Dimensionamiento Granular:** Cada servicio consume únicamente los recursos que requiere, pagando por segundo de ejecución de vCPU y memoria RAM.
 
-#### 1.1.2 Selección y Opciones de Almacenamiento en Bloque: Amazon EBS (`gp3`)
+| Servicio / Contenedor | Tipo de Cómputo | vCPU Asignada | Memoria RAM | Almacenamiento Efímero | Propósito Arquitectónico |
+|:---|:---:|:---:|:---:|:---:|:---|
+| **`sofi-backend`** | AWS Fargate | `0.50 vCPU` | `1024 MiB (1 GiB)` | 20 GB Estándar | API REST/GraphQL en NestJS con Prisma ORM. Procesa lógica de negocio y persistencia en RDS. |
+| **`SOFI-WEB`** | AWS Fargate | `0.25 vCPU` | `512 MiB (0.5 GiB)` | 20 GB Estándar | Frontend institucional en Next.js (SSR / Servidor Node ligero). |
+| **`Bot-Asistencia-APM`** | AWS Fargate | `0.25 vCPU` | `512 MiB (0.5 GiB)` | 20 GB Estándar | Proceso persistente con conexión WebSocket 24/7 hacia la Gateway API de Discord. |
+| **Clientes (Reflexo / Arte & Ideas)** | AWS Fargate | `0.50 vCPU` | `1024 MiB (1 GiB)` | 20 GB Estándar | Contenedores comerciales desacoplados. Los picos de tráfico externo quedan confinados sin afectar a SOFI. |
+| **Staging / QA (Pruebas)** | AWS Fargate | `0.25 vCPU` | `512 MiB (0.5 GiB)` | 20 GB Estándar | Despliegue de réplicas de prueba efímeras para validación de integración previa a producción. |
 
-Para el almacenamiento raíz del sistema operativo y los contenedores Docker, se descartan los antiguos volúmenes `gp2` y se estandariza el uso de **Amazon EBS General Purpose SSD (`gp3`)**:
+#### 1.1.2 Estaciones de Desarrollo Virtuales: Amazon EC2
 
-1. **Rendimiento Base Independiente del Volumen:**
-   - A diferencia de `gp2`, donde el rendimiento en IOPS depende directamente del tamaño en gigabytes (3 IOPS por GB con necesidad de acumular créditos de ráfaga), los volúmenes `gp3` entregan **3,000 IOPS sostenidos y 125 MB/s de rendimiento base sin costo adicional**, independientemente de si el disco tiene 20 GB o 100 GB.
-2. **Ahorro Directo en Costos:**
-   - La tarifa por gigabyte de `gp3` ($0.08 USD/GB-mes) representa un **ahorro inmediato del 20%** frente a la tarifa de `gp2` ($0.10 USD/GB-mes).
-3. **Escalabilidad Elástica en Caliente (Elastic Volumes):**
-   - Los volúmenes EBS en AWS permiten ampliar capacidad de disco, modificar IOPS o alternar tipo de almacenamiento en tiempo de ejecución sin reiniciar las instancias ni provocar tiempo de inactividad (*downtime*).
+Para el ambiente de desarrollo de practicantes se mantiene **Amazon EC2**, donde la flexibilidad de una máquina virtual interactiva es insustituible:
 
-#### 1.1.3 Estrategia de Cómputo para Pruebas: Amazon EC2 Spot Instances
+* **Especificaciones:** Instancias `t3.small` (2 vCPU, 2 GiB RAM) con opción de escalamiento temporal a `t3.medium` para compilaciones pesadas.
+* **Estandarización de Herramientas:** Imagen base unificada con Ubuntu 22.04 LTS, Node.js 20, Python 3, Docker CLI y Git, erradicando el síndrome de "en mi máquina sí funciona".
+* **FinOps y Ahorro:** Programación de apagado automático fuera del horario de prácticas (160 horas mensuales), reduciendo el costo mensual de la estación a menos de **$3.50 USD**.
 
-Para maximizar la eficiencia presupuestal en el ambiente de pruebas (*Staging/QA*), se implementa la modalidad de compra **Amazon EC2 Spot Instances**:
+#### 1.1.3 Estrategia de Almacenamiento en Cómputo: Efímero vs. Amazon EBS (`gp3`)
 
-* **Fundamento Técnico:** AWS comercializa su capacidad de cómputo ociosa con descuentos de hasta un **70% a 90%** en comparación con las tarifas *On-Demand*. Como contraprestación, AWS puede reclamar la instancia si la demanda global de capacidad aumenta, emitiendo una notificación de interrupción (*Spot Instance Interruption Notice*) con **2 minutos de anticipación**.
-* **Idoneidad para el Entorno de Pruebas:**
-  - El ambiente de *Staging* no presta servicios a clientes finales ni requiere disponibilidad ininterrumpida 24/7. Su único propósito es validar despliegues, ejecutar pruebas de integración y verificar endpoints.
-  - Una interrupción ocasional durante la noche o fuera de horas de prueba tiene impacto operacional nulo sobre la empresa.
-* **Mecanismos de Resiliencia ante Interrupciones:**
-  1. **Comportamiento de Interrupción (*Stop Behavior*):** Se configura la instancia Spot con comportamiento de detención (*Stop*) en lugar de terminación (*Terminate*). Cuando AWS reclama la capacidad, el sistema operativo se apaga de forma limpia conservando el volumen EBS intacto; al restablecerse la capacidad Spot, la instancia se reinicia exactamente en el estado previo.
-  2. **Aprovisionamiento Automatizado mediante User Data:** Al estar la suite de pruebas y los servicios empaquetados en contenedores Docker y versionados en GitHub, cualquier nueva instancia Spot de reemplazo se auto-configura en menos de dos minutos ejecutando el script de inicio (*User Data*).
-* **Beneficio Económico Concreto (Referencia `us-east-1`):**
-  - Instancia `t3.small` On-Demand: ~$0.0208 USD/hora (~$3.33 USD por 160 horas mensuales de pruebas).
-  - Instancia `t3.small` en modalidad **Spot**: ~$0.0062 USD/hora (~**$0.99 USD** por 160 horas mensuales), logrando una reducción del **70%** en el costo de cómputo de pruebas y permitiendo incluso probar sobre instancias de mayor capacidad técnica a una fracción del costo normal.
+1. **Almacenamiento Efímero en AWS Fargate:** Cada tarea de Fargate dispone de **20 GB de almacenamiento efímero cifrado** incluido sin costo adicional, suficiente para el sistema de archivos del contenedor, capas intermedias y logs transitorios. Dado que los contenedores son sin estado (*stateless*), cualquier persistencia requerida se delega a Amazon RDS o Amazon S3.
+2. **Amazon EBS General Purpose SSD (`gp3`) para EC2 Workstations:**
+   - Se asigna un volumen raíz de **25 GB `gp3`** por estación de desarrollo.
+   - Entrega **3,000 IOPS sostenidos y 125 MB/s de rendimiento base** sin depender del tamaño del disco ni requerir acumulación de créditos de ráfaga como en `gp2`.
+   - Tarifa un 20% más económica ($0.08 USD/GB-mes).
 
 ---
 
-### 1.2 Evaluación de Arquitecturas Modernas: Contenedores vs. Serverless
+### 1.2 Evaluación de Arquitecturas Modernas: Contenedores Serverless vs. Monolito VM vs. Lambda
 
-Se realiza un análisis de viabilidad técnica para determinar si el software de la empresa debe migrar a esquemas sin servidor (**AWS Lambda**), plataformas administradas (**AWS Elastic Beanstalk**) o contenedores orquestados (**Docker / Amazon ECS**):
+Se evalúa la viabilidad técnica de las distintas alternativas de cómputo para el ecosistema de **APM Inversiones EIRL**:
 
 ```mermaid
 flowchart LR
     A["Evaluación de Cargas"] --> B{"Tipo de Carga"}
-    B -->|"NestJS REST y GraphQL"| C["Amazon ECS o EC2 Docker<br/>Baja latencia y procesos continuos"]
-    B -->|"Bot Discord Gateway"| D["Amazon EC2 o ECS Docker<br/>Conexión persistente 24/7 obligatoria"]
-    B -->|"Tareas de Respaldo y Scripts"| E["AWS Lambda y EventBridge<br/>Serverless efímero por eventos"]
-    B -->|"SOFI-WEB Frontend Next.js"| F["Amplify Hosting o S3 con CloudFront<br/>o Contenedor en EC2"]
+    B -->|"APIs NestJS y Web Next.js"| C["Amazon ECS con AWS Fargate<br/>Contenedores Serverless sin gestión de VMs"]
+    B -->|"Bot Discord WebSocket"| D["Amazon ECS con AWS Fargate<br/>Conexión continua 24/7 sin timeout"]
+    B -->|"Entornos Interactivos Devs"| E["Amazon EC2 t3.small + EFS<br/>Control total de terminal y herramientas"]
+    B -->|"Tareas Batch / Respaldos"| F["AWS Lambda + EventBridge<br/>Ejecución efímera por eventos"]
 ```
 
 #### 1.2.1 Análisis Comparativo de Tecnologías
 
-| Criterio de Decisión | Docker sobre Amazon EC2 (Selección Fase Actual) | AWS Elastic Beanstalk | AWS Lambda (Serverless) | Amazon ECS / AWS Fargate (Roadmap Fase 3) |
-|:---|:---|:---|:---|:---|
-| **Compatibilidad con `Bot-Asistencia-APM`** | **Excelente:** Admite conexiones WebSockets continuas hacia la API de Discord sin desconexiones. | **Buena:** Soporta Docker de un solo contenedor, pero añade sobrecarga de configuración innecesaria. | **Inviable:** El Bot requiere socket persistente (Discord Gateway). Lambda se apaga a los 15 min máximo y destruiría la sesión. | **Excelente:** Maneja tareas continuas en contenedores con recuperación automática. |
-| **Compatibilidad con `sofi-backend` (NestJS)** | **Excelente:** Ejecución nativa de la API con Prisma ORM y pool de conexiones reutilizable. | **Buena:** Despliegue automatizado, pero oculta control de red fina en subredes privadas. | **Media:** Requiere adaptar NestJS a handlers Lambda; impacto negativo de arranque en frío (*Cold Starts*). | **Excelente:** Despliegue desacoplado mediante tareas de contenedor administradas. |
-| **Curva de Adopción para Practicantes** | **Baja (Inmediata):** El equipo ya domina Docker y `docker-compose`. Transición sin fricción formativa. | **Media:** Requiere aprender CLI de EB y archivos `.ebextensions`. | **Alta:** Obliga a reescribir arquitectura monolítica modular a microfunciones orientadas a eventos. | **Baja / Media:** Evolución natural tras consolidar Docker en EC2. |
-| **Impacto Financiero** | **Control Total:** Instancias fijas cubiertas por cuota y Free Tier; sin cobros por petición imprevista. | Igual a EC2 base subyacente, sin costo adicional por la capa EB. | Económico en tráfico bajo, pero impredecible si hay bucles o peticiones concurrentes masivas. | Costo por vCPU y memoria por segundo en Fargate; ligeramente superior a EC2 reservado. |
+| Criterio de Decisión | Monolito en EC2 (Familia T3) | AWS Lambda (Serverless Funcional) | Amazon ECS con AWS Fargate (Elección Final) |
+|:---|:---|:---|:---|
+| **Gestión Operativa de SO** | **Alta:** Requiere parches de kernel, gestión de AMIs y monitoreo de disco en cada VM. | **Nula:** Totalmente abstraído por AWS. | **Nula:** Gestión de contenedores sin servidores. Solo se administra la imagen Docker. |
+| **Dimensionamiento de Recursos** | **Rígido:** Limitado a los tamaños predefinidos de la familia T (ej. `t3.small` 2GB, `t3.medium` 4GB). Riesgo de sobrecosto. | **Por función:** Límite estricto de 15 minutos de ejecución. | **Granular:** Selección exacta de vCPU (desde 0.25) y memoria (desde 512 MiB) por contenedor. |
+| **Soporte `Bot-Asistencia-APM`** | **Excelente:** Admite sockets continuos, pero depende de la salud de una única VM. | **Inviable:** El bot requiere socket WebSocket continuo (Gateway Discord); Lambda se apaga a los 15 min. | **Excelente:** Tareas continuas 24/7 con reinicio y autorecuperación automática. |
+| **Comportamiento ante Picos** | Lento (3 a 5 min para que un Auto Scaling Group levante una VM EC2). | Inmediato, pero con impacto severo de *Cold Starts* y saturación de conexiones en PostgreSQL. | **Rápido (segundos):** Las tareas de Fargate se levantan y colocan en el Target Group casi al instante. |
+| **Impacto de Créditos de CPU** | Las instancias T3 agotan créditos bajo carga sostenida y se degradan. | No aplica. | **Rendimiento predecible:** Fargate entrega la capacidad de cómputo asignada de forma 100% dedicada. |
 
-#### 1.2.2 Justificación Técnica de la Decisión Arquitectónica
+---
 
-1. **Adopción de Docker en Amazon EC2 como Paso Fundamental:**
-   - La arquitectura actual de APM Inversiones ya cuenta con contenedores Docker para `sofi-backend`, `SOFI-WEB` y los sitios comerciales. Mantener Docker sobre instancias EC2 dedicadas dentro de la VPC garantiza un traspaso tecnológico limpio, sin requerir semanas de refactorización de código.
-2. **Descarte de AWS Lambda para Cargas Centrales:**
-   - `Bot-Asistencia-APM` mantiene una conexión persistente bidireccional mediante WebSocket hacia los servidores de Discord para registrar eventos de presencia y marcas de practicantes en tiempo real. En un entorno Serverless como AWS Lambda, la ejecución máxima está restringida a 900 segundos (15 minutos) y las funciones se suspenden ante inactividad, lo que generaría desconexiones recurrentes del bot.
-   - Adicionalmente, el pool de conexiones del ORM Prisma sobre bases de datos relacionales sufre degradación de rendimiento ante el agotamiento de sockets si se instancian cientos de funciones efímeras concurrentes sin una capa costosa de RDS Proxy.
-3. **Uso Focalizado de Serverless (AWS Lambda):**
-   - Se reserva AWS Lambda exclusivamente para tareas auxiliares automatizadas: ejecución de scripts nocturnos de apagado de instancias no productivas (FinOps) y sincronización programada de respaldos entre S3 y Glacier.
+### 1.3 Arquitectura de Identidades y Seguridad con AWS IAM
+
+Para resolver de raíz los riesgos de seguridad y garantizar una administración robusta, se define una separación estricta entre **identidades humanas** e **identidades de cómputo (servicios y máquinas)**.
+
+```mermaid
+flowchart TD
+    subgraph IAM_MODEL["Modelo Integral de AWS Identity and Access Management (IAM)"]
+        direction TB
+
+        subgraph HUMAN_ID["1. Identidades Humanas (Personas)"]
+            direction TB
+            ROOT["Cuenta Root (MFA Físico Obligatorio)<br/>Prohibida para operaciones cotidianas; solo facturación"]
+            USERS["Usuarios Individuales IAM (jhefry-dev, lead-arch)<br/>MFA Obligatorio | Cero llaves estáticas permanentes"]
+            GRP_ADMIN["Grupo IAM: Admins-CloudOps<br/>Política: Acceso administrativo acotado + Control de IaC"]
+            GRP_DEV["Grupo IAM: Developers-Practicantes<br/>Política: Acceso a EC2 Dev y Staging; Deny explícito a Prod"]
+            USERS -->|Heredan permisos de| GRP_ADMIN
+            USERS -->|Heredan permisos de| GRP_DEV
+        end
+
+        subgraph MACHINE_ID["2. Identidades de Cómputo (Servicios y Tareas)"]
+            direction TB
+            subgraph EC2_IAM["Para Instancias EC2 (Cloud Workstations)"]
+                R_EC2["IAM Role: EC2-DevWorkstation-Role<br/>Permisos: AmazonSSMManagedInstanceCore, S3ReadLMS, EFSMount"]
+                IP_EC2["EC2 Instance Profile<br/>(Contenedor que asocia el Rol a la VM)"]
+                VM_EC2["Instancia EC2 Ubuntu Workstation"]
+                R_EC2 --> IP_EC2 --> VM_EC2
+            end
+
+            subgraph ECS_IAM["Para Contenedores en AWS Fargate"]
+                TER["ECS Task Execution Role<br/>(Usado por el plano de AWS Fargate)"]
+                TER_POL["Permisos:<br/>- AmazonECSTaskExecutionRolePolicy (Pull ECR, Logs CloudWatch)<br/>- ssm:GetParameters (Inyección segura de variables de entorno)"]
+                TR["ECS Task Role<br/>(Usado por el código NestJS / Next.js)"]
+                TR_POL["Permisos:<br/>- s3:GetObject / PutObject (Bucket LMS)<br/>- ses:SendEmail (Notificaciones)"]
+                FARGATE_CONTAINER["Contenedor en Ejecución (sofi-backend / web)"]
+
+                TER --- TER_POL --> FARGATE_CONTAINER
+                TR --- TR_POL --> FARGATE_CONTAINER
+            end
+        end
+    end
+```
+
+#### 1.3.1 Identidades Humanas: Usuarios, Grupos y Menor Privilegio
+1. **Regla de Oro:** Se prohíbe la asignación directa de políticas a usuarios individuales. Los permisos se asocian únicamente a **Grupos de Usuarios IAM**, respetando el principio de menor privilegio (*Principle of Least Privilege - PoLP*).
+2. **Grupo `Developers-Practicantes`:** Concede acceso exclusivo para iniciar sesión en sus estaciones EC2 a través de **AWS Systems Manager (SSM Session Manager)** y desplegar sobre el entorno de *Staging*. Posee una regla explícita de denegación (`Deny`) sobre recursos con etiquetas `Environment = Production`.
+3. **Erradicación de Llaves Estáticas:** Se bloquea la generación de `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` para colaboradores. La autenticación se realiza mediante la consola con MFA o mediante credenciales temporales generadas vía AWS CLI autenticado.
+
+#### 1.3.2 Identidades de Máquina en EC2: IAM Roles e Instance Profiles
+Una instancia virtual EC2 no puede asumir un IAM Role de manera directa. Requiere un **Instance Profile**:
+* **Definición:** El *Instance Profile* es un contenedor lógico que aloja el IAM Role y lo expone al servicio de metadatos de la instancia (`http://169.254.169.254/latest/meta-data/iam/`).
+* **Función en las Workstations:** El rol `EC2-DevWorkstation-Role` permite que la máquina se registre automáticamente contra **AWS Systems Manager** (eliminando llaves SSH en el puerto 22) y monte el sistema de archivos **Amazon EFS** sin necesidad de credenciales quemadas en el sistema operativo.
+
+#### 1.3.3 Identidades de Contenedores en ECS Fargate: Dual Role
+En Fargate no existen máquinas virtuales ni *Instance Profiles*. En su lugar, la seguridad se gestiona a nivel de contenedor con una estricta dualidad de roles:
+
+1. **ECS Task Execution Role (`ecsTaskExecutionRole`):**
+   - **Quién lo asume:** El agente y plano de control de AWS ECS/Fargate antes de que arranque tu aplicación.
+   - **Propósito:** Concede permisos para autenticarse y descargar imágenes privadas de contenedor desde **Amazon ECR**, crear los flujos de log y escribir trazas en **Amazon CloudWatch Logs**, y extraer secretos de base de datos cifrados desde **AWS Secrets Manager** o **SSM Parameter Store** para inyectarlos como variables de entorno seguras.
+2. **ECS Task Role (`sofiBackendTaskRole`):**
+   - **Quién lo asume:** El código fuente de la aplicación en ejecución (`sofi-backend`, `SOFI-WEB` o el Bot de Discord) dentro del contenedor.
+   - **Propósito:** Concede acceso granular a las APIs de AWS requeridas por el software (por ejemplo: subir archivos multimedia a los buckets de **Amazon S3** o enviar correos de confirmación mediante **Amazon SES**), garantizando que el código no tenga acceso a ningún otro recurso fuera de su dominio.
 
 ---
 
@@ -253,21 +309,23 @@ Se seleccionó **Amazon RDS for PostgreSQL (Versión 16)** como el motor adminis
 
 | Pilar Arquitectónico | Recurso AWS | Especificación / Modelo | Capacidad / Rendimiento | Mecanismo de Aislamiento / Seguridad |
 |:---|:---|:---|:---|:---|
-| **Cómputo Producción** | Amazon EC2 | `t3.small` (Ubuntu 22.04 LTS) | 2 vCPU / 2 GiB RAM / 30 GB EBS `gp3` | Subred privada; sin IP pública; gestión exclusiva por AWS Systems Manager. |
-| **Cómputo Clientes** | Amazon EC2 | `t3.small` (Ubuntu 22.04 LTS) | 2 vCPU / 2 GiB RAM / 30 GB EBS `gp3` | Subred privada; aislamiento total frente a la infraestructura académica SOFI. |
-| **Cómputo Pruebas (QA)** | Amazon EC2 (Spot) | `t3.small` / `t3.micro` (Spot) | 1-2 vCPU / 1-2 GiB RAM / 20 GB EBS `gp3` | Modalidad Spot (hasta 90% de ahorro); persistencia con stop; subred de staging. |
-| **Cómputo Desarrollo** | Amazon EC2 | `t3.small` (Ubuntu 22.04 LTS) | 2 vCPU / 2 GiB RAM / 25 GB EBS `gp3` | Entorno plantilla para practicantes; túnel SSM; apagado automático fuera de jornada. |
+| **Cómputo Producción (SOFI)** | Amazon ECS / AWS Fargate | Contenedores Serverless (`sofi-backend`, `SOFI-WEB`, `Bot`) | Granular: 0.50 vCPU/1 GiB (API) + 0.25 vCPU/512 MiB (Web y Bot) | Subredes privadas; modo `awsvpc`; `ecsTaskExecutionRole` para ECR/Logs y `sofiTaskRole` para S3. |
+| **Cómputo Clientes** | Amazon ECS / AWS Fargate | Contenedores Serverless (Reflexo Perú y Arte & Ideas) | Granular: 0.50 vCPU / 1024 MiB | Aislamiento lógico total frente a SOFI; tareas en subredes privadas sin IP pública. |
+| **Cómputo Pruebas (QA)** | Amazon ECS / AWS Fargate | Tareas efímeras bajo demanda | Granular: 0.25 vCPU / 512 MiB | Despliegue efímero en subred de staging; ejecución y destrucción controlada por CI/CD. |
+| **Cómputo Desarrollo** | Amazon EC2 | `t3.small` (Ubuntu 22.04 LTS) | 2 vCPU / 2 GiB RAM / 25 GB EBS `gp3` | Asociada a **EC2 Instance Profile** (`EC2-DevWorkstation-Role`); acceso exclusivo vía SSM Session Manager. |
 | **Almacenamiento Objetos** | Amazon S3 | S3 Standard / S3 Glacier | Elástico (Escala automática) | Acceso restringido por OAC y CloudFront; versionado activo; cifrado SSE-S3. |
-| **Archivos Compartidos** | Amazon EFS | Elastic General Purpose | Elástico con montaje NFSv4 multi-AZ | Montaje en subred privada para `/shared/workspace` de practicantes y staging. |
-| **Base de Datos** | Amazon RDS | PostgreSQL 16 (`db.t3.micro`) | 1 vCPU / 1 GiB RAM / 20 GB `gp3` | Subred privada de datos; cifrado KMS; backups continuos PITR (7 días). |
+| **Archivos Compartidos** | Amazon EFS | Elastic General Purpose | Elástico con montaje NFSv4 multi-AZ | Montaje en subred privada para `/shared/workspace` de practicantes en las Cloud Workstations. |
+| **Base de Datos** | Amazon RDS | PostgreSQL 16 (`db.t3.micro`) | 1 vCPU / 1 GiB RAM / 20 GB `gp3` | Subred privada de datos; cifrado KMS; backups continuos PITR (7 días); acceso solo desde SG de tareas Fargate. |
+| **Gobierno e Identidad** | AWS IAM | Usuarios, Grupos, Roles y Profiles | Principio de Menor Privilegio (PoLP) | MFA obligatorio; sin llaves permanentes; separación de identidades humanas y roles de cómputo. |
 
 ---
 
 ## 5. Conclusiones y Preparación para la Etapa 3
 
-La implementación diseñada en esta **Etapa 2** cumple rigurosamente con los objetivos curriculares de SENATI y las necesidades operativas de **APM Inversiones EIRL**:
+La implementación diseñada en esta **Etapa 2** cumple rigurosamente con los objetivos curriculares de SENATI y moderniza la infraestructura de **APM Inversiones EIRL**:
 
-1. **Resolución Integral del Ciclo de Vida del Software:** Se erradicó la brecha de calidad y seguridad diagnosticada en la Fase 1, dotando a la empresa de una **plataforma estandarizada de desarrollo en la nube (Cloud Workstations + Amazon EFS)** y un **ambiente de pruebas (Staging)** para validar cambios antes de desplegar a producción.
-2. **Aislamiento y Eliminación del Punto Único de Fallo:** Los contenedores de clientes comerciales y el ecosistema SOFI ya no compiten por recursos locales.
-3. **Persistencia Profesional y Alta Resiliencia:** La base de datos PostgreSQL ahora cuenta con respaldo continuo automatizado y tolerancia ante fallos mediante Amazon RDS.
-4. **Fundación para la Etapa 3:** Esta infraestructura de cómputo y almacenamiento queda plenamente preparada para la siguiente etapa, donde se incorporará el balanceo dinámico de carga (**Application Load Balancer**), escalabilidad automática (**Auto Scaling Groups**), monitoreo proactivo con **Amazon CloudWatch** y automatización mediante Infraestructura como Código (**AWS CloudFormation**).
+1. **Modernización a Contenedores Serverless (Fargate):** Se eliminó la sobrecarga de parches y dimensionamiento rígido de máquinas virtuales para los servicios web y bots, asignando capacidades exactas de vCPU y memoria por contenedor.
+2. **Claridad y Solidez en la Capa de Identidad (IAM):** Se erradicó la confusión clásica entre accesos humanos y credenciales de servicio, separando **Grupos de Usuarios con menor privilegio** de las identidades de cómputo (**Instance Profiles en EC2** para workstations y la dualidad **Task Execution Role / Task Role en ECS Fargate**).
+3. **Persistencia Profesional y Alta Resiliencia:** La base de datos PostgreSQL ahora cuenta con respaldo continuo automatizado y aislamiento de red en Amazon RDS.
+4. **Fundación para la Etapa 3:** Esta infraestructura basada en tareas Fargate desacopladas y roles bien delimitados es el punto de partida perfecto para la Etapa 3, donde se integrará el balanceador de carga (**Application Load Balancer**), el autoescalado reactivo de contenedores (**ECS Service Auto Scaling**), el monitoreo con **CloudWatch Container Insights** y el despliegue automatizado con **AWS CloudFormation**.
+

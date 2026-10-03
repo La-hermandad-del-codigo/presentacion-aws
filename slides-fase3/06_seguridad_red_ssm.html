@@ -1,0 +1,118 @@
+<!-- SLIDE 6: SEGURIDAD DE RED Y SSM SESSION MANAGER -->
+<section class="slide-seguridad-red" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-seguridad-red {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-seguridad-red .sec-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-seguridad-red .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="sec-header-wrapper">
+    <h2 class="slide-title">
+      Defensa en Profundidad: <span style="color: #4338ca;">Micro-segmentación &amp; Acceso sin SSH (SSM)</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Security Groups en Cascada y NACLs -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Security Groups en Cascada (Stateful)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca; text-transform: uppercase;">Aislamiento Estricto por Capas</div>
+          </div>
+        </div>
+
+        <!-- Cascada de SGs -->
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #b45309;">1. sg-alb-public</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: 80/443 (0.0.0.0/0)</span>
+          </div>
+
+          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-alb ▼</div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #0284c7;">2. sg-fargate-tasks</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 3000 exclusivo</span>
+          </div>
+
+          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-fargate ▼</div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #2563eb;">3. sg-rds-postgres</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 5432 exclusivo</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35;">
+          <strong>Defensa en Subredes (NACLs):</strong> Capa stateless complementaria que bloquea cualquier paquete externo hacia las subredes privadas.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Erradicación de Bastión y Adopción de SSM -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">AWS Systems Manager (SSM)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #10b981; text-transform: uppercase;">Gestión Remota sin Bastión SSH</div>
+          </div>
+        </div>
+
+        <!-- Comparativa visual Bastión vs SSM -->
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+          
+          <div style="background: rgba(254, 242, 242, 0.85); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px;">
+            <div style="font-size: 0.74rem; font-weight: 800; color: #b91c1c; margin-bottom: 2px;">❌ Bastión SSH Tradicional (Descartado)</div>
+            <div style="font-size: 0.72rem; color: #7f1d1d; line-height: 1.3;">
+              Expone el puerto 22 a Internet, requiere distribuir llaves privadas <code>.pem</code> vulnerables a robo y genera costo de servidor extra.
+            </div>
+          </div>
+
+          <div style="background: rgba(236, 253, 245, 0.9); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 10px;">
+            <div style="font-size: 0.74rem; font-weight: 800; color: #065f46; margin-bottom: 2px;">✓ AWS SSM Session Manager (Implementado)</div>
+            <div style="font-size: 0.72rem; color: #064e3b; line-height: 1.3;">
+              Túnel TLS saliente (puerto 443), cero puertos abiertos, acceso con MFA y registro auditable de cada comando en CloudWatch Logs.
+            </div>
+          </div>
+
+        </div>
+
+        <div style="background: rgba(248, 250, 252, 0.9); border-radius: 8px; padding: 8px 12px; font-size: 0.72rem; color: var(--text-muted);">
+          <strong>Cumplimiento de Seguridad:</strong> Las Cloud Workstations de practicantes quedan 100% protegidas en subredes privadas sin IP pública.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

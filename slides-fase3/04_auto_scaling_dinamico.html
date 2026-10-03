@@ -1,0 +1,118 @@
+<!-- SLIDE 4: AUTO SCALING DINÁMICO EN FARGATE -->
+<section class="slide-auto-scaling" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-auto-scaling {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-auto-scaling .as-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-auto-scaling .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="as-header-wrapper">
+    <h2 class="slide-title">
+      Elasticidad y Auto Scaling: <span style="color: #059669;">Application Auto Scaling en Segundos</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Parámetros y Políticas de Target Tracking -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Políticas de Target Tracking Scaling</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #059669; text-transform: uppercase;">Ajuste Proporcional sin Sobrecostos</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #059669; text-transform: uppercase;">Métrica 1: CPU Promedio</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">70%</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Si la CPU promedio supera 70%, escala tareas adicionales.</div>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">Métrica 2: Peticiones ALB</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">1,000 req/t</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Escala anticipadamente ante avalanchas de tráfico web.</div>
+          </div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.85); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(203, 213, 225, 0.8);">
+          <div style="font-size: 0.75rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">Límites de Capacidad y Enfriamiento:</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+            • <strong>Mínimo:</strong> 2 tareas (Alta Disponibilidad Multi-AZ 24/7).<br/>
+            • <strong>Máximo:</strong> 6 tareas (Picos de evaluación académica).<br/>
+            • <strong>Scale-in Cooldown:</strong> 300 segundos (Previene oscilaciones o <em>thrashing</em>).
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Comparativa de Velocidad y Auto-Recuperación -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 12px;">
+          Velocidad de Aprovisionamiento Cloud
+        </div>
+
+        <!-- Tarjeta 1: EC2 Tradicional -->
+        <div style="background: rgba(254, 242, 242, 0.9); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #991b1b;">Auto Scaling EC2 Tradicional</span>
+            <span style="background: #fee2e2; color: #dc2626; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">3 a 5 Minutos</span>
+          </div>
+          <div style="font-size: 0.74rem; color: #7f1d1d; line-height: 1.35;">
+            Requiere boot de kernel Linux, inicialización de Cloud-Init, arranque del demonio Docker y asignación de EBS.
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: ECS Fargate -->
+        <div style="background: rgba(236, 253, 245, 0.95); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #065f46;">Amazon ECS Fargate (Adopción)</span>
+            <span style="background: #d1fae5; color: #059669; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">15 a 30 Segundos</span>
+          </div>
+          <div style="font-size: 0.74rem; color: #064e3b; line-height: 1.35;">
+            Arranque instantáneo de contenedores sobre infraestructura serverless pre-calentada por AWS.
+          </div>
+        </div>
+
+        <!-- Auto-recuperación -->
+        <div style="border-top: 1px dashed rgba(203, 213, 225, 0.9); padding-top: 10px;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">
+            Resiliencia y Auto-Recuperación:
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">
+            Si un contenedor sufre un error no capturado (<em>Crash</em>), ECS lo retira del balanceador y levanta una réplica limpia de forma inmediata.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

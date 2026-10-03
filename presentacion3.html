@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta Cloud AWS | APM Inversiones EIRL - Etapa 3 (Escalabilidad, Operaciones & IaC)</title>
+  
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.min.css" id="theme">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #fef8df;
+      --r-background-color: #fef8df;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(255, 255, 255, 0.95);
+      --aws-navy: #232f3e;
+      --aws-orange: #ff9900;
+      --aws-blue: #0073bb;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body, .reveal-viewport {
+      background-color: var(--bg-base) !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      overflow: hidden;
+      margin: 0;
+    }
+
+    /* Resplandores ambientales difuminados (fondo con calidez y profundidad) */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 15%;
+      left: 35%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 10%;
+      right: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(251, 227, 127, 0.2) 0%, rgba(251, 227, 127, 0) 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Fondo animado de nubes con transición suave de desenfoque */
+    #cloud-network-bg {
+      position: fixed;
+      top: -16px;
+      left: -16px;
+      width: calc(100vw + 32px);
+      height: calc(100vh + 32px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.92;
+      filter: blur(2.31px);
+      transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    }
+
+    /* Estilos fluidos con rebote elástico y desaceleración suave para fragmentos nativos */
+    .reveal .slides section .fragment.fade-up {
+      transform: translate3d(0, 52px, 0);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.75s ease-out,
+                  transform 1.05s cubic-bezier(0.34, 1.45, 0.65, 1) !important;
+    }
+
+    .reveal .slides section .fragment.fade-up.visible {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      visibility: inherit;
+    }
+
+    @keyframes pulseDash {
+      to {
+        stroke-dashoffset: -28;
+      }
+    }
+
+    .data-stream-line {
+      animation: pulseDash 5.5s linear infinite;
+    }
+
+    .reveal {
+      z-index: 2;
+      background: transparent !important;
+    }
+
+    .reveal .slides {
+      text-align: left;
+    }
+
+    .reveal .slides section {
+      padding: 20px 30px;
+    }
+
+    /* Contenedores y Tarjetas Glassmorphism */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(36px);
+      -webkit-backdrop-filter: blur(36px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      box-shadow: 0 12px 35px -8px rgba(15, 23, 42, 0.07), 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+      padding: 28px;
+      transition: all 0.25s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px -10px rgba(15, 23, 42, 0.1);
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(255, 153, 0, 0.12);
+      color: #b45309;
+      border: 1px solid rgba(255, 153, 0, 0.28);
+    }
+
+    .pill-badge.navy {
+      background: rgba(35, 47, 62, 0.08);
+      color: var(--aws-navy);
+      border-color: rgba(35, 47, 62, 0.2);
+    }
+
+    .pill-badge.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    .pill-badge.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-weight: 800 !important;
+      color: var(--text-main) !important;
+      letter-spacing: -0.03em !important;
+      text-transform: none !important;
+    }
+
+    .slide-title {
+      font-size: 2.3rem !important;
+      margin-bottom: 6px !important;
+      line-height: 1.15 !important;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem !important;
+      color: var(--text-muted) !important;
+      font-weight: 500 !important;
+      margin-bottom: 24px !important;
+    }
+
+    /* Grillas y Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .metric-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin: 8px 0 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .icon-box.orange { background: #fff7ed; color: var(--aws-orange); }
+    .icon-box.blue { background: #eff6ff; color: var(--aws-blue); }
+    .icon-box.red { background: #fef2f2; color: var(--danger); }
+    .icon-box.emerald { background: #ecfdf5; color: var(--success); }
+
+    /* Indicador de progreso de reveal */
+    .reveal .progress {
+      color: var(--aws-orange);
+      height: 4px;
+    }
+
+    .reveal .controls button {
+      color: var(--aws-navy) !important;
+    }
+
+    /* Top bar fija */
+    .header-bar {
+      position: fixed;
+      top: 24px;
+      left: 36px;
+      right: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .header-bar .logo-tag {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--aws-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 6px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de cabecera fija -->
+  <div class="header-bar">
+    <div class="logo-tag">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      <span>APM INVERSIONES EIRL <strong>· AWS CLOUD</strong></span>
+    </div>
+    <div class="pill-badge navy">Semanas 7-8 · Etapa 3 (Final)</div>
+  </div>
+
+  <!-- Fondo animado e interconectado de Nubes con logo AWS e iconos oficiales -->
+  <svg id="cloud-network-bg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Gradientes y Filtros -->
+      <linearGradient id="networkLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#475569" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#334155" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#475569" stop-opacity="0.85"/>
+      </linearGradient>
+      <linearGradient id="cloudCenterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="100%" stop-color="#f8fafc"/>
+      </linearGradient>
+      <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="20" result="blur"/>
+        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+      </filter>
+      <filter id="cloudShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.06"/>
+      </filter>
+      <filter id="packetGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- 1. Red Unificada de Conexiones (Radiales, Perimétricas y Cruzadas) -->
+    <!-- Color sólido #64748b homogéneo en toda la red para evitar que desaparezcan líneas verticales u horizontales en SVG -->
+    <g stroke="#64748b" stroke-opacity="0.8" stroke-width="2" stroke-dasharray="6,8" stroke-linecap="round" class="data-stream-line" fill="none">
+      <!-- Conectores Radiales hacia la Nube Central AWS (800, 500) -->
+      <path d="M 300 240 L 800 500" />
+      <path d="M 800 140 L 800 500" />
+      <path d="M 1300 240 L 800 500" />
+      <path d="M 1320 760 L 800 500" />
+      <path d="M 800 860 L 800 500" />
+      <path d="M 280 760 L 800 500" />
+
+      <!-- Anillo Perimétrico Exterior entre Nubes Adyacentes -->
+      <path d="M 300 240 L 800 140" />
+      <path d="M 800 140 L 1300 240" />
+      <path d="M 1300 240 L 1320 760" />
+      <path d="M 1320 760 L 800 860" />
+      <path d="M 800 860 L 280 760" />
+      <path d="M 280 760 L 300 240" />
+
+      <!-- Conectores Cruzados de Malla Completa -->
+      <path d="M 300 240 L 1300 240" />
+      <path d="M 280 760 L 1320 760" />
+      <path d="M 800 140 L 800 860" />
+      <path d="M 300 240 L 1320 760" />
+      <path d="M 280 760 L 1300 240" />
+    </g>
+
+    <!-- 2. Transferencia Sutil y Calmada de Datos (reducida a 10 puntos pausados) -->
+    <!-- Flujos Radiales (Nubes periféricas hacia AWS Central) -->
+    <circle r="3.5" fill="#ff9900" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 300 240 L 800 500" dur="4.8s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3.5" fill="#6366f1" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 800 140 L 800 500" dur="4.5s" begin="0.8s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3.5" fill="#3b82f6" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 1300 240 L 800 500" dur="5.0s" begin="1.6s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3.5" fill="#ef4444" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 1320 760 L 800 500" dur="4.8s" begin="2.4s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3.5" fill="#f43f5e" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 800 860 L 800 500" dur="4.5s" begin="1.2s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3.5" fill="#10b981" opacity="0.85" filter="url(#packetGlow)">
+      <animateMotion path="M 280 760 L 800 500" dur="5.2s" begin="2.0s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Flujos Perimétricos Sutiles (Intercambio suave entre servicios) -->
+    <circle r="3" fill="#ff9900" opacity="0.75" filter="url(#packetGlow)">
+      <animateMotion path="M 300 240 L 800 140" dur="5.6s" begin="0.5s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3" fill="#6366f1" opacity="0.75" filter="url(#packetGlow)">
+      <animateMotion path="M 800 140 L 1300 240" dur="5.8s" begin="1.8s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3" fill="#ef4444" opacity="0.75" filter="url(#packetGlow)">
+      <animateMotion path="M 1320 760 L 800 860" dur="5.5s" begin="2.6s" repeatCount="indefinite" />
+    </circle>
+    <circle r="3" fill="#10b981" opacity="0.75" filter="url(#packetGlow)">
+      <animateMotion path="M 280 760 L 300 240" dur="5.8s" begin="1.0s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- 4. Nubes Periféricas con ICONOS VECTORIALES DE AWS AMPLIADOS -->
+    
+    <!-- Nube 1: Cómputo (EC2) -->
+    <g transform="translate(300, 240) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS EC2 / Cómputo Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#ff9900" fill-opacity="0.16" stroke="#ff9900" stroke-width="2"/>
+        <rect x="-9" y="-9" width="18" height="18" rx="3" fill="#ff9900"/>
+        <line x1="-5" y1="-13" x2="-5" y2="-9" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="5" y1="-13" x2="5" y2="-9" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="-5" y1="9" x2="-5" y2="13" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="5" y1="9" x2="5" y2="13" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="-13" y1="-5" x2="-9" y2="-5" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="-13" y1="5" x2="-9" y2="5" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="9" y1="-5" x2="13" y2="-5" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="9" y1="5" x2="13" y2="5" stroke="#ff9900" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Nube 2: Redes (VPC / Route 53) -->
+    <g transform="translate(800, 140) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS Redes / VPC Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#6366f1" fill-opacity="0.16" stroke="#6366f1" stroke-width="2"/>
+        <circle cx="0" cy="0" r="9" fill="none" stroke="#6366f1" stroke-width="2"/>
+        <line x1="-9" y1="0" x2="9" y2="0" stroke="#6366f1" stroke-width="1.6"/>
+        <ellipse cx="0" cy="0" rx="4" ry="9" fill="none" stroke="#6366f1" stroke-width="1.6"/>
+      </g>
+    </g>
+
+    <!-- Nube 3: Base de Datos (RDS) -->
+    <g transform="translate(1300, 240) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS RDS Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#3b48cc" fill-opacity="0.16" stroke="#3b48cc" stroke-width="2"/>
+        <ellipse cx="0" cy="-5" rx="9" ry="3.2" fill="#3b48cc"/>
+        <path d="M -9 -5 L -9 1 A 9 3.2 0 0 0 9 1 L 9 -5 Z" fill="#3b48cc" fill-opacity="0.75"/>
+        <path d="M -9 1 L -9 7 A 9 3.2 0 0 0 9 7 L 9 1 Z" fill="#3b48cc"/>
+      </g>
+    </g>
+
+    <!-- Nube 4: Seguridad (IAM) -->
+    <g transform="translate(1320, 760) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS IAM / Seguridad Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#ef4444" fill-opacity="0.16" stroke="#ef4444" stroke-width="2"/>
+        <path d="M 0 -9.5 L 8.5 -5.8 L 8.5 0.5 C 8.5 5.8 4.8 9 0 11.2 C -4.8 9 -8.5 5.8 -8.5 0.5 L -8.5 -5.8 Z" fill="#ef4444"/>
+        <circle cx="0" cy="-0.5" r="2" fill="#ffffff"/>
+        <path d="M -1.2 0.5 L 1.2 0.5 L 1.4 4 L -1.4 4 Z" fill="#ffffff"/>
+      </g>
+    </g>
+
+    <!-- Nube 5: Operaciones y Monitoreo (CloudWatch) -->
+    <g transform="translate(800, 860) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS CloudWatch Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#f43f5e" fill-opacity="0.16" stroke="#f43f5e" stroke-width="2"/>
+        <polyline points="-10,1 -6,1 -3,-5 0,6 3,-3 6,1 10,1" fill="none" stroke="#f43f5e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Nube 6: Almacenamiento (S3) -->
+    <g transform="translate(280, 760) scale(1.4)" filter="url(#cloudShadow)">
+      <path d="M -65 -18 A 38 38 0 0 1 -18 -50 A 46 46 0 0 1 42 -36 A 32 32 0 0 1 70 5 A 36 36 0 0 1 32 50 L -42 50 A 40 40 0 0 1 -65 -18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Icono AWS S3 Ampliado -->
+      <g transform="translate(0, 2) scale(1.4)">
+        <rect x="-17" y="-17" width="34" height="34" rx="8" fill="#10b981" fill-opacity="0.16" stroke="#10b981" stroke-width="2"/>
+        <path d="M -9.5 -7.5 L 9.5 -7.5 L 8 7.5 L -8 7.5 Z" fill="#10b981"/>
+        <line x1="-7" y1="-2" x2="7" y2="-2" stroke="#ffffff" stroke-width="1.8"/>
+        <line x1="-6" y1="2.8" x2="6" y2="2.8" stroke="#ffffff" stroke-width="1.8"/>
+      </g>
+    </g>
+
+    <!-- 5. NUBE CENTRAL CON LOGO OFICIAL Y NÍTIDO DE AWS (AMPLIADA) -->
+    <g transform="translate(800, 500) scale(1.25)" filter="url(#softGlow)">
+      <!-- Silueta de Nube Central -->
+      <path d="M -135 -30 A 75 75 0 0 1 -40 -95 A 95 95 0 0 1 85 -70 A 70 70 0 0 1 145 10 A 80 80 0 0 1 65 100 L -80 100 A 85 85 0 0 1 -135 -30 Z" 
+            fill="url(#cloudCenterGrad)" stroke="#ff9900" stroke-width="3.5" stroke-opacity="0.85"/>
+      
+      <!-- LOGO AWS OFICIAL: Texto nítido 'aws' y sonrisa naranja -->
+      <g transform="translate(0, -6)">
+        <text x="0" y="8" text-anchor="middle" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="58" fill="#232f3e" letter-spacing="-2px">aws</text>
+        <!-- Sonrisa / Flecha Oficial AWS -->
+        <path d="M -48 24 Q 0 47 48 24" fill="none" stroke="#ff9900" stroke-width="5.5" stroke-linecap="round"/>
+        <polygon points="42,16 54,24 44,32" fill="#ff9900"/>
+      </g>
+    </g>
+  </svg>
+
+  <!-- Capa global fija para desenfoque y contraste en diapositivas con diagramas (abarca toda la pantalla) -->
+  <div id="diagram-global-overlay" style="position: fixed; inset: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.08); z-index: 1; pointer-events: none; opacity: 0; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+
+  <!-- Presentación Reveal.js -->
+  <div class="reveal">
+    <div class="slides">
+            <!-- Slide: 01_portada.html -->
+      <!-- SLIDE 1: PORTADA INSTITUCIONAL Y EQUIPO - FASE 3 -->
+<section class="slide-portada">
+  <div style="display: grid; grid-template-columns: 1.18fr 0.82fr; gap: 24px; max-width: 1180px; min-height: 570px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Tarjeta Izquierda: Identidad del Proyecto, Alcance Fase 3 y Tecnologías AWS -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 36px 38px 30px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 250, 235, 0.85) 100%); border: 1.5px solid rgba(255, 153, 0, 0.32); position: relative; overflow: hidden; box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08);">
+      
+      <!-- Marca de agua decorativa sutil de nube AWS -->
+      <div style="position: absolute; right: -15px; top: -15px; opacity: 0.06; pointer-events: none;">
+        <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#232f3e" stroke-width="1.8"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      </div>
+
+      <div>
+        <!-- Título Principal -->
+        <h1 class="slide-title" style="font-size: 2.35rem !important; margin-top: 2px; margin-bottom: 14px !important; line-height: 1.15; color: var(--aws-navy);">
+          Diseño e Implementación de Infraestructura Cloud en AWS para <span style="color: #b45309;">APM Inversiones EIRL</span>
+        </h1>
+
+        <!-- Introducción Adaptada para Fase 3 -->
+        <p style="font-size: 0.96rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+          Arquitecturas dinámicas de alta disponibilidad, tolerancia a fallos, monitoreo proactivo y automatización con Infraestructura como Código (IaC) en <strong>Amazon Web Services</strong>:
+        </p>
+
+        <!-- Desglose de Alcance: Cómputo Elástico y Gobierno -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px;">
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(255, 153, 0, 0.35); border-radius: 12px; padding: 12px 16px;">
+            <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: #b45309; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              Alta Disponibilidad &amp; Auto Scaling
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+              Application Load Balancer Multi-AZ, tareas serverless con Amazon ECS Fargate y escalabilidad en segundos.
+            </div>
+          </div>
+
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: 12px; padding: 12px 16px;">
+            <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: #4338ca; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              Seguridad, Ops &amp; IaC
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+              Dual Role IAM, administración sin SSH con SSM, CloudWatch Container Insights y CloudFormation.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Servicios AWS Nucleares de la Fase 3 -->
+      <div>
+        <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--aws-orange)" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Pila Tecnológica AWS - Etapa 3 (Final)
+        </div>
+        
+        <!-- Grid de tarjetas de servicios -->
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 0;">
+          
+          <!-- ALB -->
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(255, 153, 0, 0.35); border-radius: 12px; padding: 10px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255, 153, 0, 0.15); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
+            </div>
+            <div>
+              <div style="color: #b45309; font-size: 0.76rem; font-weight: 800; line-height: 1.1;">ALB</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">Balanceo L7</div>
+            </div>
+          </div>
+
+          <!-- ECS Fargate -->
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 12px; padding: 10px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div>
+              <div style="color: #d97706; font-size: 0.76rem; font-weight: 800; line-height: 1.1;">Fargate</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">Serverless</div>
+            </div>
+          </div>
+
+          <!-- Auto Scaling -->
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 10px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div style="color: #10b981; font-size: 0.76rem; font-weight: 800; line-height: 1.1;">Scaling</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">Elasticidad</div>
+            </div>
+          </div>
+
+          <!-- CloudWatch -->
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(37, 99, 235, 0.35); border-radius: 12px; padding: 10px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div>
+              <div style="color: #2563eb; font-size: 0.76rem; font-weight: 800; line-height: 1.1;">CloudWatch</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">Métricas/Logs</div>
+            </div>
+          </div>
+
+          <!-- CloudFormation -->
+          <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: 12px; padding: 10px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div style="color: #6366f1; font-size: 0.76rem; font-weight: 800; line-height: 1.1;">IaC</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">CloudFormation</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjeta Derecha: Equipo de Trabajo (6 Integrantes) e Institución -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 36px 30px 30px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 252, 245, 0.85) 100%); border: 1.5px solid rgba(255, 153, 0, 0.32); box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08);">
+      
+      <div>
+        <!-- Cabecera del Equipo -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--aws-orange);">
+              Equipo de Ingeniería Cloud
+            </div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+              Integrantes del Proyecto
+            </div>
+          </div>
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(255, 153, 0, 0.14); display: flex; align-items: center; justify-content: center; color: var(--aws-orange);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
+
+        <!-- Lista de los 6 Integrantes -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px;">
+          
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #232f3e; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">JC</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Jhefry Cabanillas Casana</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #ff9900; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">GT</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Gustavo Tuesta Puse</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #6366f1; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">SC</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Sandro Chavez Barrios</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #2563eb; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">EM</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Edward Montero Delgado</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #10b981; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">JA</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Jherson Apaza Puris</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(226, 232, 240, 0.95); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #f43f5e; color: #fff; font-size: 0.74rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">CG</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">Carlos Gago Anaya</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Pie Institucional SENATI -->
+      <div style="border-top: 1px solid rgba(226, 232, 240, 0.9); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.74rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Institución</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-navy);">SENATI</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.74rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Carrera / Nivel</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--aws-orange);">Semestre VI · 2026 (Final)</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 02_seccion1_escalabilidad.html -->
+      <!-- SLIDE 2: SEPARADOR SECCIÓN 1 - ALTA DISPONIBILIDAD Y AUTO SCALING -->
+<section class="slide-seccion-1">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
+    
+    <div class="glass-card fragment fade-up" style="padding: 50px 60px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+      
+      <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; margin: 0 auto 22px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
+      </div>
+
+      <div style="font-size: 0.92rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #b45309; margin-bottom: 14px;">
+        SECCIÓN 01
+      </div>
+
+      <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
+        Arquitectura Dinámica, <span style="color: #b45309;">Alta Disponibilidad &amp; Auto Scaling</span>
+      </h1>
+
+      <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+        <span>Application Load Balancer</span> · <span>Amazon ECS Fargate</span> · <span>Multi-AZ</span> · <span>Target Tracking</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 03_arquitectura_alb_fargate.html -->
+      <!-- SLIDE 3: ALB Y AMAZON ECS FARGATE MULTI-AZ -->
+<section class="slide-alb-fargate" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-alb-fargate {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-alb-fargate .alb-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-alb-fargate .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="alb-header-wrapper">
+    <h2 class="slide-title">
+      Balanceo L7 y Cómputo Serverless: <span style="color: #b45309;">ALB + Amazon ECS Fargate Multi-AZ</span>
+    </h2>
+  </div>
+
+  <!-- Contenedor Principal: 2 Columnas -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Tarjetas Explicativas -->
+    <div style="display: flex; flex-direction: column; gap: 12px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Application Load Balancer -->
+      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 18px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Application Load Balancer (ALB L7)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #b45309; text-transform: uppercase;">Distribución Multi-AZ &amp; Health Checks</div>
+          </div>
+        </div>
+
+        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Enrutamiento Inteligente por Host:</strong> Dirige <code>sofi.apm.edu.pe</code> al Target Group de SOFI y los sitios comerciales al Target Group de clientes.</li>
+          <li><strong>Terminación SSL &amp; Redirección 301:</strong> Forzado transparente de HTTP (80) a HTTPS (443) gestionado por certificados ACM.</li>
+          <li><strong>Health Checks Activos (/api/health):</strong> Intervalo de 15s con drenado automático de conexiones defectuosas en 30s.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Amazon ECS sobre AWS Fargate -->
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 18px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS con AWS Fargate</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7; text-transform: uppercase;">Cómputo Serverless Granular</div>
+          </div>
+        </div>
+
+        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Dimensionamiento Exacto:</strong> <code>0.50 vCPU / 1 GiB</code> para la API NestJS y <code>0.25 vCPU / 512 MiB</code> para Web y Bot, erradicando capacidad ociosa.</li>
+          <li><strong>Modo de Red <code>awsvpc</code>:</strong> Cada tarea recibe su propia ENI y Security Group en subredes privadas, sin IPs públicas.</li>
+          <li><strong>Cero Mantenimiento de SO:</strong> AWS gestiona hipervisores y parches; el equipo solo versiona la imagen de contenedor.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Topología Visual Multi-AZ -->
+    <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span>Flujo de Resiliencia Multi-AZ</span>
+        <span style="background: rgba(16, 185, 129, 0.15); color: #059669; padding: 2px 8px; border-radius: 6px; font-size: 0.68rem;">SLA 99.9%</span>
+      </div>
+
+      <!-- Diagrama SVG / Mini Layout Estilizado -->
+      <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(248, 250, 252, 0.9); border-radius: 12px; padding: 12px; border: 1px dashed rgba(203, 213, 225, 0.9);">
+        
+        <!-- Capa Pública -->
+        <div style="background: #ffffff; border: 1.5px solid rgba(255, 153, 0, 0.4); border-radius: 8px; padding: 8px 12px; text-align: center;">
+          <div style="font-size: 0.74rem; font-weight: 800; color: #b45309;">Application Load Balancer (Public Subnets 1a &amp; 1b)</div>
+          <div style="font-size: 0.68rem; color: var(--text-muted);">DNS Anycast · Puertos 80 / 443 · Detección de fallas</div>
+        </div>
+
+        <div style="text-align: center; color: #ff9900; font-weight: 800; font-size: 0.8rem; margin: -4px 0;">▼ Target Group (puerto 3000) ▼</div>
+
+        <!-- Capa Privada Multi-AZ -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: #ffffff; border: 1.5px solid rgba(2, 132, 199, 0.4); border-radius: 8px; padding: 8px; text-align: center;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #0284c7;">Zona us-east-1a</div>
+            <div style="font-size: 0.66rem; color: var(--text-muted); margin-top: 3px;">Tarea SOFI Fargate<br/>(10.0.10.x) · Saludable</div>
+          </div>
+          <div style="background: #ffffff; border: 1.5px solid rgba(2, 132, 199, 0.4); border-radius: 8px; padding: 8px; text-align: center;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #0284c7;">Zona us-east-1b</div>
+            <div style="font-size: 0.66rem; color: var(--text-muted); margin-top: 3px;">Tarea SOFI Fargate<br/>(10.0.20.x) · Saludable</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; color: #2563eb; font-weight: 800; font-size: 0.8rem; margin: -4px 0;">▼ Prisma ORM (TCP 5432) ▼</div>
+
+        <!-- Capa de Datos -->
+        <div style="background: #ffffff; border: 1.5px solid rgba(37, 99, 235, 0.4); border-radius: 8px; padding: 8px 12px; text-align: center;">
+          <div style="font-size: 0.74rem; font-weight: 800; color: #2563eb;">Amazon RDS PostgreSQL Multi-AZ</div>
+          <div style="font-size: 0.68rem; color: var(--text-muted);">Instancia Primaria (1a) + Réplica Síncrona Standby (1b)</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 8px; font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; text-align: center;">
+        Si una Zona de Disponibilidad sufre una falla catastrófica, el tráfico se redirige automáticamente sin interrupción de servicio para los alumnos y practicantes.
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 04_auto_scaling_dinamico.html -->
+      <!-- SLIDE 4: AUTO SCALING DINÁMICO EN FARGATE -->
+<section class="slide-auto-scaling" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-auto-scaling {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-auto-scaling .as-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-auto-scaling .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="as-header-wrapper">
+    <h2 class="slide-title">
+      Elasticidad y Auto Scaling: <span style="color: #059669;">Application Auto Scaling en Segundos</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Parámetros y Políticas de Target Tracking -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Políticas de Target Tracking Scaling</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #059669; text-transform: uppercase;">Ajuste Proporcional sin Sobrecostos</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #059669; text-transform: uppercase;">Métrica 1: CPU Promedio</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">70%</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Si la CPU promedio supera 70%, escala tareas adicionales.</div>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">Métrica 2: Peticiones ALB</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">1,000 req/t</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Escala anticipadamente ante avalanchas de tráfico web.</div>
+          </div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.85); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(203, 213, 225, 0.8);">
+          <div style="font-size: 0.75rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">Límites de Capacidad y Enfriamiento:</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+            • <strong>Mínimo:</strong> 2 tareas (Alta Disponibilidad Multi-AZ 24/7).<br/>
+            • <strong>Máximo:</strong> 6 tareas (Picos de evaluación académica).<br/>
+            • <strong>Scale-in Cooldown:</strong> 300 segundos (Previene oscilaciones o <em>thrashing</em>).
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Comparativa de Velocidad y Auto-Recuperación -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 12px;">
+          Velocidad de Aprovisionamiento Cloud
+        </div>
+
+        <!-- Tarjeta 1: EC2 Tradicional -->
+        <div style="background: rgba(254, 242, 242, 0.9); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #991b1b;">Auto Scaling EC2 Tradicional</span>
+            <span style="background: #fee2e2; color: #dc2626; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">3 a 5 Minutos</span>
+          </div>
+          <div style="font-size: 0.74rem; color: #7f1d1d; line-height: 1.35;">
+            Requiere boot de kernel Linux, inicialización de Cloud-Init, arranque del demonio Docker y asignación de EBS.
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: ECS Fargate -->
+        <div style="background: rgba(236, 253, 245, 0.95); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #065f46;">Amazon ECS Fargate (Adopción)</span>
+            <span style="background: #d1fae5; color: #059669; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">15 a 30 Segundos</span>
+          </div>
+          <div style="font-size: 0.74rem; color: #064e3b; line-height: 1.35;">
+            Arranque instantáneo de contenedores sobre infraestructura serverless pre-calentada por AWS.
+          </div>
+        </div>
+
+        <!-- Auto-recuperación -->
+        <div style="border-top: 1px dashed rgba(203, 213, 225, 0.9); padding-top: 10px;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">
+            Resiliencia y Auto-Recuperación:
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">
+            Si un contenedor sufre un error no capturado (<em>Crash</em>), ECS lo retira del balanceador y levanta una réplica limpia de forma inmediata.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 05_seccion2_seguridad.html -->
+      <!-- SLIDE 5: SEPARADOR SECCIÓN 2 - SEGURIDAD Y GOBIERNO DE IDENTIDADES -->
+<section class="slide-seccion-2">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
+    
+    <div class="glass-card fragment fade-up" style="padding: 50px 60px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+      
+      <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1; margin: 0 auto 22px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+
+      <div style="font-size: 0.92rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #4338ca; margin-bottom: 14px;">
+        SECCIÓN 02
+      </div>
+
+      <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
+        Seguridad Avanzada de Red y <span style="color: #4338ca;">Gobierno de Identidades (IAM)</span>
+      </h1>
+
+      <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+        <span>Security Groups en Capas</span> · <span>SSM Session Manager</span> · <span>Dual Role Fargate</span> · <span>PoLP</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 06_seguridad_red_ssm.html -->
+      <!-- SLIDE 6: SEGURIDAD DE RED Y SSM SESSION MANAGER -->
+<section class="slide-seguridad-red" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-seguridad-red {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-seguridad-red .sec-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-seguridad-red .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="sec-header-wrapper">
+    <h2 class="slide-title">
+      Defensa en Profundidad: <span style="color: #4338ca;">Micro-segmentación &amp; Acceso sin SSH (SSM)</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Security Groups en Cascada y NACLs -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Security Groups en Cascada (Stateful)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca; text-transform: uppercase;">Aislamiento Estricto por Capas</div>
+          </div>
+        </div>
+
+        <!-- Cascada de SGs -->
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #b45309;">1. sg-alb-public</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: 80/443 (0.0.0.0/0)</span>
+          </div>
+
+          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-alb ▼</div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #0284c7;">2. sg-fargate-tasks</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 3000 exclusivo</span>
+          </div>
+
+          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-fargate ▼</div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #2563eb;">3. sg-rds-postgres</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 5432 exclusivo</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35;">
+          <strong>Defensa en Subredes (NACLs):</strong> Capa stateless complementaria que bloquea cualquier paquete externo hacia las subredes privadas.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Erradicación de Bastión y Adopción de SSM -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">AWS Systems Manager (SSM)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #10b981; text-transform: uppercase;">Gestión Remota sin Bastión SSH</div>
+          </div>
+        </div>
+
+        <!-- Comparativa visual Bastión vs SSM -->
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+          
+          <div style="background: rgba(254, 242, 242, 0.85); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px;">
+            <div style="font-size: 0.74rem; font-weight: 800; color: #b91c1c; margin-bottom: 2px;">❌ Bastión SSH Tradicional (Descartado)</div>
+            <div style="font-size: 0.72rem; color: #7f1d1d; line-height: 1.3;">
+              Expone el puerto 22 a Internet, requiere distribuir llaves privadas <code>.pem</code> vulnerables a robo y genera costo de servidor extra.
+            </div>
+          </div>
+
+          <div style="background: rgba(236, 253, 245, 0.9); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 10px;">
+            <div style="font-size: 0.74rem; font-weight: 800; color: #065f46; margin-bottom: 2px;">✓ AWS SSM Session Manager (Implementado)</div>
+            <div style="font-size: 0.72rem; color: #064e3b; line-height: 1.3;">
+              Túnel TLS saliente (puerto 443), cero puertos abiertos, acceso con MFA y registro auditable de cada comando en CloudWatch Logs.
+            </div>
+          </div>
+
+        </div>
+
+        <div style="background: rgba(248, 250, 252, 0.9); border-radius: 8px; padding: 8px 12px; font-size: 0.72rem; color: var(--text-muted);">
+          <strong>Cumplimiento de Seguridad:</strong> Las Cloud Workstations de practicantes quedan 100% protegidas en subredes privadas sin IP pública.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 07_gobierno_identidades_iam.html -->
+      <!-- SLIDE 7: GOBIERNO DE IDENTIDADES AWS IAM -->
+<section class="slide-iam-gobierno" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-iam-gobierno {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-iam-gobierno .iam-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-iam-gobierno .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="iam-header-wrapper">
+    <h2 class="slide-title">
+      Gobierno de Identidades (AWS IAM): <span style="color: #4338ca;">Humanos, EC2 y Contenedores</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Diagrama Mermaid Limpio y Estilizado -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #4338ca; letter-spacing: 0.06em; margin-bottom: 8px;">
+        Arquitectura Integral de Identidades &amp; Roles
+      </div>
+
+      <div class="mermaid" style="font-size: 0.65rem !important; transform: scale(0.92); transform-origin: top center;">
+flowchart TD
+    subgraph H["1. Identidades Humanas (Personas)"]
+        direction TB
+        ROOT["Cuenta Root (MFA Bloqueado)<br/>Cero operaciones diarias"]
+        USERS["Usuarios Nominales (jhefry-dev)"]
+        G_ADM["Grupo Admins-CloudOps (IaC)"]
+        G_DEV["Grupo Developers (Deny a Prod)"]
+        USERS --> G_ADM
+        USERS --> G_DEV
+    end
+
+    subgraph M["2. Identidades de Cómputo (Servicios)"]
+        direction TB
+        subgraph EC2["Para EC2 (Workstations)"]
+            R_EC2["IAM Role (SSM / EFS)"] --> IP["Instance Profile"] --> VM["EC2 Ubuntu"]
+        end
+        subgraph ECS["Para ECS Fargate (Apps)"]
+            TER["Task Execution Role<br/>(ECR Pull + CloudWatch Logs)"] --> TASK["Tarea / Contenedor"]
+            TR["Task Role<br/>(Código: Bucket S3 / RDS)"] --> TASK
+        end
+    end
+      </div>
+
+      <div style="background: rgba(248, 250, 252, 0.9); border-radius: 8px; padding: 6px 10px; font-size: 0.7rem; color: var(--text-muted); text-align: center;">
+        Separación estricta: Personas usan MFA en consola; máquinas y tareas asumen credenciales rotativas.
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Desglose Pedagógico de los 3 Pilares -->
+    <div style="display: flex; flex-direction: column; gap: 10px; justify-content: space-between;">
+      
+      <!-- Pilar 1: Personas y Grupos -->
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35);">
+        <div style="font-size: 0.8rem; font-weight: 800; color: #b45309; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+          <span>👤</span> 1. Identidades Humanas (Principio PoLP)
+        </div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          • Permisos asignados <strong>exclusivamente a Grupos</strong>, nunca a usuarios individuales.<br/>
+          • El grupo <code>Developers-Practicantes</code> tiene regla <code>Deny</code> estricta a Producción.<br/>
+          • Cuenta Root guardada bajo llave con MFA físico; cero llaves estáticas.
+        </div>
+      </div>
+
+      <!-- Pilar 2: EC2 Instance Profile -->
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35);">
+        <div style="font-size: 0.8rem; font-weight: 800; color: #0284c7; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+          <span>💻</span> 2. Cómputo EC2 (Instance Profile)
+        </div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          • La máquina virtual no entiende roles por sí sola: el <strong>Instance Profile</strong> actúa de puente.<br/>
+          • Entrega credenciales temporales rotativas cada 6 horas vía metadatos (<code>169.254.169.254</code>).<br/>
+          • Erradica el peligro de ejecutar <code>aws configure</code> con llaves quemadas en disco.
+        </div>
+      </div>
+
+      <!-- Pilar 3: Dual Role Fargate -->
+      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35);">
+        <div style="font-size: 0.8rem; font-weight: 800; color: #4338ca; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+          <span>📦</span> 3. Contenedores Fargate (Dual Role)
+        </div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          • <strong>Task Execution Role:</strong> Lo usa AWS para descargar la imagen de ECR y enviar logs.<br/>
+          • <strong>Task Role:</strong> Lo asume tu código NestJS para subir archivos al bucket S3 del LMS.<br/>
+          • Desacoplamiento total: un atacante no puede robar imágenes de ECR desde la web.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 08_seccion3_operaciones_iac.html -->
+      <!-- SLIDE 8: SEPARADOR SECCIÓN 3 - MONITOREO Y AUTOMATIZACIÓN IAC -->
+<section class="slide-seccion-3">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; max-width: 920px; margin: 0 auto;">
+    
+    <div class="glass-card fragment fade-up" style="padding: 50px 60px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+      
+      <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb; margin: 0 auto 22px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+
+      <div style="font-size: 0.92rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #2563eb; margin-bottom: 14px;">
+        SECCIÓN 03
+      </div>
+
+      <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
+        Monitoreo, Auditoría y <span style="color: #2563eb;">Infraestructura como Código (IaC)</span>
+      </h1>
+
+      <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+        <span>CloudWatch Container Insights</span> · <span>AWS Budgets</span> · <span>SNS Alertas</span> · <span>CloudFormation</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 09_monitoreo_cloudwatch_finops.html -->
+      <!-- SLIDE 9: MONITOREO CLOUDWATCH Y FINOPS -->
+<section class="slide-cloudwatch-finops" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-cloudwatch-finops {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-cloudwatch-finops .cw-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-cloudwatch-finops .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="cw-header-wrapper">
+    <h2 class="slide-title">
+      Monitoreo Proactivo y FinOps: <span style="color: #2563eb;">CloudWatch, Alarmas &amp; Control Presupuestal</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: CloudWatch Container Insights y Alarmas -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon CloudWatch &amp; Telemetría</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #2563eb; text-transform: uppercase;">Visibilidad de Contenedores y Alertas</div>
+          </div>
+        </div>
+
+        <ul style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0 0 12px 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Container Insights Activado:</strong> Métricas diagnósticas en tiempo real de utilización de memoria, CPU y fallos de red por tarea Fargate.</li>
+          <li><strong>Logs Centralizados (<code>awslogs</code>):</strong> Ingesta directa de trazas de NestJS hacia <code>/ecs/sofi-backend</code> con ciclo de retención de 30 días.</li>
+        </ul>
+
+        <!-- Matriz de Alarmas -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: rgba(254, 242, 242, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 8px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #dc2626;">Alarma CPU &gt; 85%</div>
+            <div style="font-size: 0.68rem; color: #7f1d1d;">Saturación severa; notificación inmediata vía SNS.</div>
+          </div>
+          <div style="background: rgba(254, 242, 242, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 8px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #dc2626;">HTTP 5XX &gt; 5 req/m</div>
+            <div style="font-size: 0.68rem; color: #7f1d1d;">Caída de backend detectada en el balanceador ALB.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: FinOps, Presupuesto y Tagging -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Gobernanza Financiera (FinOps)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #d97706; text-transform: uppercase;">AWS Budgets &amp; Tagging Obligatorio</div>
+          </div>
+        </div>
+
+        <div style="background: rgba(254, 252, 232, 0.9); border: 1px solid rgba(234, 179, 8, 0.4); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.76rem; font-weight: 800; color: #854d0e;">Presupuesto AWS Budgets:</span>
+            <span style="font-size: 1rem; font-weight: 800; color: #a16207;">$60.00 USD / mes</span>
+          </div>
+          <div style="font-size: 0.72rem; color: #713f12; margin-top: 4px;">
+            Alertas automáticas por correo al alcanzar el <strong>80% ($48)</strong> y el <strong>100% ($60)</strong> del consumo mensual.
+          </div>
+        </div>
+
+        <!-- Tagging Obligatorio -->
+        <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; padding: 10px 12px;">
+          <div style="font-size: 0.74rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">
+            Esquema de Etiquetado Obligatorio:
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: #334155; line-height: 1.4;">
+            Environment: "Production" | Staging<br/>
+            Project: "SOFI-Ecosistema"<br/>
+            CostCenter: "CC-TI-101" · ManagedBy: "CloudFormation"
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 10_automatizacion_cloudformation.html -->
+      <!-- SLIDE 10: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
+<section class="slide-cloudformation-iac" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-cloudformation-iac {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-cloudformation-iac .iac-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-cloudformation-iac .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="iac-header-wrapper">
+    <h2 class="slide-title">
+      Automatización e IaC: <span style="color: #4338ca;">Despliegues con AWS CloudFormation</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Principios y Ventajas de IaC -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Infraestructura como Código (IaC)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca; text-transform: uppercase;">Estandarización y Repetibilidad</div>
+          </div>
+        </div>
+
+        <ul style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0 0 14px 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Erradicación del Error Manual:</strong> Despliegue 100% automatizado mediante plantillas declarativas en formato YAML.</li>
+          <li><strong>Control de Versiones y Auditoría:</strong> Cada cambio en la infraestructura se commitea en GitHub, permitiendo rollbacks controlados.</li>
+          <li><strong>Ambientes Espejo Idénticos:</strong> Permite levantar el entorno de Staging con un solo comando de CLI con parámetros idénticos a Producción.</li>
+        </ul>
+
+        <div style="background: rgba(238, 242, 255, 0.9); border: 1px solid rgba(199, 210, 254, 0.9); border-radius: 10px; padding: 10px 12px; font-size: 0.74rem; color: #3730a3;">
+          <strong>Comando de Despliegue Unificado:</strong><br/>
+          <code style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: #1e1b4b;">aws cloudformation deploy --template-file template-etapa3.yaml --stack-name apm-sofi-prod</code>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Estructura Modular de la Plantilla -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 10px;">
+          Recursos Orquestados en template-etapa3.yaml
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">
+          
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #b45309; font-weight: 700;">1. AlbSecurityGroup</span>
+            <span style="color: #64748b;">Inbound 80/443</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #0284c7; font-weight: 700;">2. ApplicationLoadBalancer</span>
+            <span style="color: #64748b;">Public Subnets 1a &amp; 1b</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #2563eb; font-weight: 700;">3. AlbTargetGroup</span>
+            <span style="color: #64748b;">HTTP 3000 /api/health</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #4338ca; font-weight: 700;">4. EcsCluster &amp; Roles IAM</span>
+            <span style="color: #64748b;">ExecutionRole + TaskRole</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #059669; font-weight: 700;">5. SofiTaskDefinition</span>
+            <span style="color: #64748b;">0.50 vCPU / 1024 MiB</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #10b981; font-weight: 700;">6. ScalableTarget &amp; Policy</span>
+            <span style="color: #64748b;">CPU Target Tracking 70%</span>
+          </div>
+
+        </div>
+
+        <div style="margin-top: 10px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;">
+          Aprovisionamiento atómico: si algún recurso falla, CloudFormation revierte el estado (*rollback*) protegiendo la disponibilidad.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 11_resumen_proyecto_final.html -->
+      <!-- SLIDE 11: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
+<section class="slide-resumen-final" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-resumen-final {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-resumen-final .resumen-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-resumen-final .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="resumen-header-wrapper">
+    <h2 class="slide-title">
+      Consolidado Final: <span style="color: #b45309;">Arquitectura AWS Completa y Conclusiones</span>
+    </h2>
+  </div>
+
+  <div style="max-width: 1180px; margin: 0 auto;">
+    
+    <!-- Tarjeta Principal: Cuadro Resumen Integrador -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 16px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); margin-bottom: 14px;">
+      
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.74rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid rgba(226, 232, 240, 0.9); text-align: left;">
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Capa</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Servicio AWS</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Configuración &amp; Capacidad</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Aporte a APM Inversiones EIRL</th>
+          </tr>
+        </thead>
+        <tbody style="line-height: 1.4; color: var(--text-muted);">
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #b45309;">Balanceo L7</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Application Load Balancer</td>
+            <td style="padding: 6px 8px;">Multi-AZ (us-east-1a / 1b) · SSL/TLS ACM</td>
+            <td style="padding: 6px 8px;">Distribución inteligente de tráfico y tolerancia a caídas de zona.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #d97706;">Cómputo Serverless</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon ECS + AWS Fargate</td>
+            <td style="padding: 6px 8px;">0.50 vCPU / 1 GiB (API) · 0.25 vCPU (Web y Bot)</td>
+            <td style="padding: 6px 8px;">Cero parches de SO; escalamiento horizontal en segundos.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #2563eb;">Base de Datos</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon RDS PostgreSQL 16</td>
+            <td style="padding: 6px 8px;">db.t3.micro Multi-AZ · 20 GB gp3 · Backups PITR</td>
+            <td style="padding: 6px 8px;">Persistencia ACID, aislamiento en subred privada y failover automático.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #10b981;">Almacenamiento</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon S3 + Glacier + EFS</td>
+            <td style="padding: 6px 8px;">S3 Standard (LMS) + Glacier (90 días) + EFS (Devs)</td>
+            <td style="padding: 6px 8px;">11 nueves de durabilidad; workspace compartido para practicantes.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #4338ca;">Seguridad &amp; IAM</td>
+            <td style="padding: 6px 8px; font-weight: 700;">AWS IAM + SSM Session Manager</td>
+            <td style="padding: 6px 8px;">Grupos con PoLP · Dual Role Fargate · Cero SSH</td>
+            <td style="padding: 6px 8px;">Cero llaves estáticas; acceso seguro sin exponer puerto 22 a Internet.</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 8px; font-weight: 700; color: #6366f1;">Operaciones &amp; IaC</td>
+            <td style="padding: 6px 8px; font-weight: 700;">CloudWatch + CloudFormation</td>
+            <td style="padding: 6px 8px;">Container Insights · Budgets ($60 USD) · YAML IaC</td>
+            <td style="padding: 6px 8px;">Despliegues 100% repetibles, trazabilidad y control de costos FinOps.</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- Bloque de 3 Conclusiones Clave -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+      
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #059669; margin-bottom: 4px;">1. Alta Disponibilidad (99.9%)</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Se eliminó todo punto único de fallo distribuyendo ALB, Fargate y RDS en múltiples Zonas de Disponibilidad.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #2563eb; margin-bottom: 4px;">2. Seguridad Certificada</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Micro-segmentación con Security Groups, túneles cifrados con SSM y dualidad de roles en IAM sin llaves quemadas.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #b45309; margin-bottom: 4px;">3. Eficiencia FinOps</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Inversión mensual contenida en ~$55-$60 USD gracias a tareas serverless y apagado programado de workstations.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      margin: 0.08,
+      width: 1200,
+      height: 700
+    });
+
+    // Sincronización del fondo reactivo y blur con los Fragmentos de Reveal.js
+    const bg = document.getElementById('cloud-network-bg');
+    const diagramOverlay = document.getElementById('diagram-global-overlay');
+
+    function syncBackgroundBlur() {
+      if (!bg) return;
+      const currentSlide = Reveal.getCurrentSlide();
+      const indices = Reveal.getIndices();
+      const isFirstSlide = (indices.h === 0 && (indices.v === 0 || indices.v === undefined));
+      const isDiagramSlide = currentSlide && (
+        currentSlide.classList.contains('slide-interno') ||
+        currentSlide.classList.contains('slide-externo') ||
+        currentSlide.classList.contains('slide-red-arquitectura')
+      );
+
+      let targetFilter = 'blur(2.31px)';
+      let targetOpacity = '0.92';
+      let targetOverlayOpacity = '0';
+
+      if (isFirstSlide) {
+        const slide1 = document.querySelector('.slide-portada');
+        const visibleFragments = slide1 ? slide1.querySelectorAll('.fragment.visible') : [];
+        if (visibleFragments.length === 0) {
+          targetFilter = 'blur(0px)';
+        }
+      } else if (isDiagramSlide) {
+        targetFilter = 'blur(6px)';
+        targetOpacity = '0.65';
+        targetOverlayOpacity = '1';
+      }
+
+      if (bg.style.filter !== targetFilter) {
+        bg.style.transition = 'filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease';
+        bg.style.filter = targetFilter;
+      }
+      if (bg.style.opacity !== targetOpacity) {
+        bg.style.opacity = targetOpacity;
+      }
+      if (diagramOverlay && diagramOverlay.style.opacity !== targetOverlayOpacity) {
+        diagramOverlay.style.opacity = targetOverlayOpacity;
+      }
+    }
+
+    Reveal.on('ready', syncBackgroundBlur);
+    Reveal.on('slidechanged', syncBackgroundBlur);
+    Reveal.on('fragmentshown', syncBackgroundBlur);
+    Reveal.on('fragmenthidden', syncBackgroundBlur);
+  </script>
+</body>
+</html>

@@ -27,6 +27,11 @@ CONFIGS = {
         "output_file": os.path.join(BASE_DIR, "presentacion2.html"),
         "title": "Propuesta Cloud AWS | APM Inversiones EIRL - Etapa 2 (Servicios Core & Datos)",
     },
+    3: {
+        "slides_dir": os.path.join(BASE_DIR, "slides-fase3"),
+        "output_file": os.path.join(BASE_DIR, "presentacion3.html"),
+        "title": "Propuesta Cloud AWS | APM Inversiones EIRL - Etapa 3 (Escalabilidad, Operaciones & IaC)",
+    },
 }
 
 def build_fase(fase=1):
@@ -59,6 +64,11 @@ def build_fase(fase=1):
             '<div class="pill-badge navy">Semana 6 · Etapa 1</div>',
             '<div class="pill-badge navy">Semana 7 · Etapa 2</div>'
         )
+    elif fase == 3:
+        template = template.replace(
+            '<div class="pill-badge navy">Semana 6 · Etapa 1</div>',
+            '<div class="pill-badge navy">Semanas 7-8 · Etapa 3 (Final)</div>'
+        )
 
     slide_files = sorted(glob.glob(os.path.join(slides_dir, "*.html")))
     if not slide_files:
@@ -83,7 +93,7 @@ def build_fase(fase=1):
 
 def build_all():
     success = True
-    for f in (1, 2):
+    for f in (1, 2, 3):
         if os.path.exists(CONFIGS[f]["slides_dir"]):
             if not build_fase(f):
                 success = False
@@ -166,6 +176,8 @@ if __name__ == "__main__":
         target_fase = 1
     elif "2" in sys.argv:
         target_fase = 2
+    elif "3" in sys.argv:
+        target_fase = 3
 
     if "--watch" in sys.argv or "-w" in sys.argv:
         watch(fase=target_fase or 2)

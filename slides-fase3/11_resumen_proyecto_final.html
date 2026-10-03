@@ -1,0 +1,115 @@
+<!-- SLIDE 11: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
+<section class="slide-resumen-final" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-resumen-final {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-resumen-final .resumen-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-resumen-final .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="resumen-header-wrapper">
+    <h2 class="slide-title">
+      Consolidado Final: <span style="color: #b45309;">Arquitectura AWS Completa y Conclusiones</span>
+    </h2>
+  </div>
+
+  <div style="max-width: 1180px; margin: 0 auto;">
+    
+    <!-- Tarjeta Principal: Cuadro Resumen Integrador -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 16px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); margin-bottom: 14px;">
+      
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.74rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid rgba(226, 232, 240, 0.9); text-align: left;">
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Capa</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Servicio AWS</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Configuración &amp; Capacidad</th>
+            <th style="padding: 6px 8px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Aporte a APM Inversiones EIRL</th>
+          </tr>
+        </thead>
+        <tbody style="line-height: 1.4; color: var(--text-muted);">
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #b45309;">Balanceo L7</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Application Load Balancer</td>
+            <td style="padding: 6px 8px;">Multi-AZ (us-east-1a / 1b) · SSL/TLS ACM</td>
+            <td style="padding: 6px 8px;">Distribución inteligente de tráfico y tolerancia a caídas de zona.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #d97706;">Cómputo Serverless</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon ECS + AWS Fargate</td>
+            <td style="padding: 6px 8px;">0.50 vCPU / 1 GiB (API) · 0.25 vCPU (Web y Bot)</td>
+            <td style="padding: 6px 8px;">Cero parches de SO; escalamiento horizontal en segundos.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #2563eb;">Base de Datos</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon RDS PostgreSQL 16</td>
+            <td style="padding: 6px 8px;">db.t3.micro Multi-AZ · 20 GB gp3 · Backups PITR</td>
+            <td style="padding: 6px 8px;">Persistencia ACID, aislamiento en subred privada y failover automático.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #10b981;">Almacenamiento</td>
+            <td style="padding: 6px 8px; font-weight: 700;">Amazon S3 + Glacier + EFS</td>
+            <td style="padding: 6px 8px;">S3 Standard (LMS) + Glacier (90 días) + EFS (Devs)</td>
+            <td style="padding: 6px 8px;">11 nueves de durabilidad; workspace compartido para practicantes.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px 8px; font-weight: 700; color: #4338ca;">Seguridad &amp; IAM</td>
+            <td style="padding: 6px 8px; font-weight: 700;">AWS IAM + SSM Session Manager</td>
+            <td style="padding: 6px 8px;">Grupos con PoLP · Dual Role Fargate · Cero SSH</td>
+            <td style="padding: 6px 8px;">Cero llaves estáticas; acceso seguro sin exponer puerto 22 a Internet.</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 8px; font-weight: 700; color: #6366f1;">Operaciones &amp; IaC</td>
+            <td style="padding: 6px 8px; font-weight: 700;">CloudWatch + CloudFormation</td>
+            <td style="padding: 6px 8px;">Container Insights · Budgets ($60 USD) · YAML IaC</td>
+            <td style="padding: 6px 8px;">Despliegues 100% repetibles, trazabilidad y control de costos FinOps.</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- Bloque de 3 Conclusiones Clave -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+      
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #059669; margin-bottom: 4px;">1. Alta Disponibilidad (99.9%)</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Se eliminó todo punto único de fallo distribuyendo ALB, Fargate y RDS en múltiples Zonas de Disponibilidad.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #2563eb; margin-bottom: 4px;">2. Seguridad Certificada</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Micro-segmentación con Security Groups, túneles cifrados con SSM y dualidad de roles en IAM sin llaves quemadas.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35);">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #b45309; margin-bottom: 4px;">3. Eficiencia FinOps</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35;">
+          Inversión mensual contenida en ~$55-$60 USD gracias a tareas serverless y apagado programado de workstations.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

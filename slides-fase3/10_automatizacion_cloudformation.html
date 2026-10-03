@@ -1,0 +1,112 @@
+<!-- SLIDE 10: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
+<section class="slide-cloudformation-iac" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-cloudformation-iac {
+      padding-top: 15px !important;
+    }
+    .reveal .slides section.slide-cloudformation-iac .iac-header-wrapper {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-cloudformation-iac .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="iac-header-wrapper">
+    <h2 class="slide-title">
+      Automatización e IaC: <span style="color: #4338ca;">Despliegues con AWS CloudFormation</span>
+    </h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Principios y Ventajas de IaC -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Infraestructura como Código (IaC)</div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca; text-transform: uppercase;">Estandarización y Repetibilidad</div>
+          </div>
+        </div>
+
+        <ul style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin: 0 0 14px 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Erradicación del Error Manual:</strong> Despliegue 100% automatizado mediante plantillas declarativas en formato YAML.</li>
+          <li><strong>Control de Versiones y Auditoría:</strong> Cada cambio en la infraestructura se commitea en GitHub, permitiendo rollbacks controlados.</li>
+          <li><strong>Ambientes Espejo Idénticos:</strong> Permite levantar el entorno de Staging con un solo comando de CLI con parámetros idénticos a Producción.</li>
+        </ul>
+
+        <div style="background: rgba(238, 242, 255, 0.9); border: 1px solid rgba(199, 210, 254, 0.9); border-radius: 10px; padding: 10px 12px; font-size: 0.74rem; color: #3730a3;">
+          <strong>Comando de Despliegue Unificado:</strong><br/>
+          <code style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: #1e1b4b;">aws cloudformation deploy --template-file template-etapa3.yaml --stack-name apm-sofi-prod</code>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Estructura Modular de la Plantilla -->
+    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <div>
+        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 10px;">
+          Recursos Orquestados en template-etapa3.yaml
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">
+          
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #b45309; font-weight: 700;">1. AlbSecurityGroup</span>
+            <span style="color: #64748b;">Inbound 80/443</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #0284c7; font-weight: 700;">2. ApplicationLoadBalancer</span>
+            <span style="color: #64748b;">Public Subnets 1a &amp; 1b</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #2563eb; font-weight: 700;">3. AlbTargetGroup</span>
+            <span style="color: #64748b;">HTTP 3000 /api/health</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #4338ca; font-weight: 700;">4. EcsCluster &amp; Roles IAM</span>
+            <span style="color: #64748b;">ExecutionRole + TaskRole</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #059669; font-weight: 700;">5. SofiTaskDefinition</span>
+            <span style="color: #64748b;">0.50 vCPU / 1024 MiB</span>
+          </div>
+
+          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between;">
+            <span style="color: #10b981; font-weight: 700;">6. ScalableTarget &amp; Policy</span>
+            <span style="color: #64748b;">CPU Target Tracking 70%</span>
+          </div>
+
+        </div>
+
+        <div style="margin-top: 10px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;">
+          Aprovisionamiento atómico: si algún recurso falla, CloudFormation revierte el estado (*rollback*) protegiendo la disponibilidad.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
