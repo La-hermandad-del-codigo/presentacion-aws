@@ -2,15 +2,17 @@
 <section class="slide-auto-scaling" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-auto-scaling {
-      padding-top: 15px !important;
+      padding-top: 44px !important;
     }
+
     .reveal .slides section.slide-auto-scaling .as-header-wrapper {
-      max-width: 1180px;
+      max-width: 1260px;
       margin: 0 auto 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .reveal .slides section.slide-auto-scaling .slide-title {
       font-size: 2.15rem !important;
       margin: 0 !important;
@@ -19,6 +21,18 @@
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .as-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 
@@ -29,89 +43,195 @@
     </h2>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Parámetros y Políticas de Target Tracking -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
-      <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      <!-- Tarjeta 1: Target Tracking Scaling -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Target Tracking Scaling</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Ajuste Proporcional sin Sobrecostos · CloudWatch</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Políticas de Target Tracking Scaling</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #059669; text-transform: uppercase;">Ajuste Proporcional sin Sobrecostos</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas &amp; Tráfico</span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
-          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
-            <div style="font-size: 0.72rem; font-weight: 800; color: #059669; text-transform: uppercase;">Métrica 1: CPU Promedio</div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">70%</div>
-            <div style="font-size: 0.7rem; color: var(--text-muted);">Si la CPU promedio supera 70%, escala tareas adicionales.</div>
-          </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Umbral de CPU al 70%:</strong> Si el consumo promedio del cluster supera el 70% en 2 períodos consecutivos, se provisionan tareas Fargate adicionales sin degradar al usuario.</li>
+          <li><strong>Peticiones ALB (1,000 req/t):</strong> Métrica reactiva ante avalanchas masivas de peticiones web para anticipar picos de concurrencia antes de saturar el cómputo.</li>
+          <li><strong>Enfriamiento Seguro (Cooldown 300s):</strong> Pausa de 5 minutos tras el desescalado (<em>Scale-in</em>) para consolidar telemetría y evitar fluctuaciones bruscas (<em>thrashing</em>).</li>
+        </ul>
+      </div>
 
-          <div style="background: rgba(248, 250, 252, 0.9); border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 10px; padding: 10px;">
-            <div style="font-size: 0.72rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">Métrica 2: Peticiones ALB</div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--aws-navy); margin: 2px 0;">1,000 req/t</div>
-            <div style="font-size: 0.7rem; color: var(--text-muted);">Escala anticipadamente ante avalanchas de tráfico web.</div>
+      <!-- Tarjeta 2: Amazon ECS Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS Fargate Multi-AZ</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Self-Healing</div>
+            </div>
           </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless 24/7</span>
         </div>
 
-        <div style="background: rgba(255, 255, 255, 0.85); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(203, 213, 225, 0.8);">
-          <div style="font-size: 0.75rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">Límites de Capacidad y Enfriamiento:</div>
-          <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
-            • <strong>Mínimo:</strong> 2 tareas (Alta Disponibilidad Multi-AZ 24/7).<br/>
-            • <strong>Máximo:</strong> 6 tareas (Picos de evaluación académica).<br/>
-            • <strong>Scale-in Cooldown:</strong> 300 segundos (Previene oscilaciones o <em>thrashing</em>).
-          </div>
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Rango Elástico (2 a 6 Tareas):</strong> Base fija de 2 tareas en alta disponibilidad (us-east-1a y 1b) y techo elástico de 6 tareas durante semanas de evaluaciones académicas.</li>
+          <li><strong>Arranque en 15–30 Segundos:</strong> Provisión instantánea en infraestructura precalentada por AWS, eliminando los 3 a 5 min de espera del booteo y SO en EC2.</li>
+          <li><strong>Resiliencia y Auto-Recuperación:</strong> Reemplazo automático y drenado limpio en 30s ante caídas del contenedor o fallas en el sondeo del endpoint <code>/api/health</code>.</li>
+        </ul>
       </div>
 
     </div>
 
-    <!-- Columna Derecha: Comparativa de Velocidad y Auto-Recuperación -->
-    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      
-      <div>
-        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 12px;">
-          Velocidad de Aprovisionamiento Cloud
-        </div>
+    <!-- Columna Derecha: Diagrama de Auto Scaling AWS (Estilo Fase 2) -->
+    <div class="as-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="diag-shadow-as4" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
 
-        <!-- Tarjeta 1: EC2 Tradicional -->
-        <div style="background: rgba(254, 242, 242, 0.9); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #991b1b;">Auto Scaling EC2 Tradicional</span>
-            <span style="background: #fee2e2; color: #dc2626; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">3 a 5 Minutos</span>
-          </div>
-          <div style="font-size: 0.74rem; color: #7f1d1d; line-height: 1.35;">
-            Requiere boot de kernel Linux, inicialización de Cloud-Init, arranque del demonio Docker y asignación de EBS.
-          </div>
-        </div>
+          <!-- Icono Auto Scaling -->
+          <g id="icon-asg-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#10b981" />
+            <path d="M -8 5 L -3 0 L 2 3 L 8 -5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="4 -5 8 -5 8 -1" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
 
-        <!-- Tarjeta 2: ECS Fargate -->
-        <div style="background: rgba(236, 253, 245, 0.95); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #065f46;">Amazon ECS Fargate (Adopción)</span>
-            <span style="background: #d1fae5; color: #059669; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">15 a 30 Segundos</span>
-          </div>
-          <div style="font-size: 0.74rem; color: #064e3b; line-height: 1.35;">
-            Arranque instantáneo de contenedores sobre infraestructura serverless pre-calentada por AWS.
-          </div>
-        </div>
+          <!-- Icono Fargate -->
+          <g id="icon-fargate-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#0284c7" />
+            <rect x="-7" y="-7" width="14" height="14" rx="2" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+            <rect x="-2.5" y="-2.5" width="5" height="5" fill="#ffffff"/>
+          </g>
+        </defs>
 
-        <!-- Auto-recuperación -->
-        <div style="border-top: 1px dashed rgba(203, 213, 225, 0.9); padding-top: 10px;">
-          <div style="font-size: 0.76rem; font-weight: 800; color: var(--aws-navy); margin-bottom: 4px;">
-            Resiliencia y Auto-Recuperación:
-          </div>
-          <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">
-            Si un contenedor sufre un error no capturado (<em>Crash</em>), ECS lo retira del balanceador y levanta una réplica limpia de forma inmediata.
-          </div>
-        </div>
-      </div>
+        <!-- 1. Contenedor Maestro -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#10b981" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado Ecosistema -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#10b981"/>
+          <path d="M 4 17 L 9 10 L 14 13 L 20 6" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="15 6 20 6 20 11" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Ecosistema de Auto Scaling Dinámico <tspan font-weight="700" fill="#059669">(us-east-1)</tspan></text>
+        </g>
 
+        <!-- 2. Contenedor Superior: Telemetría CloudWatch -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="130" rx="10" fill="rgba(240, 249, 255, 0.75)" stroke="#0284c7" stroke-width="1.5"/>
+          
+          <!-- Pill de Telemetría -->
+          <rect x="12" y="6" width="265" height="19" rx="9.5" fill="#0284c7"/>
+          <text x="144.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">TELEMETRÍA &amp; UMBRALES DE ACTIVACIÓN</text>
+          
+          <!-- 2 Sub-Tarjetas de Métricas -->
+          <g transform="translate(12, 29)">
+            <!-- Métrica CPU -->
+            <g filter="url(#diag-shadow-as4)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(2, 132, 199, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">📈</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0369a1">Métrica CPU Cluster</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">Target: 70% Utilización</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Promedio en 2 periodos seguidos</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Container Insights proactivo</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">Disparo de escalado automático</text>
+            </g>
+
+            <!-- Métrica Peticiones ALB -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-as4)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">🌐</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">Peticiones por Target</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">1,000 req/tarea en ALB</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Protección ante picos web</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Anticipa saturación de cómputo</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#92400e">Escalamiento ágil por demanda</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- 3. Conector Central -->
+        <g transform="translate(245, 174)">
+          <line x1="0" y1="0" x2="0" y2="34" stroke="#475569" stroke-width="2"/>
+          <polygon points="0,34 -4.5,26 4.5,26" fill="#475569"/>
+          <!-- Pill de Conexión -->
+          <g filter="url(#diag-shadow-as4)">
+            <rect x="-115" y="8" width="230" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="1.3"/>
+            <text x="0" y="20.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#334155">Target Tracking Policy: Ajuste Automático ✓</text>
+          </g>
+        </g>
+
+        <!-- 4. Contenedor Inferior: Cómputo Elástico ECS Fargate -->
+        <g transform="translate(18, 208)">
+          <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(209, 250, 229, 0.4)" stroke="#059669" stroke-width="1.5"/>
+          
+          <!-- Pill de Capacidad Fargate -->
+          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#059669"/>
+          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">CÓMPUTO ELÁSTICO SERVERLESS EN PRODUCCIÓN</text>
+          
+          <!-- 2 Sub-Tarjetas Fargate & Self-Healing -->
+          <g transform="translate(12, 29)">
+            <!-- Sub-Tarjeta 1: Fargate Multi-AZ -->
+            <g filter="url(#diag-shadow-as4)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-asg-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">Amazon ECS Fargate</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#059669">Dimensionamiento Multi-AZ</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Rango: 2 a 6 Tareas (Multi-AZ)</text>
+              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Zonas us-east-1a y us-east-1b</text>
+              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Cooldown: 300s anti-thrashing</text>
+              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ 0.50 vCPU / 1 GiB por tarea</text>
+              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#047857">Base 24/7 · Techo en exámenes</text>
+            </g>
+
+            <!-- Sub-Tarjeta 2: Resiliencia Self-Healing -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-as4)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-fargate-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0369a1">Resiliencia Self-Healing</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">Sondeo /api/health</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Health Check activo cada 15s</text>
+              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Drenado en 30s sin caídas</text>
+              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Reemplazo automático en zona sana</text>
+              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Cero interrupción para alumnos</text>
+              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#0284c7">SLA 99.9% de servicio</text>
+            </g>
+          </g>
+
+          <!-- Tarjeta Inferior de Velocidad Serverless (Igual que EBS en Fase 2) -->
+          <g transform="translate(12, 178)" filter="url(#diag-shadow-as4)">
+            <rect x="0" y="0" width="430" height="56" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.3"/>
+            <rect x="8" y="13" width="30" height="30" rx="6" fill="rgba(13, 148, 136, 0.15)"/>
+            <text x="23" y="33" text-anchor="middle" font-size="14">⚡</text>
+            
+            <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#134e4a">Velocidad de Arranque Serverless: 15 a 30 Segundos</text>
+            <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#0d9488">vs. 3 a 5 min en EC2 tradicional · Cero mantenimiento ni parches de SO</text>
+
+            <!-- Badge Velocidad -->
+            <rect x="330" y="16" width="90" height="24" rx="5" fill="#0d9488"/>
+            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">10x MÁS RÁPIDO</text>
+          </g>
+        </g>
+      </svg>
     </div>
 
   </div>

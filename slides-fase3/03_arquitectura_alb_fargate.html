@@ -2,11 +2,11 @@
 <section class="slide-alb-fargate" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-alb-fargate {
-      padding-top: 15px !important;
+      padding-top: 44px !important;
     }
     .reveal .slides section.slide-alb-fargate .alb-header-wrapper {
-      max-width: 1180px;
-      margin: 0 auto 14px;
+      max-width: 1300px;
+      margin: 0 auto 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -29,16 +29,16 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: 2 Columnas -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal: 2 Filas (Tarjetas arriba, Gráfico abajo) -->
+  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 1300px; margin: 0 auto;">
     
-    <!-- Columna Izquierda: Tarjetas Explicativas -->
-    <div style="display: flex; flex-direction: column; gap: 12px; justify-content: space-between;">
+    <!-- Fila Superior: Tarjetas Explicativas Lado a Lado -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
       
       <!-- Tarjeta 1: Application Load Balancer -->
-      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 18px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900;">
+      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 14px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
           </div>
           <div>
@@ -47,17 +47,17 @@
           </div>
         </div>
 
-        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
-          <li><strong>Enrutamiento Inteligente por Host:</strong> Dirige <code>sofi.apm.edu.pe</code> al Target Group de SOFI y los sitios comerciales al Target Group de clientes.</li>
-          <li><strong>Terminación SSL &amp; Redirección 301:</strong> Forzado transparente de HTTP (80) a HTTPS (443) gestionado por certificados ACM.</li>
-          <li><strong>Health Checks Activos (/api/health):</strong> Intervalo de 15s con drenado automático de conexiones defectuosas en 30s.</li>
+        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Enrutamiento por Host:</strong> Dirige <code>sofi.apm.edu.pe</code> al Target Group de SOFI y sitios al Target Group de clientes.</li>
+          <li><strong>Terminación SSL &amp; Redirección 301:</strong> Forzado transparente de HTTP (80) a HTTPS (443) con ACM.</li>
+          <li><strong>Health Checks Activos (/api/health):</strong> Intervalo de 15s con drenado automático en 30s.</li>
         </ul>
       </div>
 
       <!-- Tarjeta 2: Amazon ECS sobre AWS Fargate -->
-      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 18px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 14px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
           </div>
           <div>
@@ -66,60 +66,18 @@
           </div>
         </div>
 
-        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
-          <li><strong>Dimensionamiento Exacto:</strong> <code>0.50 vCPU / 1 GiB</code> para la API NestJS y <code>0.25 vCPU / 512 MiB</code> para Web y Bot, erradicando capacidad ociosa.</li>
-          <li><strong>Modo de Red <code>awsvpc</code>:</strong> Cada tarea recibe su propia ENI y Security Group en subredes privadas, sin IPs públicas.</li>
-          <li><strong>Cero Mantenimiento de SO:</strong> AWS gestiona hipervisores y parches; el equipo solo versiona la imagen de contenedor.</li>
+        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Dimensionamiento:</strong> <code>0.50 vCPU / 1 GiB</code> (API NestJS) y <code>0.25 vCPU / 512 MiB</code> (Web y Bot) sin capacidad ociosa.</li>
+          <li><strong>Modo de Red <code>awsvpc</code>:</strong> ENI dedicada y Security Group asignado dentro de subredes privadas.</li>
+          <li><strong>Cero Mantenimiento de SO:</strong> AWS administra el cluster; el equipo solo versiona la imagen Docker.</li>
         </ul>
       </div>
 
     </div>
 
-    <!-- Columna Derecha: Topología Visual Multi-AZ -->
-    <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      
-      <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--aws-navy); letter-spacing: 0.06em; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-        <span>Flujo de Resiliencia Multi-AZ</span>
-        <span style="background: rgba(16, 185, 129, 0.15); color: #059669; padding: 2px 8px; border-radius: 6px; font-size: 0.68rem;">SLA 99.9%</span>
-      </div>
-
-      <!-- Diagrama SVG / Mini Layout Estilizado -->
-      <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(248, 250, 252, 0.9); border-radius: 12px; padding: 12px; border: 1px dashed rgba(203, 213, 225, 0.9);">
-        
-        <!-- Capa Pública -->
-        <div style="background: #ffffff; border: 1.5px solid rgba(255, 153, 0, 0.4); border-radius: 8px; padding: 8px 12px; text-align: center;">
-          <div style="font-size: 0.74rem; font-weight: 800; color: #b45309;">Application Load Balancer (Public Subnets 1a &amp; 1b)</div>
-          <div style="font-size: 0.68rem; color: var(--text-muted);">DNS Anycast · Puertos 80 / 443 · Detección de fallas</div>
-        </div>
-
-        <div style="text-align: center; color: #ff9900; font-weight: 800; font-size: 0.8rem; margin: -4px 0;">▼ Target Group (puerto 3000) ▼</div>
-
-        <!-- Capa Privada Multi-AZ -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <div style="background: #ffffff; border: 1.5px solid rgba(2, 132, 199, 0.4); border-radius: 8px; padding: 8px; text-align: center;">
-            <div style="font-size: 0.72rem; font-weight: 800; color: #0284c7;">Zona us-east-1a</div>
-            <div style="font-size: 0.66rem; color: var(--text-muted); margin-top: 3px;">Tarea SOFI Fargate<br/>(10.0.10.x) · Saludable</div>
-          </div>
-          <div style="background: #ffffff; border: 1.5px solid rgba(2, 132, 199, 0.4); border-radius: 8px; padding: 8px; text-align: center;">
-            <div style="font-size: 0.72rem; font-weight: 800; color: #0284c7;">Zona us-east-1b</div>
-            <div style="font-size: 0.66rem; color: var(--text-muted); margin-top: 3px;">Tarea SOFI Fargate<br/>(10.0.20.x) · Saludable</div>
-          </div>
-        </div>
-
-        <div style="text-align: center; color: #2563eb; font-weight: 800; font-size: 0.8rem; margin: -4px 0;">▼ Prisma ORM (TCP 5432) ▼</div>
-
-        <!-- Capa de Datos -->
-        <div style="background: #ffffff; border: 1.5px solid rgba(37, 99, 235, 0.4); border-radius: 8px; padding: 8px 12px; text-align: center;">
-          <div style="font-size: 0.74rem; font-weight: 800; color: #2563eb;">Amazon RDS PostgreSQL Multi-AZ</div>
-          <div style="font-size: 0.68rem; color: var(--text-muted);">Instancia Primaria (1a) + Réplica Síncrona Standby (1b)</div>
-        </div>
-
-      </div>
-
-      <div style="margin-top: 8px; font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; text-align: center;">
-        Si una Zona de Disponibilidad sufre una falla catastrófica, el tráfico se redirige automáticamente sin interrupción de servicio para los alumnos y practicantes.
-      </div>
-
+    <!-- Fila Inferior: Topología Visual de Arquitectura Multi-AZ -->
+    <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 10px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; justify-content: center; align-items: center;">
+      <img src="diagrama_alb_fargate.png" alt="Arquitectura ALB + Amazon ECS Fargate Multi-AZ" style="width: 100%; max-height: 380px; object-fit: contain; border-radius: 12px; display: block;" />
     </div>
 
   </div>

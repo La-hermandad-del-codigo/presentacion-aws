@@ -2,15 +2,17 @@
 <section class="slide-seguridad-red" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-seguridad-red {
-      padding-top: 15px !important;
+      padding-top: 44px !important;
     }
+
     .reveal .slides section.slide-seguridad-red .sec-header-wrapper {
-      max-width: 1180px;
+      max-width: 1260px;
       margin: 0 auto 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .reveal .slides section.slide-seguridad-red .slide-title {
       font-size: 2.15rem !important;
       margin: 0 !important;
@@ -19,6 +21,18 @@
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .sec-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 
@@ -29,89 +43,192 @@
     </h2>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1180px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Security Groups en Cascada y NACLs -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
+    <!-- Columna Izquierda: Tarjetas de Seguridad -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
-      <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <!-- Tarjeta 1: Security Groups en Cascada -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #4338ca;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Security Groups en Cascada</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Defensa en Profundidad Stateful · PoLP de Red</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Security Groups en Cascada (Stateful)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca; text-transform: uppercase;">Aislamiento Estricto por Capas</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">Stateful Firewall</span>
         </div>
 
-        <!-- Cascada de SGs -->
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
-          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #b45309;">1. sg-alb-public</span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: 80/443 (0.0.0.0/0)</span>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Encadenamiento por Referencia:</strong> El SG de Fargate solo acepta tráfico en el puerto 3000 si proviene del ID <code>sg-alb</code>; no se abren rangos CIDR directos.</li>
+          <li><strong>Aislamiento Total de la Base de Datos:</strong> RDS únicamente permite conexiones TCP 5432 originadas por <code>sg-fargate</code>, dejando la base de datos invisible a Internet.</li>
+          <li><strong>NACLs Perimetrales Stateless:</strong> Filtro adicional a nivel subred que descarta paquetes maliciosos antes de alcanzar las interfaces de red de los contenedores.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: AWS Systems Manager (SSM) -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">AWS Systems Manager (SSM)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Gestión Remota Cero-Trust sin Bastión SSH</div>
+            </div>
           </div>
-
-          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-alb ▼</div>
-
-          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #0284c7;">2. sg-fargate-tasks</span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 3000 exclusivo</span>
-          </div>
-
-          <div style="text-align: center; color: #6366f1; font-weight: 800; font-size: 0.75rem; margin: -4px 0;">▼ Solo tráfico desde sg-fargate ▼</div>
-
-          <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #2563eb;">3. sg-rds-postgres</span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">Inbound: Puerto 5432 exclusivo</span>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #059669;">Zero-Trust Access</span>
         </div>
 
-        <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35;">
-          <strong>Defensa en Subredes (NACLs):</strong> Capa stateless complementaria que bloquea cualquier paquete externo hacia las subredes privadas.
-        </div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Erradicación del Puerto 22:</strong> Cero puertos de entrada abiertos en Internet; la comunicación se realiza mediante túneles salientes TLS 443 con el endpoint SSM.</li>
+          <li><strong>Cero Llaves Estáticas (.pem):</strong> Acceso autenticado mediante identidades IAM corporativas con MFA temporal, eliminando el riesgo de robo de claves privadas.</li>
+          <li><strong>Trazabilidad y Auditoría Continua:</strong> Cada sesión interactiva y comando ejecutado en las Workstations se graba de forma inmutable en CloudWatch Logs.</li>
+        </ul>
       </div>
 
     </div>
 
-    <!-- Columna Derecha: Erradicación de Bastión y Adopción de SSM -->
-    <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-      
-      <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #10b981;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-          </div>
-          <div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">AWS Systems Manager (SSM)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #10b981; text-transform: uppercase;">Gestión Remota sin Bastión SSH</div>
-          </div>
-        </div>
+    <!-- Columna Derecha: Diagrama SVG de Seguridad (Estilo Fase 2) -->
+    <div class="sec-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="diag-shadow-sec6" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
 
-        <!-- Comparativa visual Bastión vs SSM -->
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+          <!-- Icono Security Group -->
+          <g id="icon-sg-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#6366f1" />
+            <path d="M -7 -2 L 0 -6 L 7 -2 L 7 4 C 7 7 0 10 0 10 C 0 10 -7 7 -7 4 Z" fill="#ffffff"/>
+          </g>
+
+          <!-- Icono SSM -->
+          <g id="icon-ssm-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#10b981" />
+            <polyline points="-5,1 -2,4 5,-3" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </defs>
+
+        <!-- 1. Contenedor Maestro -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#6366f1" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado Ecosistema -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#6366f1"/>
+          <path d="M 12 4 L 19 7 L 19 13 C 19 17 12 20 12 20 C 12 20 5 17 5 13 L 5 7 Z" fill="#ffffff"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Arquitectura de Red y Zero-Trust <tspan font-weight="700" fill="#4338ca">(us-east-1)</tspan></text>
+        </g>
+
+        <!-- 2. Contenedor Superior: Acceso Administrativo (Bastión vs SSM) -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="130" rx="10" fill="rgba(245, 243, 255, 0.75)" stroke="#6366f1" stroke-width="1.5"/>
           
-          <div style="background: rgba(254, 242, 242, 0.85); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px;">
-            <div style="font-size: 0.74rem; font-weight: 800; color: #b91c1c; margin-bottom: 2px;">❌ Bastión SSH Tradicional (Descartado)</div>
-            <div style="font-size: 0.72rem; color: #7f1d1d; line-height: 1.3;">
-              Expone el puerto 22 a Internet, requiere distribuir llaves privadas <code>.pem</code> vulnerables a robo y genera costo de servidor extra.
-            </div>
-          </div>
+          <!-- Pill de Acceso Administrativo -->
+          <rect x="12" y="6" width="245" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="134.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">ACCESO ADMINISTRATIVO: BASTIÓN VS. SSM</text>
+          
+          <!-- 2 Sub-Tarjetas Bastión y SSM -->
+          <g transform="translate(12, 29)">
+            <!-- Sub-Tarjeta 1: Bastión SSH Descartado -->
+            <g filter="url(#diag-shadow-sec6)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#ef4444" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(239, 68, 68, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">❌</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#991b1b">Bastión SSH (Descartado)</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#dc2626">Puerto 22 Expuesto a Internet</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">• Llaves .pem en computadoras</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">• Riesgo de fuerza bruta SSH</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b91c1c">Costo de host relay ($15/mes)</text>
+            </g>
 
-          <div style="background: rgba(236, 253, 245, 0.9); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 10px;">
-            <div style="font-size: 0.74rem; font-weight: 800; color: #065f46; margin-bottom: 2px;">✓ AWS SSM Session Manager (Implementado)</div>
-            <div style="font-size: 0.72rem; color: #064e3b; line-height: 1.3;">
-              Túnel TLS saliente (puerto 443), cero puertos abiertos, acceso con MFA y registro auditable de cada comando en CloudWatch Logs.
-            </div>
-          </div>
+            <!-- Sub-Tarjeta 2: SSM Session Manager -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-sec6)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(16, 185, 129, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">✓</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#065f46">SSM Session Manager</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#059669">Túnel Saliente TLS 443</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Cero puertos de entrada abiertos</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Identidad IAM + MFA temporal</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#059669">Auditoría en CloudWatch Logs</text>
+            </g>
+          </g>
+        </g>
 
-        </div>
+        <!-- 3. Conector Central -->
+        <g transform="translate(245, 174)">
+          <line x1="0" y1="0" x2="0" y2="34" stroke="#475569" stroke-width="2"/>
+          <polygon points="0,34 -4.5,26 4.5,26" fill="#475569"/>
+          <!-- Pill de Validación -->
+          <g filter="url(#diag-shadow-sec6)">
+            <rect x="-115" y="8" width="230" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="1.3"/>
+            <text x="0" y="20.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#334155">Zero Inbound Ports: Aislamiento Privado ✓</text>
+          </g>
+        </g>
 
-        <div style="background: rgba(248, 250, 252, 0.9); border-radius: 8px; padding: 8px 12px; font-size: 0.72rem; color: var(--text-muted);">
-          <strong>Cumplimiento de Seguridad:</strong> Las Cloud Workstations de practicantes quedan 100% protegidas en subredes privadas sin IP pública.
-        </div>
-      </div>
+        <!-- 4. Contenedor Inferior: Micro-segmentación SGs -->
+        <g transform="translate(18, 208)">
+          <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(238, 242, 255, 0.45)" stroke="#4338ca" stroke-width="1.5"/>
+          
+          <!-- Pill de Micro-segmentación -->
+          <rect x="12" y="6" width="260" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="142" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">MICRO-SEGMENTACIÓN DE SECURITY GROUPS</text>
+          
+          <!-- 2 Sub-Tarjetas ALB y Fargate -->
+          <g transform="translate(12, 29)">
+            <!-- Sub-Tarjeta 1: SG-ALB -->
+            <g filter="url(#diag-shadow-sec6)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-sg-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#b45309">1. SG ALB (Público)</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#d97706">Perímetro L7 Multi-AZ</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Inbound: 0.0.0.0/0 (Internet)</text>
+              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Puertos: 80 (HTTP) y 443 (HTTPS)</text>
+              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Redirección 301 SSL forzada</text>
+              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Certificado ACM gestionado</text>
+              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#b45309">Único punto expuesto a la red</text>
+            </g>
 
+            <!-- Sub-Tarjeta 2: SG-FARGATE -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-sec6)">
+              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#4338ca" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-sg-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#312e81">2. SG Fargate (Privado)</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#4338ca">Cómputo en Subredes Privadas</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Inbound exclusivo: sg-alb</text>
+              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Puerto: 3000 (API NestJS / Web)</text>
+              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Bloqueo total desde Internet</text>
+              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Modo awsvpc con ENI propia</text>
+              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#4338ca">Zero-Trust a nivel aplicación</text>
+            </g>
+          </g>
+
+          <!-- Tarjeta Inferior de Datos (RDS SG) -->
+          <g transform="translate(12, 178)" filter="url(#diag-shadow-sec6)">
+            <rect x="0" y="0" width="430" height="56" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
+            <rect x="8" y="13" width="30" height="30" rx="6" fill="rgba(37, 99, 235, 0.15)"/>
+            <text x="23" y="33" text-anchor="middle" font-size="14">🗄️</text>
+            
+            <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#1e3a8a">3. Amazon RDS PostgreSQL SG: Subredes Privadas de Datos</text>
+            <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#2563eb">Inbound exclusivo TCP 5432 desde sg-fargate · Cero acceso público externo</text>
+
+            <!-- Badge Zero-Trust -->
+            <rect x="330" y="16" width="90" height="24" rx="5" fill="#4338ca"/>
+            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">ZERO-TRUST L4</text>
+          </g>
+        </g>
+      </svg>
     </div>
 
   </div>
