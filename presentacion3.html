@@ -1567,15 +1567,15 @@
   </div>
 </section>
 
-      <!-- Slide: 09_monitoreo_cloudwatch_finops.html -->
-      <!-- SLIDE 9: MONITOREO CLOUDWATCH Y FINOPS -->
-<section class="slide-cloudwatch-finops" data-transition="slide-in slide-out">
+      <!-- Slide: 09_monitoreo_cloudwatch_alarmas.html -->
+      <!-- SLIDE 9: MONITOREO CLOUDWATCH Y TELEMETRÍA PROACTIVA -->
+<section class="slide-cloudwatch-alarmas" data-transition="slide-in slide-out">
   <style>
-    .reveal .slides section.slide-cloudwatch-finops {
+    .reveal .slides section.slide-cloudwatch-alarmas {
       padding-top: 44px !important;
     }
 
-    .reveal .slides section.slide-cloudwatch-finops .cw-header-wrapper {
+    .reveal .slides section.slide-cloudwatch-alarmas .cw-header-wrapper {
       max-width: 1260px;
       margin: 0 auto 14px;
       display: flex;
@@ -1583,7 +1583,7 @@
       align-items: center;
     }
 
-    .reveal .slides section.slide-cloudwatch-finops .slide-title {
+    .reveal .slides section.slide-cloudwatch-alarmas .slide-title {
       font-size: 2.15rem !important;
       margin: 0 !important;
       line-height: 1.15;
@@ -1609,194 +1609,187 @@
   <!-- Encabezado Fijo -->
   <div class="cw-header-wrapper">
     <h2 class="slide-title">
-      Monitoreo Proactivo y FinOps: <span style="color: #2563eb;">CloudWatch, Alarmas &amp; Control Presupuestal</span>
+      Supervisión y Telemetría: <span style="color: #2563eb;">CloudWatch, Container Insights &amp; Alarmas SNS</span>
     </h2>
   </div>
 
   <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
   <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas de Monitoreo & FinOps -->
+    <!-- Columna Izquierda: Tarjetas de Observabilidad y Matriz de Alarmas -->
     <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
-      <!-- Tarjeta 1: Observabilidad y Telemetría -->
+      <!-- Tarjeta 1: Recolección y Telemetría Centralizada -->
       <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Observabilidad con CloudWatch</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #2563eb;">Container Insights · Métricas &amp; Alarmas SNS</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Telemetría y Logs Centralizados</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #2563eb;">Container Insights · Ingesta awslogs · Métricas L7</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">Alerta Proactiva</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: #1d4ed8;">driver awslogs</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Container Insights por Tarea:</strong> Ingesta por segundo de CPU, RAM, volumen y red de cada contenedor mediante el driver nativo <code>awslogs</code>.</li>
-          <li><strong>Alarmas Compuestas &amp; SNS:</strong> Detección de anomalías (&gt;70% CPU o errores 5XX &gt; 1%) que despachan notificaciones por correo en menos de 60 segundos.</li>
-          <li><strong>Retención Inteligente de Logs:</strong> Políticas de expiración a 30 días en CloudWatch Logs para evitar acumulación de costos por gigabytes históricos.</li>
+          <li><strong>Container Insights en Fargate:</strong> Monitoreo de CPU, memoria, storage y red por contenedor sin agentes pesados del SO.</li>
+          <li><strong>Log Groups Estructurados:</strong> Flujo directo de logs de Node.js a <code>/ecs/sofi-backend</code> con ciclo de retención configurado a 30 días.</li>
+          <li><strong>Métricas de Balanceador y BD:</strong> Telemetría nativa de peticiones ALB (latencia, 5XX) y métricas de motor en Amazon RDS PostgreSQL.</li>
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Gobierno Financiero y FinOps -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+      <!-- Tarjeta 2: Matriz de Alarmas Críticas y Notificación SNS -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(220, 38, 38, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(220, 38, 38, 0.14); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             </div>
             <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Gobierno Financiero FinOps</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Control Presupuestal $60 USD · Etiquetado Obligatorio</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Matriz de Alarmas y Alertas SNS</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #dc2626;">Notificación Inmediata &lt; 60s · Disparo Reactivo</div>
             </div>
           </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps Cost Control</span>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(220, 38, 38, 0.12); color: #b91c1c;">Alertas en Tiempo Real</span>
         </div>
 
         <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Presupuesto Fijo ($60 USD/mes):</strong> Umbrales de alerta temprana al 80% ($48) proyectado y 100% real para prevenir sorpresas en la facturación.</li>
-          <li><strong>Taxonomía de Tags Obligatoria:</strong> Cuatro etiquetas obligatorias (<code>Environment</code>, <code>Project</code>, <code>CostCenter</code>, <code>Owner</code>) para distribución exacta de costos.</li>
-          <li><strong>Apagado Programado:</strong> Apagado de estaciones de trabajo no productivas fuera de horario laboral, ahorrando hasta un 65% mensual.</li>
+          <li><strong>CPU y Memoria Fargate:</strong> Alarma si CPU &ge; 85% o RAM &ge; 80% (detección de fugas de memoria o sobrecarga en Node.js).</li>
+          <li><strong>Errores Críticos ALB:</strong> Disparo automático ante <code>HTTPCode_Target_5XX_Count &gt; 5</code> o <code>TargetResponseTime &gt; 1.5s</code>.</li>
+          <li><strong>Amazon SNS Topic:</strong> Despacho multicanal inmediato a DevOps (Email / Webhook) y activación de auto-escalado horizontal de tareas.</li>
         </ul>
       </div>
 
     </div>
 
-    <!-- Columna Derecha: Diagrama SVG de Observabilidad (Estilo Fase 2) -->
+    <!-- Columna Derecha: Diagrama SVG de Arquitectura de Telemetría -->
     <div class="cw-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="diag-shadow-cw9" x="-10%" y="-10%" width="125%" height="125%">
+          <filter id="diag-shadow-cw-obs" x="-10%" y="-10%" width="125%" height="125%">
             <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
           </filter>
-
-          <!-- Icono CloudWatch -->
-          <g id="icon-cw-diag">
-            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#2563eb" />
-            <polyline points="-8,2 -4,2 -1,-4 2,5 5,-2 8,2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </g>
-
-          <!-- Icono Budgets -->
-          <g id="icon-budget-diag">
-            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#059669" />
-            <line x1="0" y1="-8" x2="0" y2="8" stroke="#ffffff" stroke-width="1.8"/>
-            <path d="M 4 -4 C 4 -7 -4 -7 -4 -4 C -4 -1 4 -1 4 2 C 4 5 -4 5 -4 2" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
-          </g>
         </defs>
 
-        <!-- 1. Contenedor Maestro -->
+        <!-- Contenedor Maestro -->
         <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="6 4"/>
         
         <!-- Encabezado Ecosistema -->
         <g transform="translate(18, 16)">
           <rect x="0" y="0" width="24" height="24" rx="5" fill="#2563eb"/>
           <polyline points="4,15 8,15 11,8 14,18 17,11 20,15" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Observabilidad y Control FinOps <tspan font-weight="700" fill="#2563eb">(us-east-1)</tspan></text>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Pipeline de Telemetría &amp; Observabilidad <tspan font-weight="700" fill="#2563eb">(us-east-1)</tspan></text>
         </g>
 
-        <!-- 2. Contenedor Superior: Telemetría y Alarmas -->
+        <!-- 1. Capa de Fuentes de Telemetría (Superior) -->
         <g transform="translate(18, 44)">
-          <rect x="0" y="0" width="454" height="130" rx="10" fill="rgba(239, 246, 255, 0.75)" stroke="#2563eb" stroke-width="1.5"/>
+          <rect x="0" y="0" width="454" height="106" rx="10" fill="rgba(239, 246, 255, 0.75)" stroke="#2563eb" stroke-width="1.5"/>
           
-          <!-- Pill de Telemetría -->
-          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#1e40af"/>
-          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">PIPELINE DE TELEMETRÍA Y ALARMAS REACTIVAS</text>
+          <rect x="12" y="6" width="240" height="19" rx="9.5" fill="#1e40af"/>
+          <text x="132" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">1. FUENTES DE TELEMETRÍA Y AGENTES</text>
           
-          <!-- 2 Sub-Tarjetas Container Insights y SNS -->
-          <g transform="translate(12, 29)">
-            <!-- Sub-Tarjeta 1: Container Insights -->
-            <g filter="url(#diag-shadow-cw9)">
-              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
-              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(37, 99, 235, 0.15)"/>
-              <text x="17" y="22" text-anchor="middle" font-size="12">📊</text>
-              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">CloudWatch Insights</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#2563eb">Métricas por Tarea y ALB</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Driver nativo awslogs</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ CPU, memoria y trazas L7</text>
-              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#1d4ed8">Resolución granular 1 minuto</text>
+          <g transform="translate(10, 30)">
+            <!-- Fuente A: Fargate Tasks -->
+            <g filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="138" height="66" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+              <text x="69" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#1e3a8a">ECS Fargate</text>
+              <text x="69" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#2563eb">driver: awslogs</text>
+              <text x="69" y="46" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#475569">CPU &amp; Memory Metrics</text>
+              <text x="69" y="58" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="700" fill="#059669">Stdout / Stderr</text>
             </g>
 
-            <!-- Sub-Tarjeta 2: Alarmas SNS -->
-            <g transform="translate(220, 0)" filter="url(#diag-shadow-cw9)">
-              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
-              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
-              <text x="17" y="22" text-anchor="middle" font-size="12">🔔</text>
-              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">Amazon SNS Alertas</text>
-              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">Notificación en &lt; 60 seg</text>
-              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Disparo ante CPU &gt; 70%</text>
-              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Detección de Errores 5XX</text>
-              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Email instantáneo a SysAdmins</text>
+            <!-- Fuente B: ALB Metrics -->
+            <g transform="translate(148, 0)" filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="138" height="66" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="69" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#0369a1">Application LB</text>
+              <text x="69" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#0284c7">Métricas L7</text>
+              <text x="69" y="46" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#475569">HTTP 5XX &amp; Latencia</text>
+              <text x="69" y="58" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="700" fill="#0284c7">TargetResponseTime</text>
+            </g>
+
+            <!-- Fuente C: RDS PostgreSQL -->
+            <g transform="translate(296, 0)" filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="138" height="66" rx="7" fill="#ffffff" stroke="#4338ca" stroke-width="1.2"/>
+              <text x="69" y="18" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#312e81">RDS PostgreSQL</text>
+              <text x="69" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#4338ca">Base de Datos</text>
+              <text x="69" y="46" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#475569">Active Connections</text>
+              <text x="69" y="58" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.8" font-weight="700" fill="#4338ca">FreeStorageSpace</text>
             </g>
           </g>
         </g>
 
-        <!-- 3. Conector Central -->
-        <g transform="translate(245, 174)">
-          <line x1="0" y1="0" x2="0" y2="34" stroke="#475569" stroke-width="2"/>
-          <polygon points="0,34 -4.5,26 4.5,26" fill="#475569"/>
-          <!-- Pill de Notificación -->
-          <g filter="url(#diag-shadow-cw9)">
-            <rect x="-115" y="8" width="230" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="1.3"/>
-            <text x="0" y="20.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#334155">Notificaciones SNS y Auto-Escalado ✓</text>
+        <!-- Conector Flujo 1 -> 2 -->
+        <g transform="translate(245, 150)">
+          <line x1="0" y1="0" x2="0" y2="18" stroke="#2563eb" stroke-width="2"/>
+          <polygon points="0,18 -4,12 4,12" fill="#2563eb"/>
+        </g>
+
+        <!-- 2. Capa CloudWatch Core: Logs & Insights (Medio) -->
+        <g transform="translate(18, 168)">
+          <rect x="0" y="0" width="454" height="136" rx="10" fill="rgba(240, 253, 250, 0.65)" stroke="#0d9488" stroke-width="1.5"/>
+          
+          <rect x="12" y="6" width="240" height="19" rx="9.5" fill="#0d9488"/>
+          <text x="132" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">2. INGESTA Y PROCESAMIENTO CLOUDWATCH</text>
+          
+          <g transform="translate(10, 30)">
+            <!-- Componente 1: CloudWatch Logs -->
+            <g filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="212" height="96" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#134e4a">📄 CloudWatch Logs</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0d9488">Log Group: /ecs/sofi-backend</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Ingesta centralizada en tiempo real</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Retención: 30 días (control FinOps)</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#059669">✓ Filtros métricos sobre errores</text>
+            </g>
+
+            <!-- Componente 2: Container Insights & Alarms Engine -->
+            <g transform="translate(222, 0)" filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="212" height="96" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">📈 Container Insights</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#2563eb">Métricas de Tareas &amp; Cluster</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Agregación por servicio ECS</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Resolución granular a 1 minuto</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#1d4ed8">✓ Alarmas de umbral configuradas</text>
+            </g>
           </g>
         </g>
 
-        <!-- 4. Contenedor Inferior: Control FinOps -->
-        <g transform="translate(18, 208)">
-          <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(236, 253, 245, 0.45)" stroke="#059669" stroke-width="1.5"/>
+        <!-- Conector Flujo 2 -> 3 -->
+        <g transform="translate(245, 304)">
+          <line x1="0" y1="0" x2="0" y2="18" stroke="#dc2626" stroke-width="2"/>
+          <polygon points="0,18 -4,12 4,12" fill="#dc2626"/>
+        </g>
+
+        <!-- 3. Capa de Acción y Alertas: SNS & Auto Scaling (Inferior) -->
+        <g transform="translate(18, 322)">
+          <rect x="0" y="0" width="454" height="132" rx="10" fill="rgba(254, 242, 242, 0.7)" stroke="#dc2626" stroke-width="1.5"/>
           
-          <!-- Pill de FinOps -->
-          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#059669"/>
-          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">GOBIERNO FINANCIERO Y CONTROL FINOPS</text>
+          <rect x="12" y="6" width="240" height="19" rx="9.5" fill="#dc2626"/>
+          <text x="132" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">3. ACCIÓN REACTIVA Y NOTIFICACIONES</text>
           
-          <!-- 2 Sub-Tarjetas Tags y Budgets -->
-          <g transform="translate(12, 29)">
-            <!-- Sub-Tarjeta 1: Taxonomía de Tags -->
-            <g filter="url(#diag-shadow-cw9)">
-              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
-              <g transform="translate(18, 18) scale(0.85)">
-                <use href="#icon-budget-diag"/>
-              </g>
-              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0369a1">1. Taxonomía de Tags</text>
-              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">Distribución de Costos</text>
-              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Environment: Prod / Dev</text>
-              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Project: SOFI / LMS APM</text>
-              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ CostCenter: Académico</text>
-              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Owner: Dirección Cloud</text>
-              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#0284c7">100% Trazabilidad Contable</text>
+          <g transform="translate(10, 30)">
+            <!-- Alerta SNS -->
+            <g filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="212" height="92" rx="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#991b1b">🔔 Amazon SNS (Alertas-DevOps)</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#dc2626">Notificación Crítica &lt; 60 seg</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ CPU &gt; 85% o Memoria &gt; 80%</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ HTTP 5XX &gt; 5 req/min en ALB</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#b91c1c">Envío directo a Email / Webhook</text>
             </g>
 
-            <!-- Sub-Tarjeta 2: AWS Budgets -->
-            <g transform="translate(220, 0)" filter="url(#diag-shadow-cw9)">
-              <rect x="0" y="0" width="210" height="136" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.3"/>
-              <g transform="translate(18, 18) scale(0.85)">
-                <use href="#icon-cw-diag"/>
-              </g>
-              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">2. AWS Budgets ($60)</text>
-              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#059669">Tope Mensual Contenido</text>
-              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Alarma 80% ($48 proyectado)</text>
-              <text x="8" y="67" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Alarma 100% ($60 real)</text>
-              <text x="8" y="82" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Apagado nocturno workstations</text>
-              <text x="8" y="97" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Serverless sin sobrecostos</text>
-              <text x="8" y="117" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#059669">Control de Gasto Garantizado</text>
+            <!-- Auto-Scaling Trigger -->
+            <g transform="translate(222, 0)" filter="url(#diag-shadow-cw-obs)">
+              <rect x="0" y="0" width="212" height="92" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">⚡ Application Auto Scaling</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#2563eb">Respuesta Autónoma</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Disparo de Target Tracking</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Inyección de 2 a 6 tareas Fargate</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#2563eb">Recuperación sin intervención manual</text>
             </g>
-          </g>
-
-          <!-- Tarjeta Inferior de Costo Mensual -->
-          <g transform="translate(12, 178)" filter="url(#diag-shadow-cw9)">
-            <rect x="0" y="0" width="430" height="56" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.3"/>
-            <rect x="8" y="13" width="30" height="30" rx="6" fill="rgba(16, 185, 129, 0.15)"/>
-            <text x="23" y="33" text-anchor="middle" font-size="14">💵</text>
-            
-            <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#064e3b">Inversión Mensual Contenida: ~$52 a $58 USD / Mes</text>
-            <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#059669">Tareas Fargate just-in-time + apagado programado · &gt;60% ahorro vs VPS</text>
-
-            <!-- Badge Presupuesto -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#059669"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">PRESUPUESTO OK</text>
           </g>
         </g>
       </svg>
@@ -1805,8 +1798,233 @@
   </div>
 </section>
 
-      <!-- Slide: 10_automatizacion_cloudformation.html -->
-      <!-- SLIDE 10: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
+      <!-- Slide: 10_gobernanza_finops_presupuesto.html -->
+      <!-- SLIDE 10: GOBERNANZA DE RECURSOS, FINOPS Y CONTROL PRESUPUESTAL -->
+<section class="slide-finops-presupuesto" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-finops-presupuesto {
+      padding-top: 44px !important;
+    }
+
+    .reveal .slides section.slide-finops-presupuesto .finops-header-wrapper {
+      max-width: 1260px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reveal .slides section.slide-finops-presupuesto .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .finops-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="finops-header-wrapper">
+    <h2 class="slide-title">
+      Gobernanza y FinOps: <span style="color: #059669;">Tagging, AWS Budgets &amp; Trusted Advisor</span>
+    </h2>
+  </div>
+
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Tarjetas de Gobernanza, Tagging y FinOps -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Taxonomía de Tags Obligatoria -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Política de Etiquetado Obligatorio</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cost Allocation Tags · Trazabilidad 100%</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Gobernanza Cloud</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Esquema Estandarizado:</strong> Etiquetas mandatorias aplicadas por CloudFormation: <code>Project</code>, <code>Environment</code>, <code>Owner</code>, <code>CostCenter</code> y <code>Compliance</code>.</li>
+          <li><strong>Atribución de Centros de Costos:</strong> Activación de Cost Allocation Tags en Billing Console para auditar el gasto de desarrollo vs. producción.</li>
+          <li><strong>Auditoría Automatizada:</strong> Detección y bloqueo de recursos huérfanos sin metadatos de cumplimiento empresarial.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: AWS Budgets y AWS Trusted Advisor -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Control Presupuestal &amp; Trusted Advisor</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Tope Mensual $60 USD · Auditoría de 5 Pilares</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps Contenido</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>AWS Budgets con Alertas Proactivas:</strong> Umbral preventivo al 80% ($48 USD pronosticado) y alerta crítica al 100% ($60 USD real) vía correo.</li>
+          <li><strong>AWS Trusted Advisor:</strong> Revisión de optimización de costos (volúmenes EBS ociosos) y seguridad (MFA en IAM, buckets S3 sin acceso público).</li>
+          <li><strong>Optimización Operativa:</strong> Apagado nocturno programado de instancias de práctica (ahorro &gt;60% en horas no lectivas).</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Diagrama SVG de Framework FinOps -->
+    <div class="finops-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="diag-shadow-finops" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+        </defs>
+
+        <!-- Contenedor Maestro -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#059669" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado Ecosistema -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#059669"/>
+          <path d="M12 4v16m-4-12h8a2 2 0 0 1 0 4H8a2 2 0 0 0 0 4h8" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Framework de Gobernanza FinOps <tspan font-weight="700" fill="#059669">(AWS Well-Architected)</tspan></text>
+        </g>
+
+        <!-- 1. Capa Superior: Taxonomía de Etiquetado -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="114" rx="10" fill="rgba(240, 249, 255, 0.75)" stroke="#0284c7" stroke-width="1.5"/>
+          
+          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#0369a1"/>
+          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">1. TAXONOMÍA MANDATORIA DE TAGGING</text>
+          
+          <g transform="translate(10, 30)">
+            <!-- Grid de Tags -->
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">Project &amp; Env</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Project: SOFI-Cloud</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Env: Production / Dev</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#0284c7">Aislamiento por entorno</text>
+            </g>
+
+            <g transform="translate(148, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">Cost Center &amp; Owner</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• CostCenter: CC-TI-101</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Owner: APM-Inversiones</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#059669">Imputación contable</text>
+            </g>
+
+            <g transform="translate(296, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">IaC &amp; Compliance</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• ManagedBy: CloudForm.</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Compliance: SENATI</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#b45309">100% Repetible</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Conector Flujo 1 -> 2 (Azul por salir de Taxonomía de Tags) -->
+        <g transform="translate(245, 158)">
+          <line x1="0" y1="0" x2="0" y2="14" stroke="#0284c7" stroke-width="2"/>
+          <polygon points="0,14 -4,8 4,8" fill="#0284c7"/>
+        </g>
+
+        <!-- 2. Capa Media: AWS Budgets & Trusted Advisor -->
+        <g transform="translate(18, 172)">
+          <rect x="0" y="0" width="454" height="148" rx="10" fill="rgba(236, 253, 245, 0.65)" stroke="#059669" stroke-width="1.5"/>
+          
+          <rect x="12" y="6" width="260" height="19" rx="9.5" fill="#059669"/>
+          <text x="142" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">2. CONTROL PRESUPUESTAL Y AUDITORÍA</text>
+          
+          <g transform="translate(10, 28)">
+            <!-- Componente A: AWS Budgets -->
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="212" height="114" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#065f46">💰 AWS Budgets ($60 USD)</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#059669">Límite Mensual Estricto</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Alerta al 80% ($48 USD pronóstico)</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Alerta al 100% ($60 USD real)</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Notificación por correo a SysAdmin</text>
+              <text x="14" y="102" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#047857">✓ Cero sorpresas de facturación</text>
+            </g>
+
+            <!-- Componente B: AWS Trusted Advisor -->
+            <g transform="translate(222, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="212" height="114" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">🛡️ AWS Trusted Advisor</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#2563eb">Auditoría Continua</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Optimización: Volúmenes EBS ociosos</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Seguridad: MFA y accesos S3 cerrados</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Resiliencia: Chequeo Multi-AZ y backups</text>
+              <text x="14" y="102" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#1d4ed8">✓ Alineación con Well-Architected</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Conector Flujo 2 -> 3 (Verde por salir de Control Presupuestal) -->
+        <g transform="translate(245, 320)">
+          <line x1="0" y1="0" x2="0" y2="15" stroke="#059669" stroke-width="2"/>
+          <polygon points="0,15 -4,9 4,9" fill="#059669"/>
+        </g>
+
+        <!-- 3. Capa Inferior: Impacto Financiero y Ahorro -->
+        <g transform="translate(18, 336)">
+          <rect x="0" y="0" width="454" height="116" rx="10" fill="rgba(254, 252, 232, 0.75)" stroke="#eab308" stroke-width="1.4"/>
+          
+          <!-- Pill de Título y Badge alineado a la derecha sin solapamiento -->
+          <rect x="12" y="6" width="225" height="19" rx="9.5" fill="#ca8a04"/>
+          <text x="124" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">3. VIABILIDAD ECONÓMICA Y EFICIENCIA</text>
+          
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#059669"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.03em">✓ DENTRO DEL TOPE</text>
+          
+          <g transform="translate(10, 30)">
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="434" height="76" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.2"/>
+              <rect x="10" y="12" width="44" height="52" rx="6" fill="rgba(16, 185, 129, 0.12)"/>
+              <text x="32" y="44" text-anchor="middle" font-size="22">💵</text>
+              
+              <text x="64" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">Costo Mensual Estimado: $52 a $58 USD / Mes</text>
+              <text x="64" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#334155">• Apagado nocturno de EC2 practicantes (-65% horas de cómputo)</text>
+              <text x="64" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="700" fill="#047857">• Fargate serverless por segundo: sin desperdicio de vCPU ociosa</text>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 11_automatizacion_cloudformation.html -->
+      <!-- SLIDE 11: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
 <section class="slide-cloudformation-iac" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-cloudformation-iac {
@@ -2048,8 +2266,8 @@
   </div>
 </section>
 
-      <!-- Slide: 11_resumen_proyecto_final.html -->
-      <!-- SLIDE 11: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
+      <!-- Slide: 12_resumen_proyecto_final.html -->
+      <!-- SLIDE 12: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
 <section class="slide-resumen-final" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-resumen-final {

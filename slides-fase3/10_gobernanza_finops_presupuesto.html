@@ -1,0 +1,223 @@
+<!-- SLIDE 10: GOBERNANZA DE RECURSOS, FINOPS Y CONTROL PRESUPUESTAL -->
+<section class="slide-finops-presupuesto" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-finops-presupuesto {
+      padding-top: 44px !important;
+    }
+
+    .reveal .slides section.slide-finops-presupuesto .finops-header-wrapper {
+      max-width: 1260px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reveal .slides section.slide-finops-presupuesto .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .finops-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 6px;
+      box-sizing: border-box;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="finops-header-wrapper">
+    <h2 class="slide-title">
+      Gobernanza y FinOps: <span style="color: #059669;">Tagging, AWS Budgets &amp; Trusted Advisor</span>
+    </h2>
+  </div>
+
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+    
+    <!-- Columna Izquierda: Tarjetas de Gobernanza, Tagging y FinOps -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Taxonomía de Tags Obligatoria -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Política de Etiquetado Obligatorio</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cost Allocation Tags · Trazabilidad 100%</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Gobernanza Cloud</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Esquema Estandarizado:</strong> Etiquetas mandatorias aplicadas por CloudFormation: <code>Project</code>, <code>Environment</code>, <code>Owner</code>, <code>CostCenter</code> y <code>Compliance</code>.</li>
+          <li><strong>Atribución de Centros de Costos:</strong> Activación de Cost Allocation Tags en Billing Console para auditar el gasto de desarrollo vs. producción.</li>
+          <li><strong>Auditoría Automatizada:</strong> Detección y bloqueo de recursos huérfanos sin metadatos de cumplimiento empresarial.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: AWS Budgets y AWS Trusted Advisor -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Control Presupuestal &amp; Trusted Advisor</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Tope Mensual $60 USD · Auditoría de 5 Pilares</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps Contenido</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>AWS Budgets con Alertas Proactivas:</strong> Umbral preventivo al 80% ($48 USD pronosticado) y alerta crítica al 100% ($60 USD real) vía correo.</li>
+          <li><strong>AWS Trusted Advisor:</strong> Revisión de optimización de costos (volúmenes EBS ociosos) y seguridad (MFA en IAM, buckets S3 sin acceso público).</li>
+          <li><strong>Optimización Operativa:</strong> Apagado nocturno programado de instancias de práctica (ahorro &gt;60% en horas no lectivas).</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha: Diagrama SVG de Framework FinOps -->
+    <div class="finops-diagram-wrapper">
+      <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="diag-shadow-finops" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+        </defs>
+
+        <!-- Contenedor Maestro -->
+        <rect x="6" y="6" width="478" height="458" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#059669" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado Ecosistema -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#059669"/>
+          <path d="M12 4v16m-4-12h8a2 2 0 0 1 0 4H8a2 2 0 0 0 0 4h8" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Framework de Gobernanza FinOps <tspan font-weight="700" fill="#059669">(AWS Well-Architected)</tspan></text>
+        </g>
+
+        <!-- 1. Capa Superior: Taxonomía de Etiquetado -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="114" rx="10" fill="rgba(240, 249, 255, 0.75)" stroke="#0284c7" stroke-width="1.5"/>
+          
+          <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#0369a1"/>
+          <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">1. TAXONOMÍA MANDATORIA DE TAGGING</text>
+          
+          <g transform="translate(10, 30)">
+            <!-- Grid de Tags -->
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">Project &amp; Env</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Project: SOFI-Cloud</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Env: Production / Dev</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#0284c7">Aislamiento por entorno</text>
+            </g>
+
+            <g transform="translate(148, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">Cost Center &amp; Owner</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• CostCenter: CC-TI-101</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Owner: APM-Inversiones</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#059669">Imputación contable</text>
+            </g>
+
+            <g transform="translate(296, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="138" height="74" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="10" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0369a1">IaC &amp; Compliance</text>
+              <text x="10" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• ManagedBy: CloudForm.</text>
+              <text x="10" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="600" fill="#334155">• Compliance: SENATI</text>
+              <text x="10" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.2" font-weight="700" fill="#b45309">100% Repetible</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Conector Flujo 1 -> 2 (Azul por salir de Taxonomía de Tags) -->
+        <g transform="translate(245, 158)">
+          <line x1="0" y1="0" x2="0" y2="14" stroke="#0284c7" stroke-width="2"/>
+          <polygon points="0,14 -4,8 4,8" fill="#0284c7"/>
+        </g>
+
+        <!-- 2. Capa Media: AWS Budgets & Trusted Advisor -->
+        <g transform="translate(18, 172)">
+          <rect x="0" y="0" width="454" height="148" rx="10" fill="rgba(236, 253, 245, 0.65)" stroke="#059669" stroke-width="1.5"/>
+          
+          <rect x="12" y="6" width="260" height="19" rx="9.5" fill="#059669"/>
+          <text x="142" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">2. CONTROL PRESUPUESTAL Y AUDITORÍA</text>
+          
+          <g transform="translate(10, 28)">
+            <!-- Componente A: AWS Budgets -->
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="212" height="114" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#065f46">💰 AWS Budgets ($60 USD)</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#059669">Límite Mensual Estricto</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Alerta al 80% ($48 USD pronóstico)</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Alerta al 100% ($60 USD real)</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Notificación por correo a SysAdmin</text>
+              <text x="14" y="102" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#047857">✓ Cero sorpresas de facturación</text>
+            </g>
+
+            <!-- Componente B: AWS Trusted Advisor -->
+            <g transform="translate(222, 0)" filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="212" height="114" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.3"/>
+              <text x="14" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">🛡️ AWS Trusted Advisor</text>
+              <text x="14" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#2563eb">Auditoría Continua</text>
+              <text x="14" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Optimización: Volúmenes EBS ociosos</text>
+              <text x="14" y="68" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Seguridad: MFA y accesos S3 cerrados</text>
+              <text x="14" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">• Resiliencia: Chequeo Multi-AZ y backups</text>
+              <text x="14" y="102" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#1d4ed8">✓ Alineación con Well-Architected</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Conector Flujo 2 -> 3 (Verde por salir de Control Presupuestal) -->
+        <g transform="translate(245, 320)">
+          <line x1="0" y1="0" x2="0" y2="15" stroke="#059669" stroke-width="2"/>
+          <polygon points="0,15 -4,9 4,9" fill="#059669"/>
+        </g>
+
+        <!-- 3. Capa Inferior: Impacto Financiero y Ahorro -->
+        <g transform="translate(18, 336)">
+          <rect x="0" y="0" width="454" height="116" rx="10" fill="rgba(254, 252, 232, 0.75)" stroke="#eab308" stroke-width="1.4"/>
+          
+          <!-- Pill de Título y Badge alineado a la derecha sin solapamiento -->
+          <rect x="12" y="6" width="225" height="19" rx="9.5" fill="#ca8a04"/>
+          <text x="124" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.03em">3. VIABILIDAD ECONÓMICA Y EFICIENCIA</text>
+          
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#059669"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.03em">✓ DENTRO DEL TOPE</text>
+          
+          <g transform="translate(10, 30)">
+            <g filter="url(#diag-shadow-finops)">
+              <rect x="0" y="0" width="434" height="76" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.2"/>
+              <rect x="10" y="12" width="44" height="52" rx="6" fill="rgba(16, 185, 129, 0.12)"/>
+              <text x="32" y="44" text-anchor="middle" font-size="22">💵</text>
+              
+              <text x="64" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#065f46">Costo Mensual Estimado: $52 a $58 USD / Mes</text>
+              <text x="64" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#334155">• Apagado nocturno de EC2 practicantes (-65% horas de cómputo)</text>
+              <text x="64" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="700" fill="#047857">• Fargate serverless por segundo: sin desperdicio de vCPU ociosa</text>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+</section>
