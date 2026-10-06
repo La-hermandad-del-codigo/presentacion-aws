@@ -107,6 +107,15 @@
       animation: pulseDash 5.5s linear infinite;
     }
 
+    #cloud-network-bg.bg-paused-for-diagram {
+      opacity: 0.15 !important;
+      transition: opacity 0.4s ease;
+    }
+
+    #cloud-network-bg.bg-paused-for-diagram .data-stream-line {
+      animation-play-state: paused !important;
+    }
+
     .reveal {
       z-index: 2;
       background: transparent !important;
@@ -521,6 +530,7 @@
       const currentSlide = Reveal.getCurrentSlide();
       const indices = Reveal.getIndices();
       const isFirstSlide = (indices.h === 0 && (indices.v === 0 || indices.v === undefined));
+      const isArchifySlide = currentSlide && currentSlide.classList.contains('slide-arch-archify');
       const isDiagramSlide = currentSlide && (
         currentSlide.classList.contains('slide-interno') ||
         currentSlide.classList.contains('slide-externo') ||
@@ -537,10 +547,23 @@
         if (visibleFragments.length === 0) {
           targetFilter = 'blur(0px)';
         }
+      } else if (isArchifySlide) {
+        targetFilter = 'blur(4px)';
+        targetOpacity = '0.15';
+        targetOverlayOpacity = '0';
       } else if (isDiagramSlide) {
         targetFilter = 'blur(6px)';
         targetOpacity = '0.65';
         targetOverlayOpacity = '1';
+      }
+
+      // Congelar o reanudar animaciones SMIL en SVG y CSS reactivamente en cada cambio de slide
+      if (isArchifySlide) {
+        if (typeof bg.pauseAnimations === 'function') bg.pauseAnimations();
+        bg.classList.add('bg-paused-for-diagram');
+      } else {
+        if (typeof bg.unpauseAnimations === 'function') bg.unpauseAnimations();
+        bg.classList.remove('bg-paused-for-diagram');
       }
 
       if (bg.style.filter !== targetFilter) {

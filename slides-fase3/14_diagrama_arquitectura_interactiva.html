@@ -1441,27 +1441,7 @@
       }
     }, { capture: true });
 
-    // Control de Animación del Fondo Global para Optimización GPU en Slide 14
-    function manageBgAnimation() {
-      const bgSvg = document.getElementById('cloud-network-bg');
-      if (!bgSvg) return;
-      const isPresent = isSlide14Active();
-      if (isPresent) {
-        if (typeof bgSvg.pauseAnimations === 'function') bgSvg.pauseAnimations();
-        bgSvg.classList.add('bg-paused-for-diagram');
-      } else {
-        if (typeof bgSvg.unpauseAnimations === 'function') bgSvg.unpauseAnimations();
-        bgSvg.classList.remove('bg-paused-for-diagram');
-      }
-    }
-
-    if (window.Reveal && typeof Reveal.on === 'function') {
-      Reveal.on('slidechanged', manageBgAnimation);
-    }
-
-    // Inicializar estado del tour y optimización de fondo
+    // Inicializar estado del tour
     updateTourUI();
-    manageBgAnimation();
-    setTimeout(manageBgAnimation, 250);
   </script>
 </section>
