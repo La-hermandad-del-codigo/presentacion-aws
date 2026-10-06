@@ -190,8 +190,35 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="video-flow-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7C3AED;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=18;spacingRight=18;spacingTop=14;fontFamily=Helvetica;shadow=1;" value="&lt;div style=&quot;text-align: center; margin-bottom: 6px;&quot;&gt;&lt;b style=&quot;font-size: 13.5px; color: #5B21B6;&quot;&gt;Flujo de Streaming de Video Desacoplado (Direct-to-Client)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#6D28D9&quot;&gt;&lt;i&gt;Estrategia Anti-Saturación: Backend ligero (solo URLs) + Streaming vía CDN&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#374151&quot;&gt;&lt;b&gt;1. Almacenamiento y Registro (Cero carga en RAM de Fargate):&lt;/b&gt;&lt;br&gt;• Los videos (.mp4 / HLS) se almacenan en &lt;b&gt;Amazon S3 Standard&lt;/b&gt;.&lt;br&gt;• &lt;b&gt;Amazon RDS PostgreSQL&lt;/b&gt; almacena únicamente la ubicación (S3 Key / URL) y metadatos.&lt;br&gt;&lt;br&gt;&lt;b&gt;2. Solicitud y Entrega de Ubicación (Solo Control Plane):&lt;/b&gt;&lt;br&gt;• El cliente solicita el video a la API (&lt;code&gt;sofi-backend&lt;/code&gt; vía ALB: &lt;code&gt;/api/videos/:id&lt;/code&gt;).&lt;br&gt;• El backend valida la sesión y &lt;b&gt;responde únicamente con la ubicación / URL directa de CloudFront&lt;/b&gt; (JSON &amp;lt; 1 KB).&lt;br&gt;• &lt;u&gt;El backend NUNCA transmite los bytes del video ni actúa como proxy de streaming&lt;/u&gt;.&lt;br&gt;&lt;br&gt;&lt;b&gt;3. Streaming Directo desde el Borde (Data Plane Offloading):&lt;/b&gt;&lt;br&gt;• El reproductor web solicita y reproduce el video directamente desde &lt;b&gt;Amazon CloudFront (CDN Edge)&lt;/b&gt;.&lt;br&gt;• CloudFront entrega desde Edge Cache y recupera de &lt;b&gt;Amazon S3 vía Origin Access Control (OAC)&lt;/b&gt;.&lt;br&gt;&lt;br&gt;&lt;b style=&quot;color: #059669;&quot;&gt;Ventajas de Arquitectura y FinOps:&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Cero Saturación:&lt;/b&gt; Tareas Fargate 100% libres de streaming pesado y sockets abiertos.&lt;br&gt;• &lt;b&gt;Ahorro FinOps:&lt;/b&gt; Sin costos de transferencia NAT Gateway ($0.045/GB) para video.&lt;br&gt;• &lt;b&gt;Escalabilidad:&lt;/b&gt; CloudFront absorbe alta concurrencia con baja latencia perimetral.&lt;/font&gt;" vertex="1">
-          <mxGeometry height="320" width="500" x="1490" y="35" as="geometry" />
+        <mxCell id="video-flow-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#7C3AED;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=16;fontFamily=Helvetica;fontColor=#5B21B6;" value="&lt;b style=&quot;font-size: 14.5px;&quot;&gt;Flujo de Streaming de Video Desacoplado (Direct-to-Client)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11.5px;&quot; color=&quot;#6D28D9&quot;&gt;&lt;i&gt;Estrategia Anti-Saturación: Control Plane Ligero + CDN Edge Offloading&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="375" width="510" x="1485" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="video-step-control" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;1. Control Plane: Solicitud Ligera de Ubicación&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Petición API:&lt;/b&gt; Cliente solicita video a &lt;code&gt;sofi-backend&lt;/code&gt; vía ALB (&lt;code&gt;/api/videos/:id&lt;/code&gt;)&lt;br&gt;• &lt;b&gt;Respuesta &amp;lt; 1 KB:&lt;/b&gt; Backend valida sesión en RDS y devuelve solo la URL directa de CloudFront&lt;br&gt;• &lt;b&gt;Cero Proxy:&lt;/b&gt; &lt;u&gt;Fargate NUNCA transmite bytes de video ni satura memoria RAM&lt;/u&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="450" x="1515" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="e-video-flow-step" edge="1" parent="1" source="video-step-control" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10.5;fontColor=#6D28D9;labelBackgroundColor=#F8FAFC;" target="video-step-data" value="Data Plane Offloading (Streaming directo sin tocar el Backend)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="video-step-data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;2. Data Plane: Streaming Directo desde el Borde&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Streaming CDN:&lt;/b&gt; Reproductor web solicita y reproduce directo desde &lt;b&gt;Amazon CloudFront (CDN Edge)&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Origen Seguro:&lt;/b&gt; CloudFront entrega desde Edge Cache y recupera de &lt;b&gt;Amazon S3 vía OAC&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Ahorro FinOps:&lt;/b&gt; Tareas Fargate 100% libres de sockets pesados y &lt;b&gt;$0 en NAT Gateway&lt;/b&gt; ($0.045/GB)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="450" x="1515" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="e-users-video-control" edge="1" parent="1" source="users-box" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10;fontColor=#6D28D9;labelBackgroundColor=#FFFFFF;" target="video-step-control" value="1. Petición Video (Control Plane /api)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="70" />
+              <mxPoint x="1350" y="70" />
+              <mxPoint x="1350" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-video-cf-stream" edge="1" parent="1" source="video-step-data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10;fontColor=#6D28D9;labelBackgroundColor=#FFFFFF;" target="cf" value="2. Streaming CDN (HLS/MP4)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1515" y="290" />
+              <mxPoint x="1435" y="290" />
+              <mxPoint x="1435" y="260" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="e-cf-video-stream" edge="1" parent="1" source="cf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;endArrow=classic;strokeColor=#7C3AED;strokeWidth=2.5;fontFamily=Helvetica;fontSize=11;fontColor=#5B21B6;labelBackgroundColor=#FAF5FF;" target="users-box" value="Streaming Directo de Video (HLS / MP4)&lt;br&gt;&lt;font style=&quot;font-size: 9.5px;&quot; color=&quot;#6D28D9&quot;&gt;CloudFront CDN Edge &amp;harr; Cliente (Cero carga en Backend/VPC)&lt;/font&gt;">
           <mxGeometry relative="1" as="geometry">
@@ -204,8 +231,8 @@
         <mxCell id="e-s3-cf-video" edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2.2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#5B21B6;labelBackgroundColor=#FFFFFF;" target="cf" value="Distribución de Video LMS&lt;br&gt;&lt;font style=&quot;font-size: 9.5px;&quot; color=&quot;#6D28D9&quot;&gt;(Origen S3 vía OAC)&lt;/font&gt;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1465" y="532" />
-              <mxPoint x="1465" y="247" />
+              <mxPoint x="1435" y="532" />
+              <mxPoint x="1435" y="247" />
             </Array>
           </mxGeometry>
         </mxCell>
