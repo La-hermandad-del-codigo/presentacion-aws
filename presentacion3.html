@@ -714,15 +714,17 @@
 <section class="slide-alb-fargate" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-alb-fargate {
-      padding-top: 44px !important;
+      padding-top: 36px !important;
     }
+
     .reveal .slides section.slide-alb-fargate .alb-header-wrapper {
-      max-width: 1300px;
-      margin: 0 auto 10px;
+      max-width: 1260px;
+      margin: 0 auto 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .reveal .slides section.slide-alb-fargate .slide-title {
       font-size: 2.15rem !important;
       margin: 0 !important;
@@ -731,6 +733,18 @@
       paint-order: stroke fill;
       -webkit-text-stroke: 4px #ffffff;
       text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .alb-diagram-wrapper {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);
+      padding: 8px;
+      box-sizing: border-box;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 
@@ -741,55 +755,200 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: 2 Filas (Tarjetas arriba, Gráfico abajo) -->
-  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 1300px; margin: 0 auto;">
+  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Fila Superior: Tarjetas Explicativas Lado a Lado -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
+    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
       
       <!-- Tarjeta 1: Application Load Balancer -->
-      <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 14px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; flex-shrink: 0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #d97706;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Application Load Balancer (ALB L7)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Distribución Multi-AZ &amp; Health Checks</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Application Load Balancer (ALB L7)</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #b45309; text-transform: uppercase;">Distribución Multi-AZ &amp; Health Checks</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Tráfico Seguro L7</span>
         </div>
 
-        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
-          <li><strong>Enrutamiento por Host:</strong> Dirige <code>sofi.apm.edu.pe</code> al Target Group de SOFI y sitios al Target Group de clientes.</li>
-          <li><strong>Terminación SSL &amp; Redirección 301:</strong> Forzado transparente de HTTP (80) a HTTPS (443) con ACM.</li>
-          <li><strong>Health Checks Activos (/api/health):</strong> Intervalo de 15s con drenado automático en 30s.</li>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Enrutamiento por Host &amp; Path:</strong> Inspección L7 para dirigir <code>sofi.apm.edu.pe</code> al Target Group de SOFI y sitios corporativos hacia sus respectivos entornos aislados.</li>
+          <li><strong>Terminación SSL &amp; Redirección 301:</strong> Forzado transparente de HTTP (80) a HTTPS (443) con certificados TLS gratuitos gestionados por AWS Certificate Manager (ACM).</li>
+          <li><strong>Health Checks Activos (/api/health):</strong> Sondeo continuo cada 15s con drenado automático en 30s ante fallas de contenedor sin degradar la experiencia de usuario.</li>
         </ul>
       </div>
 
-      <!-- Tarjeta 2: Amazon ECS sobre AWS Fargate -->
-      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 14px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-          <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7; flex-shrink: 0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+      <!-- Tarjeta 2: Amazon ECS con AWS Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS con AWS Fargate</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Subredes Privadas</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 1rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS con AWS Fargate</div>
-            <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7; text-transform: uppercase;">Cómputo Serverless Granular</div>
-          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless Multi-AZ</span>
         </div>
 
-        <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
-          <li><strong>Dimensionamiento:</strong> <code>0.50 vCPU / 1 GiB</code> (API NestJS) y <code>0.25 vCPU / 512 MiB</code> (Web y Bot) sin capacidad ociosa.</li>
-          <li><strong>Modo de Red <code>awsvpc</code>:</strong> ENI dedicada y Security Group asignado dentro de subredes privadas.</li>
-          <li><strong>Cero Mantenimiento de SO:</strong> AWS administra el cluster; el equipo solo versiona la imagen Docker.</li>
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Dimensionamiento por Tarea:</strong> <code>0.50 vCPU / 1 GiB</code> (API NestJS) y <code>0.25 vCPU / 512 MiB</code> (Web y Bot) eliminando sobrecostos de capacidad ociosa.</li>
+          <li><strong>Modo de Red <code>awsvpc</code>:</strong> ENI dedicada y Security Group asignado dentro de subredes privadas sin IP pública ni exposición a Internet.</li>
+          <li><strong>Cero Mantenimiento de SO:</strong> AWS administra el cluster, parches y hardware subyacente; el equipo solo versiona la imagen en Amazon ECR.</li>
         </ul>
       </div>
 
     </div>
 
-    <!-- Fila Inferior: Topología Visual de Arquitectura Multi-AZ -->
-    <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 10px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); display: flex; justify-content: center; align-items: center;">
-      <img src="diagrama_alb_fargate.png" alt="Arquitectura ALB + Amazon ECS Fargate Multi-AZ" style="width: 100%; max-height: 380px; object-fit: contain; border-radius: 12px; display: block;" />
+    <!-- Columna Derecha: Diagrama Exclusivo del Load Balancer (ALB L7) -->
+    <div class="alb-diagram-wrapper">
+      <svg viewBox="0 0 490 530" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="diag-shadow-alb3" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+
+          <!-- Icono ALB -->
+          <g id="icon-alb-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#f59e0b" />
+            <circle cx="0" cy="-6" r="3" fill="#ffffff"/>
+            <circle cx="-6" cy="6" r="3" fill="#ffffff"/>
+            <circle cx="6" cy="6" r="3" fill="#ffffff"/>
+            <path d="M -4 4 L -1 -3 M 4 4 L 1 -3" stroke="#ffffff" stroke-width="1.8"/>
+          </g>
+
+          <!-- Icono Target Group -->
+          <g id="icon-tg-diag">
+            <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#ff9900" />
+            <circle cx="0" cy="0" r="7" fill="none" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+          </g>
+        </defs>
+
+        <!-- 1. Contenedor Maestro -->
+        <rect x="6" y="6" width="478" height="518" rx="14" fill="#ffffff" fill-opacity="0.95" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="6 4"/>
+        
+        <!-- Encabezado ALB -->
+        <g transform="translate(18, 16)">
+          <rect x="0" y="0" width="24" height="24" rx="5" fill="#f59e0b"/>
+          <circle cx="12" cy="7" r="2.5" fill="#ffffff"/>
+          <circle cx="7" cy="17" r="2.5" fill="#ffffff"/>
+          <circle cx="17" cy="17" r="2.5" fill="#ffffff"/>
+          <path d="M 8.5 15 L 11 9 M 15.5 15 L 13 9" stroke="#ffffff" stroke-width="1.5"/>
+          <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#232f3e">Flujo y Componentes del Load Balancer <tspan font-weight="700" fill="#b45309">(ALB L7)</tspan></text>
+        </g>
+
+        <!-- 2. Contenedor Superior: Listeners & SSL -->
+        <g transform="translate(18, 44)">
+          <rect x="0" y="0" width="454" height="132" rx="10" fill="rgba(254, 243, 199, 0.45)" stroke="#f59e0b" stroke-width="1.5"/>
+          
+          <!-- Pill de Listeners -->
+          <rect x="12" y="6" width="270" height="19" rx="9.5" fill="#d97706"/>
+          <text x="147" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">LISTENERS DE ENTRADA &amp; TERMINACIÓN SSL</text>
+          
+          <!-- 2 Sub-Tarjetas de Listeners -->
+          <g transform="translate(12, 30)">
+            <!-- Listener HTTP:80 -->
+            <g filter="url(#diag-shadow-alb3)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(245, 158, 11, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">🔄</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#92400e">Listener HTTP (Port 80)</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">Redirección 301 a HTTPS</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Redirección permanente 301</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Cero exposición en texto plano</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#b45309">Regla nativa en el balanceador</text>
+            </g>
+
+            <!-- Listener HTTPS:443 -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-alb3)">
+              <rect x="0" y="0" width="210" height="92" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+              <rect x="7" y="7" width="20" height="20" rx="5" fill="rgba(2, 132, 199, 0.15)"/>
+              <text x="17" y="22" text-anchor="middle" font-size="12">🔒</text>
+              <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#0369a1">Listener HTTPS (Port 443)</text>
+              <text x="32" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">Certificado ACM (*.apm.edu.pe)</text>
+              <text x="8" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Terminación SSL/TLS 1.3</text>
+              <text x="8" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="600" fill="#334155">✓ Descarga de CPU en cómputo</text>
+              <text x="8" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#0369a1">Cifrado estricto extremo a borde</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- 3. Conector Central -->
+        <g transform="translate(245, 176)">
+          <line x1="0" y1="0" x2="0" y2="34" stroke="#475569" stroke-width="2"/>
+          <polygon points="0,34 -4.5,26 4.5,26" fill="#475569"/>
+          <!-- Pill de Conexión -->
+          <g filter="url(#diag-shadow-alb3)">
+            <rect x="-135" y="8" width="270" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="1.3"/>
+            <text x="0" y="20.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#334155">Enrutamiento L7 por Host &amp; Path Rule Engine ✓</text>
+          </g>
+        </g>
+
+        <!-- 4. Contenedor Inferior: Target Groups & Enrutamiento Multi-AZ (Expandido) -->
+        <g transform="translate(18, 210)">
+          <rect x="0" y="0" width="454" height="298" rx="10" fill="rgba(255, 251, 235, 0.45)" stroke="#ff9900" stroke-width="1.5"/>
+          
+          <!-- Pill de Target Groups -->
+          <rect x="12" y="6" width="285" height="19" rx="9.5" fill="#ff9900"/>
+          <text x="154.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">REGLAS DE RUTEO &amp; TARGET GROUPS MULTI-AZ</text>
+          
+          <!-- 2 Sub-Tarjetas Target Groups -->
+          <g transform="translate(12, 30)">
+            <!-- Target Group SOFI -->
+            <g filter="url(#diag-shadow-alb3)">
+              <rect x="0" y="0" width="210" height="150" rx="8" fill="#ffffff" stroke="#ff9900" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-tg-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#92400e">Target Group: SOFI</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#b45309">Host: sofi.apm.edu.pe</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ /api/* ➔ TG Backend (:8080)</text>
+              <text x="8" y="69" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ /* ➔ TG Web Next.js (:3000)</text>
+              <text x="8" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Health Check: /api/health (15s)</text>
+              <text x="8" y="103" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Balanceo en us-east-1a y 1b</text>
+              <text x="8" y="128" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#b45309">Drenado seguro en 30s sin caídas</text>
+            </g>
+
+            <!-- Target Group Clientes -->
+            <g transform="translate(220, 0)" filter="url(#diag-shadow-alb3)">
+              <rect x="0" y="0" width="210" height="150" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+              <g transform="translate(18, 18) scale(0.85)">
+                <use href="#icon-alb-diag"/>
+              </g>
+              <text x="40" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11.5" font-weight="800" fill="#0369a1">Target Group: Clientes</text>
+              <text x="40" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="700" fill="#0284c7">Host: *.apm.edu.pe (Default)</text>
+              <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Aislamiento de sitios comerciales</text>
+              <text x="8" y="69" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Reflexo Perú y Arte &amp; Ideas</text>
+              <text x="8" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Health Check: HTTP 200 (15s)</text>
+              <text x="8" y="103" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="600" fill="#334155">✓ Balanceo en us-east-1a y 1b</text>
+              <text x="8" y="128" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.4" font-weight="700" fill="#0284c7">Aislamiento total de tráfico</text>
+            </g>
+          </g>
+
+          <!-- Tarjeta Inferior de Alta Disponibilidad (Sin sobreposiciones) -->
+          <g transform="translate(12, 198)" filter="url(#diag-shadow-alb3)">
+            <rect x="0" y="0" width="430" height="84" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3"/>
+            <rect x="10" y="25" width="34" height="34" rx="7" fill="rgba(245, 158, 11, 0.15)"/>
+            <text x="27" y="47" text-anchor="middle" font-size="16">⚖️</text>
+            
+            <text x="52" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#78350f">Alta Disponibilidad Activo-Activo: SLA 99.99%</text>
+            <text x="52" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#b45309">Distribución elástica en subredes públicas us-east-1a / 1b</text>
+            <text x="52" y="60" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.6" font-weight="600" fill="#475569">Health Checks activos · Drenado de conexiones en 30s sin caídas</text>
+
+            <!-- Badge Disponibilidad -->
+            <rect x="315" y="16" width="102" height="24" rx="5" fill="#f59e0b"/>
+            <text x="366" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">RESILIENTE L7</text>
+          </g>
+        </g>
+      </svg>
     </div>
 
   </div>
