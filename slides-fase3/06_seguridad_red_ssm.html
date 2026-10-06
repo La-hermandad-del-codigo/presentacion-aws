@@ -177,10 +177,13 @@
         <g transform="translate(18, 208)">
           <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(238, 242, 255, 0.45)" stroke="#4338ca" stroke-width="1.5"/>
           
-          <!-- Pill de Micro-segmentación -->
-          <rect x="12" y="6" width="260" height="19" rx="9.5" fill="#4338ca"/>
-          <text x="142" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">MICRO-SEGMENTACIÓN DE SECURITY GROUPS</text>
+          <!-- Pill de Micro-segmentación y Badge alineado a la derecha sin solapamiento -->
+          <rect x="12" y="6" width="255" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="139" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">MICRO-SEGMENTACIÓN DE SECURITY GROUPS</text>
           
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.04em">ZERO-TRUST L4</text>
+
           <!-- 2 Sub-Tarjetas ALB y Fargate -->
           <g transform="translate(12, 29)">
             <!-- Sub-Tarjeta 1: SG-ALB -->
@@ -222,10 +225,6 @@
             
             <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#1e3a8a">3. Amazon RDS PostgreSQL SG: Subredes Privadas de Datos</text>
             <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#2563eb">Inbound exclusivo TCP 5432 desde sg-fargate · Cero acceso público externo</text>
-
-            <!-- Badge Zero-Trust -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#4338ca"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">ZERO-TRUST L4</text>
           </g>
         </g>
       </svg>

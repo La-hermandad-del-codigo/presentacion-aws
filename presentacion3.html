@@ -1022,9 +1022,12 @@
         <g transform="translate(18, 208)">
           <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(209, 250, 229, 0.4)" stroke="#059669" stroke-width="1.5"/>
           
-          <!-- Pill de Capacidad Fargate -->
+          <!-- Pill de Capacidad Fargate y Badge alineado a la derecha -->
           <rect x="12" y="6" width="250" height="19" rx="9.5" fill="#059669"/>
           <text x="137" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">CÓMPUTO ELÁSTICO SERVERLESS EN PRODUCCIÓN</text>
+          
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#059669"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.04em">10x MÁS RÁPIDO</text>
           
           <!-- 2 Sub-Tarjetas Fargate & Self-Healing -->
           <g transform="translate(12, 29)">
@@ -1067,10 +1070,6 @@
             
             <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#134e4a">Velocidad de Arranque Serverless: 15 a 30 Segundos</text>
             <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#0d9488">vs. 3 a 5 min en EC2 tradicional · Cero mantenimiento ni parches de SO</text>
-
-            <!-- Badge Velocidad -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#0d9488"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">10x MÁS RÁPIDO</text>
           </g>
         </g>
       </svg>
@@ -1287,10 +1286,13 @@
         <g transform="translate(18, 208)">
           <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(238, 242, 255, 0.45)" stroke="#4338ca" stroke-width="1.5"/>
           
-          <!-- Pill de Micro-segmentación -->
-          <rect x="12" y="6" width="260" height="19" rx="9.5" fill="#4338ca"/>
-          <text x="142" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">MICRO-SEGMENTACIÓN DE SECURITY GROUPS</text>
+          <!-- Pill de Micro-segmentación y Badge alineado a la derecha sin solapamiento -->
+          <rect x="12" y="6" width="255" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="139" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">MICRO-SEGMENTACIÓN DE SECURITY GROUPS</text>
           
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#4338ca"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.04em">ZERO-TRUST L4</text>
+
           <!-- 2 Sub-Tarjetas ALB y Fargate -->
           <g transform="translate(12, 29)">
             <!-- Sub-Tarjeta 1: SG-ALB -->
@@ -1332,10 +1334,6 @@
             
             <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#1e3a8a">3. Amazon RDS PostgreSQL SG: Subredes Privadas de Datos</text>
             <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#2563eb">Inbound exclusivo TCP 5432 desde sg-fargate · Cero acceso público externo</text>
-
-            <!-- Badge Zero-Trust -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#4338ca"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">ZERO-TRUST L4</text>
           </g>
         </g>
       </svg>
@@ -1526,10 +1524,13 @@
         <g transform="translate(18, 208)">
           <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(238, 242, 255, 0.45)" stroke="#4338ca" stroke-width="1.5"/>
           
-          <!-- Pill de Dual Role -->
+          <!-- Pill de Dual Role y Badge alineado a la derecha -->
           <rect x="12" y="6" width="265" height="19" rx="9.5" fill="#4338ca"/>
           <text x="144.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">IDENTIDADES DE MÁQUINA: DUAL ROLE EN FARGATE</text>
           
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#dc2626"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.04em">MFA BLOQUEADO</text>
+
           <!-- 2 Sub-Tarjetas Dual Role -->
           <g transform="translate(12, 29)">
             <!-- Sub-Tarjeta 1: Task Execution Role -->
@@ -1571,10 +1572,6 @@
             
             <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#991b1b">Cuenta Root Bloqueada: Bóveda de Claves y Hardware MFA</text>
             <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#ef4444">Cero Access Keys creadas · Reservada exclusivamente para emergencias legales</text>
-
-            <!-- Badge Root -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#dc2626"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">MFA BLOQUEADO</text>
           </g>
         </g>
       </svg>
@@ -2253,10 +2250,13 @@
         <g transform="translate(18, 208)">
           <rect x="0" y="0" width="454" height="246" rx="10" fill="rgba(240, 249, 255, 0.45)" stroke="#0284c7" stroke-width="1.5"/>
           
-          <!-- Pill de Dependencias -->
+          <!-- Pill de Dependencias y Badge alineado a la derecha -->
           <rect x="12" y="6" width="265" height="19" rx="9.5" fill="#0284c7"/>
           <text x="144.5" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.2" font-weight="800" fill="#ffffff" letter-spacing="0.03em">ÁRBOL DE DEPENDENCIAS Y ESCUDO DE ROLLBACK</text>
           
+          <rect x="330" y="6" width="114" height="19" rx="9.5" fill="#0284c7"/>
+          <text x="387" y="19" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#ffffff" letter-spacing="0.04em">IAC ZERO DRIFT</text>
+
           <!-- 2 Sub-Tarjetas DAG y Rollback -->
           <g transform="translate(12, 29)">
             <!-- Sub-Tarjeta 1: DAG de Recursos -->
@@ -2298,130 +2298,9 @@
             
             <text x="48" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.8" font-weight="800" fill="#0c4a6e">Aprovisionamiento Automatizado: 8 a 12 Minutos</text>
             <text x="48" y="41" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="600" fill="#0284c7">Pila 100% reproducible y portable · Erradicación total de drift manual</text>
-
-            <!-- Badge IaC -->
-            <rect x="330" y="16" width="90" height="24" rx="5" fill="#0284c7"/>
-            <text x="375" y="32" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.04em">IAC ZERO DRIFT</text>
           </g>
         </g>
       </svg>
-    </div>
-
-  </div>
-</section>
-
-      <!-- Slide: 12_resumen_proyecto_final.html -->
-      <!-- SLIDE 12: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
-<section class="slide-resumen-final" data-transition="slide-in slide-out">
-  <style>
-    .reveal .slides section.slide-resumen-final {
-      padding-top: 44px !important;
-    }
-    .reveal .slides section.slide-resumen-final .resumen-header-wrapper {
-      max-width: 1300px;
-      margin: 0 auto 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .reveal .slides section.slide-resumen-final .slide-title {
-      font-size: 2.15rem !important;
-      margin: 0 !important;
-      line-height: 1.15;
-      color: var(--aws-navy);
-      paint-order: stroke fill;
-      -webkit-text-stroke: 4px #ffffff;
-      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
-    }
-  </style>
-
-  <!-- Encabezado Fijo -->
-  <div class="resumen-header-wrapper">
-    <h2 class="slide-title">
-      Consolidado Final: <span style="color: #b45309;">Arquitectura AWS Completa y Conclusiones</span>
-    </h2>
-  </div>
-
-  <div style="max-width: 1300px; margin: 0 auto;">
-    
-    <!-- Tarjeta Principal: Cuadro Resumen Integrador -->
-    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 18px 24px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); margin-bottom: 14px;">
-      
-      <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
-        <thead>
-          <tr style="border-bottom: 2px solid rgba(226, 232, 240, 0.9); text-align: left;">
-            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Capa</th>
-            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Servicio AWS</th>
-            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Configuración &amp; Capacidad</th>
-            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Aporte a APM Inversiones EIRL</th>
-          </tr>
-        </thead>
-        <tbody style="line-height: 1.45; color: var(--text-muted);">
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 8px 10px; font-weight: 700; color: #b45309;">Balanceo L7</td>
-            <td style="padding: 8px 10px; font-weight: 700;">Application Load Balancer</td>
-            <td style="padding: 8px 10px;">Multi-AZ (us-east-1a / 1b) · SSL/TLS ACM</td>
-            <td style="padding: 8px 10px;">Distribución inteligente de tráfico y tolerancia a caídas de zona.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 8px 10px; font-weight: 700; color: #d97706;">Cómputo Serverless</td>
-            <td style="padding: 8px 10px; font-weight: 700;">Amazon ECS + AWS Fargate</td>
-            <td style="padding: 8px 10px;">0.50 vCPU / 1 GiB (API) · 0.25 vCPU (Web y Bot)</td>
-            <td style="padding: 8px 10px;">Cero parches de SO; escalamiento horizontal en segundos.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 8px 10px; font-weight: 700; color: #2563eb;">Base de Datos</td>
-            <td style="padding: 8px 10px; font-weight: 700;">Amazon RDS PostgreSQL 16</td>
-            <td style="padding: 8px 10px;">db.t3.micro Multi-AZ · 20 GB gp3 · Backups PITR</td>
-            <td style="padding: 8px 10px;">Persistencia ACID, aislamiento en subred privada y failover automático.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 8px 10px; font-weight: 700; color: #10b981;">Almacenamiento</td>
-            <td style="padding: 8px 10px; font-weight: 700;">Amazon S3 + Glacier + EFS</td>
-            <td style="padding: 8px 10px;">S3 Standard (LMS) + Glacier (90 días) + EFS (Devs)</td>
-            <td style="padding: 8px 10px;">11 nueves de durabilidad; workspace compartido para practicantes.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 8px 10px; font-weight: 700; color: #4338ca;">Seguridad &amp; IAM</td>
-            <td style="padding: 8px 10px; font-weight: 700;">AWS IAM + SSM Session Manager</td>
-            <td style="padding: 8px 10px;">Grupos con PoLP · Dual Role Fargate · Cero SSH</td>
-            <td style="padding: 8px 10px;">Cero llaves estáticas; acceso seguro sin exponer puerto 22 a Internet.</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 10px; font-weight: 700; color: #6366f1;">Operaciones &amp; IaC</td>
-            <td style="padding: 8px 10px; font-weight: 700;">CloudWatch + CloudFormation</td>
-            <td style="padding: 8px 10px;">Container Insights · Budgets ($60 USD) · YAML IaC</td>
-            <td style="padding: 8px 10px;">Despliegues 100% repetibles, trazabilidad y control de costos FinOps.</td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
-    <!-- Bloque de 3 Conclusiones Clave -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-      
-      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35);">
-        <div style="font-size: 0.88rem; font-weight: 800; color: #059669; margin-bottom: 5px;">1. Alta Disponibilidad (99.9%)</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
-          Se eliminó todo punto único de fallo distribuyendo ALB, Fargate y RDS en múltiples Zonas de Disponibilidad.
-        </div>
-      </div>
-
-      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35);">
-        <div style="font-size: 0.88rem; font-weight: 800; color: #2563eb; margin-bottom: 5px;">2. Seguridad Certificada</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
-          Micro-segmentación con Security Groups, túneles cifrados con SSM y dualidad de roles en IAM sin llaves quemadas.
-        </div>
-      </div>
-
-      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35);">
-        <div style="font-size: 0.88rem; font-weight: 800; color: #b45309; margin-bottom: 5px;">3. Eficiencia FinOps</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
-          Inversión mensual contenida en ~$52-$60 USD gracias a tareas serverless y apagado programado de workstations.
-        </div>
-      </div>
-
     </div>
 
   </div>
@@ -3637,6 +3516,123 @@
       }
     });
   </script>
+</section>
+
+      <!-- Slide: 13_resumen_proyecto_final.html -->
+      <!-- SLIDE 13: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
+<section class="slide-resumen-final" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-resumen-final {
+      padding-top: 44px !important;
+    }
+    .reveal .slides section.slide-resumen-final .resumen-header-wrapper {
+      max-width: 1300px;
+      margin: 0 auto 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reveal .slides section.slide-resumen-final .slide-title {
+      font-size: 2.15rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+
+  <!-- Encabezado Fijo -->
+  <div class="resumen-header-wrapper">
+    <h2 class="slide-title">
+      Consolidado Final: <span style="color: #b45309;">Arquitectura AWS Completa y Conclusiones</span>
+    </h2>
+  </div>
+
+  <div style="max-width: 1300px; margin: 0 auto;">
+    
+    <!-- Tarjeta Principal: Cuadro Resumen Integrador -->
+    <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 18px 24px; border-radius: 16px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(255, 153, 0, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06); margin-bottom: 14px;">
+      
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid rgba(226, 232, 240, 0.9); text-align: left;">
+            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Capa</th>
+            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Servicio AWS</th>
+            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Configuración &amp; Capacidad</th>
+            <th style="padding: 8px 10px; color: var(--aws-navy); font-weight: 800; text-transform: uppercase;">Aporte a APM Inversiones EIRL</th>
+          </tr>
+        </thead>
+        <tbody style="line-height: 1.45; color: var(--text-muted);">
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 8px 10px; font-weight: 700; color: #b45309;">Balanceo L7</td>
+            <td style="padding: 8px 10px; font-weight: 700;">Application Load Balancer</td>
+            <td style="padding: 8px 10px;">Multi-AZ (us-east-1a / 1b) · SSL/TLS ACM</td>
+            <td style="padding: 8px 10px;">Distribución inteligente de tráfico y tolerancia a caídas de zona.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 8px 10px; font-weight: 700; color: #d97706;">Cómputo Serverless</td>
+            <td style="padding: 8px 10px; font-weight: 700;">Amazon ECS + AWS Fargate</td>
+            <td style="padding: 8px 10px;">0.50 vCPU / 1 GiB (API) · 0.25 vCPU (Web y Bot)</td>
+            <td style="padding: 8px 10px;">Cero parches de SO; escalamiento horizontal en segundos.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 8px 10px; font-weight: 700; color: #2563eb;">Base de Datos</td>
+            <td style="padding: 8px 10px; font-weight: 700;">Amazon RDS PostgreSQL 16</td>
+            <td style="padding: 8px 10px;">db.t3.micro Multi-AZ · 20 GB gp3 · Backups PITR</td>
+            <td style="padding: 8px 10px;">Persistencia ACID, aislamiento en subred privada y failover automático.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 8px 10px; font-weight: 700; color: #10b981;">Almacenamiento</td>
+            <td style="padding: 8px 10px; font-weight: 700;">Amazon S3 + Glacier + EFS</td>
+            <td style="padding: 8px 10px;">S3 Standard (LMS) + Glacier (90 días) + EFS (Devs)</td>
+            <td style="padding: 8px 10px;">11 nueves de durabilidad; workspace compartido para practicantes.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 8px 10px; font-weight: 700; color: #4338ca;">Seguridad &amp; IAM</td>
+            <td style="padding: 8px 10px; font-weight: 700;">AWS IAM + SSM Session Manager</td>
+            <td style="padding: 8px 10px;">Grupos con PoLP · Dual Role Fargate · Cero SSH</td>
+            <td style="padding: 8px 10px;">Cero llaves estáticas; acceso seguro sin exponer puerto 22 a Internet.</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 10px; font-weight: 700; color: #6366f1;">Operaciones &amp; IaC</td>
+            <td style="padding: 8px 10px; font-weight: 700;">CloudWatch + CloudFormation</td>
+            <td style="padding: 8px 10px;">Container Insights · Budgets ($60 USD) · YAML IaC</td>
+            <td style="padding: 8px 10px;">Despliegues 100% repetibles, trazabilidad y control de costos FinOps.</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- Bloque de 3 Conclusiones Clave -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      
+      <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35);">
+        <div style="font-size: 0.88rem; font-weight: 800; color: #059669; margin-bottom: 5px;">1. Alta Disponibilidad (99.9%)</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+          Se eliminó todo punto único de fallo distribuyendo ALB, Fargate y RDS en múltiples Zonas de Disponibilidad.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(37, 99, 235, 0.35);">
+        <div style="font-size: 0.88rem; font-weight: 800; color: #2563eb; margin-bottom: 5px;">2. Seguridad Certificada</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+          Micro-segmentación con Security Groups, túneles cifrados con SSM y dualidad de roles en IAM sin llaves quemadas.
+        </div>
+      </div>
+
+      <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 16px 20px; border-radius: 14px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(255, 153, 0, 0.35);">
+        <div style="font-size: 0.88rem; font-weight: 800; color: #b45309; margin-bottom: 5px;">3. Eficiencia FinOps</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+          Inversión mensual contenida en ~$52-$60 USD gracias a tareas serverless y apagado programado de workstations.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </section>
 
     </div>
