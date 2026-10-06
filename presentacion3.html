@@ -3956,7 +3956,7 @@
       const camera = document.getElementById('arch-camera');
       const wrapper = document.getElementById('arch-global-wrapper');
       const slide = document.querySelector('.slide-arch-archify');
-      const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node');
+      const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node, .slide-arch-archify .arch-connector');
 
       // Limpiar conector de réplica RDS
       const replConn = document.getElementById('conn-rds-repl');
@@ -4010,7 +4010,7 @@
             }
 
             // 2. Si el objetivo es una zona completa, asegurar que sus hijos permanezcan 100% legibles
-            const childNodes = el.querySelectorAll('.arch-node');
+            const childNodes = el.querySelectorAll('.arch-node, .arch-connector');
             childNodes.forEach(c => c.classList.add('node-child-active'));
 
             // 3. Caso especial réplica RDS: iluminar también la flecha síncrona y la primaria para ilustrar la replicación
