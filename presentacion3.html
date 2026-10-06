@@ -3247,7 +3247,7 @@
               <g transform="translate(10, 156)">
                 <!-- 1. EC2 Dev Box -->
                 <g id="node-ec2-dev" class="arch-node" onclick="zoomArch('ec2-dev', event)" filter="url(#shadow-node-af)">
-                  <rect x="0" y="0" width="230" height="64" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
+                  <rect x="0" y="0" width="224" height="64" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
                   <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#b45309">EC2 Workstations (Dev)</text>
                   <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#d97706">t4g.small ARM64 (Graviton2)</text>
                   <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#475569">2 vCPU · 2 GiB · 25 GB gp3</text>
@@ -3255,8 +3255,8 @@
                 </g>
 
                 <!-- 2. Ambiente de Pruebas QA Spot Box (NUEVO) -->
-                <g id="node-ec2-spot" class="arch-node" onclick="zoomArch('ec2-spot', event)" transform="translate(242, 0)" filter="url(#shadow-node-af)">
-                  <rect x="0" y="0" width="242" height="64" rx="7" fill="#ffffff" stroke="#d97706" stroke-width="1.4"/>
+                <g id="node-ec2-spot" class="arch-node" onclick="zoomArch('ec2-spot', event)" transform="translate(248, 0)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="226" height="64" rx="7" fill="#ffffff" stroke="#d97706" stroke-width="1.4"/>
                   <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#92400e">Ambiente de Pruebas (QA Spot)</text>
                   <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#b45309">Amazon EC2 Spot (t4g.small)</text>
                   <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#475569">1 vCPU · 1 GiB · 20 GB EBS gp3</text>
@@ -3264,8 +3264,8 @@
                 </g>
 
                 <!-- 3. VPC Endpoints Box -->
-                <g id="node-vpc-endpoints" class="arch-node" onclick="zoomArch('vpc-endpoints', event)" transform="translate(496, 0)" filter="url(#shadow-node-af)">
-                  <rect x="0" y="0" width="231" height="64" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                <g id="node-vpc-endpoints" class="arch-node" onclick="zoomArch('vpc-endpoints', event)" transform="translate(494, 0)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="233" height="64" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
                   <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">VPC Endpoints (PrivateLink)</text>
                   <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Gateway S3 (:443) + ECR / SSM</text>
                   <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="700" fill="#0284c7">Interface TLS privada sin NAT</text>
@@ -3274,25 +3274,25 @@
 
                 <!-- Canal TLS entre VPC Endpoints y Ambientes de Cómputo -->
                 <g class="arch-connector">
-                  <line x1="496" y1="32" x2="484" y2="32" stroke="#475569" stroke-width="1.6" stroke-dasharray="3 2"/>
-                  <polygon points="486,29 480,32 486,35" fill="#475569"/>
+                  <line x1="494" y1="32" x2="478" y2="32" stroke="#475569" stroke-width="1.6" stroke-dasharray="3 2"/>
+                  <polygon points="480,29 474,32 480,35" fill="#475569"/>
                 </g>
               </g>
             </g>
 
-            <!-- ENRUTAMIENTO ORTOGONAL LIMPIO DE sofi-backend A RDS PRIMARIA (SIN CORTAR TARJETAS) -->
-            <g class="arch-connector">
-              <path d="M 245 316 L 245 366 L 425 366 L 425 466 L 205 466 L 205 486" stroke="#059669" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-              <polygon points="201,484 205,490 209,484" fill="#059669"/>
-              <rect x="227" y="458" width="186" height="16" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.1"/>
-              <text x="320" y="469" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.3" font-weight="800" fill="#065f46">Conexión Segura TCP :5432 (Security Group)</text>
+            <!-- ENRUTAMIENTO ORTOGONAL LIMPIO DE sofi-backend A RDS PRIMARIA (DESPEJADO A LA IZQUIERDA) -->
+            <g id="conn-sofi-rds" class="arch-connector">
+              <path d="M 280 338 L 280 492" stroke="#059669" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <polygon points="276,486 280,494 284,486" fill="#059669"/>
+              <rect x="187" y="458" width="186" height="16" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.1"/>
+              <text x="280" y="469" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.3" font-weight="800" fill="#065f46">Conexión Segura TCP :5432 (Security Group)</text>
             </g>
 
             <!-- 2.3 SUBREDES AISLADAS DE BASE DE DATOS (10.0.30.0/24 y 10.0.40.0/24) -->
             <g id="node-db-zone" class="arch-node" onclick="zoomArch('db-zone', event)" transform="translate(34, 474)">
               <rect x="0" y="0" width="747" height="150" rx="10" fill="rgba(209, 250, 229, 0.72)" stroke="#059669" stroke-width="1.6"/>
-              <rect x="10" y="4" width="280" height="13" rx="6.5" fill="#059669"/>
-              <text x="150" y="13.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#ffffff">SUBREDES AISLADAS DE BASE DE DATOS (MULTI-AZ · CERO SALIDA A INTERNET)</text>
+              <rect x="420" y="4" width="316" height="13" rx="6.5" fill="#059669"/>
+              <text x="578" y="13.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#ffffff">SUBREDES AISLADAS DE BASE DE DATOS (MULTI-AZ · CERO SALIDA A INTERNET)</text>
 
               <!-- RDS Primaria -->
               <g id="node-rds-pri" class="arch-node" onclick="zoomArch('rds-pri', event)" transform="translate(10, 20)" filter="url(#shadow-node-af)">
@@ -3668,7 +3668,7 @@
         ]
       },
       "ec2-dev": {
-        cx: 159, cy: 410, scale: 1.8,
+        cx: 156, cy: 410, scale: 1.8,
         activeNode: "node-ec2-dev",
         pillBg: "rgba(245, 158, 11, 0.12)", pillColor: "#b45309", pillBorder: "rgba(245, 158, 11, 0.3)",
         pill: "Entornos de Desarrollo",
@@ -3682,7 +3682,7 @@
         ]
       },
       "ec2-spot": {
-        cx: 407, cy: 410, scale: 1.8,
+        cx: 405, cy: 410, scale: 1.8,
         activeNode: "node-ec2-spot",
         pillBg: "rgba(217, 119, 6, 0.12)", pillColor: "#92400e", pillBorder: "rgba(217, 119, 6, 0.3)",
         pill: "Ambiente de Pruebas & QA",
@@ -3696,7 +3696,7 @@
         ]
       },
       "vpc-endpoints": {
-        cx: 656, cy: 410, scale: 1.8,
+        cx: 655, cy: 410, scale: 1.8,
         activeNode: "node-vpc-endpoints",
         pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
         pill: "Conectividad Privada",
@@ -3976,9 +3976,11 @@
       const slide = document.querySelector('.slide-arch-archify');
       const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node, .slide-arch-archify .arch-connector');
 
-      // Limpiar conector de réplica RDS
+      // Limpiar conectores activos especiales
       const replConn = document.getElementById('conn-rds-repl');
       if (replConn) replConn.classList.remove('node-child-active');
+      const sofiRdsConn = document.getElementById('conn-sofi-rds');
+      if (sofiRdsConn) sofiRdsConn.classList.remove('node-child-active');
 
       // Sincronizar el paso del tour si se hizo clic directo en un nodo
       if (syncStep) {
@@ -4031,11 +4033,13 @@
             const childNodes = el.querySelectorAll('.arch-node, .arch-connector');
             childNodes.forEach(c => c.classList.add('node-child-active'));
 
-            // 3. Caso especial réplica RDS: iluminar también la flecha síncrona y la primaria para ilustrar la replicación
+            // 3. Caso especial réplica RDS y conexión backend-RDS
             if (key === 'rds-sec') {
               if (replConn) replConn.classList.add('node-child-active');
               const rdsPri = document.getElementById('node-rds-pri');
               if (rdsPri) rdsPri.classList.add('node-child-active');
+            } else if (key === 'rds-pri' || key === 'ecs-backend') {
+              if (sofiRdsConn) sofiRdsConn.classList.add('node-child-active');
             }
           }
         }
