@@ -191,11 +191,11 @@
       animation-play-state: paused !important;
     }
 
-    /* 1. NODO FOCO PRINCIPAL (Hoja o Zona): Brillo naranja intenso y 100% opacidad */
+    /* 1. NODO FOCO PRINCIPAL (Hoja o Zona): Brillo dinámico coordinado con el color del nodo */
     .slide-arch-archify.is-zoomed .arch-node.node-focus,
     .slide-arch-archify .arch-wrapper.is-zoomed .arch-node.node-focus {
       opacity: 1 !important;
-      filter: drop-shadow(0 0 18px rgba(255, 153, 0, 0.95)) !important;
+      filter: drop-shadow(0 0 20px var(--node-glow, #ff9900)) !important;
     }
 
     .slide-arch-archify.is-zoomed .arch-node.node-focus [filter],
@@ -1348,18 +1348,31 @@
       }
 
       if (target.isGlobal) {
-        if (wrapper) wrapper.classList.remove('is-zoomed');
+        if (wrapper) {
+          wrapper.classList.remove('is-zoomed');
+          wrapper.style.removeProperty('--node-glow');
+        }
         if (slide) slide.classList.remove('is-zoomed');
-        allNodes.forEach(n => n.classList.remove('node-focus', 'node-context', 'node-child-active'));
+        allNodes.forEach(n => {
+          n.classList.remove('node-focus', 'node-context', 'node-child-active');
+          n.style.removeProperty('--node-glow');
+        });
         camera.style.transform = "translate(0px, 0px) scale(1)";
       } else {
-        if (wrapper) wrapper.classList.add('is-zoomed');
+        if (wrapper) {
+          wrapper.classList.add('is-zoomed');
+          wrapper.style.setProperty('--node-glow', target.pillColor || '#ff9900');
+        }
         if (slide) slide.classList.add('is-zoomed');
-        allNodes.forEach(n => n.classList.remove('node-focus', 'node-context', 'node-child-active'));
+        allNodes.forEach(n => {
+          n.classList.remove('node-focus', 'node-context', 'node-child-active');
+          n.style.removeProperty('--node-glow');
+        });
         if (target.activeNode) {
           const el = document.getElementById(target.activeNode);
           if (el) {
             el.classList.add('node-focus');
+            el.style.setProperty('--node-glow', target.pillColor || '#ff9900');
 
             // 1. Contenedores de contexto (padres): evitar que la opacidad del grupo comprima al hijo
             let parentNode = el.parentElement;
