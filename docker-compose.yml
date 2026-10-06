@@ -6,8 +6,10 @@ services:
     container_name: aws-presentation
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /home/azureuser/certs:/etc/letsencrypt:ro
-      - /home/azureuser/certs-data:/var/www/certbot:ro
+      - "8080:80"
+    networks:
+      - crafty_default
+
+networks:
+  crafty_default:
+    external: true
