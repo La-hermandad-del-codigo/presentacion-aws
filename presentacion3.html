@@ -2847,28 +2847,29 @@
       filter: none !important;
     }
 
-    /* Tarjeta Lateral de Justificación de Ingeniería - Visible en Zoom */
+    /* Tarjeta Lateral de Justificación de Ingeniería - Consola Cloud Enterprise */
     .slide-arch-archify .tech-side-card {
       position: absolute;
       top: 10px;
       right: 14px;
-      width: 370px;
+      width: 375px;
       max-height: 625px;
-      background: rgba(255, 255, 255, 0.97);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 2px solid #ff9900;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-top: 4px solid var(--accent-card, #ff9900);
       border-radius: 16px;
-      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255, 153, 0, 0.3);
-      padding: 18px 20px;
+      box-shadow: 0 20px 45px -12px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      padding: 16px 18px;
       box-sizing: border-box;
       transform: translateX(430px);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 100;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      gap: 4px;
+      gap: 3px;
       overflow-y: auto;
     }
 
@@ -2878,73 +2879,105 @@
     }
 
     .slide-arch-archify .tech-pill {
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       font-weight: 800;
       text-transform: uppercase;
       padding: 3px 9px;
-      border-radius: 9999px;
+      border-radius: 6px;
       display: inline-block;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
 
     .slide-arch-archify .tech-title {
       font-size: 1.15rem;
       font-weight: 800;
-      color: var(--aws-navy);
-      margin: 8px 0 3px;
-      line-height: 1.2;
+      color: #0f172a;
+      margin: 8px 0 2px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
     }
 
     .slide-arch-archify .tech-subtitle {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #b45309;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #64748b;
       margin-bottom: 12px;
     }
 
     .slide-arch-archify .tech-box-why {
-      background: #fffbeb;
-      border-left: 3.5px solid #f59e0b;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 3.5px solid var(--accent-why, #0284c7);
       padding: 10px 12px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
     }
 
     .slide-arch-archify .tech-why-header {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      color: #b45309;
+      color: #475569;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
+    .slide-arch-archify .tech-why-header svg {
+      color: var(--accent-why, #0284c7);
+    }
+
     .slide-arch-archify .tech-why-content {
-      font-size: 0.79rem;
-      color: #78350f;
-      line-height: 1.4;
+      font-size: 0.76rem;
+      color: #334155;
+      line-height: 1.45;
       font-weight: 500;
+    }
+
+    .slide-arch-archify .tech-specs-header {
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      margin: 8px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .slide-arch-archify .tech-specs-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 14px 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
     }
 
     .slide-arch-archify .tech-specs-list li {
-      font-size: 0.76rem;
-      color: var(--text-main);
-      line-height: 1.35;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.74rem;
+      line-height: 1.4;
+      color: #334155;
       display: flex;
       align-items: flex-start;
-      gap: 6px;
+      gap: 8px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .slide-arch-archify .tech-specs-list li:hover {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
     }
 
     .slide-arch-archify .tech-specs-list li svg {
@@ -3418,16 +3451,20 @@
           <div class="tech-title" id="tech-title">Route 53 &amp; CloudFront</div>
           <div class="tech-subtitle" id="tech-subtitle">Aceleración Perimetral &amp; Seguridad L3/L4</div>
 
-          <div class="tech-box-why">
+          <div class="tech-box-why" id="tech-box-why">
             <div class="tech-why-header">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              ¿Por qué está diseñado así?
+              Decisión de Arquitectura &amp; C4
             </div>
             <div class="tech-why-content" id="tech-why-content">
               Descarga el cifrado TLS y cachea contenidos cerca de los usuarios peruanos para reducir latencia, mitigando ataques de denegación de servicio con AWS Shield en el borde.
             </div>
           </div>
 
+          <div class="tech-specs-header">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Especificaciones Técnicas
+          </div>
           <ul class="tech-specs-list" id="tech-specs-list">
             <li>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -3978,12 +4015,20 @@
         camera.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
 
         // Actualizar Tarjeta Lateral de Justificación
+        const card = document.getElementById('tech-card');
         const pill = document.getElementById('tech-pill');
         const title = document.getElementById('tech-title');
         const subtitle = document.getElementById('tech-subtitle');
+        const whyBox = document.getElementById('tech-box-why');
         const whyText = document.getElementById('tech-why-content');
         const specsList = document.getElementById('tech-specs-list');
 
+        if (card) {
+          card.style.setProperty('--accent-card', target.pillColor || '#ff9900');
+        }
+        if (whyBox) {
+          whyBox.style.setProperty('--accent-why', target.pillColor || '#0284c7');
+        }
         if (pill) {
           pill.textContent = target.pill;
           pill.style.background = target.pillBg;
