@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Antigravity">
   <diagram id="aws-global-architecture-expanded" name="Diagrama de Arquitectura Global AWS - APM Inversiones EIRL">
-    <mxGraphModel dx="1254" dy="2838" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1950" math="0" shadow="0">
+    <mxGraphModel dx="865" dy="2562" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1950" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -191,7 +191,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="video-flow-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#7C3AED;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=16;fontFamily=Helvetica;fontColor=#5B21B6;" value="&lt;b style=&quot;font-size: 14.5px;&quot;&gt;Flujo de Streaming de Video Desacoplado (Direct-to-Client)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11.5px;&quot; color=&quot;#6D28D9&quot;&gt;&lt;i&gt;Estrategia Anti-Saturación: Control Plane Ligero + CDN Edge Offloading&lt;/i&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="375" width="510" x="1540" y="-40" as="geometry" />
+          <mxGeometry height="425" width="510" x="1540" y="-90" as="geometry" />
         </mxCell>
         <mxCell id="video-step-control" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;1. Control Plane: Solicitud Ligera de Ubicación&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Petición API:&lt;/b&gt; Cliente solicita video a &lt;code&gt;sofi-backend&lt;/code&gt; vía ALB (&lt;code&gt;/api/videos/:id&lt;/code&gt;)&lt;br&gt;• &lt;b&gt;Respuesta &amp;lt; 1 KB:&lt;/b&gt; Backend valida sesión en RDS y devuelve solo la URL directa de CloudFront&lt;br&gt;• &lt;b&gt;Cero Proxy:&lt;/b&gt; &lt;u&gt;Fargate NUNCA transmite bytes de video ni satura memoria RAM&lt;/u&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="110" width="450" x="1570" y="10" as="geometry" />
