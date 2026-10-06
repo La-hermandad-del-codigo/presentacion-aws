@@ -2650,33 +2650,102 @@
       text-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 2px 6px rgba(15, 23, 42, 0.08);
     }
 
-    .slide-arch-archify .btn-reset-global {
-      display: none;
+    /* Barra de Navegación del Tour Técnico */
+    .slide-arch-archify .tour-nav-controls {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #ff9900;
-      color: #232f3e;
-      border: 1.5px solid #232f3e;
-      padding: 5px 14px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 4px 8px;
       border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(255, 153, 0, 0.35);
-      transition: all 0.2s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      border: 1.5px solid rgba(226, 232, 240, 0.95);
+      box-shadow: 0 4px 15px -3px rgba(15, 23, 42, 0.08);
     }
 
-    .slide-arch-archify .btn-reset-global:hover {
+    .slide-arch-archify .btn-tour-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      color: var(--aws-navy);
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.73rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .slide-arch-archify .btn-tour-step:hover:not(:disabled) {
+      background: var(--aws-navy);
+      color: #ffffff;
+      border-color: var(--aws-navy);
+    }
+
+    .slide-arch-archify .btn-tour-step:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .slide-arch-archify .tour-step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(255, 153, 0, 0.12);
+      border: 1px solid rgba(255, 153, 0, 0.4);
+      font-size: 0.73rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .slide-arch-archify .tour-step-badge:hover {
+      background: rgba(255, 153, 0, 0.22);
+    }
+
+    .slide-arch-archify .tour-step-badge .badge-num {
+      font-weight: 800;
+      color: #b45309;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .slide-arch-archify .tour-step-badge .badge-label {
+      font-weight: 700;
+      color: var(--aws-navy);
+      max-width: 175px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slide-arch-archify .btn-tour-global {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ff9900;
+      color: #232f3e;
+      border: 1px solid #232f3e;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.73rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .slide-arch-archify .btn-tour-global:hover {
       background: #232f3e;
       color: #ffffff;
       border-color: #ff9900;
-    }
-
-    .slide-arch-archify.is-zoomed .btn-reset-global,
-    .slide-arch-archify .arch-wrapper.is-zoomed .btn-reset-global {
-      display: inline-flex;
     }
 
     /* Contenedor del Lienzo - SIN Fondo Blanco Rígido, Integrado Naturalmente */
@@ -2849,27 +2918,6 @@
       color: #232f3e;
     }
 
-    /* Pista Flotante en Vista Global */
-    .slide-arch-archify .bottom-hint-pill {
-      position: absolute;
-      bottom: 8px;
-      left: 18px;
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid rgba(226, 232, 240, 0.95);
-      border-radius: 9999px;
-      padding: 4px 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .slide-arch-archify.is-zoomed .bottom-hint-pill,
-    .slide-arch-archify .arch-wrapper.is-zoomed .bottom-hint-pill {
-      opacity: 0;
-    }
   </style>
 
   <div class="arch-wrapper" id="arch-global-wrapper">
@@ -2881,10 +2929,26 @@
           Arquitectura Global AWS: <span style="color: #ff9900;">Flujo Integral de Infraestructura</span>
         </h2>
       </div>
-      <div>
-        <button class="btn-reset-global" onclick="zoomArch('global')">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          <span>Vista Global</span>
+      <!-- Barra de Control del Tour Técnico -->
+      <div class="tour-nav-controls">
+        <button class="btn-tour-step" id="btn-tour-prev" onclick="stepTour(-1)" title="Paso anterior (Flecha Arriba ↑)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="18 15 12 9 6 15"/></svg>
+          <span>Ant ↑</span>
+        </button>
+
+        <div class="tour-step-badge" id="tour-step-badge" onclick="zoomArch('global')" title="Hacé clic para volver a Vista Global">
+          <span class="badge-num" id="badge-step-num">00/10</span>
+          <span class="badge-label" id="badge-step-label">Vista Global</span>
+        </div>
+
+        <button class="btn-tour-step" id="btn-tour-next" onclick="stepTour(1)" title="Paso siguiente (Flecha Abajo ↓)">
+          <span>Sig ↓</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <button class="btn-tour-global" id="btn-tour-global" onclick="zoomArch('global')" title="Vista Global (Esc)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Global</span>
         </button>
       </div>
     </div>
@@ -3299,13 +3363,6 @@
         </svg>
       </div>
 
-      <!-- PISTA DE NAVEGACIÓN EN VISTA GLOBAL -->
-      <div class="bottom-hint-pill">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">
-          <strong>Navegación Interactiva:</strong> Hacé clic en cualquier componente individual o subred para enfocarlo en el centro con su justificación técnica.
-        </span>
-      </div>
 
       <!-- RECUADRO LATERAL DE JUSTIFICACIÓN DE INGENIERÍA -->
       <div class="tech-side-card" id="tech-card" onclick="event.stopPropagation()">
@@ -3746,13 +3803,71 @@
       }
     };
 
-    function zoomArch(key, e) {
+    // Secuencia Maestra del Tour de Arquitectura (10 Pasos + Global)
+    const tourSteps = [
+      { key: "global", label: "Vista Global" },
+      { key: "usuarios", label: "01/10 · Clientes & Tráfico" },
+      { key: "r53", label: "02/10 · Route 53 DNS" },
+      { key: "cf", label: "03/10 · CloudFront CDN Edge" },
+      { key: "alb", label: "04/10 · Subred Pública ALB" },
+      { key: "compute-zone", label: "05/10 · Cómputo ECS Fargate" },
+      { key: "ecs-asg", label: "06/10 · Target Tracking Scaling" },
+      { key: "ec2-dev", label: "07/10 · EC2 Dev & PrivateLink" },
+      { key: "db-zone", label: "08/10 · RDS Multi-AZ HA" },
+      { key: "storage-zone", label: "09/10 · Almacenamiento & Ciclo" },
+      { key: "ops-zone", label: "10/10 · Gobernanza & IaC" }
+    ];
+
+    let currentTourIndex = 0;
+
+    function updateTourUI() {
+      const step = tourSteps[currentTourIndex];
+      const badgeNum = document.getElementById('badge-step-num');
+      const badgeLabel = document.getElementById('badge-step-label');
+      const btnPrev = document.getElementById('btn-tour-prev');
+      const btnNext = document.getElementById('btn-tour-next');
+
+      if (badgeNum && badgeLabel && step) {
+        if (currentTourIndex === 0) {
+          badgeNum.textContent = "00/10";
+          badgeLabel.textContent = "Vista Global";
+        } else {
+          badgeNum.textContent = String(currentTourIndex).padStart(2, '0') + "/10";
+          badgeLabel.textContent = step.label.replace(/^\d+\/\d+\s*·\s*/, '');
+        }
+      }
+
+      if (btnPrev) btnPrev.disabled = (currentTourIndex === 0);
+      if (btnNext) btnNext.disabled = (currentTourIndex === tourSteps.length - 1);
+    }
+
+    function stepTour(direction) {
+      const newIndex = currentTourIndex + direction;
+      if (newIndex >= 0 && newIndex < tourSteps.length) {
+        currentTourIndex = newIndex;
+        zoomArch(tourSteps[currentTourIndex].key, null, false);
+        updateTourUI();
+      }
+    }
+
+    function zoomArch(key, e, syncStep = true) {
       if (e) e.stopPropagation();
       const target = archNodesData[key] || archNodesData.global;
       const camera = document.getElementById('arch-camera');
       const wrapper = document.getElementById('arch-global-wrapper');
       const slide = document.querySelector('.slide-arch-archify');
       const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node');
+
+      // Sincronizar el paso del tour si se hizo clic directo en un nodo
+      if (syncStep) {
+        const foundIdx = tourSteps.findIndex(s => s.key === key);
+        if (foundIdx !== -1) {
+          currentTourIndex = foundIdx;
+        } else if (key === 'global') {
+          currentTourIndex = 0;
+        }
+        updateTourUI();
+      }
 
       if (target.isGlobal) {
         if (wrapper) wrapper.classList.remove('is-zoomed');
@@ -3808,15 +3923,30 @@
       }
     }
 
-    // Tecla Escape para volver a Vista Global
+    // Navegación Ortogonal por Teclado: Flechas Arriba y Abajo exclusivas para el diagrama
+    // (Flechas Izquierda y Derecha permanecen libres para que Reveal.js cambie de diapositiva)
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
+      const slide = document.querySelector('.slide-arch-archify');
+      // Solo actuar cuando este slide está visible en pantalla (.present)
+      if (!slide || !slide.classList.contains('present')) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        stepTour(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        stepTour(-1);
+      } else if (e.key === 'Escape') {
         const wrapper = document.getElementById('arch-global-wrapper');
         if (wrapper && wrapper.classList.contains('is-zoomed')) {
+          e.preventDefault();
           zoomArch('global');
         }
       }
     });
+
+    // Inicializar estado del tour
+    updateTourUI();
   </script>
 </section>
 
