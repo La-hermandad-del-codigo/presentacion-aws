@@ -188,6 +188,11 @@
       filter: drop-shadow(0 0 18px rgba(255, 153, 0, 0.95)) !important;
     }
 
+    .slide-arch-archify.is-zoomed .arch-node.node-focus [filter],
+    .slide-arch-archify.is-zoomed .arch-node.node-focus[filter] {
+      filter: none !important;
+    }
+
     /* 2. CONTENEDOR DE CONTEXTO (Padre del elemento enfocado, ej: Subred Pública para ALB):
           Opacidad 100% y nítido para que el hijo NO quede limitado por el compositing de opacidad SVG */
     .slide-arch-archify.is-zoomed .arch-node.node-context,
@@ -371,9 +376,9 @@
       
       <!-- CÁMARA DE TRANSFORMACIÓN POR GPU -->
       <div id="arch-camera">
-        <svg viewBox="0 0 1260 645" width="1260" height="645" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 1260 645" width="1260" height="645" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">
           <defs>
-            <filter id="shadow-node-af" x="-15%" y="-15%" width="130%" height="130%">
+            <filter id="shadow-node-af" x="-100%" y="-150%" width="300%" height="400%">
               <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
             </filter>
 
