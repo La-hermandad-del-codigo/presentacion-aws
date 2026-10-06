@@ -605,9 +605,9 @@
                 <!-- EC2 Dev Box -->
                 <g id="node-ec2-dev" class="arch-node" onclick="zoomArch('ec2-dev', event)" filter="url(#shadow-node-af)">
                   <rect x="0" y="0" width="380" height="64" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
-                  <text x="12" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#b45309">EC2 Workstations Dev (Familia T3 / T4g ARM Graviton)</text>
-                  <text x="12" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="600" fill="#475569">Cargas Burstable · 25 GB EBS gp3 (3,000 IOPS base)</text>
-                  <text x="12" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="800" fill="#10b981">✓ Política FinOps: Apagado programado (160h/mes = ~$3.50/mes)</text>
+                  <text x="12" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#b45309">EC2 Workstations Dev (Amazon EC2 t4g.small · Graviton2)</text>
+                  <text x="12" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="600" fill="#475569">2 vCPU · 2 GiB RAM · 25 GB EBS gp3 (3,000 IOPS base)</text>
+                  <text x="12" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="800" fill="#10b981">✓ Política FinOps: Apagado programado (160h/mes = ~$2.70/mes cómputo)</text>
                 </g>
 
                 <!-- VPC Endpoints Box -->
@@ -1016,12 +1016,12 @@
         pillBg: "rgba(245, 158, 11, 0.12)", pillColor: "#b45309", pillBorder: "rgba(245, 158, 11, 0.3)",
         pill: "Entornos de Desarrollo",
         title: "Amazon EC2 Workstations",
-        subtitle: "Familia T3 / T4g ARM Graviton2",
-        why: "<strong>Rendimiento en Ráfaga & Control FinOps:</strong> El practicante pasa tiempo editando código (5-15% CPU) acumulando créditos que se liberan al compilar. El apagado programado fuera de horario deja el costo en solo ~$3.50/mes.",
+        subtitle: "Instancia t4g.small ARM64 (AWS Graviton2)",
+        why: "<strong>Rendimiento en Ráfaga & Control FinOps:</strong> Instancia basada en procesadores AWS Graviton2 (arquitectura ARM64 de 64 bits). El practicante pasa el tiempo editando código (5-15% CPU) acumulando créditos que se liberan al compilar. El apagado programado fuera de horario (160 h/mes) reduce el costo de cómputo a solo ~$2.70/mes.",
         specs: [
-          "<strong>AWS Graviton2 (t4g.small):</strong> Hasta 40% mejor rendimiento por dólar en ARM64.",
-          "<strong>EBS gp3:</strong> 25 GB con 3,000 IOPS base independientes del tamaño.",
-          "<strong>Apagado Programado:</strong> 160 h/mes de operación = reducción drástica de factura."
+          "<strong>AWS Graviton2 (t4g.small):</strong> 2 vCPU, 2 GiB RAM y hasta 40% mejor rendimiento por dólar.",
+          "<strong>Almacenamiento EBS gp3:</strong> 25 GB con 3,000 IOPS base sostenidos y 125 MB/s de throughput.",
+          "<strong>Apagado Programado:</strong> 160 h/mes de operación = reducción drástica de factura (~$2.70/mes)."
         ]
       },
       "vpc-endpoints": {
