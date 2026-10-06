@@ -502,7 +502,7 @@
           <!-- ============================================================ -->
           <!-- 2. AMAZON VPC (10.0.0.0/16 · us-east-1) (x = 20 a 800)      -->
           <!-- ============================================================ -->
-          <g id="box-vpc-container">
+          <g id="box-vpc-container" class="arch-node" onclick="zoomArch('vpc', event)">
             <rect x="20" y="100" width="775" height="535" rx="14" fill="rgba(255, 255, 255, 0.72)" stroke="#0284c7" stroke-width="2" stroke-dasharray="8 5"/>
             <text x="36" y="116" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="900" fill="#0369a1" letter-spacing="0.02em">
               Amazon Virtual Private Cloud (VPC) <tspan font-weight="700" fill="#64748b">· CIDR Principal: 10.0.0.0/16 · Región us-east-1 (N. Virginia)</tspan>
@@ -929,6 +929,20 @@
           "<strong>Ancho de Banda Elástico:</strong> Escala automáticamente de 5 Gbps hasta 45 Gbps sin administración de instancias."
         ]
       },
+      vpc: {
+        cx: 407, cy: 367, scale: 0.98,
+        activeNode: "box-vpc-container",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Red Privada Aislada",
+        title: "Amazon Virtual Private Cloud (VPC)",
+        subtitle: "CIDR 10.0.0.0/16 · Región us-east-1 (N. Virginia)",
+        why: "<strong>Aislamiento Lógico & Espacio de Red Seguro:</strong> Red virtual lógicamente aislada en la nube de AWS con un bloque CIDR /16 que provee 65,536 direcciones IP privadas. Alberga la topología de seguridad en 3 capas de subredes Multi-AZ con tablas de ruteo y Security Groups restrictivos.",
+        specs: [
+          "<strong>Espacio de Direccionamiento:</strong> Bloque CIDR 10.0.0.0/16 (65,536 IPs privadas).",
+          "<strong>Segmentación en 3 Capas:</strong> Subredes Públicas, Privadas de Cómputo y Aisladas de BD.",
+          "<strong>Alta Disponibilidad:</strong> Despliegue distribuido en Zonas us-east-1a y us-east-1b."
+        ]
+      },
       "public-zone": {
         cx: 407, cy: 161, scale: 1.05,
         activeNode: "node-public-zone",
@@ -1240,28 +1254,29 @@
       }
     };
 
-    // Secuencia Maestra del Tour de Arquitectura (19 Pasos + Global)
+    // Secuencia Maestra del Tour de Arquitectura (20 Pasos + Global)
     const tourSteps = [
       { key: "global", label: "Vista Global" },
-      { key: "usuarios", label: "01/19 · Clientes & Tráfico" },
-      { key: "r53", label: "02/19 · Route 53 DNS" },
-      { key: "cf", label: "03/19 · CloudFront CDN Edge" },
-      { key: "public-zone", label: "04/19 · Subredes Públicas Multi-AZ" },
-      { key: "alb", label: "05/19 · Subred Pública ALB" },
-      { key: "nat", label: "06/19 · NAT Gateways Multi-AZ" },
-      { key: "compute-zone", label: "07/19 · Subredes Privadas Cómputo" },
-      { key: "ecs-asg", label: "08/19 · ECS Fargate & Microservicios" },
-      { key: "ec2-dev", label: "09/19 · EC2 Dev Workstations" },
-      { key: "vpc-endpoints", label: "10/19 · VPC Endpoints PrivateLink" },
-      { key: "db-zone", label: "11/19 · Subredes Aisladas BD" },
-      { key: "rds-pri", label: "12/19 · RDS PostgreSQL Primaria" },
-      { key: "rds-sec", label: "13/19 · Replicación Síncrona & HA" },
-      { key: "storage-zone", label: "14/19 · Almacenamiento & Ciclo S3" },
-      { key: "cloudwatch", label: "15/19 · CloudWatch Observabilidad" },
-      { key: "sns", label: "16/19 · Amazon SNS Alertas" },
-      { key: "ssm", label: "17/19 · SSM Session Manager" },
-      { key: "iam", label: "18/19 · AWS IAM & PoLP" },
-      { key: "iac", label: "19/19 · CloudFormation & FinOps" }
+      { key: "usuarios", label: "01/20 · Clientes & Tráfico" },
+      { key: "r53", label: "02/20 · Route 53 DNS" },
+      { key: "cf", label: "03/20 · CloudFront CDN Edge" },
+      { key: "vpc", label: "04/20 · VPC Amazon 10.0.0.0/16" },
+      { key: "public-zone", label: "05/20 · Subredes Públicas Multi-AZ" },
+      { key: "alb", label: "06/20 · Subred Pública ALB" },
+      { key: "nat", label: "07/20 · NAT Gateways Multi-AZ" },
+      { key: "compute-zone", label: "08/20 · Subredes Privadas Cómputo" },
+      { key: "ecs-asg", label: "09/20 · ECS Fargate & Microservicios" },
+      { key: "ec2-dev", label: "10/20 · EC2 Dev Workstations" },
+      { key: "vpc-endpoints", label: "11/20 · VPC Endpoints PrivateLink" },
+      { key: "db-zone", label: "12/20 · Subredes Aisladas BD" },
+      { key: "rds-pri", label: "13/20 · RDS PostgreSQL Primaria" },
+      { key: "rds-sec", label: "14/20 · Replicación Síncrona & HA" },
+      { key: "storage-zone", label: "15/20 · Almacenamiento & Ciclo S3" },
+      { key: "cloudwatch", label: "16/20 · CloudWatch Observabilidad" },
+      { key: "sns", label: "17/20 · Amazon SNS Alertas" },
+      { key: "ssm", label: "18/20 · SSM Session Manager" },
+      { key: "iam", label: "19/20 · AWS IAM & PoLP" },
+      { key: "iac", label: "20/20 · CloudFormation & FinOps" }
     ];
 
     let currentTourIndex = 0;
