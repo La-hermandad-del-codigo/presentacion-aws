@@ -2798,6 +2798,16 @@
       filter: grayscale(60%);
     }
 
+    /* Optimización GPU: Congelar animaciones y atenuar fondo mientras el diagrama esté en pantalla */
+    #cloud-network-bg.bg-paused-for-diagram {
+      opacity: 0.15 !important;
+      transition: opacity 0.4s ease;
+    }
+
+    #cloud-network-bg.bg-paused-for-diagram .data-stream-line {
+      animation-play-state: paused !important;
+    }
+
     /* 1. NODO FOCO PRINCIPAL (Hoja o Zona): Brillo naranja intenso y 100% opacidad */
     .slide-arch-archify.is-zoomed .arch-node.node-focus,
     .slide-arch-archify .arch-wrapper.is-zoomed .arch-node.node-focus {
@@ -3165,7 +3175,7 @@
 
               <!-- Cluster ECS Fargate Contenedor Agrupado -->
               <g id="node-ecs-cluster" class="arch-node" onclick="zoomArch('ecs-asg', event)">
-                <rect x="10" y="22" width="727" height="122" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3" filter="url(#shadow-node-af)"/>
+                <rect x="10" y="22" width="727" height="106" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3" filter="url(#shadow-node-af)"/>
                 
                 <g transform="translate(20, 36)">
                   <g transform="scale(0.65)"><use href="#icon-fargate-af"/></g>
@@ -3207,13 +3217,6 @@
                     <text x="8" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="600" fill="#64748b">Reflexo Perú · Arte Ideas</text>
                     <text x="8" y="42" font-family="'JetBrains Mono', monospace" font-size="7" font-weight="700" fill="#6b21a8">0.50 vCPU · 1024 MiB</text>
                   </g>
-                </g>
-
-                <!-- Pastilla de Auto Scaling Fargate -->
-                <g id="node-ecs-asg" class="arch-node" onclick="zoomArch('ecs-asg', event)" transform="translate(180, 102)">
-                  <rect x="-8" y="-1" width="370" height="30" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1"/>
-                  <text x="177" y="12" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#92400e">Mecanismo de Elasticidad: Amazon ECS Auto Scaling Policies</text>
-                  <text x="177" y="24" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.8" font-weight="600" fill="#b45309">• Target Tracking (70% CPU/RAM) + Step Scaling Dinámico</text>
                 </g>
               </g>
 
@@ -3614,17 +3617,17 @@
         ]
       },
       "ecs-asg": {
-        cx: 407, cy: 305, scale: 1.05,
+        cx: 407, cy: 300, scale: 1.05,
         activeNode: "node-ecs-cluster",
         pillBg: "rgba(217, 119, 6, 0.12)", pillColor: "#92400e", pillBorder: "rgba(217, 119, 6, 0.3)",
-        pill: "Elasticidad Dinámica",
-        title: "Amazon ECS Auto Scaling Policies",
-        subtitle: "Target Tracking (70% CPU/RAM) & Step Scaling",
-        why: "<strong>Garantía de Rendimiento & Ahorro:</strong> Mantiene el uso medio al 70% inyectando tareas en segundos ante alta afluencia y retirándolas en horario nocturno para eliminar costos ociosos.",
+        pill: "Cómputo Elástico Serverless",
+        title: "Cluster Amazon ECS (AWS Fargate)",
+        subtitle: "Elasticidad por Auto Scaling & 4 Microservicios Desacoplados",
+        why: "<strong>Cómputo Serverless Elástico:</strong> Aloja los 4 microservicios desacoplados del negocio (sofi-web SSR, sofi-backend API, Bot Discord 24/7 y Clientes B2B) en contenedores sin servidores EC2 que gestionar. Aplica políticas de <strong>Target Tracking al 70% CPU/RAM</strong> y Step Scaling para escalar en segundos ante picos y contraerse de noche.",
         specs: [
-          "<strong>Target Tracking:</strong> Ajuste automático al superar 70% de CPU o RAM.",
-          "<strong>Step Scaling:</strong> Respuestas agresivas ante picos bruscos de peticiones en ALB.",
-          "<strong>Cooldown 60s:</strong> Previene inestabilidad y ciclos de encendido/apagado acelerados."
+          "<strong>Target Tracking (70% CPU/RAM):</strong> Elasticidad autónoma ante picos de demanda.",
+          "<strong>Aislamiento de Cargas:</strong> Cuotas de vCPU y memoria dedicadas por microservicio.",
+          "<strong>Sin Servidores que Administrar:</strong> Ciclo de vida y parches gestionados por AWS Fargate."
         ]
       },
       "ec2-dev": {
@@ -3854,21 +3857,28 @@
       }
     };
 
-    // Secuencia Maestra del Tour de Arquitectura (12 Pasos + Global)
+    // Secuencia Maestra del Tour de Arquitectura (19 Pasos + Global)
     const tourSteps = [
       { key: "global", label: "Vista Global" },
-      { key: "usuarios", label: "01/12 · Clientes & Tráfico" },
-      { key: "r53", label: "02/12 · Route 53 DNS" },
-      { key: "cf", label: "03/12 · CloudFront CDN Edge" },
-      { key: "alb", label: "04/12 · Subred Pública ALB" },
-      { key: "nat", label: "05/12 · NAT Gateways Multi-AZ" },
-      { key: "ecs-asg", label: "06/12 · ECS Fargate & Scaling" },
-      { key: "ec2-dev", label: "07/12 · EC2 Dev Workstations" },
-      { key: "vpc-endpoints", label: "08/12 · VPC Endpoints PrivateLink" },
-      { key: "rds-pri", label: "09/12 · RDS PostgreSQL Primaria" },
-      { key: "rds-sec", label: "10/12 · Replicación Síncrona & HA" },
-      { key: "storage-zone", label: "11/12 · Almacenamiento & Ciclo" },
-      { key: "ops-zone", label: "12/12 · Gobernanza, Obs & IaC" }
+      { key: "usuarios", label: "01/19 · Clientes & Tráfico" },
+      { key: "r53", label: "02/19 · Route 53 DNS" },
+      { key: "cf", label: "03/19 · CloudFront CDN Edge" },
+      { key: "public-zone", label: "04/19 · Subredes Públicas Multi-AZ" },
+      { key: "alb", label: "05/19 · Subred Pública ALB" },
+      { key: "nat", label: "06/19 · NAT Gateways Multi-AZ" },
+      { key: "compute-zone", label: "07/19 · Subredes Privadas Cómputo" },
+      { key: "ecs-asg", label: "08/19 · ECS Fargate & Microservicios" },
+      { key: "ec2-dev", label: "09/19 · EC2 Dev Workstations" },
+      { key: "vpc-endpoints", label: "10/19 · VPC Endpoints PrivateLink" },
+      { key: "db-zone", label: "11/19 · Subredes Aisladas BD" },
+      { key: "rds-pri", label: "12/19 · RDS PostgreSQL Primaria" },
+      { key: "rds-sec", label: "13/19 · Replicación Síncrona & HA" },
+      { key: "storage-zone", label: "14/19 · Almacenamiento & Ciclo S3" },
+      { key: "cloudwatch", label: "15/19 · CloudWatch Observabilidad" },
+      { key: "sns", label: "16/19 · Amazon SNS Alertas" },
+      { key: "ssm", label: "17/19 · SSM Session Manager" },
+      { key: "iam", label: "18/19 · AWS IAM & PoLP" },
+      { key: "iac", label: "19/19 · CloudFormation & FinOps" }
     ];
 
     let currentTourIndex = 0;
@@ -4048,8 +4058,28 @@
       }
     }, { capture: true });
 
-    // Inicializar estado del tour
+    // Control de Animación del Fondo Global para Optimización GPU en Slide 14
+    function manageBgAnimation() {
+      const bgSvg = document.getElementById('cloud-network-bg');
+      if (!bgSvg) return;
+      const isPresent = isSlide14Active();
+      if (isPresent) {
+        if (typeof bgSvg.pauseAnimations === 'function') bgSvg.pauseAnimations();
+        bgSvg.classList.add('bg-paused-for-diagram');
+      } else {
+        if (typeof bgSvg.unpauseAnimations === 'function') bgSvg.unpauseAnimations();
+        bgSvg.classList.remove('bg-paused-for-diagram');
+      }
+    }
+
+    if (window.Reveal && typeof Reveal.on === 'function') {
+      Reveal.on('slidechanged', manageBgAnimation);
+    }
+
+    // Inicializar estado del tour y optimización de fondo
     updateTourUI();
+    manageBgAnimation();
+    setTimeout(manageBgAnimation, 250);
   </script>
 </section>
 
