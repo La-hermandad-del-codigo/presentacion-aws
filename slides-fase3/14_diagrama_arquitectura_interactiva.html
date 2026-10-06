@@ -379,7 +379,7 @@
         </button>
 
         <div class="tour-step-badge" id="tour-step-badge" onclick="zoomArch('global')" title="Hacé clic para volver a Vista Global">
-          <span class="badge-num" id="badge-step-num">00/12</span>
+          <span class="badge-num" id="badge-step-num">00/21</span>
           <span class="badge-label" id="badge-step-label">Vista Global</span>
         </div>
 
@@ -617,28 +617,39 @@
                 </g>
               </g>
 
-              <!-- Fila Inferior: EC2 Dev y VPC Endpoints con canal libre en el medio -->
+              <!-- Fila Inferior: EC2 Dev, Ambiente de Pruebas (Spot) y VPC Endpoints -->
               <g transform="translate(10, 156)">
-                <!-- EC2 Dev Box -->
+                <!-- 1. EC2 Dev Box -->
                 <g id="node-ec2-dev" class="arch-node" onclick="zoomArch('ec2-dev', event)" filter="url(#shadow-node-af)">
-                  <rect x="0" y="0" width="380" height="64" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
-                  <text x="12" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#b45309">EC2 Workstations Dev (Amazon EC2 t4g.small · Graviton2)</text>
-                  <text x="12" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="600" fill="#475569">2 vCPU · 2 GiB RAM · 25 GB EBS gp3 (3,000 IOPS base)</text>
-                  <text x="12" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="800" fill="#10b981">✓ Política FinOps: Apagado programado (160h/mes = ~$2.70/mes cómputo)</text>
+                  <rect x="0" y="0" width="230" height="64" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
+                  <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#b45309">EC2 Workstations (Dev)</text>
+                  <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#d97706">t4g.small ARM64 (Graviton2)</text>
+                  <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#475569">2 vCPU · 2 GiB · 25 GB gp3</text>
+                  <text x="10" y="56" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="700" fill="#10b981">✓ Apagado 160h/m (~$2.70/m)</text>
                 </g>
 
-                <!-- VPC Endpoints Box -->
-                <g id="node-vpc-endpoints" class="arch-node" onclick="zoomArch('vpc-endpoints', event)" transform="translate(405, 0)" filter="url(#shadow-node-af)">
-                  <rect x="0" y="0" width="322" height="64" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
-                  <text x="12" y="18" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0369a1">VPC Endpoints Gestionados (AWS PrivateLink)</text>
-                  <text x="12" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="600" fill="#475569">Gateway S3 (:443) + Interface ECR / SSM TLS</text>
-                  <text x="12" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="700" fill="#0369a1">Tráfico privado sin consumir ancho de banda NAT Gateway</text>
+                <!-- 2. Ambiente de Pruebas QA Spot Box (NUEVO) -->
+                <g id="node-ec2-spot" class="arch-node" onclick="zoomArch('ec2-spot', event)" transform="translate(242, 0)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="242" height="64" rx="7" fill="#ffffff" stroke="#d97706" stroke-width="1.4"/>
+                  <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#92400e">Ambiente de Pruebas (QA Spot)</text>
+                  <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#b45309">Amazon EC2 Spot (t4g.small)</text>
+                  <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#475569">1 vCPU · 1 GiB · 20 GB EBS gp3</text>
+                  <text x="10" y="56" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="800" fill="#10b981">✓ Hasta -90% ahorro · Staging efímero</text>
                 </g>
 
-                <!-- Canal TLS entre VPC Endpoints y EC2 Dev -->
+                <!-- 3. VPC Endpoints Box -->
+                <g id="node-vpc-endpoints" class="arch-node" onclick="zoomArch('vpc-endpoints', event)" transform="translate(496, 0)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="231" height="64" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                  <text x="10" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">VPC Endpoints (PrivateLink)</text>
+                  <text x="10" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Gateway S3 (:443) + ECR / SSM</text>
+                  <text x="10" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="700" fill="#0284c7">Interface TLS privada sin NAT</text>
+                  <text x="10" y="56" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="700" fill="#10b981">✓ Cero costo de transferencia NAT</text>
+                </g>
+
+                <!-- Canal TLS entre VPC Endpoints y Ambientes de Cómputo -->
                 <g class="arch-connector">
-                  <line x1="405" y1="32" x2="380" y2="32" stroke="#475569" stroke-width="1.6" stroke-dasharray="3 2"/>
-                  <polygon points="382,29 376,32 382,35" fill="#475569"/>
+                  <line x1="496" y1="32" x2="484" y2="32" stroke="#475569" stroke-width="1.6" stroke-dasharray="3 2"/>
+                  <polygon points="486,29 480,32 486,35" fill="#475569"/>
                 </g>
               </g>
             </g>
@@ -1031,7 +1042,7 @@
         ]
       },
       "ec2-dev": {
-        cx: 234, cy: 410, scale: 1.6,
+        cx: 159, cy: 410, scale: 1.8,
         activeNode: "node-ec2-dev",
         pillBg: "rgba(245, 158, 11, 0.12)", pillColor: "#b45309", pillBorder: "rgba(245, 158, 11, 0.3)",
         pill: "Entornos de Desarrollo",
@@ -1044,8 +1055,22 @@
           "<strong>Apagado Programado:</strong> 160 h/mes de operación = reducción drástica de factura (~$2.70/mes)."
         ]
       },
+      "ec2-spot": {
+        cx: 407, cy: 410, scale: 1.8,
+        activeNode: "node-ec2-spot",
+        pillBg: "rgba(217, 119, 6, 0.12)", pillColor: "#92400e", pillBorder: "rgba(217, 119, 6, 0.3)",
+        pill: "Ambiente de Pruebas & QA",
+        title: "Amazon EC2 Spot Instances",
+        subtitle: "Instancia t4g.small ARM64 (Hasta -90% Ahorro)",
+        why: "<strong>Pruebas Automatizadas con Máximo Ahorro:</strong> Capacidad de cómputo ociosa de AWS para pruebas de integración continua, staging y testing funcional. Al ser cargas de prueba tolerantes a interrupciones, el modelo Spot reduce hasta un 90% el costo frente a On-Demand. Se aprovisiona on-demand mediante CI/CD y se destruye al finalizar los tests.",
+        specs: [
+          "<strong>Hasta 90% de Descuento:</strong> Aprovecha capacidad sobrante de AWS con ahorro radical en QA.",
+          "<strong>Arquitectura Graviton2:</strong> Paridad exacta de arquitectura ARM64 con las estaciones Dev.",
+          "<strong>Tolerancia a Interrupciones:</strong> Preaviso de 2 minutos vía EventBridge para drenado limpio si AWS reclama capacidad."
+        ]
+      },
       "vpc-endpoints": {
-        cx: 566, cy: 378, scale: 1.5,
+        cx: 656, cy: 410, scale: 1.8,
         activeNode: "node-vpc-endpoints",
         pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
         pill: "Conectividad Privada",
@@ -1257,29 +1282,30 @@
       }
     };
 
-    // Secuencia Maestra del Tour de Arquitectura (20 Pasos + Global)
+    // Secuencia Maestra del Tour de Arquitectura (21 Pasos + Global)
     const tourSteps = [
       { key: "global", label: "Vista Global" },
-      { key: "usuarios", label: "01/20 · Clientes & Tráfico" },
-      { key: "r53", label: "02/20 · Route 53 DNS" },
-      { key: "cf", label: "03/20 · CloudFront CDN Edge" },
-      { key: "vpc", label: "04/20 · VPC Amazon 10.0.0.0/16" },
-      { key: "public-zone", label: "05/20 · Subredes Públicas Multi-AZ" },
-      { key: "alb", label: "06/20 · Subred Pública ALB" },
-      { key: "nat", label: "07/20 · NAT Gateways Multi-AZ" },
-      { key: "compute-zone", label: "08/20 · Subredes Privadas Cómputo" },
-      { key: "ecs-asg", label: "09/20 · ECS Fargate & Microservicios" },
-      { key: "ec2-dev", label: "10/20 · EC2 Dev Workstations" },
-      { key: "vpc-endpoints", label: "11/20 · VPC Endpoints PrivateLink" },
-      { key: "db-zone", label: "12/20 · Subredes Aisladas BD" },
-      { key: "rds-pri", label: "13/20 · RDS PostgreSQL Primaria" },
-      { key: "rds-sec", label: "14/20 · Replicación Síncrona & HA" },
-      { key: "storage-zone", label: "15/20 · Almacenamiento & Ciclo S3" },
-      { key: "cloudwatch", label: "16/20 · CloudWatch Observabilidad" },
-      { key: "sns", label: "17/20 · Amazon SNS Alertas" },
-      { key: "ssm", label: "18/20 · SSM Session Manager" },
-      { key: "iam", label: "19/20 · AWS IAM & PoLP" },
-      { key: "iac", label: "20/20 · CloudFormation & FinOps" }
+      { key: "usuarios", label: "01/21 · Clientes & Tráfico" },
+      { key: "r53", label: "02/21 · Route 53 DNS" },
+      { key: "cf", label: "03/21 · CloudFront CDN Edge" },
+      { key: "vpc", label: "04/21 · VPC Amazon 10.0.0.0/16" },
+      { key: "public-zone", label: "05/21 · Subredes Públicas Multi-AZ" },
+      { key: "alb", label: "06/21 · Subred Pública ALB" },
+      { key: "nat", label: "07/21 · NAT Gateways Multi-AZ" },
+      { key: "compute-zone", label: "08/21 · Subredes Privadas Cómputo" },
+      { key: "ecs-asg", label: "09/21 · ECS Fargate & Microservicios" },
+      { key: "ec2-dev", label: "10/21 · EC2 Dev Workstations" },
+      { key: "ec2-spot", label: "11/21 · Pruebas QA EC2 Spot" },
+      { key: "vpc-endpoints", label: "12/21 · VPC Endpoints PrivateLink" },
+      { key: "db-zone", label: "13/21 · Subredes Aisladas BD" },
+      { key: "rds-pri", label: "14/21 · RDS PostgreSQL Primaria" },
+      { key: "rds-sec", label: "15/21 · Replicación Síncrona & HA" },
+      { key: "storage-zone", label: "16/21 · Almacenamiento & Ciclo S3" },
+      { key: "cloudwatch", label: "17/21 · CloudWatch Observabilidad" },
+      { key: "sns", label: "18/21 · Amazon SNS Alertas" },
+      { key: "ssm", label: "19/21 · SSM Session Manager" },
+      { key: "iam", label: "20/21 · AWS IAM & PoLP" },
+      { key: "iac", label: "21/21 · CloudFormation & FinOps" }
     ];
 
     let currentTourIndex = 0;
