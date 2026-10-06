@@ -199,7 +199,9 @@
     /* 3. HIJOS ACTIVOS (Cuando el foco es la Zona completa, ej: Cómputo ECS, DB, Storage o Ops):
           Opacidad 100% y totalmente legibles */
     .slide-arch-archify.is-zoomed .arch-node.node-child-active,
-    .slide-arch-archify .arch-wrapper.is-zoomed .arch-node.node-child-active {
+    .slide-arch-archify .arch-wrapper.is-zoomed .arch-node.node-child-active,
+    .slide-arch-archify.is-zoomed .arch-connector.node-child-active,
+    .slide-arch-archify .arch-wrapper.is-zoomed .arch-connector.node-child-active {
       opacity: 1 !important;
       filter: none !important;
     }
@@ -348,7 +350,7 @@
         </button>
 
         <div class="tour-step-badge" id="tour-step-badge" onclick="zoomArch('global')" title="Hacé clic para volver a Vista Global">
-          <span class="badge-num" id="badge-step-num">00/10</span>
+          <span class="badge-num" id="badge-step-num">00/12</span>
           <span class="badge-label" id="badge-step-label">Vista Global</span>
         </div>
 
@@ -646,7 +648,7 @@
               </g>
 
               <!-- Conector Replicación Síncrona -->
-              <g class="arch-connector" transform="translate(356, 80)">
+              <g id="conn-rds-repl" class="arch-connector" transform="translate(356, 80)">
                 <line x1="0" y1="0" x2="40" y2="0" stroke="#059669" stroke-width="2" stroke-dasharray="4 3"/>
                 <polygon points="38,-3 44,0 38,3" fill="#059669"/>
                 <rect x="-14" y="-9" width="68" height="18" rx="5" fill="#ffffff" stroke="#059669" stroke-width="1"/>
@@ -906,17 +908,17 @@
         ]
       },
       nat: {
-        cx: 635, cy: 167, scale: 1.8,
+        cx: 635, cy: 167, scale: 1.5,
         activeNode: "node-nat",
         pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
         pill: "Egress & Seguridad",
-        title: "NAT Gateways Redundantes",
+        title: "NAT Gateways Redundantes (Multi-AZ)",
         subtitle: "Salida Segura a Internet sin Conexiones Entrantes",
-        why: "<strong>Aislamiento de Cómputo Privado:</strong> Permite que los contenedores Fargate y servidores EC2 descarguen parches y dependencias (npm, Docker, APIs externas) sin exponer jamás una IP pública a Internet.",
+        why: "<strong>Aislamiento de Cómputo Privado:</strong> Permite que los contenedores Fargate y servidores EC2 descarguen parches y dependencias (npm, Docker, APIs externas) sin exponer jamás una dirección IP pública a Internet. Bloquea de forma nativa todo paquete entrante no solicitado.",
         specs: [
-          "<strong>Alta Disponibilidad:</strong> Despliegue redundante en subredes públicas us-east-1a y 1b.",
-          "<strong>Tráfico Unidireccional:</strong> Bloqueo absoluto de paquetes entrantes no solicitados.",
-          "<strong>Ancho de Banda Elástico:</strong> Hasta 45 Gbps escalable automáticamente por AWS."
+          "<strong>Alta Disponibilidad:</strong> Despliegue redundante en subredes públicas us-east-1a y us-east-1b.",
+          "<strong>Tráfico Unidireccional:</strong> Stateful NAT translation que impide escaneos o ataques desde el exterior.",
+          "<strong>Ancho de Banda Elástico:</strong> Escala automáticamente de 5 Gbps hasta 45 Gbps sin administración de instancias."
         ]
       },
       "public-zone": {
@@ -1018,17 +1020,17 @@
         ]
       },
       "vpc-endpoints": {
-        cx: 610, cy: 410, scale: 1.7,
+        cx: 566, cy: 378, scale: 1.5,
         activeNode: "node-vpc-endpoints",
         pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
         pill: "Conectividad Privada",
         title: "VPC Endpoints (AWS PrivateLink)",
-        subtitle: "Acceso Privado a Servicios AWS sin Pasar por NAT",
-        why: "<strong>Seguridad y Ahorro en Datos:</strong> Permite que los contenedores descarguen imágenes Docker de ECR y suban a S3 por la red interna de AWS, eliminando cobros por GB en NAT Gateway.",
+        subtitle: "Acceso Troncal Privado a Servicios AWS sin Pasar por NAT",
+        why: "<strong>Conectividad Troncal Directa & FinOps:</strong> Conecta microservicios y estaciones de desarrollo directamente con Amazon S3, ECR y SSM a través del backbone privado de AWS. El tráfico no viaja por Internet ni cruza el NAT Gateway, eliminando por completo cobros de transferencia de datos y blindando la seguridad.",
         specs: [
-          "<strong>Gateway Endpoint S3:</strong> Comunicación gratuita a nivel de ruta sin costo por GB.",
-          "<strong>Interface Endpoints ECR & SSM:</strong> Enlaces TLS privados con direcciones IP de VPC.",
-          "<strong>Cero Salida a Internet:</strong> Todo el tráfico viaja en la troncal segura de AWS."
+          "<strong>Gateway Endpoint S3:</strong> Comunicación gratuita a nivel de tabla de rutas sin costo por GB.",
+          "<strong>Interface Endpoints ECR & SSM:</strong> Enlaces TLS privados con IPs elásticas dentro de la VPC.",
+          "<strong>Cero Exposición Externa:</strong> Descarga de imágenes pesadas de Docker a velocidad de red local."
         ]
       },
       "compute-zone": {
@@ -1046,31 +1048,32 @@
         ]
       },
       "rds-pri": {
-        cx: 213, cy: 554, scale: 1.6,
+        cx: 213, cy: 554, scale: 1.35,
         activeNode: "node-rds-pri",
         pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
         pill: "Persistencia RDBMS",
         title: "RDS PostgreSQL 16 (Primaria Activa)",
-        subtitle: "Zona us-east-1a · Subred 10.0.30.0/24",
-        why: "<strong>Motor Transaccional Blindado:</strong> Procesa todas las lecturas y escrituras del negocio. Ubicado en una subred aislada sin internet, aceptando únicamente tráfico TCP :5432 desde el Security Group de Fargate.",
+        subtitle: "Motor Transaccional ACID · Zona us-east-1a (Subred 10.0.30.0/24)",
+        why: "<strong>Motor Transaccional Blindado:</strong> Procesa el 100% de lecturas y escrituras del negocio. Ubicado en una subred aislada físicamente de Internet, aceptando únicamente tráfico TCP :5432 desde el Security Group de Fargate con credenciales rotativas en Secrets Manager.",
         specs: [
-          "<strong>Cifrado KMS en Reposo:</strong> Llaves administradas para discos EBS gp3.",
-          "<strong>PITR hasta 35 Días:</strong> Restauración precisa a cualquier segundo ante fallos humanos.",
-          "<strong>Snapshots Automáticos:</strong> Copias de seguridad diarias copiadas a S3."
+          "<strong>Cifrado KMS en Reposo:</strong> Llaves administradas para discos EBS gp3 (cero datos en claro).",
+          "<strong>PITR hasta 35 Días:</strong> Restauración point-in-time a cualquier segundo exacto ante incidentes.",
+          "<strong>Pool Controlado:</strong> Conexiones gestionadas por Prisma ORM para evitar saturar memoria."
         ]
       },
       "rds-sec": {
-        cx: 604, cy: 554, scale: 1.6,
+        cx: 569, cy: 554, scale: 1.35,
         activeNode: "node-rds-sec",
         pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
         pill: "Alta Disponibilidad BD",
-        title: "RDS PostgreSQL 16 (Standby Pasiva)",
-        subtitle: "Zona us-east-1b · Subred 10.0.40.0/24",
-        why: "<strong>Tolerancia a Fallos Físicos de AZ:</strong> Mantiene sincronización síncrona a nivel de bloques. Si la primaria en us-east-1a colapsa, la Standby asume la operación en &lt; 60s sin cambiar credenciales ni endpoint DNS.",
+        title: "Replicación Síncrona Multi-AZ & Standby Pasiva",
+        subtitle: "Tolerancia a Desastres Físicos · Zona us-east-1b (Subred 10.0.40.0/24)",
+        why: "<strong>Cómo Funciona la Réplica Síncrona:</strong> Cada escritura confirmada en la Primaria se replica síncronamente a nivel de bloques de almacenamiento físico (EBS) hacia us-east-1b antes de confirmar el commit al backend, garantizando <strong>RPO = 0</strong> (cero pérdida de datos). Si la zona us-east-1a colapsa por fallo eléctrico o físico, AWS ejecuta un <strong>Failover Automático en &lt; 60 segundos</strong>, promocionando la Standby a Primaria y actualizando el registro CNAME del endpoint DNS sin que la API requiera parches de código ni intervención manual.",
         specs: [
-          "<strong>Failover Automático &lt; 60s:</strong> Detección y promoción autónoma por AWS.",
-          "<strong>Cero Pérdida de Datos (RPO = 0):</strong> Replicación síncrona antes de confirmar commits.",
-          "<strong>Continuidad de Negocio:</strong> El backend se reconecta automáticamente sin parches de código."
+          "<strong>Replicación a Nivel de Bloque:</strong> Sincronización transparente en hardware dedicado de AWS.",
+          "<strong>RPO = 0 (Zero Data Loss):</strong> Ninguna transacción confirmada se pierde ante un desastre de AZ.",
+          "<strong>Failover Automático &lt; 60s:</strong> Detección autónoma y promoción con switcheo de CNAME DNS.",
+          "<strong>Backups en Standby:</strong> Snapshots diarios ejecutados en la copia sin degradar el rendimiento primario."
         ]
       },
       "db-zone": {
@@ -1229,19 +1232,21 @@
       }
     };
 
-    // Secuencia Maestra del Tour de Arquitectura (10 Pasos + Global)
+    // Secuencia Maestra del Tour de Arquitectura (12 Pasos + Global)
     const tourSteps = [
       { key: "global", label: "Vista Global" },
-      { key: "usuarios", label: "01/10 · Clientes & Tráfico" },
-      { key: "r53", label: "02/10 · Route 53 DNS" },
-      { key: "cf", label: "03/10 · CloudFront CDN Edge" },
-      { key: "alb", label: "04/10 · Subred Pública ALB" },
-      { key: "compute-zone", label: "05/10 · Cómputo ECS Fargate" },
-      { key: "ecs-asg", label: "06/10 · Target Tracking Scaling" },
-      { key: "ec2-dev", label: "07/10 · EC2 Dev & PrivateLink" },
-      { key: "db-zone", label: "08/10 · RDS Multi-AZ HA" },
-      { key: "storage-zone", label: "09/10 · Almacenamiento & Ciclo" },
-      { key: "ops-zone", label: "10/10 · Gobernanza & IaC" }
+      { key: "usuarios", label: "01/12 · Clientes & Tráfico" },
+      { key: "r53", label: "02/12 · Route 53 DNS" },
+      { key: "cf", label: "03/12 · CloudFront CDN Edge" },
+      { key: "alb", label: "04/12 · Subred Pública ALB" },
+      { key: "nat", label: "05/12 · NAT Gateways Multi-AZ" },
+      { key: "ecs-asg", label: "06/12 · ECS Fargate & Scaling" },
+      { key: "ec2-dev", label: "07/12 · EC2 Dev Workstations" },
+      { key: "vpc-endpoints", label: "08/12 · VPC Endpoints PrivateLink" },
+      { key: "rds-pri", label: "09/12 · RDS PostgreSQL Primaria" },
+      { key: "rds-sec", label: "10/12 · Replicación Síncrona & HA" },
+      { key: "storage-zone", label: "11/12 · Almacenamiento & Ciclo" },
+      { key: "ops-zone", label: "12/12 · Gobernanza, Obs & IaC" }
     ];
 
     let currentTourIndex = 0;
@@ -1252,13 +1257,15 @@
       const badgeLabel = document.getElementById('badge-step-label');
       const btnPrev = document.getElementById('btn-tour-prev');
       const btnNext = document.getElementById('btn-tour-next');
+      const totalSteps = tourSteps.length - 1;
+      const totalStr = String(totalSteps).padStart(2, '0');
 
       if (badgeNum && badgeLabel && step) {
         if (currentTourIndex === 0) {
-          badgeNum.textContent = "00/10";
+          badgeNum.textContent = `00/${totalStr}`;
           badgeLabel.textContent = "Vista Global";
         } else {
-          badgeNum.textContent = String(currentTourIndex).padStart(2, '0') + "/10";
+          badgeNum.textContent = `${String(currentTourIndex).padStart(2, '0')}/${totalStr}`;
           badgeLabel.textContent = step.label.replace(/^\d+\/\d+\s*·\s*/, '');
         }
       }
@@ -1283,6 +1290,10 @@
       const wrapper = document.getElementById('arch-global-wrapper');
       const slide = document.querySelector('.slide-arch-archify');
       const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node');
+
+      // Limpiar conector de réplica RDS
+      const replConn = document.getElementById('conn-rds-repl');
+      if (replConn) replConn.classList.remove('node-child-active');
 
       // Sincronizar el paso del tour si se hizo clic directo en un nodo
       if (syncStep) {
@@ -1321,6 +1332,13 @@
             // 2. Si el objetivo es una zona completa, asegurar que sus hijos permanezcan 100% legibles
             const childNodes = el.querySelectorAll('.arch-node');
             childNodes.forEach(c => c.classList.add('node-child-active'));
+
+            // 3. Caso especial réplica RDS: iluminar también la flecha síncrona y la primaria para ilustrar la replicación
+            if (key === 'rds-sec') {
+              if (replConn) replConn.classList.add('node-child-active');
+              const rdsPri = document.getElementById('node-rds-pri');
+              if (rdsPri) rdsPri.classList.add('node-child-active');
+            }
           }
         }
 
