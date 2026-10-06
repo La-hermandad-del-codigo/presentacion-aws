@@ -1,5 +1,5 @@
 <!-- SLIDE 7: GOBIERNO DE IDENTIDADES AWS IAM -->
-<section class="slide-iam-gobierno" data-transition="slide-in slide-out">
+<section class="slide-iam-gobierno" data-transition="fade-in slide-out">
   <style>
     .reveal .slides section.slide-iam-gobierno {
       padding-top: 44px !important;
@@ -34,6 +34,37 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* Animación de transición fluida: diagrama viaja de derecha a izquierda */
+    .reveal .slides section.slide-iam-gobierno.present .iam-diagram-wrapper {
+      animation: slideDiagramToLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .reveal .slides section.slide-iam-gobierno.present .iam-cards-wrapper {
+      animation: fadeInCardsRight 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes slideDiagramToLeft {
+      0% {
+        transform: translateX(105%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInCardsRight {
+      0% {
+        transform: translateX(35px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 
   <!-- Encabezado Fijo -->
@@ -43,59 +74,10 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal Invertido: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas de Gobernanza IAM -->
-    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-      
-      <!-- Tarjeta 1: PoLP e Identidades Humanas -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #b45309;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Principio de Menor Privilegio (PoLP)</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Gobierno de Identidades Humanas · MFA Obligatorio</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Zero Standing Access</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Root Account Protegida:</strong> Credencial raíz bajo custodia estricta con MFA físico de token de hardware; cero uso operativo cotidiano.</li>
-          <li><strong>Grupo Admins (2 usuarios):</strong> Permisos administrativos restringidos por origen IP institucional y requerimiento forzoso de MFA virtual.</li>
-          <li><strong>Grupo Practicantes (Devs):</strong> Acceso exclusivo mediante túneles SSM y lectura de imágenes en Amazon ECR, sin credenciales de consola web.</li>
-        </ul>
-      </div>
-
-      <!-- Tarjeta 2: Dual Role IAM en Fargate -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #4338ca;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Dual Role IAM para ECS Fargate</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Separación Estricta de Privilegios de Máquina</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">IAM Best Practices</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Task Execution Role:</strong> Permisos para que el agente de AWS descargue imágenes Docker desde ECR y emita telemetría a CloudWatch.</li>
-          <li><strong>Task Role de Aplicación:</strong> Asignado al código de SOFI NestJS para interactuar únicamente con buckets S3 autorizados y Secrets Manager.</li>
-          <li><strong>Cero Credenciales Quemadas:</strong> Rotación transparente de credenciales temporales vía AWS STS, erradicando llaves estáticas en repositorios.</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Columna Derecha: Diagrama SVG de IAM (Estilo Fase 2) -->
+    <!-- Columna Izquierda: Diagrama SVG de IAM -->
     <div class="iam-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -230,6 +212,55 @@
           </g>
         </g>
       </svg>
+    </div>
+
+    <!-- Columna Derecha: Tarjetas de Gobernanza IAM -->
+    <div class="iam-cards-wrapper" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: PoLP e Identidades Humanas -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #b45309;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Principio de Menor Privilegio (PoLP)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Gobierno de Identidades Humanas · MFA Obligatorio</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Zero Standing Access</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Root Account Protegida:</strong> Credencial raíz bajo custodia estricta con MFA físico de token de hardware; cero uso operativo cotidiano.</li>
+          <li><strong>Grupo Admins (2 usuarios):</strong> Permisos administrativos restringidos por origen IP institucional y requerimiento forzoso de MFA virtual.</li>
+          <li><strong>Grupo Practicantes (Devs):</strong> Acceso exclusivo mediante túneles SSM y lectura de imágenes en Amazon ECR, sin credenciales de consola web.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Dual Role IAM en Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #4338ca;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Dual Role IAM para ECS Fargate</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Separación Estricta de Privilegios de Máquina</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">IAM Best Practices</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Task Execution Role:</strong> Permisos para que el agente de AWS descargue imágenes Docker desde ECR y emita telemetría a CloudWatch.</li>
+          <li><strong>Task Role de Aplicación:</strong> Asignado al código de SOFI NestJS para interactuar únicamente con buckets S3 autorizados y Secrets Manager.</li>
+          <li><strong>Cero Credenciales Quemadas:</strong> Rotación transparente de credenciales temporales vía AWS STS, erradicando llaves estáticas en repositorios.</li>
+        </ul>
+      </div>
+
     </div>
 
   </div>

@@ -1,5 +1,5 @@
 <!-- SLIDE 4: AUTO SCALING DINÁMICO EN FARGATE -->
-<section class="slide-auto-scaling" data-transition="slide-in slide-out">
+<section class="slide-auto-scaling" data-transition="fade-in slide-out">
   <style>
     .reveal .slides section.slide-auto-scaling {
       padding-top: 44px !important;
@@ -34,6 +34,37 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* Animación de entrada continua (diagrama viaja de derecha a izquierda) */
+    .reveal .slides section.slide-auto-scaling.present .as-diagram-wrapper {
+      animation: slideDiagramToLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .reveal .slides section.slide-auto-scaling.present .as-cards-wrapper {
+      animation: fadeInCardsRight 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes slideDiagramToLeft {
+      0% {
+        transform: translateX(105%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInCardsRight {
+      0% {
+        transform: translateX(35px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 
   <!-- Encabezado Fijo -->
@@ -43,59 +74,10 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal Invertido: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
-    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-      
-      <!-- Tarjeta 1: Target Tracking Scaling -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Target Tracking Scaling</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Ajuste Proporcional sin Sobrecostos · CloudWatch</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas &amp; Tráfico</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Umbral de CPU al 70%:</strong> Si el consumo promedio del cluster supera el 70% en 2 períodos consecutivos, se provisionan tareas Fargate adicionales sin degradar al usuario.</li>
-          <li><strong>Peticiones ALB (1,000 req/t):</strong> Métrica reactiva ante avalanchas masivas de peticiones web para anticipar picos de concurrencia antes de saturar el cómputo.</li>
-          <li><strong>Enfriamiento Seguro (Cooldown 300s):</strong> Pausa de 5 minutos tras el desescalado (<em>Scale-in</em>) para consolidar telemetría y evitar fluctuaciones bruscas (<em>thrashing</em>).</li>
-        </ul>
-      </div>
-
-      <!-- Tarjeta 2: Amazon ECS Fargate -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS Fargate Multi-AZ</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Self-Healing</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless 24/7</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Rango Elástico (2 a 6 Tareas):</strong> Base fija de 2 tareas en alta disponibilidad (us-east-1a y 1b) y techo elástico de 6 tareas durante semanas de evaluaciones académicas.</li>
-          <li><strong>Arranque en 15–30 Segundos:</strong> Provisión instantánea en infraestructura precalentada por AWS, eliminando los 3 a 5 min de espera del booteo y SO en EC2.</li>
-          <li><strong>Resiliencia y Auto-Recuperación:</strong> Reemplazo automático y drenado limpio en 30s ante caídas del contenedor o fallas en el sondeo del endpoint <code>/api/health</code>.</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Columna Derecha: Diagrama de Auto Scaling AWS (Estilo Fase 2) -->
+    <!-- Columna Izquierda: Diagrama de Auto Scaling AWS -->
     <div class="as-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -220,7 +202,7 @@
             </g>
           </g>
 
-          <!-- Tarjeta Inferior de Velocidad Serverless (Igual que EBS en Fase 2) -->
+          <!-- Tarjeta Inferior de Velocidad Serverless -->
           <g transform="translate(12, 178)" filter="url(#diag-shadow-as4)">
             <rect x="0" y="0" width="430" height="56" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.3"/>
             <rect x="8" y="13" width="30" height="30" rx="6" fill="rgba(13, 148, 136, 0.15)"/>
@@ -231,6 +213,55 @@
           </g>
         </g>
       </svg>
+    </div>
+
+    <!-- Columna Derecha: Tarjetas Explicativas -->
+    <div class="as-cards-wrapper" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Target Tracking Scaling -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Target Tracking Scaling</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Ajuste Proporcional sin Sobrecostos · CloudWatch</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas &amp; Tráfico</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Umbral de CPU al 70%:</strong> Si el consumo promedio del cluster supera el 70% en 2 períodos consecutivos, se provisionan tareas Fargate adicionales sin degradar al usuario.</li>
+          <li><strong>Peticiones ALB (1,000 req/t):</strong> Métrica reactiva ante avalanchas masivas de peticiones web para anticipar picos de concurrencia antes de saturar el cómputo.</li>
+          <li><strong>Enfriamiento Seguro (Cooldown 300s):</strong> Pausa de 5 minutos tras el desescalado (<em>Scale-in</em>) para consolidar telemetría y evitar fluctuaciones bruscas (<em>thrashing</em>).</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Amazon ECS Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS Fargate Multi-AZ</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Self-Healing</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless 24/7</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Rango Elástico (2 a 6 Tareas):</strong> Base fija de 2 tareas en alta disponibilidad (us-east-1a y 1b) y techo elástico de 6 tareas durante semanas de evaluaciones académicas.</li>
+          <li><strong>Arranque en 15–30 Segundos:</strong> Provisión instantánea en infraestructura precalentada por AWS, eliminando los 3 a 5 min de espera del booteo y SO en EC2.</li>
+          <li><strong>Resiliencia y Auto-Recuperación:</strong> Reemplazo automático y drenado limpio en 30s ante caídas del contenedor o fallas en el sondeo del endpoint <code>/api/health</code>.</li>
+        </ul>
+      </div>
+
     </div>
 
   </div>

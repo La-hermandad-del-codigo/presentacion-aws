@@ -727,10 +727,10 @@
 
       <!-- Slide: 02_seccion1_escalabilidad.html -->
       <!-- SLIDE 2: SEPARADOR SECCIÓN 1 - ALTA DISPONIBILIDAD Y AUTO SCALING -->
-<section class="slide-seccion-1">
+<section class="slide-seccion-1" data-transition="zoom">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 620px; text-align: center; max-width: 1060px; margin: 0 auto;">
     
-    <div class="glass-card fragment fade-up" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+    <div class="glass-card" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
       
       <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; margin: 0 auto 22px;">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="m7.5 16.5 3-8.5"/><path d="m16.5 16.5-3-8.5"/></svg>
@@ -755,7 +755,7 @@
 
       <!-- Slide: 03_arquitectura_alb_fargate.html -->
       <!-- SLIDE 3: ALB Y AMAZON ECS FARGATE MULTI-AZ -->
-<section class="slide-alb-fargate" data-transition="slide-in slide-out">
+<section class="slide-alb-fargate" data-transition="slide-in fade-out">
   <style>
     .reveal .slides section.slide-alb-fargate {
       padding-top: 36px !important;
@@ -1000,7 +1000,7 @@
 
       <!-- Slide: 04_auto_scaling_dinamico.html -->
       <!-- SLIDE 4: AUTO SCALING DINÁMICO EN FARGATE -->
-<section class="slide-auto-scaling" data-transition="slide-in slide-out">
+<section class="slide-auto-scaling" data-transition="fade-in slide-out">
   <style>
     .reveal .slides section.slide-auto-scaling {
       padding-top: 44px !important;
@@ -1035,6 +1035,37 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* Animación de entrada continua (diagrama viaja de derecha a izquierda) */
+    .reveal .slides section.slide-auto-scaling.present .as-diagram-wrapper {
+      animation: slideDiagramToLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .reveal .slides section.slide-auto-scaling.present .as-cards-wrapper {
+      animation: fadeInCardsRight 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes slideDiagramToLeft {
+      0% {
+        transform: translateX(105%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInCardsRight {
+      0% {
+        transform: translateX(35px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 
   <!-- Encabezado Fijo -->
@@ -1044,59 +1075,10 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal Invertido: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas con Estilo Homogéneo -->
-    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-      
-      <!-- Tarjeta 1: Target Tracking Scaling -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Target Tracking Scaling</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Ajuste Proporcional sin Sobrecostos · CloudWatch</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas &amp; Tráfico</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Umbral de CPU al 70%:</strong> Si el consumo promedio del cluster supera el 70% en 2 períodos consecutivos, se provisionan tareas Fargate adicionales sin degradar al usuario.</li>
-          <li><strong>Peticiones ALB (1,000 req/t):</strong> Métrica reactiva ante avalanchas masivas de peticiones web para anticipar picos de concurrencia antes de saturar el cómputo.</li>
-          <li><strong>Enfriamiento Seguro (Cooldown 300s):</strong> Pausa de 5 minutos tras el desescalado (<em>Scale-in</em>) para consolidar telemetría y evitar fluctuaciones bruscas (<em>thrashing</em>).</li>
-        </ul>
-      </div>
-
-      <!-- Tarjeta 2: Amazon ECS Fargate -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS Fargate Multi-AZ</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Self-Healing</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless 24/7</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Rango Elástico (2 a 6 Tareas):</strong> Base fija de 2 tareas en alta disponibilidad (us-east-1a y 1b) y techo elástico de 6 tareas durante semanas de evaluaciones académicas.</li>
-          <li><strong>Arranque en 15–30 Segundos:</strong> Provisión instantánea en infraestructura precalentada por AWS, eliminando los 3 a 5 min de espera del booteo y SO en EC2.</li>
-          <li><strong>Resiliencia y Auto-Recuperación:</strong> Reemplazo automático y drenado limpio en 30s ante caídas del contenedor o fallas en el sondeo del endpoint <code>/api/health</code>.</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Columna Derecha: Diagrama de Auto Scaling AWS (Estilo Fase 2) -->
+    <!-- Columna Izquierda: Diagrama de Auto Scaling AWS -->
     <div class="as-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1221,7 +1203,7 @@
             </g>
           </g>
 
-          <!-- Tarjeta Inferior de Velocidad Serverless (Igual que EBS en Fase 2) -->
+          <!-- Tarjeta Inferior de Velocidad Serverless -->
           <g transform="translate(12, 178)" filter="url(#diag-shadow-as4)">
             <rect x="0" y="0" width="430" height="56" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.3"/>
             <rect x="8" y="13" width="30" height="30" rx="6" fill="rgba(13, 148, 136, 0.15)"/>
@@ -1234,15 +1216,64 @@
       </svg>
     </div>
 
+    <!-- Columna Derecha: Tarjetas Explicativas -->
+    <div class="as-cards-wrapper" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Target Tracking Scaling -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Target Tracking Scaling</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #047857;">Ajuste Proporcional sin Sobrecostos · CloudWatch</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">Métricas &amp; Tráfico</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Umbral de CPU al 70%:</strong> Si el consumo promedio del cluster supera el 70% en 2 períodos consecutivos, se provisionan tareas Fargate adicionales sin degradar al usuario.</li>
+          <li><strong>Peticiones ALB (1,000 req/t):</strong> Métrica reactiva ante avalanchas masivas de peticiones web para anticipar picos de concurrencia antes de saturar el cómputo.</li>
+          <li><strong>Enfriamiento Seguro (Cooldown 300s):</strong> Pausa de 5 minutos tras el desescalado (<em>Scale-in</em>) para consolidar telemetría y evitar fluctuaciones bruscas (<em>thrashing</em>).</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Amazon ECS Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Amazon ECS Fargate Multi-AZ</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cómputo Serverless Granular · Self-Healing</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0284c7;">Serverless 24/7</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Rango Elástico (2 a 6 Tareas):</strong> Base fija de 2 tareas en alta disponibilidad (us-east-1a y 1b) y techo elástico de 6 tareas durante semanas de evaluaciones académicas.</li>
+          <li><strong>Arranque en 15–30 Segundos:</strong> Provisión instantánea en infraestructura precalentada por AWS, eliminando los 3 a 5 min de espera del booteo y SO en EC2.</li>
+          <li><strong>Resiliencia y Auto-Recuperación:</strong> Reemplazo automático y drenado limpio en 30s ante caídas del contenedor o fallas en el sondeo del endpoint <code>/api/health</code>.</li>
+        </ul>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
       <!-- Slide: 05_seccion2_seguridad.html -->
       <!-- SLIDE 5: SEPARADOR SECCIÓN 2 - SEGURIDAD Y GOBIERNO DE IDENTIDADES -->
-<section class="slide-seccion-2">
+<section class="slide-seccion-2" data-transition="zoom">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 620px; text-align: center; max-width: 1060px; margin: 0 auto;">
     
-    <div class="glass-card fragment fade-up" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+    <div class="glass-card" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
       
       <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #6366f1; margin: 0 auto 22px;">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -1267,7 +1298,7 @@
 
       <!-- Slide: 06_seguridad_red_ssm.html -->
       <!-- SLIDE 6: SEGURIDAD DE RED Y SSM SESSION MANAGER -->
-<section class="slide-seguridad-red" data-transition="slide-in slide-out">
+<section class="slide-seguridad-red" data-transition="slide-in fade-out">
   <style>
     .reveal .slides section.slide-seguridad-red {
       padding-top: 44px !important;
@@ -1503,7 +1534,7 @@
 
       <!-- Slide: 07_gobierno_identidades_iam.html -->
       <!-- SLIDE 7: GOBIERNO DE IDENTIDADES AWS IAM -->
-<section class="slide-iam-gobierno" data-transition="slide-in slide-out">
+<section class="slide-iam-gobierno" data-transition="fade-in slide-out">
   <style>
     .reveal .slides section.slide-iam-gobierno {
       padding-top: 44px !important;
@@ -1538,6 +1569,37 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* Animación de transición fluida: diagrama viaja de derecha a izquierda */
+    .reveal .slides section.slide-iam-gobierno.present .iam-diagram-wrapper {
+      animation: slideDiagramToLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .reveal .slides section.slide-iam-gobierno.present .iam-cards-wrapper {
+      animation: fadeInCardsRight 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes slideDiagramToLeft {
+      0% {
+        transform: translateX(105%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInCardsRight {
+      0% {
+        transform: translateX(35px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 
   <!-- Encabezado Fijo -->
@@ -1547,59 +1609,10 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal Invertido: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas de Gobernanza IAM -->
-    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-      
-      <!-- Tarjeta 1: PoLP e Identidades Humanas -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #b45309;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Principio de Menor Privilegio (PoLP)</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Gobierno de Identidades Humanas · MFA Obligatorio</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Zero Standing Access</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Root Account Protegida:</strong> Credencial raíz bajo custodia estricta con MFA físico de token de hardware; cero uso operativo cotidiano.</li>
-          <li><strong>Grupo Admins (2 usuarios):</strong> Permisos administrativos restringidos por origen IP institucional y requerimiento forzoso de MFA virtual.</li>
-          <li><strong>Grupo Practicantes (Devs):</strong> Acceso exclusivo mediante túneles SSM y lectura de imágenes en Amazon ECR, sin credenciales de consola web.</li>
-        </ul>
-      </div>
-
-      <!-- Tarjeta 2: Dual Role IAM en Fargate -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #4338ca;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Dual Role IAM para ECS Fargate</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Separación Estricta de Privilegios de Máquina</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">IAM Best Practices</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Task Execution Role:</strong> Permisos para que el agente de AWS descargue imágenes Docker desde ECR y emita telemetría a CloudWatch.</li>
-          <li><strong>Task Role de Aplicación:</strong> Asignado al código de SOFI NestJS para interactuar únicamente con buckets S3 autorizados y Secrets Manager.</li>
-          <li><strong>Cero Credenciales Quemadas:</strong> Rotación transparente de credenciales temporales vía AWS STS, erradicando llaves estáticas en repositorios.</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Columna Derecha: Diagrama SVG de IAM (Estilo Fase 2) -->
+    <!-- Columna Izquierda: Diagrama SVG de IAM -->
     <div class="iam-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1736,15 +1749,64 @@
       </svg>
     </div>
 
+    <!-- Columna Derecha: Tarjetas de Gobernanza IAM -->
+    <div class="iam-cards-wrapper" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: PoLP e Identidades Humanas -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.16); display: flex; align-items: center; justify-content: center; color: #b45309;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Principio de Menor Privilegio (PoLP)</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #b45309;">Gobierno de Identidades Humanas · MFA Obligatorio</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); color: #b45309;">Zero Standing Access</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Root Account Protegida:</strong> Credencial raíz bajo custodia estricta con MFA físico de token de hardware; cero uso operativo cotidiano.</li>
+          <li><strong>Grupo Admins (2 usuarios):</strong> Permisos administrativos restringidos por origen IP institucional y requerimiento forzoso de MFA virtual.</li>
+          <li><strong>Grupo Practicantes (Devs):</strong> Acceso exclusivo mediante túneles SSM y lectura de imágenes en Amazon ECR, sin credenciales de consola web.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: Dual Role IAM en Fargate -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(99, 102, 241, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.16); display: flex; align-items: center; justify-content: center; color: #4338ca;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Dual Role IAM para ECS Fargate</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #4338ca;">Separación Estricta de Privilegios de Máquina</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: #4338ca;">IAM Best Practices</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Task Execution Role:</strong> Permisos para que el agente de AWS descargue imágenes Docker desde ECR y emita telemetría a CloudWatch.</li>
+          <li><strong>Task Role de Aplicación:</strong> Asignado al código de SOFI NestJS para interactuar únicamente con buckets S3 autorizados y Secrets Manager.</li>
+          <li><strong>Cero Credenciales Quemadas:</strong> Rotación transparente de credenciales temporales vía AWS STS, erradicando llaves estáticas en repositorios.</li>
+        </ul>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
-      <!-- Slide: 08_seccion3_operaciones_iac.html -->
+      <!-- Slide: 08_seccion3_operaciones_finops.html -->
       <!-- SLIDE 8: SEPARADOR SECCIÓN 3 - MONITOREO Y AUTOMATIZACIÓN IAC -->
-<section class="slide-seccion-3">
+<section class="slide-seccion-3" data-transition="zoom">
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 620px; text-align: center; max-width: 1060px; margin: 0 auto;">
     
-    <div class="glass-card fragment fade-up" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+    <div class="glass-card" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
       
       <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(37, 99, 235, 0.16); display: flex; align-items: center; justify-content: center; color: #2563eb; margin: 0 auto 22px;">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -1755,11 +1817,11 @@
       </div>
 
       <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
-        Monitoreo, Auditoría y <span style="color: #2563eb;">Infraestructura como Código (IaC)</span>
+        Monitoreo, Auditoría y <span style="color: #2563eb;">Gestión de Recursos (FinOps)</span>
       </h1>
 
       <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
-        <span>CloudWatch Container Insights</span> · <span>AWS Budgets</span> · <span>SNS Alertas</span> · <span>CloudFormation</span>
+        <span>CloudWatch Container Insights</span> · <span>SNS Alertas</span> · <span>AWS Budgets ($60)</span> · <span>Trusted Advisor</span>
       </div>
 
     </div>
@@ -1769,7 +1831,7 @@
 
       <!-- Slide: 09_monitoreo_cloudwatch_alarmas.html -->
       <!-- SLIDE 9: MONITOREO CLOUDWATCH Y TELEMETRÍA PROACTIVA -->
-<section class="slide-cloudwatch-alarmas" data-transition="slide-in slide-out">
+<section class="slide-cloudwatch-alarmas" data-transition="slide-in fade-out">
   <style>
     .reveal .slides section.slide-cloudwatch-alarmas {
       padding-top: 44px !important;
@@ -2000,7 +2062,7 @@
 
       <!-- Slide: 10_gobernanza_finops_presupuesto.html -->
       <!-- SLIDE 10: GOBERNANZA DE RECURSOS, FINOPS Y CONTROL PRESUPUESTAL -->
-<section class="slide-finops-presupuesto" data-transition="slide-in slide-out">
+<section class="slide-finops-presupuesto" data-transition="fade-in slide-out">
   <style>
     .reveal .slides section.slide-finops-presupuesto {
       padding-top: 44px !important;
@@ -2035,6 +2097,37 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* Animación de transición fluida: diagrama viaja de derecha a izquierda */
+    .reveal .slides section.slide-finops-presupuesto.present .finops-diagram-wrapper {
+      animation: slideDiagramToLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .reveal .slides section.slide-finops-presupuesto.present .finops-cards-wrapper {
+      animation: fadeInCardsRight 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes slideDiagramToLeft {
+      0% {
+        transform: translateX(105%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInCardsRight {
+      0% {
+        transform: translateX(35px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 
   <!-- Encabezado Fijo -->
@@ -2044,59 +2137,10 @@
     </h2>
   </div>
 
-  <!-- Contenedor Principal: Tarjetas a la Izquierda + Diagrama a la Derecha -->
-  <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
+  <!-- Contenedor Principal Invertido: Diagrama a la Izquierda + Tarjetas a la Derecha -->
+  <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 18px; max-width: 1260px; margin: 0 auto; align-items: stretch;">
     
-    <!-- Columna Izquierda: Tarjetas de Gobernanza, Tagging y FinOps -->
-    <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-      
-      <!-- Tarjeta 1: Taxonomía de Tags Obligatoria -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Política de Etiquetado Obligatorio</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cost Allocation Tags · Trazabilidad 100%</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Gobernanza Cloud</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>Esquema Estandarizado:</strong> Etiquetas mandatorias aplicadas por CloudFormation: <code>Project</code>, <code>Environment</code>, <code>Owner</code>, <code>CostCenter</code> y <code>Compliance</code>.</li>
-          <li><strong>Atribución de Centros de Costos:</strong> Activación de Cost Allocation Tags en Billing Console para auditar el gasto de desarrollo vs. producción.</li>
-          <li><strong>Auditoría Automatizada:</strong> Detección y bloqueo de recursos huérfanos sin metadatos de cumplimiento empresarial.</li>
-        </ul>
-      </div>
-
-      <!-- Tarjeta 2: AWS Budgets y AWS Trusted Advisor -->
-      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </div>
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Control Presupuestal &amp; Trusted Advisor</div>
-              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Tope Mensual $60 USD · Auditoría de 5 Pilares</div>
-            </div>
-          </div>
-          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps Contenido</span>
-        </div>
-
-        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
-          <li><strong>AWS Budgets con Alertas Proactivas:</strong> Umbral preventivo al 80% ($48 USD pronosticado) y alerta crítica al 100% ($60 USD real) vía correo.</li>
-          <li><strong>AWS Trusted Advisor:</strong> Revisión de optimización de costos (volúmenes EBS ociosos) y seguridad (MFA en IAM, buckets S3 sin acceso público).</li>
-          <li><strong>Optimización Operativa:</strong> Apagado nocturno programado de instancias de práctica (ahorro &gt;60% en horas no lectivas).</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Columna Derecha: Diagrama SVG de Framework FinOps -->
+    <!-- Columna Izquierda: Diagrama SVG de Framework FinOps -->
     <div class="finops-diagram-wrapper">
       <svg viewBox="0 0 490 470" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -2220,11 +2264,88 @@
       </svg>
     </div>
 
+    <!-- Columna Derecha: Tarjetas de Gobernanza, Tagging y FinOps -->
+    <div class="finops-cards-wrapper" style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
+      
+      <!-- Tarjeta 1: Taxonomía de Tags Obligatoria -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(2, 132, 199, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Política de Etiquetado Obligatorio</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #0284c7;">Cost Allocation Tags · Trazabilidad 100%</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(2, 132, 199, 0.12); color: #0369a1;">Gobernanza Cloud</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>Esquema Estandarizado:</strong> Etiquetas mandatorias aplicadas por CloudFormation: <code>Project</code>, <code>Environment</code>, <code>Owner</code>, <code>CostCenter</code> y <code>Compliance</code>.</li>
+          <li><strong>Atribución de Centros de Costos:</strong> Activación de Cost Allocation Tags en Billing Console para auditar el gasto de desarrollo vs. producción.</li>
+          <li><strong>Auditoría Automatizada:</strong> Detección y bloqueo de recursos huérfanos sin metadatos de cumplimiento empresarial.</li>
+        </ul>
+      </div>
+
+      <!-- Tarjeta 2: AWS Budgets y AWS Trusted Advisor -->
+      <div class="glass-card" style="padding: 20px 22px; border-radius: 16px; background: rgba(255, 255, 255, 0.94); border: 1.5px solid rgba(16, 185, 129, 0.35); box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.16); display: flex; align-items: center; justify-content: center; color: #059669;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: var(--aws-navy);">Control Presupuestal &amp; Trusted Advisor</div>
+              <div style="font-size: 0.74rem; font-weight: 700; color: #059669;">Tope Mensual $60 USD · Auditoría de 5 Pilares</div>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: #047857;">FinOps Contenido</span>
+        </div>
+
+        <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: var(--text-main); line-height: 1.55;">
+          <li><strong>AWS Budgets con Alertas Proactivas:</strong> Umbral preventivo al 80% ($48 USD pronosticado) y alerta crítica al 100% ($60 USD real) vía correo.</li>
+          <li><strong>AWS Trusted Advisor:</strong> Revisión de optimización de costos (volúmenes EBS ociosos) y seguridad (MFA en IAM, buckets S3 sin acceso público).</li>
+          <li><strong>Optimización Operativa:</strong> Apagado nocturno programado de instancias de práctica (ahorro &gt;60% en horas no lectivas).</li>
+        </ul>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
-      <!-- Slide: 11_automatizacion_cloudformation.html -->
-      <!-- SLIDE 11: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
+      <!-- Slide: 11_seccion4_automatizacion_iac.html -->
+      <!-- SLIDE 11: SEPARADOR SECCIÓN 4 - AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
+<section class="slide-seccion-4" data-transition="zoom">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 620px; text-align: center; max-width: 1060px; margin: 0 auto;">
+    
+    <div class="glass-card" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+      
+      <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(2, 132, 199, 0.16); display: flex; align-items: center; justify-content: center; color: #0284c7; margin: 0 auto 22px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+
+      <div style="font-size: 0.92rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #0284c7; margin-bottom: 14px;">
+        SECCIÓN 04
+      </div>
+
+      <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
+        Automatización e <span style="color: #0284c7;">Infraestructura como Código (IaC)</span>
+      </h1>
+
+      <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+        <span>AWS CloudFormation</span> · <span>Plantillas Declarativas</span> · <span>Atomic Rollback</span> · <span>DAG DependsOn</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 12_automatizacion_cloudformation.html -->
+      <!-- SLIDE 12: AUTOMATIZACIÓN E INFRAESTRUCTURA COMO CÓDIGO -->
 <section class="slide-cloudformation-iac" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-cloudformation-iac {
@@ -2465,9 +2586,37 @@
   </div>
 </section>
 
-      <!-- Slide: 12_diagrama_arquitectura_interactiva.html -->
-      <!-- SLIDE 12: DIAGRAMA DE ARQUITECTURA GLOBAL AWS (NATIVO ARCHIFY) -->
-<section class="slide-arch-archify" data-transition="slide-in slide-out">
+      <!-- Slide: 13_seccion_diagrama_final.html -->
+      <!-- SLIDE 13: SEPARADOR DIAGRAMA FINAL DE LA PROPUESTA -->
+<section class="slide-seccion-diagrama-final" data-transition="zoom">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 620px; text-align: center; max-width: 1060px; margin: 0 auto;">
+    
+    <div class="glass-card" style="padding: 60px 70px; border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 235, 0.9) 100%); border: 2px solid rgba(255, 153, 0, 0.4); box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.1);">
+      
+      <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(255, 153, 0, 0.16); display: flex; align-items: center; justify-content: center; color: #ff9900; margin: 0 auto 22px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+
+      <div style="font-size: 0.92rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #b45309; margin-bottom: 14px;">
+        DIAGRAMA FINAL DE LA PROPUESTA
+      </div>
+
+      <h1 class="slide-title" style="font-size: 2.65rem !important; margin: 0 0 16px 0; color: var(--aws-navy); line-height: 1.2;">
+        Arquitectura Global AWS: <span style="color: #ff9900;">Flujo Integral de Infraestructura</span>
+      </h1>
+
+      <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+        <span>Red Global Anycast</span> · <span>Multi-AZ us-east-1</span> · <span>Zero-Trust Bastionless</span> · <span>Observabilidad &amp; IaC</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      <!-- Slide: 14_diagrama_arquitectura_interactiva.html -->
+      <!-- SLIDE 14: DIAGRAMA DE ARQUITECTURA GLOBAL AWS (NATIVO ARCHIFY) -->
+<section class="slide-arch-archify" data-transition="fade">
   <style>
     .reveal .slides section.slide-arch-archify {
       padding: 6px 10px !important;
@@ -3677,8 +3826,8 @@
   </script>
 </section>
 
-      <!-- Slide: 13_resumen_proyecto_final.html -->
-      <!-- SLIDE 13: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
+      <!-- Slide: 15_resumen_proyecto_final.html -->
+      <!-- SLIDE 15: RESUMEN FINAL DEL PROYECTO INTEGRADOR -->
 <section class="slide-resumen-final" data-transition="slide-in slide-out">
   <style>
     .reveal .slides section.slide-resumen-final {
