@@ -2857,13 +2857,13 @@
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(28px) saturate(180%);
       -webkit-backdrop-filter: blur(28px) saturate(180%);
-      border: 2px solid #ff9900;
+      border: 2px solid var(--accent-card, #ff9900);
       border-radius: 16px;
-      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255, 153, 0, 0.25);
+      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.22), 0 0 0 1px var(--accent-border-glow, rgba(255, 153, 0, 0.25));
       padding: 16px 18px;
       box-sizing: border-box;
       transform: translateX(430px);
-      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
       z-index: 100;
       display: flex;
       flex-direction: column;
@@ -2905,28 +2905,30 @@
 
     .slide-arch-archify .tech-box-why {
       background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-left: 3.5px solid var(--accent-why, #0284c7);
+      border: 1.5px solid var(--accent-why, #0284c7);
       padding: 10px 12px;
       border-radius: 8px;
       margin-bottom: 10px;
       box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+      transition: border-color 0.3s ease;
     }
 
     .slide-arch-archify .tech-why-header {
       font-size: 0.68rem;
       font-weight: 800;
-      color: #475569;
+      color: var(--accent-why, #0284c7);
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 5px;
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: color 0.3s ease;
     }
 
     .slide-arch-archify .tech-why-header svg {
       color: var(--accent-why, #0284c7);
+      transition: color 0.3s ease;
     }
 
     .slide-arch-archify .tech-why-content {
@@ -4022,6 +4024,10 @@
         const whyText = document.getElementById('tech-why-content');
         const specsList = document.getElementById('tech-specs-list');
 
+        if (card) {
+          card.style.setProperty('--accent-card', target.pillColor || '#ff9900');
+          card.style.setProperty('--accent-border-glow', target.pillBorder || 'rgba(255, 153, 0, 0.25)');
+        }
         if (whyBox) {
           whyBox.style.setProperty('--accent-why', target.pillColor || '#0284c7');
         }
