@@ -2427,6 +2427,1218 @@
   </div>
 </section>
 
+      <!-- Slide: 12_diagrama_arquitectura_interactiva.html -->
+      <!-- SLIDE 12: DIAGRAMA DE ARQUITECTURA GLOBAL AWS (NATIVO ARCHIFY) -->
+<section class="slide-arch-archify" data-transition="slide-in slide-out">
+  <style>
+    .reveal .slides section.slide-arch-archify {
+      padding: 6px 10px !important;
+      height: 100% !important;
+      top: 0 !important;
+      box-sizing: border-box;
+    }
+
+    .slide-arch-archify .arch-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 650px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cabecera Limpia */
+    .slide-arch-archify .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .slide-arch-archify .slide-title {
+      font-size: 1.85rem !important;
+      margin: 0 !important;
+      line-height: 1.15;
+      color: var(--aws-navy);
+      paint-order: stroke fill;
+      -webkit-text-stroke: 3.5px #ffffff;
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .slide-arch-archify .btn-reset-global {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: #ff9900;
+      color: #232f3e;
+      border: 1.5px solid #232f3e;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 153, 0, 0.35);
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .slide-arch-archify .btn-reset-global:hover {
+      background: #232f3e;
+      color: #ffffff;
+      border-color: #ff9900;
+    }
+
+    .slide-arch-archify.is-zoomed .btn-reset-global,
+    .slide-arch-archify .arch-wrapper.is-zoomed .btn-reset-global {
+      display: inline-flex;
+    }
+
+    /* Contenedor del Lienzo - SIN Fondo Blanco Rígido, Integrado Naturalmente */
+    .slide-arch-archify .canvas-viewport {
+      position: relative;
+      width: 1200px;
+      height: 585px;
+      border-radius: 16px;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      overflow: hidden;
+    }
+
+    .slide-arch-archify #arch-camera {
+      width: 1200px;
+      height: 580px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    /* Comportamiento de Nodos Interactivos */
+    .slide-arch-archify .arch-node {
+      cursor: pointer;
+      transition: filter 0.25s ease, opacity 0.35s ease;
+    }
+
+    .slide-arch-archify .arch-node:hover {
+      filter: drop-shadow(0 0 10px rgba(255, 153, 0, 0.85));
+    }
+
+    .slide-arch-archify.is-zoomed .arch-node:not(.node-focus),
+    .slide-arch-archify .arch-wrapper.is-zoomed .arch-node:not(.node-focus) {
+      opacity: 0.35;
+      filter: grayscale(35%);
+    }
+
+    .slide-arch-archify.is-zoomed .arch-node.node-focus,
+    .slide-arch-archify .arch-wrapper.is-zoomed .arch-node.node-focus {
+      opacity: 1 !important;
+      filter: drop-shadow(0 0 16px rgba(255, 153, 0, 0.95)) !important;
+    }
+
+    /* Tarjeta Lateral de Justificación de Ingeniería - Visible en Zoom */
+    .slide-arch-archify .tech-side-card {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      width: 370px;
+      max-height: 565px;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 2px solid #ff9900;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255, 153, 0, 0.3);
+      padding: 18px 20px;
+      box-sizing: border-box;
+      transform: translateX(430px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .slide-arch-archify.is-zoomed .tech-side-card,
+    .slide-arch-archify .arch-wrapper.is-zoomed .tech-side-card {
+      transform: translateX(0) !important;
+    }
+
+    .slide-arch-archify .tech-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      display: inline-block;
+      letter-spacing: 0.04em;
+    }
+
+    .slide-arch-archify .tech-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--aws-navy);
+      margin: 8px 0 3px;
+      line-height: 1.2;
+    }
+
+    .slide-arch-archify .tech-subtitle {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #b45309;
+      margin-bottom: 12px;
+    }
+
+    .slide-arch-archify .tech-box-why {
+      background: #fffbeb;
+      border-left: 3.5px solid #f59e0b;
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 12px;
+    }
+
+    .slide-arch-archify .tech-why-header {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #b45309;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-arch-archify .tech-why-content {
+      font-size: 0.79rem;
+      color: #78350f;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .slide-arch-archify .tech-specs-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .slide-arch-archify .tech-specs-list li {
+      font-size: 0.76rem;
+      color: var(--text-main);
+      line-height: 1.35;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .slide-arch-archify .tech-specs-list li svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .slide-arch-archify .btn-close-card {
+      background: #232f3e;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .slide-arch-archify .btn-close-card:hover {
+      background: #ff9900;
+      color: #232f3e;
+    }
+
+    /* Pista Flotante en Vista Global */
+    .slide-arch-archify .bottom-hint-pill {
+      position: absolute;
+      bottom: 8px;
+      left: 18px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 9999px;
+      padding: 4px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .slide-arch-archify.is-zoomed .bottom-hint-pill,
+    .slide-arch-archify .arch-wrapper.is-zoomed .bottom-hint-pill {
+      opacity: 0;
+    }
+  </style>
+
+  <div class="arch-wrapper" id="arch-global-wrapper">
+    
+    <!-- Cabecera -->
+    <div class="header-row">
+      <div>
+        <h2 class="slide-title">
+          Arquitectura Global AWS: <span style="color: #ff9900;">Flujo Integral de Infraestructura</span>
+        </h2>
+      </div>
+      <div>
+        <button class="btn-reset-global" onclick="zoomArch('global')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Vista Global</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Lienzo de la Arquitectura Integrado -->
+    <div class="canvas-viewport" onclick="handleCanvasClick(event)">
+      
+      <!-- CÁMARA DE TRANSFORMACIÓN POR GPU -->
+      <div id="arch-camera">
+        <svg viewBox="0 0 1200 580" width="1200" height="580" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="shadow-node-af" x="-15%" y="-15%" width="130%" height="130%">
+              <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+            </filter>
+
+            <!-- ICONOS OFICIALES AWS VECTORIALES NATIVOS -->
+            <g id="icon-r53-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#8c4fff"/>
+              <circle cx="0" cy="0" r="6" fill="none" stroke="#ffffff" stroke-width="1.4"/>
+              <line x1="-6" y1="0" x2="6.5" y2="0" stroke="#ffffff" stroke-width="1"/>
+              <ellipse cx="0" cy="0" rx="2.8" ry="6" fill="none" stroke="#ffffff" stroke-width="1"/>
+            </g>
+
+            <g id="icon-cf-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#8c4fff"/>
+              <circle cx="0" cy="0" r="5" fill="none" stroke="#ffffff" stroke-width="1.3"/>
+              <circle cx="-5" cy="-2.5" r="1.3" fill="#ffffff"/>
+              <circle cx="5" cy="-2.5" r="1.3" fill="#ffffff"/>
+              <circle cx="0" cy="5" r="1.3" fill="#ffffff"/>
+            </g>
+
+            <g id="icon-alb-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#0284c7"/>
+              <line x1="-7" y1="0" x2="-2" y2="0" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+              <path d="M 2 0 L 5 -3 L 8 -3" fill="none" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M 2 0 L 5 3 L 8 3" fill="none" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+            </g>
+
+            <g id="icon-fargate-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#ff9900"/>
+              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#ffffff" fill-opacity="0.25" stroke="#ffffff" stroke-width="1.2"/>
+              <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+            </g>
+
+            <g id="icon-rds-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#059669"/>
+              <ellipse cx="0" cy="-4" rx="6.5" ry="2.2" fill="#ffffff"/>
+              <path d="M -6.5 -4 L -6.5 0 A 6.5 2.2 0 0 0 6.5 0 L 6.5 -4 Z" fill="#ffffff" fill-opacity="0.65"/>
+              <path d="M -6.5 0 L -6.5 4 A 6.5 2.2 0 0 0 6.5 4 L 6.5 0 Z" fill="#ffffff"/>
+            </g>
+
+            <g id="icon-s3-af">
+              <rect x="-12" y="-12" width="24" height="24" rx="5" fill="#2563eb"/>
+              <path d="M -6.5 -4.5 L 6.5 -4.5 L 5.5 4.5 L -5.5 4.5 Z" fill="#ffffff"/>
+              <line x1="-4" y1="-1.5" x2="4" y2="-1.5" stroke="#2563eb" stroke-width="1.2"/>
+              <line x1="-3" y1="1.8" x2="3" y2="1.8" stroke="#2563eb" stroke-width="1.2"/>
+            </g>
+          </defs>
+
+          <!-- ============================================================ -->
+          <!-- 1. ACTORES Y PERÍMETRO DE BORDE GLOBAL (y = 8 a 72)          -->
+          <!-- ============================================================ -->
+          
+          <!-- 1.1 Usuarios & Clientes Web -->
+          <g id="node-usuarios" class="arch-node" onclick="zoomArch('usuarios', event)">
+            <g transform="translate(90, 10)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="320" height="48" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.6"/>
+              <text x="160" y="20" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#0f172a">Usuarios &amp; Clientes Web</text>
+              <text x="160" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="600" fill="#64748b">HTTPS (SOFI · Reflexo · Arte) · Discord (Bot)</text>
+            </g>
+          </g>
+
+          <!-- Flecha DNS entre Usuarios y Route 53 -->
+          <line x1="410" y1="34" x2="495" y2="34" stroke="#64748b" stroke-width="2" stroke-dasharray="4 3"/>
+          <polygon points="493,31 498,34 493,37" fill="#64748b"/>
+          <rect x="424" y="27" width="58" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="0.9"/>
+          <text x="453" y="37" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" fill="#475569">UDP :53</text>
+
+          <!-- 1.2 Contenedor Borde Global (Route 53 & CloudFront) -->
+          <g id="edge-group">
+            <rect x="480" y="6" width="695" height="66" rx="10" fill="rgba(250, 245, 255, 0.75)" stroke="#8c4fff" stroke-width="1.8" stroke-dasharray="6 4"/>
+            <rect x="492" y="1" width="220" height="12" rx="6" fill="#8c4fff"/>
+            <text x="602" y="10" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.8" font-weight="800" fill="#ffffff">PERÍMETRO DE BORDE GLOBAL AWS (CDN &amp; DNS)</text>
+
+            <!-- Route 53 -->
+            <g id="node-r53" class="arch-node" onclick="zoomArch('r53', event)" transform="translate(495, 18)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="280" height="46" rx="7" fill="#ffffff" stroke="#8c4fff" stroke-width="1.5"/>
+              <g transform="translate(18, 17) scale(0.75)"><use href="#icon-r53-af"/></g>
+              <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#6b21a8">Amazon Route 53</text>
+              <text x="36" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">DNS Autoritativo · Latency Routing</text>
+              <text x="36" y="39" font-family="'JetBrains Mono', monospace" font-size="6.5" font-weight="700" fill="#8c4fff">sofi.edu.pe · reflexoperu.com</text>
+            </g>
+
+            <!-- Conexión CNAME entre Route 53 y CloudFront -->
+            <line x1="775" y1="41" x2="840" y2="41" stroke="#8c4fff" stroke-width="2" stroke-dasharray="3 2"/>
+            <polygon points="838,38 843,41 838,44" fill="#8c4fff"/>
+            <rect x="782" y="34" width="52" height="14" rx="4" fill="#ffffff" stroke="#8c4fff" stroke-width="0.8"/>
+            <text x="808" y="44" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="5.8" font-weight="700" fill="#6b21a8">CNAME</text>
+
+            <!-- CloudFront CDN -->
+            <g id="node-cf" class="arch-node" onclick="zoomArch('cf', event)" transform="translate(850, 18)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="305" height="46" rx="7" fill="#ffffff" stroke="#8c4fff" stroke-width="1.5"/>
+              <g transform="translate(18, 17) scale(0.75)"><use href="#icon-cf-af"/></g>
+              <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#6b21a8">Amazon CloudFront (CDN Edge)</text>
+              <text x="36" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">Caché Perimetral · Descarga SSL/TLS (ACM)</text>
+              <text x="36" y="39" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.8" font-weight="700" fill="#059669">Protección DDoS: AWS Shield Standard</text>
+            </g>
+          </g>
+
+          <!-- Cable Conector de CloudFront a ALB (Edge-to-Origin) -->
+          <path d="M 1000 64 L 1000 84 L 255 84 L 255 120" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <polygon points="251,118 255,124 259,118" fill="#0284c7"/>
+          <rect x="475" y="77" width="165" height="14" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1"/>
+          <text x="557" y="87" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.8" font-weight="800" fill="#0369a1">Tráfico Filtrado HTTPS :443 (Edge-to-Origin)</text>
+
+          <!-- ============================================================ -->
+          <!-- 2. AMAZON VPC (10.0.0.0/16 · us-east-1) (x = 15 a 765)      -->
+          <!-- ============================================================ -->
+          <g id="box-vpc-container">
+            <rect x="15" y="94" width="750" height="474" rx="14" fill="rgba(255, 255, 255, 0.72)" stroke="#0284c7" stroke-width="2" stroke-dasharray="8 5"/>
+            <text x="30" y="110" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="900" fill="#0369a1" letter-spacing="0.02em">
+              Amazon Virtual Private Cloud (VPC) <tspan font-weight="700" fill="#64748b">· CIDR Principal: 10.0.0.0/16 · Región us-east-1 (N. Virginia)</tspan>
+            </text>
+
+            <!-- 2.1 SUBREDES PÚBLICAS (10.0.1.0/24 y 10.0.2.0/24) -->
+            <g id="node-public-zone" class="arch-node" onclick="zoomArch('public-zone', event)" transform="translate(28, 116)">
+              <rect x="0" y="0" width="724" height="66" rx="10" fill="rgba(224, 242, 254, 0.75)" stroke="#0284c7" stroke-width="1.6"/>
+              <rect x="10" y="4" width="220" height="13" rx="6.5" fill="#0284c7"/>
+              <text x="120" y="13.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#ffffff">SUBREDES PÚBLICAS (MULTI-AZ: 10.0.1.0/24 y 10.0.2.0/24)</text>
+
+              <!-- ALB Box -->
+              <g id="node-alb" class="arch-node" onclick="zoomArch('alb', event)" transform="translate(10, 20)" filter="url(#shadow-node-af)">
+                <rect x="0" y="0" width="430" height="40" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                <g transform="translate(18, 16) scale(0.75)"><use href="#icon-alb-af"/></g>
+                <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0f172a">Application Load Balancer (ALB Multi-AZ Ingress)</text>
+                <text x="36" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#0369a1">Host Routing: *.sofi.edu.pe ➔ TG SOFI | *.reflexo / *.arte ➔ TG Clientes</text>
+              </g>
+
+              <!-- NAT Gateways Box -->
+              <g id="node-nat" class="arch-node" onclick="zoomArch('nat', event)" transform="translate(450, 20)" filter="url(#shadow-node-af)">
+                <rect x="0" y="0" width="264" height="40" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                <text x="12" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0f172a">NAT Gateways Redundantes (Multi-AZ)</text>
+                <text x="12" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">Salida segura a Internet para npm/APIs · Cero entrada</text>
+              </g>
+            </g>
+
+            <!-- Conectores L7 desde ALB hacia los Microservicios -->
+            <path d="M 125 182 L 125 212" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <polygon points="121,210 125,216 129,210" fill="#0284c7"/>
+            <rect x="85" y="188" width="80" height="13" rx="6.5" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+            <text x="125" y="197" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#0284c7">Ruta / (:3000)</text>
+
+            <path d="M 300 182 L 300 212" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+            <polygon points="296,210 300,216 304,210" fill="#059669"/>
+            <rect x="256" y="188" width="88" height="13" rx="6.5" fill="#ffffff" stroke="#059669" stroke-width="0.8"/>
+            <text x="300" y="197" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#059669">Ruta /api/* (:8080)</text>
+
+            <path d="M 642 182 L 642 212" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
+            <polygon points="638,210 642,216 646,210" fill="#a855f7"/>
+            <rect x="585" y="188" width="114" height="13" rx="6.5" fill="#ffffff" stroke="#a855f7" stroke-width="0.8"/>
+            <text x="642" y="197" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6" font-weight="800" fill="#6b21a8">Host (*.reflexo/*arte)</text>
+
+            <!-- 2.2 SUBREDES PRIVADAS DE CÓMPUTO (10.0.10.0/24 y 10.0.20.0/24) -->
+            <g id="node-compute-zone" class="arch-node" onclick="zoomArch('compute-zone', event)" transform="translate(28, 206)">
+              <rect x="0" y="0" width="724" height="204" rx="10" fill="rgba(254, 243, 199, 0.65)" stroke="#f59e0b" stroke-width="1.6"/>
+              
+              <!-- Etiqueta de Subred colocada en el centro despejado (x = 350) para no colisionar con flechas -->
+              <rect x="350" y="4" width="260" height="13" rx="6.5" fill="#f59e0b"/>
+              <text x="480" y="13.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#ffffff">SUBRED PRIVADA CÓMPUTO (10.0.10.0/24 &amp; 10.0.20.0/24)</text>
+
+              <!-- Cluster ECS Fargate Contenedor -->
+              <rect x="10" y="22" width="704" height="110" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.3" filter="url(#shadow-node-af)"/>
+              
+              <g transform="translate(20, 36)">
+                <g transform="scale(0.65)"><use href="#icon-fargate-af"/></g>
+                <text x="16" y="2" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#92400e">
+                  Cluster Amazon ECS (AWS Fargate Serverless) <tspan font-size="7.6" font-weight="600" fill="#b45309">· Cómputo Elástico de Contenedores sin Servidores</tspan>
+                </text>
+              </g>
+
+              <!-- 4 Microservicios Grid Individualmente Clickeables -->
+              <g transform="translate(18, 44)">
+                <!-- sofi-web -->
+                <g id="node-ecs-web" class="arch-node" onclick="zoomArch('ecs-web', event)">
+                  <rect x="0" y="0" width="160" height="44" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+                  <text x="8" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">sofi-web</text>
+                  <text x="8" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">Next.js (SSR LMS)</text>
+                  <text x="8" y="38" font-family="'JetBrains Mono', monospace" font-size="6.8" font-weight="700" fill="#0284c7">0.25 vCPU · 512 MiB</text>
+                </g>
+
+                <!-- sofi-backend -->
+                <g id="node-ecs-backend" class="arch-node" onclick="zoomArch('ecs-backend', event)" transform="translate(172, 0)">
+                  <rect x="0" y="0" width="168" height="44" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.2"/>
+                  <text x="8" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#065f46">sofi-backend</text>
+                  <text x="8" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">NestJS API + Prisma</text>
+                  <text x="8" y="38" font-family="'JetBrains Mono', monospace" font-size="6.8" font-weight="700" fill="#059669">0.50 vCPU · 1024 MiB</text>
+                </g>
+
+                <!-- Bot Discord -->
+                <g id="node-ecs-bot" class="arch-node" onclick="zoomArch('ecs-bot', event)" transform="translate(352, 0)">
+                  <rect x="0" y="0" width="160" height="44" rx="6" fill="#faf5ff" stroke="#6366f1" stroke-width="1.2"/>
+                  <text x="8" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#4338ca">Bot-Asistencia-APM</text>
+                  <text x="8" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">Discord WebSocket 24/7</text>
+                  <text x="8" y="38" font-family="'JetBrains Mono', monospace" font-size="6.8" font-weight="700" fill="#4338ca">0.25 vCPU · 512 MiB</text>
+                </g>
+
+                <!-- Clientes B2B -->
+                <g id="node-ecs-b2b" class="arch-node" onclick="zoomArch('ecs-b2b', event)" transform="translate(524, 0)">
+                  <rect x="0" y="0" width="164" height="44" rx="6" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+                  <text x="8" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#6b21a8">Clientes B2B Aislados</text>
+                  <text x="8" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#64748b">Reflexo Perú · Arte Ideas</text>
+                  <text x="8" y="38" font-family="'JetBrains Mono', monospace" font-size="6.8" font-weight="700" fill="#6b21a8">0.50 vCPU · 1024 MiB</text>
+                </g>
+              </g>
+
+              <!-- Texto Limpio de Auto Scaling Fargate (Despejado sin cruces) -->
+              <g id="node-ecs-asg" class="arch-node" onclick="zoomArch('ecs-asg', event)" transform="translate(250, 94)">
+                <text x="0" y="13" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#92400e">Mecanismo de Elasticidad: Amazon ECS Auto Scaling Policies</text>
+                <text x="0" y="25" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#b45309">• Target Tracking (70% CPU/RAM) + Step Scaling Dinámico ante picos de demanda</text>
+              </g>
+
+              <!-- Fila Inferior: EC2 Dev y VPC Endpoints con canal libre en el medio -->
+              <g transform="translate(10, 138)">
+                <!-- EC2 Dev Box -->
+                <g id="node-ec2-dev" class="arch-node" onclick="zoomArch('ec2-dev', event)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="370" height="54" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.4"/>
+                  <text x="12" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#b45309">EC2 Workstations Dev (Familia T3 / T4g ARM Graviton)</text>
+                  <text x="12" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Cargas Burstable · 25 GB EBS gp3 (3,000 IOPS base)</text>
+                  <text x="12" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#10b981">✓ Política FinOps: Apagado programado (160h/mes = ~$3.50/mes)</text>
+                </g>
+
+                <!-- VPC Endpoints Box -->
+                <g id="node-vpc-endpoints" class="arch-node" onclick="zoomArch('vpc-endpoints', event)" transform="translate(410, 0)" filter="url(#shadow-node-af)">
+                  <rect x="0" y="0" width="294" height="54" rx="7" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                  <text x="12" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.8" font-weight="800" fill="#0369a1">VPC Endpoints Gestionados (AWS PrivateLink)</text>
+                  <text x="12" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Gateway S3 (:443) + Interface ECR / SSM TLS</text>
+                  <text x="12" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#0369a1">Tráfico privado sin consumir ancho de banda NAT Gateway</text>
+                </g>
+
+                <!-- Canal TLS entre VPC Endpoints y EC2 Dev -->
+                <line x1="410" y1="27" x2="370" y2="27" stroke="#475569" stroke-width="1.6" stroke-dasharray="3 2"/>
+                <polygon points="372,24 366,27 372,30" fill="#475569"/>
+              </g>
+            </g>
+
+            <!-- ENRUTAMIENTO ORTOGONAL LIMPIO DE sofi-backend A RDS PRIMARIA (SIN CORTAR TARJETAS) -->
+            <!-- 1. Baja desde sofi-backend por el espacio libre (x = 240) -->
+            <!-- 2. Gira por el canal intermedio (y = 338) hacia el espacio entre EC2 y VPC Endpoints (x = 422) -->
+            <!-- 3. Baja por el espacio intermedio (x = 422) hacia el canal inferior (y = 422) -->
+            <!-- 4. Gira a la izquierda hasta colocarse sobre RDS Primaria (x = 195) y baja a su cabecera -->
+            <path d="M 240 294 L 240 338 L 420 338 L 420 422 L 195 422 L 195 438" stroke="#059669" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <polygon points="191,436 195,442 199,436" fill="#059669"/>
+            <rect x="225" y="414" width="168" height="15" rx="7.5" fill="#ffffff" stroke="#059669" stroke-width="1.1"/>
+            <text x="309" y="424.5" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.4" font-weight="800" fill="#065f46">Conexión Segura TCP :5432 (Security Group)</text>
+
+            <!-- 2.3 SUBREDES AISLADAS DE BASE DE DATOS (10.0.30.0/24 y 10.0.40.0/24) -->
+            <g id="node-db-zone" class="arch-node" onclick="zoomArch('db-zone', event)" transform="translate(28, 426)">
+              <rect x="0" y="0" width="724" height="132" rx="10" fill="rgba(209, 250, 229, 0.72)" stroke="#059669" stroke-width="1.6"/>
+              <rect x="10" y="4" width="280" height="13" rx="6.5" fill="#059669"/>
+              <text x="150" y="13.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#ffffff">SUBREDES AISLADAS DE BASE DE DATOS (MULTI-AZ · CERO SALIDA A INTERNET)</text>
+
+              <!-- RDS Primaria -->
+              <g id="node-rds-pri" class="arch-node" onclick="zoomArch('rds-pri', event)" transform="translate(10, 20)" filter="url(#shadow-node-af)">
+                <rect x="0" y="0" width="327" height="102" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.8"/>
+                <g transform="translate(18, 18) scale(0.75)"><use href="#icon-rds-af"/></g>
+                <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#065f46">Amazon RDS PostgreSQL 16 (Primaria Activa)</text>
+                <text x="36" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="700" fill="#059669">Zona us-east-1a · Subred 10.0.30.0/24</text>
+                <text x="12" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Cifrado KMS en reposo (EBS gp3)</text>
+                <text x="12" y="60" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Recuperación continua PITR hasta 35 días</text>
+                <text x="12" y="73" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#059669">• Security Group: Solo acepta puerto 5432 desde ECS</text>
+                <text x="12" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#10b981">✓ Snapshots automáticos diarios</text>
+              </g>
+
+              <!-- Conector Replicación Síncrona -->
+              <g transform="translate(345, 70)">
+                <line x1="0" y1="0" x2="38" y2="0" stroke="#059669" stroke-width="2" stroke-dasharray="4 3"/>
+                <polygon points="36,-3 42,0 36,3" fill="#059669"/>
+                <rect x="-14" y="-8" width="66" height="16" rx="5" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+                <text x="19" y="3" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.2" font-weight="800" fill="#065f46">Síncrona Multi-AZ</text>
+              </g>
+
+              <!-- RDS Standby -->
+              <g id="node-rds-sec" class="arch-node" onclick="zoomArch('rds-sec', event)" transform="translate(390, 20)" filter="url(#shadow-node-af)">
+                <rect x="0" y="0" width="324" height="102" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.8"/>
+                <g transform="translate(18, 18) scale(0.75)"><use href="#icon-rds-af"/></g>
+                <text x="36" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="800" fill="#065f46">Amazon RDS PostgreSQL 16 (Standby Pasiva)</text>
+                <text x="36" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.4" font-weight="700" fill="#059669">Zona us-east-1b · Subred 10.0.40.0/24</text>
+                <text x="12" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#059669">• Failover automático en &lt; 60 segundos</text>
+                <text x="12" y="60" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Continuidad de negocio sin cambiar endpoint DNS</text>
+                <text x="12" y="73" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Reemplazo transparente ante caída de zona física</text>
+                <text x="12" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Cero pérdida transaccional (RPO = 0)</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- ============================================================ -->
+          <!-- 3. CANAL VERTICAL INTERCONECTOR DESPEJADO (x = 765 a 835)    -->
+          <!-- ============================================================ -->
+          <g id="channel-connectors">
+            <!-- 1. Presigned URLs / S3 Gateway (:443) -->
+            <line x1="765" y1="128" x2="835" y2="128" stroke="#2563eb" stroke-width="2" stroke-dasharray="4 3"/>
+            <polygon points="831,125 836,128 831,131" fill="#2563eb"/>
+            <rect x="772" y="120" width="56" height="15" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+            <text x="800" y="130" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#1e40af">S3 :443</text>
+
+            <!-- 2. Montaje NFS :2049 en Caliente -->
+            <line x1="765" y1="239" x2="835" y2="239" stroke="#2563eb" stroke-width="2" stroke-dasharray="4 3"/>
+            <polygon points="831,236 836,239 831,242" fill="#2563eb"/>
+            <rect x="772" y="231" width="56" height="15" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+            <text x="800" y="241" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#1e40af">NFS :2049</text>
+
+            <!-- 3. Métricas y Logs awslogs :443 -->
+            <line x1="765" y1="315" x2="835" y2="315" stroke="#475569" stroke-width="2" stroke-dasharray="4 3"/>
+            <polygon points="831,312 836,315 831,318" fill="#475569"/>
+            <rect x="772" y="307" width="56" height="15" rx="4" fill="#ffffff" stroke="#475569" stroke-width="1"/>
+            <text x="800" y="317" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#334155">Logs :443</text>
+
+            <!-- 4. Canal TLS :443 (SSM Session Manager sin SSH) -->
+            <line x1="835" y1="414" x2="765" y2="414" stroke="#059669" stroke-width="2" stroke-dasharray="4 3"/>
+            <polygon points="769,411 764,414 769,417" fill="#059669"/>
+            <rect x="772" y="406" width="56" height="15" rx="4" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+            <text x="800" y="416" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="800" fill="#065f46">SSM TLS</text>
+          </g>
+
+          <!-- ============================================================ -->
+          <!-- 4. PANELES LATERALES DERECHOS (x = 835 a 1185, ancho 350px)  -->
+          <!-- ============================================================ -->
+
+          <!-- 4.1 ALMACENAMIENTO ADMINISTRADO Y CICLO DE VIDA (y = 80 a 266) -->
+          <g id="node-storage-zone" class="arch-node" onclick="zoomArch('storage-zone', event)">
+            <rect x="835" y="80" width="340" height="186" rx="12" fill="rgba(248, 250, 252, 0.85)" stroke="#2563eb" stroke-width="1.8"/>
+            <rect x="847" y="86" width="230" height="14" rx="7" fill="#2563eb"/>
+            <text x="962" y="96.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="800" fill="#ffffff">ALMACENAMIENTO &amp; CICLO DE VIDA</text>
+
+            <!-- S3 Standard -->
+            <g id="node-s3" class="arch-node" onclick="zoomArch('s3', event)" transform="translate(847, 104)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="48" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.4"/>
+              <g transform="translate(18, 16) scale(0.75)"><use href="#icon-s3-af"/></g>
+              <text x="36" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#1e40af">Amazon S3 Standard (11 Nueves)</text>
+              <text x="36" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Assets web · Cursos LMS · Backups de BD</text>
+              <text x="12" y="40" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="800" fill="#b45309">✓ Presigned URLs: Streaming y subida directa sin saturar API</text>
+            </g>
+
+            <!-- Flecha Lifecycle hacia Glacier -->
+            <line x1="1005" y1="152" x2="1005" y2="166" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="3 2"/>
+            <polygon points="1002,164 1005,169 1008,164" fill="#2563eb"/>
+
+            <!-- S3 Glacier -->
+            <g id="node-glacier" class="arch-node" onclick="zoomArch('glacier', event)" transform="translate(847, 166)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#1e40af">S3 Glacier Flexible Retrieval</text>
+              <text x="12" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Transición Lifecycle (&gt;90 días) para volcados históricos</text>
+              <text x="12" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#10b981">Ahorro FinOps: -80% respecto a S3 Standard</text>
+            </g>
+
+            <!-- Amazon EFS -->
+            <g id="node-efs" class="arch-node" onclick="zoomArch('efs', event)" transform="translate(847, 218)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#1e40af">Amazon Elastic File System (EFS NFS)</text>
+              <text x="12" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Sistema compartido montable en EC2 Dev (:2049)</text>
+              <text x="12" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#1e40af">Datasets y librerías compartidas entre practicantes</text>
+            </g>
+          </g>
+
+          <!-- 4.2 GOBERNANZA, OPERACIONES & SEGURIDAD (y = 276 a 568) -->
+          <g id="node-ops-zone" class="arch-node" onclick="zoomArch('ops-zone', event)">
+            <rect x="835" y="276" width="340" height="292" rx="12" fill="rgba(248, 250, 252, 0.85)" stroke="#475569" stroke-width="1.8"/>
+            <rect x="847" y="282" width="240" height="14" rx="7" fill="#475569"/>
+            <text x="967" y="292.5" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="800" fill="#ffffff">GOBERNANZA, OPERACIONES &amp; SEGURIDAD</text>
+
+            <!-- CloudWatch -->
+            <g id="node-cloudwatch" class="arch-node" onclick="zoomArch('cloudwatch', event)" transform="translate(847, 294)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="42" rx="7" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0f172a">Amazon CloudWatch (Observabilidad Central)</text>
+              <text x="12" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Ingesta métricas ECS/ALB/RDS · Logs awslogs (30 días)</text>
+              <text x="12" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.8" font-weight="700" fill="#ef4444">Monitoreo continuo de latencia y errores 5XX</text>
+            </g>
+
+            <!-- Flecha Alarma hacia SNS -->
+            <line x1="1005" y1="336" x2="1005" y2="346" stroke="#ef4444" stroke-width="1.6"/>
+            <polygon points="1002,344 1005,349 1008,344" fill="#ef4444"/>
+
+            <!-- SNS -->
+            <g id="node-sns" class="arch-node" onclick="zoomArch('sns', event)" transform="translate(847, 346)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="38" rx="7" fill="#ffffff" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#991b1b">Amazon Simple Notification Service (SNS)</text>
+              <text x="12" y="29" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Alertas inmediatas a Discord y Email ante CPU &gt; 75%</text>
+            </g>
+
+            <!-- SSM Session Manager -->
+            <g id="node-ssm" class="arch-node" onclick="zoomArch('ssm', event)" transform="translate(847, 392)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="44" rx="7" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#065f46">AWS Systems Manager (SSM Session Manager)</text>
+              <text x="12" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="800" fill="#10b981">✓ Zero Open Ports: Cero puerto 22 (SSH) abierto</text>
+              <text x="12" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">Acceso interactivo TLS cifrado con auditoría en CloudWatch</text>
+            </g>
+
+            <!-- IAM -->
+            <g id="node-iam" class="arch-node" onclick="zoomArch('iam', event)" transform="translate(847, 444)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="42" rx="7" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0f172a">AWS Identity &amp; Access Management (IAM)</text>
+              <text x="12" y="27" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Principio de Menor Privilegio (PoLP) y MFA obligatorio</text>
+              <text x="12" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Roles de ejecución específicos para tareas ECS y SSM</text>
+            </g>
+
+            <!-- CloudFormation & FinOps -->
+            <g id="node-iac" class="arch-node" onclick="zoomArch('iac', event)" transform="translate(847, 494)" filter="url(#shadow-node-af)">
+              <rect x="0" y="0" width="316" height="52" rx="7" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
+              <text x="12" y="15" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#0f172a">AWS CloudFormation &amp; FinOps</text>
+              <text x="12" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="600" fill="#475569">• Stacks modulares YAML en Git (Red, BD, Cómputo)</text>
+              <text x="12" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.2" font-weight="700" fill="#b45309">• Tagging obligatorio y optimización con Trusted Advisor</text>
+            </g>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- PISTA DE NAVEGACIÓN EN VISTA GLOBAL -->
+      <div class="bottom-hint-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">
+          <strong>Navegación Interactiva:</strong> Hacé clic en cualquier componente individual o subred para enfocarlo en el centro con su justificación técnica.
+        </span>
+      </div>
+
+      <!-- RECUADRO LATERAL DE JUSTIFICACIÓN DE INGENIERÍA -->
+      <div class="tech-side-card" id="tech-card" onclick="event.stopPropagation()">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="tech-pill" id="tech-pill" style="background: rgba(255, 153, 0, 0.15); color: #b45309; border: 1px solid rgba(255, 153, 0, 0.3);">
+              Borde &amp; Perímetro
+            </span>
+          </div>
+
+          <div class="tech-title" id="tech-title">Route 53 &amp; CloudFront</div>
+          <div class="tech-subtitle" id="tech-subtitle">Aceleración Perimetral &amp; Seguridad L3/L4</div>
+
+          <div class="tech-box-why">
+            <div class="tech-why-header">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              ¿Por qué está diseñado así?
+            </div>
+            <div class="tech-why-content" id="tech-why-content">
+              Descarga el cifrado TLS y cachea contenidos cerca de los usuarios peruanos para reducir latencia, mitigando ataques de denegación de servicio con AWS Shield en el borde.
+            </div>
+          </div>
+
+          <ul class="tech-specs-list" id="tech-specs-list">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>DNS multidominio autoritativo con latency routing.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <button class="btn-close-card" onclick="zoomArch('global', event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>Volver a Vista Global</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Catálogo Maestro de Nodos y Parámetros Cinemáticos de Zoom (Centrado Exacto en Canvas)
+    const archNodesData = {
+      global: {
+        cx: 600, cy: 290, scale: 1, isGlobal: true,
+        activeNode: null,
+        pillBg: "rgba(35, 47, 62, 0.1)", pillColor: "#232f3e", pillBorder: "rgba(35, 47, 62, 0.2)",
+        pill: "Panorama Global",
+        title: "Arquitectura Integral AWS",
+        subtitle: "APM Inversiones EIRL · Región us-east-1",
+        why: "Desacoplamiento total del monolito anterior en capas de borde, presentación L7, cómputo serverless en contenedores, persistencia Multi-AZ y observabilidad centralizada.",
+        specs: [
+          "Disponibilidad superior al 99.95% distribuida en 2 Zonas de Disponibilidad (AZs).",
+          "Aislamiento riguroso de red: Subredes Públicas, Privadas de Cómputo y Aisladas de BD.",
+          "Cero exposición pública: Ninguna IP pública en servidores de cómputo ni bases de datos."
+        ]
+      },
+      usuarios: {
+        cx: 250, cy: 34, scale: 1.7,
+        activeNode: "node-usuarios",
+        pillBg: "rgba(100, 116, 139, 0.12)", pillColor: "#334155", pillBorder: "rgba(100, 116, 139, 0.3)",
+        pill: "Actores & Clientes",
+        title: "Usuarios & Clientes Web",
+        subtitle: "Tráfico HTTPS Multidominio & Bot Discord",
+        why: "<strong>Punto de Entrada Universal:</strong> Conecta a los estudiantes del LMS SOFI, usuarios de marcas B2B (Reflexo Perú, Arte Ideas) y practicantes mediante Discord. Todo el tráfico externo viaja estrictamente cifrado por HTTPS :443.",
+        specs: [
+          "<strong>Navegadores Web:</strong> Sesiones seguras cifradas con TLS 1.3.",
+          "<strong>Clientes Discord:</strong> Conexión persistente WebSocket al Bot de Asistencias 24/7.",
+          "<strong>Aislamiento de Carga:</strong> Peticiones independientes por marca comercial."
+        ]
+      },
+      r53: {
+        cx: 640, cy: 41, scale: 1.8,
+        activeNode: "node-r53",
+        pillBg: "rgba(140, 79, 255, 0.12)", pillColor: "#6b21a8", pillBorder: "rgba(140, 79, 255, 0.3)",
+        pill: "DNS & Enrutamiento",
+        title: "Amazon Route 53",
+        subtitle: "DNS Global Autoritativo & Latency Routing",
+        why: "<strong>Resolución de Nombres de Ultra Baja Latencia:</strong> Administra las zonas hospedadas públicas autoritativas para sofi.edu.pe, reflexoperu.com y arteideas.pe con enrutamiento inteligente y 100% de disponibilidad garantizada por SLA.",
+        specs: [
+          "<strong>Registros Alias:</strong> Apuntamiento directo a CloudFront sin costo por consulta DNS.",
+          "<strong>Health Checks Activos:</strong> Verificación continua de disponibilidad perimetral.",
+          "<strong>SLA 100%:</strong> Servicio con garantía de disponibilidad absoluta de AWS."
+        ]
+      },
+      cf: {
+        cx: 1000, cy: 41, scale: 1.8,
+        activeNode: "node-cf",
+        pillBg: "rgba(140, 79, 255, 0.12)", pillColor: "#6b21a8", pillBorder: "rgba(140, 79, 255, 0.3)",
+        pill: "Borde & Aceleración",
+        title: "Amazon CloudFront (CDN Edge)",
+        subtitle: "Caché Perimetral & Protección Anti-DDoS",
+        why: "<strong>Descarga de Backend & Baja Latencia:</strong> Almacena en caché los assets estáticos del LMS y logos en Edge Locations cercanas a Perú, mitigando ataques de denegación de servicio (L3/L4) con AWS Shield antes de que toquen la VPC.",
+        specs: [
+          "<strong>AWS Certificate Manager (ACM):</strong> Renovación automática de certificados SSL/TLS.",
+          "<strong>AWS Shield Standard:</strong> Mitigación Anti-DDoS nativa sin costo adicional.",
+          "<strong>Compresión Brotli/Gzip:</strong> Carga acelerada de paquetes estáticos."
+        ]
+      },
+      alb: {
+        cx: 255, cy: 146, scale: 1.6,
+        activeNode: "node-alb",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Ingress & Balanceo L7",
+        title: "Application Load Balancer (ALB)",
+        subtitle: "Host & Path-Based Routing Multi-AZ",
+        why: "<strong>Desacoplamiento Total de Tráfico:</strong> Único componente con IP pública en la red. Inspecciona cabeceras HTTP y redirige a los Target Groups respectivos (sofi-web en :3000, sofi-backend en :8080 y clientes B2B en :8080) aplicando redirección forzada HTTP 301 a HTTPS.",
+        specs: [
+          "<strong>Multi-AZ:</strong> Nodos distribuidos en us-east-1a y us-east-1b.",
+          "<strong>Health Checks (/api/health):</strong> Drenado y retiro de tareas anómalas en 30s.",
+          "<strong>Security Group Encadenado:</strong> Solo acepta tráfico entrante desde CloudFront/HTTPS."
+        ]
+      },
+      nat: {
+        cx: 617, cy: 146, scale: 1.8,
+        activeNode: "node-nat",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Egress & Seguridad",
+        title: "NAT Gateways Redundantes",
+        subtitle: "Salida Segura a Internet sin Conexiones Entrantes",
+        why: "<strong>Aislamiento de Cómputo Privado:</strong> Permite que los contenedores Fargate y servidores EC2 descarguen parches y dependencias (npm, Docker, APIs externas) sin exponer jamás una IP pública a Internet.",
+        specs: [
+          "<strong>Alta Disponibilidad:</strong> Despliegue redundante en subredes públicas us-east-1a y 1b.",
+          "<strong>Tráfico Unidireccional:</strong> Bloqueo absoluto de paquetes entrantes no solicitados.",
+          "<strong>Ancho de Banda Elástico:</strong> Hasta 45 Gbps escalable automáticamente por AWS."
+        ]
+      },
+      "public-zone": {
+        cx: 390, cy: 140, scale: 1.05,
+        activeNode: "node-public-zone",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Zona de Red",
+        title: "Subredes Públicas Multi-AZ",
+        subtitle: "10.0.1.0/24 & 10.0.2.0/24 (Puerta de Enlace)",
+        why: "<strong>Perímetro Controlado de la VPC:</strong> Aloja exclusivamente el Application Load Balancer y los NAT Gateways. Todo el tráfico que ingresa a la organización es filtrado aquí antes de pasar a cómputo privado.",
+        specs: [
+          "<strong>Internet Gateway (IGW):</strong> Puerta de enlace bidireccional solo para ALB y NAT.",
+          "<strong>Aislamiento Estricto:</strong> Ningún microservicio ni base de datos reside en esta subred.",
+          "<strong>Redundancia Dual-AZ:</strong> Cobertura física en us-east-1a y us-east-1b."
+        ]
+      },
+      "ecs-web": {
+        cx: 125, cy: 245, scale: 2.0,
+        activeNode: "node-ecs-web",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0369a1", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Microservicio Frontend",
+        title: "sofi-web (LMS Frontend)",
+        subtitle: "Next.js Server-Side Rendering (SSR)",
+        why: "<strong>Interfaz de Usuario Veloz & SEO:</strong> Renderiza las páginas de la academia SOFI en servidor, garantizando tiempo de carga instantáneo de catálogo de cursos y paneles de estudiantes.",
+        specs: [
+          "<strong>Dimensionamiento Fargate:</strong> 0.25 vCPU / 512 MiB RAM.",
+          "<strong>Puerto HTTP :3000:</strong> Enlazado directamente al Target Group del ALB.",
+          "<strong>Contenedor sin Estado:</strong> Reemplazo y escalado inmediato en segundos."
+        ]
+      },
+      "ecs-backend": {
+        cx: 300, cy: 245, scale: 2.0,
+        activeNode: "node-ecs-backend",
+        pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
+        pill: "Microservicio Backend",
+        title: "sofi-backend (API Gateway Core)",
+        subtitle: "NestJS Framework + Prisma ORM",
+        why: "<strong>Lógica de Negocio & Control Transaccional:</strong> Procesa matrícula, asistencias y autenticación con pool estricto de Prisma ORM para no saturar RDS. Emite Presigned URLs para que S3 sirva videos directamente.",
+        specs: [
+          "<strong>Dimensionamiento Fargate:</strong> 0.50 vCPU / 1024 MiB RAM.",
+          "<strong>Puerto HTTP :8080:</strong> Ruta /api/* administrada por el ALB.",
+          "<strong>Generación Presigned URLs:</strong> Cero cuello de botella en transferencia de archivos."
+        ]
+      },
+      "ecs-bot": {
+        cx: 472, cy: 245, scale: 2.0,
+        activeNode: "node-ecs-bot",
+        pillBg: "rgba(99, 102, 241, 0.12)", pillColor: "#4338ca", pillBorder: "rgba(99, 102, 241, 0.3)",
+        pill: "Worker Continuo",
+        title: "Bot-Asistencia-APM",
+        subtitle: "Node.js Discord WebSocket 24/7",
+        why: "<strong>Conexión Persistente sin Timeout:</strong> Mantiene la sesión de Discord abierta permanentemente para marcar asistencias en tiempo real. En AWS Lambda fallaría por el límite de ejecución de 15 minutos.",
+        specs: [
+          "<strong>Dimensionamiento Fargate:</strong> 0.25 vCPU / 512 MiB RAM.",
+          "<strong>Socket 24/7 Continuo:</strong> Recuperación automática ante desconexión de red.",
+          "<strong>Cero Mantenimiento:</strong> Supervisión del ciclo de vida por Amazon ECS."
+        ]
+      },
+      "ecs-b2b": {
+        cx: 652, cy: 245, scale: 2.0,
+        activeNode: "node-ecs-b2b",
+        pillBg: "rgba(168, 85, 247, 0.12)", pillColor: "#6b21a8", pillBorder: "rgba(168, 85, 247, 0.3)",
+        pill: "Servicios Comerciales",
+        title: "Clientes B2B Desacoplados",
+        subtitle: "Reflexo Perú & Arte Ideas",
+        why: "<strong>Aislamiento de Impacto Operativo:</strong> Si una campaña publicitaria en Reflexo Perú o Arte Ideas genera un pico masivo de visitas, los contenedores absorben la carga sin degradar la academia SOFI.",
+        specs: [
+          "<strong>Dimensionamiento Fargate:</strong> 0.50 vCPU / 1024 MiB RAM.",
+          "<strong>Host Routing Dedicado:</strong> *.reflexoperu.com y *.arteideas.pe.",
+          "<strong>Límites de Recursos Estrictos:</strong> Aislamiento de CPU y memoria garantizado."
+        ]
+      },
+      "ecs-asg": {
+        cx: 395, cy: 294, scale: 1.1,
+        activeNode: "node-ecs-asg",
+        pillBg: "rgba(217, 119, 6, 0.12)", pillColor: "#92400e", pillBorder: "rgba(217, 119, 6, 0.3)",
+        pill: "Elasticidad Dinámica",
+        title: "Amazon ECS Auto Scaling Policies",
+        subtitle: "Target Tracking (70% CPU/RAM) & Step Scaling",
+        why: "<strong>Garantía de Rendimiento & Ahorro:</strong> Mantiene el uso medio al 70% inyectando tareas en segundos ante alta afluencia y retirándolas en horario nocturno para eliminar costos ociosos.",
+        specs: [
+          "<strong>Target Tracking:</strong> Ajuste automático al superar 70% de CPU o RAM.",
+          "<strong>Step Scaling:</strong> Respuestas agresivas ante picos bruscos de peticiones en ALB.",
+          "<strong>Cooldown 60s:</strong> Previene inestabilidad y ciclos de encendido/apagado acelerados."
+        ]
+      },
+      "ec2-dev": {
+        cx: 230, cy: 359, scale: 1.6,
+        activeNode: "node-ec2-dev",
+        pillBg: "rgba(245, 158, 11, 0.12)", pillColor: "#b45309", pillBorder: "rgba(245, 158, 11, 0.3)",
+        pill: "Entornos de Desarrollo",
+        title: "Amazon EC2 Workstations",
+        subtitle: "Familia T3 / T4g ARM Graviton2",
+        why: "<strong>Rendimiento en Ráfaga & Control FinOps:</strong> El practicante pasa tiempo editando código (5-15% CPU) acumulando créditos que se liberan al compilar. El apagado programado fuera de horario deja el costo en solo ~$3.50/mes.",
+        specs: [
+          "<strong>AWS Graviton2 (t4g.small):</strong> Hasta 40% mejor rendimiento por dólar en ARM64.",
+          "<strong>EBS gp3:</strong> 25 GB con 3,000 IOPS base independientes del tamaño.",
+          "<strong>Apagado Programado:</strong> 160 h/mes de operación = reducción drástica de factura."
+        ]
+      },
+      "vpc-endpoints": {
+        cx: 595, cy: 359, scale: 1.7,
+        activeNode: "node-vpc-endpoints",
+        pillBg: "rgba(2, 132, 199, 0.12)", pillColor: "#0284c7", pillBorder: "rgba(2, 132, 199, 0.3)",
+        pill: "Conectividad Privada",
+        title: "VPC Endpoints (AWS PrivateLink)",
+        subtitle: "Acceso Privado a Servicios AWS sin Pasar por NAT",
+        why: "<strong>Seguridad y Ahorro en Datos:</strong> Permite que los contenedores descarguen imágenes Docker de ECR y suban a S3 por la red interna de AWS, eliminando cobros por GB en NAT Gateway.",
+        specs: [
+          "<strong>Gateway Endpoint S3:</strong> Comunicación gratuita a nivel de ruta sin costo por GB.",
+          "<strong>Interface Endpoints ECR & SSM:</strong> Enlaces TLS privados con direcciones IP de VPC.",
+          "<strong>Cero Salida a Internet:</strong> Todo el tráfico viaja en la troncal segura de AWS."
+        ]
+      },
+      "compute-zone": {
+        cx: 390, cy: 293, scale: 1.02,
+        activeNode: "node-compute-zone",
+        pillBg: "rgba(245, 158, 11, 0.12)", pillColor: "#b45309", pillBorder: "rgba(245, 158, 11, 0.3)",
+        pill: "Zona de Red",
+        title: "Subredes Privadas de Cómputo",
+        subtitle: "10.0.10.0/24 & 10.0.20.0/24 (Cero IP Pública)",
+        why: "<strong>Aislamiento de Cómputo:</strong> Aloja los contenedores ECS Fargate y las estaciones EC2. Ningún recurso aquí posee IP pública; toda salida a Internet se efectúa vía NAT Gateway.",
+        specs: [
+          "<strong>Redundancia Multi-AZ:</strong> Reparto de tareas entre centros de datos 1a y 1b.",
+          "<strong>Security Groups Restrictivos:</strong> Solo admiten tráfico originado desde el ALB.",
+          "<strong>Montaje NFS Compartido:</strong> Conexión local a Amazon EFS por puerto :2049."
+        ]
+      },
+      "rds-pri": {
+        cx: 201, cy: 484, scale: 1.6,
+        activeNode: "node-rds-pri",
+        pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
+        pill: "Persistencia RDBMS",
+        title: "RDS PostgreSQL 16 (Primaria Activa)",
+        subtitle: "Zona us-east-1a · Subred 10.0.30.0/24",
+        why: "<strong>Motor Transaccional Blindado:</strong> Procesa todas las lecturas y escrituras del negocio. Ubicado en una subred aislada sin internet, aceptando únicamente tráfico TCP :5432 desde el Security Group de Fargate.",
+        specs: [
+          "<strong>Cifrado KMS en Reposo:</strong> Llaves administradas para discos EBS gp3.",
+          "<strong>PITR hasta 35 Días:</strong> Restauración precisa a cualquier segundo ante fallos humanos.",
+          "<strong>Snapshots Automáticos:</strong> Copias de seguridad diarias copiadas a S3."
+        ]
+      },
+      "rds-sec": {
+        cx: 585, cy: 484, scale: 1.6,
+        activeNode: "node-rds-sec",
+        pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
+        pill: "Alta Disponibilidad BD",
+        title: "RDS PostgreSQL 16 (Standby Pasiva)",
+        subtitle: "Zona us-east-1b · Subred 10.0.40.0/24",
+        why: "<strong>Tolerancia a Fallos Físicos de AZ:</strong> Mantiene sincronización síncrona a nivel de bloques. Si la primaria en us-east-1a colapsa, la Standby asume la operación en &lt; 60s sin cambiar credenciales ni endpoint DNS.",
+        specs: [
+          "<strong>Failover Automático &lt; 60s:</strong> Detección y promoción autónoma por AWS.",
+          "<strong>Cero Pérdida de Datos (RPO = 0):</strong> Replicación síncrona antes de confirmar commits.",
+          "<strong>Continuidad de Negocio:</strong> El backend se reconecta automáticamente sin parches de código."
+        ]
+      },
+      "db-zone": {
+        cx: 390, cy: 480, scale: 1.05,
+        activeNode: "node-db-zone",
+        pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
+        pill: "Zona de Red",
+        title: "Subredes Aisladas de Base de Datos",
+        subtitle: "10.0.30.0/24 & 10.0.40.0/24 (Blindaje RDBMS)",
+        why: "<strong>Máxima Zona de Confianza:</strong> Subredes sin tablas de ruteo hacia Internet Gateway ni NAT Gateways. La base de datos es físicamente inaccesible desde el exterior.",
+        specs: [
+          "<strong>Cero Ruta a Internet:</strong> Imposible fuga de datos o accesos no autenticados.",
+          "<strong>Filtrado por Capas:</strong> Solo acepta tráfico TCP :5432 desde el Security Group de Fargate.",
+          "<strong>Despliegue Multi-AZ:</strong> Separación física de instancias entre us-east-1a y 1b."
+        ]
+      },
+      s3: {
+        cx: 995, cy: 128, scale: 1.8,
+        activeNode: "node-s3",
+        pillBg: "rgba(37, 99, 235, 0.12)", pillColor: "#1e40af", pillBorder: "rgba(37, 99, 235, 0.3)",
+        pill: "Almacenamiento Objeto",
+        title: "Amazon S3 Standard",
+        subtitle: "Durabilidad 11 Nueves & Presigned URLs",
+        why: "<strong>Descarga de Backend & Resiliencia:</strong> Guarda cursos en video, assets y volcados. sofi-backend genera Presigned URLs con expiración y el usuario descarga directo de S3, evitando agotar memoria del servidor.",
+        specs: [
+          "<strong>Durabilidad 99.999999999%:</strong> Copias distribuidas en múltiples instalaciones físicas.",
+          "<strong>Presigned URLs:</strong> Streaming seguro temporal sin intermediar con la API NestJS.",
+          "<strong>Cifrado SSE-S3 / SSE-KMS:</strong> Encriptación automática de todo objeto en reposo."
+        ]
+      },
+      glacier: {
+        cx: 995, cy: 187, scale: 1.8,
+        activeNode: "node-glacier",
+        pillBg: "rgba(37, 99, 235, 0.12)", pillColor: "#1e40af", pillBorder: "rgba(37, 99, 235, 0.3)",
+        pill: "Archivado & FinOps",
+        title: "S3 Glacier Flexible Retrieval",
+        subtitle: "Transición Automática por Ciclo de Vida (>90 Días)",
+        why: "<strong>Ahorro en Retención Histórica:</strong> Los backups de base de datos mayores a 90 días se transfieren por Lifecycle a Glacier, reduciendo más de un 80% el costo de almacenamiento para auditoría legal.",
+        specs: [
+          "<strong>Ahorro FinOps:</strong> Tarifa más de 80% inferior a S3 Standard.",
+          "<strong>Recuperación en Horas:</strong> Opciones aceleradas o estándar según la contingencia.",
+          "<strong>Inmutabilidad:</strong> Compatible con S3 Object Lock para blindaje contra borrado accidental."
+        ]
+      },
+      efs: {
+        cx: 995, cy: 239, scale: 1.8,
+        activeNode: "node-efs",
+        pillBg: "rgba(37, 99, 235, 0.12)", pillColor: "#1e40af", pillBorder: "rgba(37, 99, 235, 0.3)",
+        pill: "Archivos Compartidos",
+        title: "Amazon Elastic File System (EFS NFS)",
+        subtitle: "Sistema de Archivos NFS Compartido (:2049)",
+        why: "<strong>Colaboración Eficiente en Desarrollo:</strong> Montable simultáneamente por múltiples EC2 Workstations de practicantes, permitiendo compartir repositorios, librerías y datasets de pruebas sin duplicar espacio.",
+        specs: [
+          "<strong>Protocolo NFS :2049:</strong> Acceso nativo multi-cliente en Linux.",
+          "<strong>Escalado Elástico:</strong> Crece y decrece automáticamente según los archivos almacenados.",
+          "<strong>Rendimiento Provisionado:</strong> Capacidad de ráfaga para lectura veloz de código."
+        ]
+      },
+      "storage-zone": {
+        cx: 995, cy: 173, scale: 1.35,
+        activeNode: "node-storage-zone",
+        pillBg: "rgba(37, 99, 235, 0.12)", pillColor: "#1e40af", pillBorder: "rgba(37, 99, 235, 0.3)",
+        pill: "Servicios Transversales",
+        title: "Almacenamiento Administrado y Ciclo de Vida",
+        subtitle: "S3 Standard · Glacier · EFS NFS",
+        why: "<strong>Estrategia Integral de Datos:</strong> Combina almacenamiento de objetos de alta velocidad para la web, archivado ultrabarato a largo plazo y carpetas compartidas para los entornos de trabajo.",
+        specs: [
+          "<strong>Gestión de Ciclo de Vida:</strong> Transición automatizada sin intervención humana.",
+          "<strong>Separación de Responsabilidades:</strong> Objetos estáticos desacoplados de bases de datos.",
+          "<strong>Optimización de Costos:</strong> Cada byte se almacena en la capa de menor costo posible."
+        ]
+      },
+      cloudwatch: {
+        cx: 995, cy: 315, scale: 1.8,
+        activeNode: "node-cloudwatch",
+        pillBg: "rgba(71, 85, 105, 0.12)", pillColor: "#334155", pillBorder: "rgba(71, 85, 105, 0.3)",
+        pill: "Observabilidad Central",
+        title: "Amazon CloudWatch",
+        subtitle: "Métricas en Tiempo Real & Logs Centralizados",
+        why: "<strong>Visibilidad Operativa Absoluta:</strong> Ingesta métricas de CPU, RAM, peticiones HTTP del balanceador y centraliza los logs de todos los microservicios con el driver awslogs (retención de 30 días).",
+        specs: [
+          "<strong>Dashboards Unificados:</strong> Monitoreo de salud operativa en un solo panel.",
+          "<strong>Logs Centralizados:</strong> Depuración de errores en contenedores sin acceder al servidor.",
+          "<strong>Alarmas Proactivas:</strong> Detección instantánea de degradación o fallos 5XX."
+        ]
+      },
+      sns: {
+        cx: 995, cy: 365, scale: 1.8,
+        activeNode: "node-sns",
+        pillBg: "rgba(239, 68, 68, 0.12)", pillColor: "#991b1b", pillBorder: "rgba(239, 68, 68, 0.3)",
+        pill: "Alertas & Notificaciones",
+        title: "Amazon Simple Notification Service (SNS)",
+        subtitle: "Difusión de Alarmas a Discord y Correo",
+        why: "<strong>Notificación Instantánea ante Incidentes:</strong> Desacopla las alertas de CloudWatch para enviar notificaciones inmediatas a canales privados de Discord del equipo técnico ante CPU > 75% o errores de BD.",
+        specs: [
+          "<strong>Integración con Discord:</strong> Webhook push directo al canal de ingeniería.",
+          "<strong>Notificaciones por Email:</strong> Respaldo formal a administradores.",
+          "<strong>Reintentos y DLQ:</strong> Garantía de entrega de mensajes críticos de alarma."
+        ]
+      },
+      ssm: {
+        cx: 995, cy: 414, scale: 1.8,
+        activeNode: "node-ssm",
+        pillBg: "rgba(5, 150, 105, 0.12)", pillColor: "#065f46", pillBorder: "rgba(5, 150, 105, 0.3)",
+        pill: "Seguridad & Acceso",
+        title: "AWS Systems Manager (SSM Session Manager)",
+        subtitle: "Zero Open Ports: Terminal Cifrada sin Puerto 22 (SSH)",
+        why: "<strong>Eliminación de Bastiones y Llaves .pem:</strong> Erradica por completo el puerto 22 SSH expuesto a Internet. Los practicantes abren consolas interactivas cifradas con TLS autenticadas por IAM con registro total de comandos.",
+        specs: [
+          "<strong>Cero Puertos Inbound:</strong> Security Groups sin reglas de entrada abiertas.",
+          "<strong>Auditoría Completa:</strong> Cada comando ejecutado queda registrado en CloudWatch Logs.",
+          "<strong>Control por IAM:</strong> Concesión o revocación de acceso en un clic sin llaves SSH."
+        ]
+      },
+      iam: {
+        cx: 995, cy: 464, scale: 1.8,
+        activeNode: "node-iam",
+        pillBg: "rgba(71, 85, 105, 0.12)", pillColor: "#334155", pillBorder: "rgba(71, 85, 105, 0.3)",
+        pill: "Gobierno de Identidades",
+        title: "AWS IAM (Principio de Menor Privilegio)",
+        subtitle: "Políticas PoLP & MFA Obligatorio",
+        why: "<strong>Blindaje de Permisos:</strong> Cada tarea de Fargate y usuario posee únicamente los permisos mínimos estrictos para operar. Autenticación Multifactor (MFA) obligatoria para el personal técnico.",
+        specs: [
+          "<strong>Task Roles en ECS:</strong> Los contenedores no poseen credenciales fijas de AWS.",
+          "<strong>MFA Obligatorio:</strong> Acceso a consola protegido contra robo de contraseñas.",
+          "<strong>Auditoría de Actividad:</strong> Integración continua con AWS CloudTrail."
+        ]
+      },
+      iac: {
+        cx: 995, cy: 517, scale: 1.7,
+        activeNode: "node-iac",
+        pillBg: "rgba(217, 119, 6, 0.12)", pillColor: "#92400e", pillBorder: "rgba(217, 119, 6, 0.3)",
+        pill: "Infraestructura como Código",
+        title: "AWS CloudFormation & FinOps",
+        subtitle: "Stacks YAML Versionados en Git & Tagging de Costos",
+        why: "<strong>Infraestructura Repetible en Minutos:</strong> Toda la arquitectura está definida en código declarativo en Git. Elimina errores manuales de consola y permite auditar gastos mediante tags de FinOps.",
+        specs: [
+          "<strong>Stacks Modulares:</strong> Red, Base de Datos y Cómputo versionados por separado.",
+          "<strong>Estrategia de Tagging:</strong> Environment, Project, Owner y CostCenter obligatorios.",
+          "<strong>Trusted Advisor:</strong> Monitoreo de seguridad, límites de cuota y optimización de costos."
+        ]
+      },
+      "ops-zone": {
+        cx: 995, cy: 416, scale: 1.25,
+        activeNode: "node-ops-zone",
+        pillBg: "rgba(71, 85, 105, 0.12)", pillColor: "#334155", pillBorder: "rgba(71, 85, 105, 0.3)",
+        pill: "Servicios Transversales",
+        title: "Gobernanza, Operaciones & Seguridad",
+        subtitle: "CloudWatch · SNS · SSM · IAM · CloudFormation",
+        why: "<strong>Marco de Operación y Seguridad Empresarial:</strong> Provee monitoreo 24/7, acceso interactivo seguro sin SSH, gobierno estricto de identidades y despliegues automatizados basados en código.",
+        specs: [
+          "<strong>Cero Administración Manual:</strong> Cambios auditados y desplegados por IaC.",
+          "<strong>Seguridad por Defecto:</strong> Principio de menor privilegio y cifrado TLS ubicuo.",
+          "<strong>Monitoreo y Alertas Integradas:</strong> Detección proactiva antes de afectar usuarios."
+        ]
+      }
+    };
+
+    function zoomArch(key, e) {
+      if (e) e.stopPropagation();
+      const target = archNodesData[key] || archNodesData.global;
+      const camera = document.getElementById('arch-camera');
+      const wrapper = document.getElementById('arch-global-wrapper');
+      const slide = document.querySelector('.slide-arch-archify');
+      const allNodes = document.querySelectorAll('.slide-arch-archify .arch-node');
+
+      if (target.isGlobal) {
+        if (wrapper) wrapper.classList.remove('is-zoomed');
+        if (slide) slide.classList.remove('is-zoomed');
+        allNodes.forEach(n => n.classList.remove('node-focus'));
+        camera.style.transform = "translate(0px, 0px) scale(1)";
+      } else {
+        if (wrapper) wrapper.classList.add('is-zoomed');
+        if (slide) slide.classList.add('is-zoomed');
+        allNodes.forEach(n => n.classList.remove('node-focus'));
+        if (target.activeNode) {
+          const el = document.getElementById(target.activeNode);
+          if (el) el.classList.add('node-focus');
+        }
+
+        // FÓRMULA DE CENTRADO EXACTO EN ÁREA VISIBLE (x: 0 a 816, centro = 410; y: 0 a 580, centro = 290)
+        const scale = target.scale || 1.8;
+        const tx = Math.round(410 - target.cx * scale);
+        const ty = Math.round(290 - target.cy * scale);
+        camera.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+
+        // Actualizar Tarjeta Lateral de Justificación
+        const pill = document.getElementById('tech-pill');
+        const title = document.getElementById('tech-title');
+        const subtitle = document.getElementById('tech-subtitle');
+        const whyText = document.getElementById('tech-why-content');
+        const specsList = document.getElementById('tech-specs-list');
+
+        if (pill) {
+          pill.textContent = target.pill;
+          pill.style.background = target.pillBg;
+          pill.style.color = target.pillColor;
+          pill.style.borderColor = target.pillBorder;
+        }
+        if (title) title.textContent = target.title;
+        if (subtitle) subtitle.textContent = target.subtitle;
+        if (whyText) whyText.innerHTML = target.why;
+        if (specsList && target.specs) {
+          specsList.innerHTML = target.specs.map(s => `
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>${s}</span>
+            </li>
+          `).join('');
+        }
+      }
+    }
+
+    function handleCanvasClick(e) {
+      const wrapper = document.getElementById('arch-global-wrapper');
+      if (wrapper && wrapper.classList.contains('is-zoomed')) {
+        zoomArch('global', e);
+      }
+    }
+
+    // Tecla Escape para volver a Vista Global
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const wrapper = document.getElementById('arch-global-wrapper');
+        if (wrapper && wrapper.classList.contains('is-zoomed')) {
+          zoomArch('global');
+        }
+      }
+    });
+  </script>
+</section>
+
     </div>
   </div>
 
