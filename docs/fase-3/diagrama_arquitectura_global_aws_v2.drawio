@@ -1,0 +1,246 @@
+<mxfile host="Electron" agent="Antigravity">
+  <diagram id="aws-global-architecture-v2-corrected" name="Arquitectura Global AWS v2 (Fase 3 Unificada) - APM Inversiones EIRL">
+    <mxGraphModel dx="1637" dy="888" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="users-box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Usuarios y Clientes Web (B2B, Practicantes y Clientes Comerciales)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#475569&quot;&gt;Navegadores HTTPS (Portal SOFI · Reflexo Perú · Arte &amp;amp; Ideas) · Clientes Discord (Bot de Asistencias)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="680" x="460" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-group" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#8C4FFF;strokeWidth=2;dashed=1;verticalAlign=top;align=center;spacingLeft=25;spacingTop=14;fontFamily=Helvetica;fontColor=#6B21A8;" value="&lt;b style=&quot;font-size: 13.5px;&quot;&gt;Perímetro de Borde Global AWS (Edge Network, DNS Multidominio y CDN)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="1280" x="160" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="r53" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon Route 53&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#475569&quot;&gt;DNS Autoritativo Global · Latency Routing · Health Checks de Disponibilidad&lt;br&gt;&lt;i&gt;Zonas Hospedadas: sofi.edu.pe · reflexoperu.com.pe · arteideas.pe&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="500" x="200" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="cf" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C4FFF;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon CloudFront (CDN Edge)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#475569&quot;&gt;Caché Perimetral de Assets Estáticos · Descarga SSL/TLS con AWS Certificate Manager (ACM)&lt;br&gt;Mitigación Anti-DDoS Nativa de Capa 3/4 (&lt;b&gt;AWS Shield Standard&lt;/b&gt;)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="550" x="840" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="aws-cloud" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#232F3E;strokeWidth=2.5;dashed=1;verticalAlign=top;align=center;spacingLeft=30;spacingTop=20;fontFamily=Helvetica;fontColor=#232F3E;" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;AWS Cloud · Región US East (N. Virginia) us-east-1&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1520" width="1980" x="40" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="vpc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2.5;verticalAlign=top;align=center;spacingLeft=25;spacingTop=18;fontFamily=Helvetica;fontColor=#0369A1;" value="&lt;b style=&quot;font-size: 14.5px;&quot;&gt;Amazon Virtual Private Cloud (VPC) · CIDR Principal: 10.0.0.0/16 · Región us-east-1&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1420" width="1380" x="70" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="subnet-pub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=14;fontFamily=Helvetica;fontColor=#0284C7;arcSize=41;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Subredes Públicas (Multi-AZ) · CIDR: 10.0.1.0/24 (us-east-1a) y 10.0.2.0/24 (us-east-1b) [Ingress / IGW Gateway]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="160" width="1320" x="100" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="alb" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Application Load Balancer (ALB) · Multi-AZ Ingress&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#0369a1&quot;&gt;Terminación HTTPS :443 · Redirección HTTP-to-HTTPS automática · Health Checks de salud periódicos&lt;br&gt;&lt;b&gt;Host &amp;amp; Path Routing:&lt;/b&gt; / hacia Next.js · /api hacia NestJS · *.reflexoperu / *.arteideas hacia Clientes&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="680" x="130" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="nat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;NAT Gateways Redundantes (Multi-AZ)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#475569&quot;&gt;Salida segura a Internet para subredes privadas (paquetes npm, Discord Gateway, APIs externas)&lt;br&gt;Bloqueo absoluto de conexiones entrantes directas no solicitadas desde Internet&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="520" x="870" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="subnet-priv" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=14;fontFamily=Helvetica;fontColor=#B45309;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Subredes Privadas de Cómputo (Multi-AZ) · CIDR: 10.0.10.0/24 (us-east-1a) y 10.0.20.0/24 (us-east-1b) [Cero IP Pública]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="330" width="1320" x="100" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs-cluster" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=14;fontFamily=Helvetica;fontColor=#92400E;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Cluster Amazon ECS (AWS Fargate - Contenedores Serverless en modo awsvpc con ENI dedicada)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="180" width="1260" x="130" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="task-web" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 12px;&quot;&gt;sofi-web&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#0369a1&quot;&gt;Next.js (SSR / Frontend)&lt;br&gt;&lt;b&gt;0.25 vCPU / 512 MiB RAM&lt;/b&gt;&lt;br&gt;Target Group: Port 3000&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="270" x="160" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="task-backend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 12px;&quot;&gt;sofi-backend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#065f46&quot;&gt;NestJS API + Prisma ORM&lt;br&gt;&lt;b&gt;0.50 vCPU / 1024 MiB RAM&lt;/b&gt;&lt;br&gt;Target Group: Port 8080&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="270" x="470" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="task-bot" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6366F1;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 12px;&quot;&gt;Bot-Asistencia-APM&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#4338ca&quot;&gt;Node.js Discord WebSocket&lt;br&gt;&lt;b&gt;0.25 vCPU / 512 MiB RAM&lt;/b&gt;&lt;br&gt;Socket continuo 24/7 sin timeout&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="270" x="780" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="task-clientes" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A855F7;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 12px;&quot;&gt;Clientes B2B Desacoplados&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10.5px;&quot; color=&quot;#6b21a8&quot;&gt;Reflexo Perú &amp;amp; Arte y Ideas&lt;br&gt;&lt;b&gt;0.50 vCPU / 1024 MiB RAM&lt;/b&gt;&lt;br&gt;Aislamiento de tráfico comercial&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="270" x="1090" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs-asg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#D97706;strokeWidth=1.8;fontFamily=Helvetica;" value="&lt;b style=&quot;font-size: 12px;&quot;&gt;Mecanismo de Elasticidad: Amazon ECS Auto Scaling Policies (Target Tracking Scaling al 70% CPU/RAM + Step Scaling)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="1260" x="130" y="915" as="geometry" />
+        </mxCell>
+        <mxCell id="subnet-dev" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=14;fontFamily=Helvetica;fontColor=#5B21B6;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Subred Privada de Gestión y Desarrollo · CIDR: 10.0.30.0/24 (Zona us-east-1a) [Acceso Seguro SSM &amp;amp; VPC Endpoints]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="220" width="1320" x="100" y="1025" as="geometry" />
+        </mxCell>
+        <mxCell id="ec2-dev" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Estaciones de Desarrollo Virtuales: Amazon EC2 Workstations&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Ubicación de Red:&lt;/b&gt; Subred Privada de Gestión 10.0.30.0/24 (Zona us-east-1a)&lt;br&gt;• &lt;b&gt;Instancia t4g.small (AWS Graviton2 ARM64):&lt;/b&gt; Rendimiento en ráfaga (&lt;i&gt;Burstable&lt;/i&gt;) 2 vCPU y 2 GiB RAM&lt;br&gt;• &lt;b&gt;Almacenamiento EBS gp3:&lt;/b&gt; 25 GB con 3,000 IOPS base sostenidos para lectura veloz de repositorios&lt;br&gt;• &lt;b&gt;Optimización FinOps:&lt;/b&gt; Apagado automático fuera del horario laboral (160 h/mes · ~$2.70 USD/mes por practicante)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="145" width="670" x="130" y="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="vpc-endpoints" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;VPC Endpoints Gestionados (AWS PrivateLink)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#0369A1&quot;&gt;• &lt;b&gt;Gateway Endpoint para Amazon S3:&lt;/b&gt; Acceso privado a buckets sin consumir NAT Gateway ni salir a Internet&lt;br&gt;• &lt;b&gt;Interface Endpoints para Amazon ECR y AWS SSM:&lt;/b&gt; Descarga de imágenes Docker y sesiones de terminal cifradas&lt;br&gt;• &lt;b&gt;Reducción de Costos:&lt;/b&gt; Elimina costos de transferencia de datos sobre el NAT Gateway&lt;/font&gt;" vertex="1">
+          <mxGeometry height="145" width="520" x="870" y="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="subnet-db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=14;fontFamily=Helvetica;fontColor=#059669;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Subredes Aisladas de Base de Datos (Multi-AZ) · CIDR: 10.0.100.0/24 (us-east-1a) y 10.0.101.0/24 (us-east-1b) [Blindaje RDBMS · Cero Salida a Internet]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="190" width="1320" x="100" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="rds-pri" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon RDS PostgreSQL 16 (Instancia Primaria Activa)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#065F46&quot;&gt;• &lt;b&gt;Ubicación:&lt;/b&gt; Zona us-east-1a (Subred Aislada de Datos 10.0.100.0/24)&lt;br&gt;• &lt;b&gt;Almacenamiento:&lt;/b&gt; EBS gp3 con cifrado en reposo mediante AWS KMS (AES-256)&lt;br&gt;• &lt;b&gt;Resiliencia:&lt;/b&gt; Snapshots diarios automáticos + PITR (Point-in-Time Recovery hasta 35 días)&lt;br&gt;• &lt;b&gt;Control de Acceso:&lt;/b&gt; Exclusivo puerto TCP :5432 desde Security Group de Fargate (`sg-sofi-fargate-tasks`)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="530" x="140" y="1315" as="geometry" />
+        </mxCell>
+        <mxCell id="rds-sec" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon RDS PostgreSQL 16 (Instancia Standby Pasiva)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#065F46&quot;&gt;• &lt;b&gt;Ubicación:&lt;/b&gt; Zona us-east-1b (Subred Aislada de Datos 10.0.101.0/24)&lt;br&gt;• &lt;b&gt;Alta Disponibilidad:&lt;/b&gt; Conmutación por error automática (&lt;i&gt;Automatic Failover&lt;/i&gt;) en &amp;lt; 60 segundos&lt;br&gt;• &lt;b&gt;Continuidad de Negocio:&lt;/b&gt; Si la zona primaria falla por corte eléctrico o catástrofe, la réplica asume sin cambiar cadenas DNS&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="530" x="860" y="1315" as="geometry" />
+        </mxCell>
+        <mxCell id="storage-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#2563EB;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=16;fontFamily=Helvetica;fontColor=#1D4ED8;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Almacenamiento Administrado y Ciclo de Vida&lt;/b&gt;" vertex="1">
+          <mxGeometry height="490" width="500" x="1490" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon S3 Standard (Almacenamiento de Objetos)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#1E40AF&quot;&gt;• Assets multimedia de portales web e imágenes de pacientes / clientes&lt;br&gt;• Volcados diarios de respaldo de bases de datos PostgreSQL&lt;br&gt;• &lt;b&gt;Durabilidad de Datos:&lt;/b&gt; 99.999999999% (11 Nueves de durabilidad garantizada)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="440" x="1520" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="glacier" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon S3 Glacier Flexible Retrieval&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#1E40AF&quot;&gt;• Archivado histórico y cumplimiento legal de datos con más de 90 días&lt;br&gt;• &lt;b&gt;Optimización FinOps:&lt;/b&gt; Reduce el costo de almacenamiento en más de un 80% comparado con almacenamiento caliente S3 Standard&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="440" x="1520" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="efs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon Elastic File System (Amazon EFS)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#1E40AF&quot;&gt;• Sistema de archivos compartido NFS montable simultáneamente en EC2 Dev&lt;br&gt;• Permite compartir librerías, datasets y repositorios locales entre practicantes&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="440" x="1520" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=16;fontFamily=Helvetica;fontColor=#334155;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Gobernanza, Operaciones, Seguridad &amp;amp; IaC&lt;/b&gt;" vertex="1">
+          <mxGeometry height="855" width="500" x="1490" y="955" as="geometry" />
+        </mxCell>
+        <mxCell id="cw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon CloudWatch (Observabilidad Centralizada)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• Ingesta de métricas operativas de ECS, ALB, RDS y EC2 en tiempo real&lt;br&gt;• Centralización de logs (`awslogs`) con política de retención de 30 días&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="440" x="1520" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="sns" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Amazon Simple Notification Service (Amazon SNS)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• Tópicos de alerta técnica: Notificaciones automáticas a Discord / Correo ante CPU &amp;gt; 75%, tasa de errores HTTP 5XX &amp;gt; 1% o espacio en BD &amp;lt; 20%&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="440" x="1520" y="1135" as="geometry" />
+        </mxCell>
+        <mxCell id="ssm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;AWS Systems Manager (SSM Session Manager)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• &lt;b&gt;Zero Open Inbound Ports:&lt;/b&gt; Acceso seguro a terminal interactiva sin puerto SSH (22) abierto a Internet, sin bastiones públicos y sin llaves privadas `.pem`&lt;br&gt;• Auditoría completa de comandos y sesiones registrada en CloudWatch Logs&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="440" x="1520" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="iam" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;AWS Identity &amp;amp; Access Management (AWS IAM)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• Principio de Menor Privilegio (PoLP) aplicado a usuarios y roles&lt;br&gt;• Autenticación Multifactor (MFA) obligatoria para todo el equipo técnico&lt;br&gt;• Roles de ejecución específicos para tareas ECS y agentes de SSM&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="440" x="1520" y="1405" as="geometry" />
+        </mxCell>
+        <mxCell id="cfn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Infraestructura como Código: AWS CloudFormation&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• Stacks modulares YAML: Red (VPC/Subredes), Datos (RDS) y Cómputo (ECS/ALB)&lt;br&gt;• Despliegues deterministas, repetibles y versionados en Git para Dev y Prod&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="440" x="1520" y="1545" as="geometry" />
+        </mxCell>
+        <mxCell id="finops" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.8;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;FinOps y AWS Trusted Advisor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#334155&quot;&gt;• Estrategia de Tagging: `Environment`, `Project`, `Owner`, `CostCenter`&lt;br&gt;• Auditoría continua de seguridad, rendimiento, optimización de costos y cuotas&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="440" x="1520" y="1680" as="geometry" />
+        </mxCell>
+        <mxCell id="e-users-r53" edge="1" parent="1" source="users-box" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2.2;fontFamily=Helvetica;fontSize=11;fontColor=#475569;" target="r53" value="DNS :53 (UDP/TCP)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="140" />
+              <mxPoint x="450" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-r53-cf" edge="1" parent="1" source="r53" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8C4FFF;strokeWidth=2.2;fontFamily=Helvetica;fontSize=11;fontColor=#6B21A8;" target="cf" value="CNAME / Alias (HTTPS :443)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-cf-alb" edge="1" parent="1" source="cf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0284C7;strokeWidth=2.5;fontFamily=Helvetica;fontSize=11;fontColor=#0369A1;" target="alb" value="Tráfico Filtrado HTTPS :443 (Edge-to-Origin)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1115" y="340" />
+              <mxPoint x="409.97" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-alb-web" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0284C7;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=#0369A1;" target="task-web" value="HTTP :3000 (Ruta /)">
+          <mxGeometry relative="1" x="-0.4857" y="-5" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="295" y="650" />
+              <mxPoint x="295" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-alb-api" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2.2;fontFamily=Helvetica;fontSize=11;fontColor=#065F46;" target="task-backend" value="HTTP :8080 (Ruta /api/*)">
+          <mxGeometry relative="1" x="-0.4857" y="-5" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="605" y="650" />
+              <mxPoint x="605" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-alb-clientes" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#A855F7;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=#6B21A8;" target="task-clientes" value="HTTP :8080 (Host Headers B2B)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="660.06" />
+              <mxPoint x="1225.06" y="660.06" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-backend-rds" edge="1" parent="1" source="task-backend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2.5;fontFamily=Helvetica;fontSize=11;fontColor=#065F46;" target="rds-pri" value="TCP :5432&amp;nbsp;&lt;div&gt;(PostgreSQL Private&amp;nbsp;&lt;div&gt;/ Encadenado por SG)&lt;/div&gt;&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="605" y="880" />
+              <mxPoint x="835" y="880" />
+              <mxPoint x="835" y="1255" />
+              <mxPoint x="349.97" y="1255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-rds-rep" edge="1" parent="1" source="rds-pri" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2.2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#065F46;" target="rds-sec" value="TCP :5432&amp;nbsp;&lt;div&gt;Replicación&amp;nbsp;&lt;div&gt;Síncrona Multi-AZ&amp;nbsp;&lt;/div&gt;&lt;div&gt;(&amp;lt;60s Failover)&lt;/div&gt;&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s3-glacier" edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#1E40AF;" target="glacier" value="Lifecycle Policy (&gt; 90 días)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ec2-efs" edge="1" parent="1" source="ec2-dev" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#1E40AF;" target="efs" value="NFS :2049 (Montaje Compartido)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="465" y="1235" />
+              <mxPoint x="1470" y="1235" />
+              <mxPoint x="1470" y="848" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-cw-sns" edge="1" parent="1" source="cw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=#DC2626;" target="sns" value="Alarma Crítica (CPU &gt; 75% / HTTP 5XX)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ssm-ec2" edge="1" parent="1" source="ssm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#334155;" target="ec2-dev" value="HTTPS :443 TLS (Túnel Session Manager sin SSH :22)">
+          <mxGeometry relative="1" x="-0.7023" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1440" y="1312" />
+              <mxPoint x="1440" y="1142" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-ecs-cw" edge="1" parent="1" source="ecs-cluster" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#334155;" target="cw" value="Métricas y Streams de Logs (awslogs)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1440" y="805" />
+              <mxPoint x="1440" y="1048" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="video-flow-panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#7C3AED;strokeWidth=2;verticalAlign=top;align=center;spacingLeft=20;spacingTop=16;fontFamily=Helvetica;fontColor=#5B21B6;" value="&lt;b style=&quot;font-size: 14.5px;&quot;&gt;Flujo de Streaming de Video Desacoplado (Direct-to-Client)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11.5px;&quot; color=&quot;#6D28D9&quot;&gt;&lt;i&gt;Estrategia Anti-Saturación: Control Plane Ligero + CDN Edge Offloading&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="375" width="510" x="1485" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="video-step-control" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;1. Control Plane: Solicitud Ligera de Ubicación&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Petición API:&lt;/b&gt; Cliente solicita video a &lt;code&gt;sofi-backend&lt;/code&gt; vía ALB (&lt;code&gt;/api/videos/:id&lt;/code&gt;)&lt;br&gt;• &lt;b&gt;Respuesta &amp;lt; 1 KB:&lt;/b&gt; Backend valida sesión en RDS y devuelve solo la URL directa de CloudFront&lt;br&gt;• &lt;b&gt;Cero Proxy:&lt;/b&gt; &lt;u&gt;Fargate NUNCA transmite bytes de video ni satura memoria RAM&lt;/u&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="450" x="1515" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="e-video-flow-step" edge="1" parent="1" source="video-step-control" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10.5;fontColor=#6D28D9;labelBackgroundColor=#F8FAFC;" target="video-step-data" value="Data Plane Offloading (Streaming directo sin tocar el Backend)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="video-step-data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontFamily=Helvetica;shadow=1;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;2. Data Plane: Streaming Directo desde el Borde&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#5B21B6&quot;&gt;• &lt;b&gt;Streaming CDN:&lt;/b&gt; Reproductor web solicita y reproduce directo desde &lt;b&gt;Amazon CloudFront (CDN Edge)&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Origen Seguro:&lt;/b&gt; CloudFront entrega desde Edge Cache y recupera de &lt;b&gt;Amazon S3 vía OAC&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Ahorro FinOps:&lt;/b&gt; Tareas Fargate 100% libres de sockets pesados y &lt;b&gt;$0 en NAT Gateway&lt;/b&gt; ($0.045/GB)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="450" x="1515" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="e-users-video-control" edge="1" parent="1" source="users-box" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10;fontColor=#6D28D9;labelBackgroundColor=#FFFFFF;" target="video-step-control" value="HTTPS :443 (1. Petición Video Control Plane)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="70" />
+              <mxPoint x="1350" y="70" />
+              <mxPoint x="1350" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-video-cf-stream" edge="1" parent="1" source="video-step-data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;fontFamily=Helvetica;fontSize=10;fontColor=#6D28D9;labelBackgroundColor=#FFFFFF;" target="cf" value="HTTPS :443 (2. Streaming CDN HLS/MP4)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1515" y="290" />
+              <mxPoint x="1435" y="290" />
+              <mxPoint x="1435" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-cf-video-stream" edge="1" parent="1" source="cf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;endArrow=classic;strokeColor=#7C3AED;strokeWidth=2.5;fontFamily=Helvetica;fontSize=11;fontColor=#5B21B6;labelBackgroundColor=#FAF5FF;" target="users-box" value="HTTPS :443 Streaming Directo Video (HLS / MP4)&lt;br&gt;&lt;font style=&quot;font-size: 9.5px;&quot; color=&quot;#6D28D9&quot;&gt;CloudFront CDN Edge &amp;harr; Cliente (Cero carga en Backend/VPC)&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="210" />
+              <mxPoint x="1060" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-s3-cf-video" edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2.2;dashed=1;fontFamily=Helvetica;fontSize=11;fontColor=#5B21B6;labelBackgroundColor=#FFFFFF;" target="cf" value="HTTPS :443 Distribución de Video LMS (Origen S3 vía OAC)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1435" y="532" />
+              <mxPoint x="1435" y="247" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

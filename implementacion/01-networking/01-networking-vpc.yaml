@@ -1,0 +1,358 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  APM Inversiones EIRL - Infraestructura Base de Red (Amazon VPC Multi-AZ)
+  Despliegue canónico de VPC, Subredes Públicas, Privadas de Cómputo, Gestión Dev,
+  Subredes Aisladas de Datos (RDS), Internet Gateway y Tablas de Ruteo.
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    Description: Prefijo identificador del entorno del proyecto.
+
+  VpcCIDR:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: Bloque CIDR principal asignado a la Amazon VPC.
+
+  PublicSubnetACIDR:
+    Type: String
+    Default: 10.0.1.0/24
+    Description: CIDR para la subred publica A (us-east-1a) - ALB / NAT.
+
+  PublicSubnetBCIDR:
+    Type: String
+    Default: 10.0.2.0/24
+    Description: CIDR para la subred publica B (us-east-1b) - ALB / NAT.
+
+  PrivateAppSubnetACIDR:
+    Type: String
+    Default: 10.0.10.0/24
+    Description: CIDR para la subred privada de computo A (us-east-1a) - ECS Fargate.
+
+  PrivateAppSubnetBCIDR:
+    Type: String
+    Default: 10.0.20.0/24
+    Description: CIDR para la subred privada de computo B (us-east-1b) - ECS Fargate.
+
+  PrivateDevSubnetACIDR:
+    Type: String
+    Default: 10.0.30.0/24
+    Description: CIDR para la subred privada de gestion/desarrollo (us-east-1a) - EC2 Dev & SSM.
+
+  IsolatedDbSubnetACIDR:
+    Type: String
+    Default: 10.0.100.0/24
+    Description: CIDR para la subred aislada de base de datos A (us-east-1a) - RDS Primaria.
+
+  IsolatedDbSubnetBCIDR:
+    Type: String
+    Default: 10.0.101.0/24
+    Description: CIDR para la subred aislada de base de datos B (us-east-1b) - RDS Standby.
+
+Resources:
+  # =========================================================================
+  # 1. AMAZON VPC & INTERNET GATEWAY
+  # =========================================================================
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-vpc'
+        - Key: Environment
+          Value: Production
+        - Key: Project
+          Value: APM-SOFI
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-igw'
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # =========================================================================
+  # 2. SUBREDES PUBLICAS (MULTI-AZ: us-east-1a / us-east-1b)
+  # =========================================================================
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnetACIDR
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-public-subnet-a'
+        - Key: Type
+          Value: Public
+        - Key: Zone
+          Value: us-east-1a
+
+  PublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnetBCIDR
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-public-subnet-b'
+        - Key: Type
+          Value: Public
+        - Key: Zone
+          Value: us-east-1b
+
+  # =========================================================================
+  # 3. SUBREDES PRIVADAS DE COMPUTO (MULTI-AZ: us-east-1a / us-east-1b)
+  # =========================================================================
+  PrivateAppSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PrivateAppSubnetACIDR
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-app-subnet-a'
+        - Key: Type
+          Value: Private-App
+        - Key: Zone
+          Value: us-east-1a
+
+  PrivateAppSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PrivateAppSubnetBCIDR
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-app-subnet-b'
+        - Key: Type
+          Value: Private-App
+        - Key: Zone
+          Value: us-east-1b
+
+  # =========================================================================
+  # 4. SUBRED PRIVADA DE GESTION Y DESARROLLO (us-east-1a)
+  # =========================================================================
+  PrivateDevSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PrivateDevSubnetACIDR
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-dev-subnet-a'
+        - Key: Type
+          Value: Private-Dev
+        - Key: Zone
+          Value: us-east-1a
+
+  # =========================================================================
+  # 5. SUBREDES AISLADAS DE BASE DE DATOS (MULTI-AZ: us-east-1a / us-east-1b)
+  # =========================================================================
+  IsolatedDbSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref IsolatedDbSubnetACIDR
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-isolated-db-subnet-a'
+        - Key: Type
+          Value: Isolated-DB
+        - Key: Zone
+          Value: us-east-1a
+
+  IsolatedDbSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref IsolatedDbSubnetBCIDR
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-isolated-db-subnet-b'
+        - Key: Type
+          Value: Isolated-DB
+        - Key: Zone
+          Value: us-east-1b
+
+  # =========================================================================
+  # 6. TABLA DE RUTEO PUBLICA & ASOCIACIONES
+  # =========================================================================
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-public-rt'
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetB
+      RouteTableId: !Ref PublicRouteTable
+
+  # =========================================================================
+  # 7. TABLA DE RUTEO PRIVADA (COMPUTO Y GESTION)
+  # =========================================================================
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-rt'
+
+  PrivateAppSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateAppSubnetA
+      RouteTableId: !Ref PrivateRouteTable
+
+  PrivateAppSubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateAppSubnetB
+      RouteTableId: !Ref PrivateRouteTable
+
+  PrivateDevSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateDevSubnetA
+      RouteTableId: !Ref PrivateRouteTable
+
+  # =========================================================================
+  # 8. TABLA DE RUTEO AISLADA (BASE DE DATOS - SIN SALIDA EXTERIOR)
+  # =========================================================================
+  IsolatedDbRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-isolated-db-rt'
+
+  IsolatedDbSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref IsolatedDbSubnetA
+      RouteTableId: !Ref IsolatedDbRouteTable
+
+  IsolatedDbSubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref IsolatedDbSubnetB
+      RouteTableId: !Ref IsolatedDbRouteTable
+
+  # =========================================================================
+  # 9. RDS DB SUBNET GROUP (GRUPO DE SUBREDES PARA POSTGRESQL MULTI-AZ)
+  # =========================================================================
+  RdsDbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: !Sub '${EnvironmentName}-db-subnet-group'
+      DBSubnetGroupDescription: 'Grupo de subredes aisladas Multi-AZ para Amazon RDS PostgreSQL'
+      SubnetIds:
+        - !Ref IsolatedDbSubnetA
+        - !Ref IsolatedDbSubnetB
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-rds-subnet-group'
+
+Outputs:
+  VpcId:
+    Description: ID de la VPC creada
+    Value: !Ref VPC
+    Export:
+      Name: !Sub '${EnvironmentName}-VpcId'
+
+  VpcCIDR:
+    Description: Bloque CIDR de la VPC
+    Value: !Ref VpcCIDR
+    Export:
+      Name: !Sub '${EnvironmentName}-VpcCIDR'
+
+  PublicSubnetA:
+    Description: ID de la Subred Publica A (us-east-1a)
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub '${EnvironmentName}-PublicSubnetA'
+
+  PublicSubnetB:
+    Description: ID de la Subred Publica B (us-east-1b)
+    Value: !Ref PublicSubnetB
+    Export:
+      Name: !Sub '${EnvironmentName}-PublicSubnetB'
+
+  PrivateAppSubnetA:
+    Description: ID de la Subred Privada de Computo A (us-east-1a)
+    Value: !Ref PrivateAppSubnetA
+    Export:
+      Name: !Sub '${EnvironmentName}-PrivateAppSubnetA'
+
+  PrivateAppSubnetB:
+    Description: ID de la Subred Privada de Computo B (us-east-1b)
+    Value: !Ref PrivateAppSubnetB
+    Export:
+      Name: !Sub '${EnvironmentName}-PrivateAppSubnetB'
+
+  PrivateDevSubnetA:
+    Description: ID de la Subred Privada de Desarrollo (us-east-1a)
+    Value: !Ref PrivateDevSubnetA
+    Export:
+      Name: !Sub '${EnvironmentName}-PrivateDevSubnetA'
+
+  IsolatedDbSubnetA:
+    Description: ID de la Subred Aislada de Base de Datos A (us-east-1a)
+    Value: !Ref IsolatedDbSubnetA
+    Export:
+      Name: !Sub '${EnvironmentName}-IsolatedDbSubnetA'
+
+  IsolatedDbSubnetB:
+    Description: ID de la Subred Aislada de Base de Datos B (us-east-1b)
+    Value: !Ref IsolatedDbSubnetB
+    Export:
+      Name: !Sub '${EnvironmentName}-IsolatedDbSubnetB'
+
+  RdsDbSubnetGroup:
+    Description: Nombre del DB Subnet Group para RDS PostgreSQL
+    Value: !Ref RdsDbSubnetGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-RdsDbSubnetGroup'
