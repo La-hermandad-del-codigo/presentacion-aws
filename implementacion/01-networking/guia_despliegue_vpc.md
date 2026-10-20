@@ -77,16 +77,24 @@ aws cloudformation wait stack-create-complete \
 
 ## 4. Evidencias para Presentar al Profesor
 
-Una vez desplegada la red, ingresar a la consola para recopilar las siguientes capturas de pantalla:
+Una vez desplegada la red, ingresar a la consola para recopilar las siguientes evidencias:
 
-1. **Mapa de Recursos de la VPC (VPC Resource Map):**
+1. **Portal Web de Validación de Conectividad y Aislamiento:**
+   * Ir a la pestaña **Outputs** del stack en CloudFormation y copiar el enlace de **`PublicTestPortalUrl`** (ej. `http://54.x.x.x`).
+   * Abrirlo en el navegador: se verá el panel de diagnóstico demostrando que la **Subred Pública** y el **Internet Gateway** están en línea.
+   * Hacer clic en el botón **"Ejecutar Sonda Interna"**: la web pública enviará una petición interna Este-Oeste a la instancia de la **Subred Privada** (`10.0.10.X:8080`), demostrando comunicación local sin salir a Internet.
+   * Hacer clic en el enlace de prueba negativa hacia la IP privada: el navegador quedará en `ERR_CONNECTION_TIMED_OUT`, evidenciando el aislamiento perimetral.
+
+2. **Mapa de Recursos de la VPC (VPC Resource Map):**
    * Ir a **VPC** ➔ **Your VPCs** ➔ Seleccionar `apm-sofi-prod-vpc`.
-   * En la parte inferior, pestaña **Resource map**: se verá visualmente cómo cada una de las 7 subredes está conectada a su tabla de ruteo correspondiente y al Internet Gateway. Esta es la evidencia principal más valorada por los evaluadores de AWS.
-2. **Tablas de Ruteo Segregadas:**
+   * En la parte inferior, pestaña **Resource map**: se verá visualmente cómo cada una de las 7 subredes está conectada a su tabla de ruteo correspondiente y al Internet Gateway. Esta es la evidencia visual nativa más valorada por los evaluadores de AWS.
+
+3. **Tablas de Ruteo Segregadas:**
    * Ir a **Route tables**:
      * Mostrar que `apm-sofi-prod-public-rt` tiene una ruta `0.0.0.0/0` apuntando a `igw-...`.
      * Mostrar que `apm-sofi-prod-isolated-db-rt` **NO** tiene ruta `0.0.0.0/0` (garantía de aislamiento total de la base de datos).
-3. **Grupo de Subredes de RDS (DB Subnet Group):**
+
+4. **Grupo de Subredes de RDS (DB Subnet Group):**
    * Ir a **RDS** ➔ **Subnet groups**:
      * Mostrar el grupo `apm-sofi-prod-db-subnet-group` abarcando las dos zonas (`us-east-1a` y `us-east-1b`) para cumplir el requisito de alta disponibilidad Multi-AZ.
 

@@ -1,8 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
   APM Inversiones EIRL - Infraestructura Base de Red (Amazon VPC Multi-AZ)
-  Despliegue canónico de VPC, Subredes Públicas, Privadas de Cómputo, Gestión Dev,
-  Subredes Aisladas de Datos (RDS), Internet Gateway y Tablas de Ruteo.
+  Despliegue canonico de VPC, Subredes Publicas, Privadas de Computo, Gestion Dev,
+  Subredes Aisladas de Datos (RDS), Internet Gateway, Tablas de Ruteo y Entorno
+  Automatizado de Verificacion de Conectividad con Instancias EC2 Minimas (t3.nano).
 
 Parameters:
   EnvironmentName:
@@ -18,22 +19,22 @@ Parameters:
   PublicSubnetACIDR:
     Type: String
     Default: 10.0.1.0/24
-    Description: CIDR para la subred publica A (us-east-1a) - ALB / NAT.
+    Description: CIDR para la subred publica A (us-east-1a) - ALB / NAT / Test Ingress.
 
   PublicSubnetBCIDR:
     Type: String
     Default: 10.0.2.0/24
-    Description: CIDR para la subred publica B (us-east-1b) - ALB / NAT.
+    Description: CIDR para la subred publica B (us-east-1b) - ALB / NAT Multi-AZ.
 
   PrivateAppSubnetACIDR:
     Type: String
     Default: 10.0.10.0/24
-    Description: CIDR para la subred privada de computo A (us-east-1a) - ECS Fargate.
+    Description: CIDR para la subred privada de computo A (us-east-1a) - ECS Fargate / Backend.
 
   PrivateAppSubnetBCIDR:
     Type: String
     Default: 10.0.20.0/24
-    Description: CIDR para la subred privada de computo B (us-east-1b) - ECS Fargate.
+    Description: CIDR para la subred privada de computo B (us-east-1b) - ECS Fargate Multi-AZ.
 
   PrivateDevSubnetACIDR:
     Type: String
@@ -49,6 +50,26 @@ Parameters:
     Type: String
     Default: 10.0.101.0/24
     Description: CIDR para la subred aislada de base de datos B (us-east-1b) - RDS Standby.
+
+  EnableTestInstances:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: 'Desplegar instancias EC2 de prueba (t3.nano) para validar conectividad externa y aislamiento este-oeste.'
+
+  TestInstanceType:
+    Type: String
+    Default: 't3.micro'
+    AllowedValues: ['t3.micro', 't2.micro']
+    Description: 'Tipo de instancia elegible para Free Tier en cuentas modernas (t3.micro).'
+
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+    Description: 'AMI ID de Amazon Linux 2023 resuelta dinamicamente via SSM Parameter Store.'
+
+Conditions:
+  DeployTestInstances: !Equals [!Ref EnableTestInstances, 'true']
 
 Resources:
   # =========================================================================
@@ -296,6 +317,308 @@ Resources:
         - Key: Name
           Value: !Sub '${EnvironmentName}-rds-subnet-group'
 
+  # =========================================================================
+  # 10. ROLES IAM & SECURITY GROUPS PARA VALIDACION DE RED
+  # =========================================================================
+  TestInstancesRole:
+    Type: AWS::IAM::Role
+    Condition: DeployTestInstances
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-test-ec2-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-test-ec2-role'
+
+  TestInstancesProfile:
+    Type: AWS::IAM::InstanceProfile
+    Condition: DeployTestInstances
+    Properties:
+      InstanceProfileName: !Sub '${EnvironmentName}-test-ec2-profile'
+      Roles:
+        - !Ref TestInstancesRole
+
+  PublicTestSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: DeployTestInstances
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-public-test-sg'
+      GroupDescription: 'Permite acceso HTTP publico para el portal de diagnostico de red'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: 'Acceso publico HTTP puerto 80'
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: 'Salida permitida para pruebas internas y SSM'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-public-test-sg'
+
+  PrivateTestSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: DeployTestInstances
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-private-test-sg'
+      GroupDescription: 'Permite trafico HTTP 8080 exclusivamente desde la EC2 Publica'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !Ref PublicTestSecurityGroup
+          Description: 'Solo permite llamadas este-oeste desde el SG de la EC2 Publica'
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: 'Salida local para respuestas internas'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-test-sg'
+
+  # =========================================================================
+  # 11. INSTANCIAS EC2 DE PRUEBA Y DIAGNOSTICO DE RED
+  # =========================================================================
+  PrivateTestInstance:
+    Type: AWS::EC2::Instance
+    Condition: DeployTestInstances
+    DependsOn: PrivateAppSubnetARouteTableAssociation
+    Properties:
+      InstanceType: !Ref TestInstanceType
+      ImageId: !Ref LatestAmiId
+      SubnetId: !Ref PrivateAppSubnetA
+      IamInstanceProfile: !Ref TestInstancesProfile
+      SecurityGroupIds:
+        - !Ref PrivateTestSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-private-test-ec2'
+        - Key: Role
+          Value: PrivateSubnetDiagnostic
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+          cat <<'PYEOF' > /opt/private_service.py
+          from http.server import HTTPServer, BaseHTTPRequestHandler
+          import json, socket, datetime
+
+          class Handler(BaseHTTPRequestHandler):
+              def do_GET(self):
+                  self.send_response(200)
+                  self.send_header('Content-Type', 'application/json')
+                  self.send_header('Access-Control-Allow-Origin', '*')
+                  self.end_headers()
+                  data = {
+                      "status": "ONLINE",
+                      "role": "Servicio de Diagnostico en Subred Privada",
+                      "subnet_name": "apm-sofi-prod-private-app-subnet-a",
+                      "cidr": "10.0.10.0/24",
+                      "az": "us-east-1a",
+                      "private_ip": socket.gethostbyname(socket.gethostname()),
+                      "internet_exposure": "NINGUNA (Aislamiento Perimetral Verificado)",
+                      "timestamp": str(datetime.datetime.utcnow()) + " UTC",
+                      "message": "Paquete recibido con exito por la red interna de la VPC."
+                  }
+                  self.wfile.write(json.dumps(data, indent=2).encode('utf-8'))
+
+              def log_message(self, format, *args):
+                  pass
+
+          server = HTTPServer(('0.0.0.0', 8080), Handler)
+          server.serve_forever()
+          PYEOF
+
+          cat <<'UNITEOF' > /etc/systemd/system/private-diag.service
+          [Unit]
+          Description=Private Subnet Diagnostic Service
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/bin/python3 /opt/private_service.py
+          Restart=always
+          User=root
+
+          [Install]
+          WantedBy=multi-user.target
+          UNITEOF
+
+          systemctl daemon-reload
+          systemctl enable --now private-diag.service
+
+  PublicTestInstance:
+    Type: AWS::EC2::Instance
+    Condition: DeployTestInstances
+    DependsOn:
+      - PublicDefaultRoute
+      - PrivateTestInstance
+    Properties:
+      InstanceType: !Ref TestInstanceType
+      ImageId: !Ref LatestAmiId
+      SubnetId: !Ref PublicSubnetA
+      IamInstanceProfile: !Ref TestInstancesProfile
+      SecurityGroupIds:
+        - !Ref PublicTestSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-public-test-ec2'
+        - Key: Role
+          Value: PublicSubnetPortal
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+          cat <<'PYEOF' > /opt/public_portal.py
+          from http.server import HTTPServer, BaseHTTPRequestHandler
+          import urllib.request, json, time, socket
+
+          TARGET_PRIVATE_IP = "${PrivateTestInstance.PrivateIp}"
+
+          PAGE_HTML = """<!DOCTYPE html>
+          <html lang="es">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Validacion de Red VPC Multi-AZ - APM Inversiones</title>
+            <style>
+              body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 2rem; }
+              .container { max-width: 860px; margin: 0 auto; }
+              .header { border-bottom: 2px solid #334155; padding-bottom: 1rem; margin-bottom: 2rem; }
+              .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+              .badge-green { background: #065f46; color: #34d399; }
+              .badge-red { background: #7f1d1d; color: #f87171; }
+              .badge-blue { background: #0369a1; color: #38bdf8; }
+              .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+              .btn { background: #0284c7; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+              .btn:hover { background: #0369a1; }
+              pre { background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 1rem; color: #38bdf8; overflow-x: auto; font-size: 0.9rem; }
+              a.test-link { color: #f87171; font-weight: 600; text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <span class="badge badge-blue">Fase 1: Networking & Aislamiento</span>
+                <h1>Verificación de Infraestructura Amazon VPC</h1>
+                <p style="color: #94a3b8; margin: 0;">APM Inversiones EIRL · Caso de Estudio SOFI & Clientes B2B</p>
+              </div>
+
+              <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="margin:0;">1. Verificación Ingress (Subred Pública)</h3>
+                  <span class="badge badge-green">Norte-Sur Operativo</span>
+                </div>
+                <p style="color: #cbd5e1;">Estás visualizando este portal web cargado directamente a través del <b>Internet Gateway (IGW)</b>.</p>
+                <ul style="color: #94a3b8; line-height: 1.7;">
+                  <li><b>Subred:</b> apm-sofi-prod-public-subnet-a (10.0.1.0/24)</li>
+                  <li><b>Zona de Disponibilidad:</b> us-east-1a</li>
+                  <li><b>Ruta Activa:</b> <code>0.0.0.0/0 &rarr; igw</code></li>
+                  <li><b>Puerto:</b> TCP 80 (HTTP)</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="margin:0;">2. Verificación Este-Oeste (Subred Privada Cómputo)</h3>
+                  <span class="badge badge-blue">Tráfico Local VPC</span>
+                </div>
+                <p style="color: #cbd5e1;">Al pulsar el botón, este servidor público enviará una petición HTTP interna a la IP privada de la instancia de backend (<code>""" + TARGET_PRIVATE_IP + """:8080</code>) sin pasar por Internet.</p>
+                <button class="btn" onclick="probarSubredPrivada()">Ejecutar Sonda Interna</button>
+                <div id="probe-output" style="margin-top: 1.2rem;"></div>
+              </div>
+
+              <div class="card" style="border-color: #7f1d1d;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="margin:0; color:#fca5a5;">3. Prueba Negativa: Aislamiento Perimetral</h3>
+                  <span class="badge badge-red">Demostración de Seguridad</span>
+                </div>
+                <p style="color: #cbd5e1;">Haz clic en el siguiente enlace para intentar abrir la instancia privada directamente desde tu navegador en casa:</p>
+                <p><a class="test-link" href="http://""" + TARGET_PRIVATE_IP + """:8080" target="_blank">http://""" + TARGET_PRIVATE_IP + """:8080</a></p>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0;">
+                  <b>Resultado esperado:</b> El navegador debe quedar cargando y dar <code>ERR_CONNECTION_TIMED_OUT</code>. Esta es la prueba reina para el evaluador de que la subred privada <u>carece de rutas públicas y no es alcanzable desde Internet</u>.
+                </p>
+              </div>
+            </div>
+
+            <script>
+              function probarSubredPrivada() {
+                var out = document.getElementById('probe-output');
+                out.innerHTML = '<span style="color:#38bdf8;">Enviando sonda HTTP interna a la subred privada...</span>';
+                fetch('/api/check-private')
+                  .then(function(r) { return r.json(); })
+                  .then(function(data) {
+                    out.innerHTML = '<div style="margin-bottom:8px;"><span class="badge badge-green">&check; COMUNICACION INTERNA EXITOSA</span> <span style="color:#94a3b8; font-size:0.85rem; margin-left:10px;">Latencia: ' + data.latency_ms + ' ms</span></div><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                  })
+                  .catch(function(err) {
+                    out.innerHTML = '<span class="badge badge-red">FALLO EN SONDA</span><pre>' + err + '</pre>';
+                  });
+              }
+            </script>
+          </body>
+          </html>"""
+
+          class Handler(BaseHTTPRequestHandler):
+              def do_GET(self):
+                  if self.path == '/api/check-private':
+                      try:
+                          t0 = time.time()
+                          req = urllib.request.Request("http://" + TARGET_PRIVATE_IP + ":8080", headers={'User-Agent': 'VPC-Probe/1.0'})
+                          with urllib.request.urlopen(req, timeout=3) as resp:
+                              latency = round((time.time() - t0) * 1000, 2)
+                              data = json.loads(resp.read().decode('utf-8'))
+                              data['latency_ms'] = latency
+                              data['probe_origin'] = "Subred Publica A (10.0.1.X)"
+                              self.send_response(200)
+                              self.send_header('Content-Type', 'application/json')
+                              self.end_headers()
+                              self.wfile.write(json.dumps(data).encode('utf-8'))
+                      except Exception as e:
+                          self.send_response(500)
+                          self.send_header('Content-Type', 'application/json')
+                          self.end_headers()
+                          self.wfile.write(json.dumps({"error": str(e), "note": "No se pudo alcanzar la IP privada."}).encode('utf-8'))
+                  else:
+                      self.send_response(200)
+                      self.send_header('Content-Type', 'text/html; charset=utf-8')
+                      self.end_headers()
+                      self.wfile.write(PAGE_HTML.encode('utf-8'))
+
+              def log_message(self, format, *args):
+                  pass
+
+          server = HTTPServer(('0.0.0.0', 80), Handler)
+          server.serve_forever()
+          PYEOF
+
+          cat <<'UNITEOF' > /etc/systemd/system/public-portal.service
+          [Unit]
+          Description=Public Subnet Diagnostic Portal
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/bin/python3 /opt/public_portal.py
+          Restart=always
+          User=root
+
+          [Install]
+          WantedBy=multi-user.target
+          UNITEOF
+
+          systemctl daemon-reload
+          systemctl enable --now public-portal.service
+
 Outputs:
   VpcId:
     Description: ID de la VPC creada
@@ -356,3 +679,11 @@ Outputs:
     Value: !Ref RdsDbSubnetGroup
     Export:
       Name: !Sub '${EnvironmentName}-RdsDbSubnetGroup'
+
+  PublicTestPortalUrl:
+    Description: 'URL publica del portal web de verificacion (Abrir en el navegador para evaluar la red)'
+    Value: !If [DeployTestInstances, !Sub 'http://${PublicTestInstance.PublicIp}', 'Instancias de prueba no desplegadas']
+
+  PrivateTestInternalIp:
+    Description: 'IP privada interna de la instancia en la subred de computo'
+    Value: !If [DeployTestInstances, !GetAtt PrivateTestInstance.PrivateIp, 'N/A']

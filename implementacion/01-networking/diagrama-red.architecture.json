@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Fase 1: Topología VPC Multi-AZ y Validación de Conectividad",
+    "output": "implementacion/01-networking/diagrama-red.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ingress-validation",
+        "label": "Validación Externa y Pública",
+        "focus": ["evaluator", "igw", "ec2_public"],
+        "note": "El tráfico externo ingresa vía IGW hacia la instancia en la subred pública (puerto 80)."
+      },
+      {
+        "id": "east-west-isolation",
+        "label": "Aislamiento y Conectividad Este-Oeste",
+        "focus": ["ec2_public", "ec2_private", "rds_subnet_a"],
+        "note": "La subred privada solo es accesible internamente desde la subred pública; la subred de datos permanece 100% aislada."
+      }
+    ]
+  },
+  "components": [
+    { "id": "evaluator", "type": "external", "label": "Evaluador / Browser", "sublabel": "Internet Pública", "pos": [40, 260], "size": [130, 60] },
+    { "id": "igw", "type": "security", "label": "Internet Gateway", "sublabel": "0.0.0.0/0 (igw)", "pos": [240, 260], "size": [130, 60] },
+    { "id": "ec2_public", "type": "backend", "label": "EC2 Test Pública", "sublabel": "10.0.1.X · t4g.nano :80", "pos": [480, 170], "size": [140, 64] },
+    { "id": "subnet_pub_b", "type": "cloud", "label": "Subred Pública B", "sublabel": "10.0.2.0/24 · Multi-AZ", "pos": [480, 350], "size": [140, 64] },
+    { "id": "ec2_private", "type": "backend", "label": "EC2 Test Privada", "sublabel": "10.0.10.X · :8080 interna", "pos": [760, 170], "size": [140, 64] },
+    { "id": "subnet_priv_b", "type": "cloud", "label": "Subred Privada B", "sublabel": "10.0.20.0/24 · Multi-AZ", "pos": [760, 350], "size": [140, 64] },
+    { "id": "rds_subnet_a", "type": "database", "label": "DB Subnet A (RDS)", "sublabel": "10.0.100.0/24 · Aislada", "pos": [1040, 170], "size": [140, 64] },
+    { "id": "rds_subnet_b", "type": "database", "label": "DB Subnet B (RDS)", "sublabel": "10.0.101.0/24 · Aislada", "pos": [1040, 350], "size": [140, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "AWS us-east-1 · VPC 10.0.0.0/16", "wraps": ["igw", "ec2_public", "subnet_pub_b", "ec2_private", "subnet_priv_b", "rds_subnet_a", "rds_subnet_b"], "pad": 22 },
+    { "kind": "security-group", "label": "Subredes Públicas (10.0.1.0/24 & 10.0.2.0/24)", "wraps": ["ec2_public", "subnet_pub_b"], "pad": 14 },
+    { "kind": "security-group", "label": "Subredes Privadas Cómputo (10.0.10.0/24 & 10.0.20.0/24)", "wraps": ["ec2_private", "subnet_priv_b"], "pad": 14 },
+    { "kind": "security-group", "label": "Subredes Aisladas RDS (10.0.100.0/24 & 10.0.101.0/24)", "wraps": ["rds_subnet_a", "rds_subnet_b"], "pad": 14 }
+  ],
+  "connections": [
+    { "id": "c-eval-igw", "from": "evaluator", "to": "igw", "label": "HTTP :80", "variant": "emphasis" },
+    { "id": "c-igw-pub", "from": "igw", "to": "ec2_public", "label": "0.0.0.0/0", "variant": "emphasis" },
+    { "id": "c-pub-priv", "from": "ec2_public", "to": "ec2_private", "label": "HTTP :8080", "variant": "security" },
+    { "id": "c-priv-db", "from": "ec2_private", "to": "rds_subnet_a", "label": "TCP :5432", "variant": "dashed" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Verificación Pública Directa",
+      "items": [
+        "Navegador accede directo a IP Pública de EC2 Pública en puerto 80",
+        "Demuestra funcionamiento de Internet Gateway y tabla de ruteo pública"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Aislamiento Privado Comprobado",
+      "items": [
+        "EC2 Privada no tiene IP pública; acceso directo desde internet RECHAZADO",
+        "EC2 Pública consulta vía curl http://10.0.10.X:8080 y reporta en su web"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Capa de Datos Protegida",
+      "items": [
+        "Subredes 10.0.100.0/24 y 10.0.101.0/24 con cero salidas a Internet",
+        "Solo aceptan tráfico PostgreSQL (puerto 5432) desde cómputo privado"
+      ]
+    }
+  ]
+}
