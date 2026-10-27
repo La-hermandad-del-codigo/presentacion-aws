@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Antigravity">
   <diagram id="aws-global-architecture-v2-corrected" name="Arquitectura Global AWS v2 (Fase 3 Unificada) - APM Inversiones EIRL">
-    <mxGraphModel dx="1637" dy="888" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1950" math="0" shadow="0">
+    <mxGraphModel dx="2822" dy="1531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1950" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />

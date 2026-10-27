@@ -1,0 +1,1302 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  APM Inversiones EIRL - Fase 2: Gestion de Identidad (IAM) y Seguridad Perimetral
+  Soporta despliegue en 2 etapas:
+  1) DeployPerimeterSecurity='false' (Antes de la VPC): Despliega Grupos IAM, Politicas PoLP,
+     Usuarios del equipo y Roles de Servicio (EC2 SSM, ECS Fargate, RDS Monitoring).
+  2) DeployPerimeterSecurity='true' (Despues de la VPC): Despliega la Matriz de Security Groups
+     (ALB, Fargate, RDS, EC2 Dev, EFS, VPC Endpoints) y Network ACLs (NACLs) por subred.
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    Description: Prefijo identificador del entorno del proyecto (debe coincidir con la Fase 1).
+
+  DeployPerimeterSecurity:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: >
+      Establecer en 'false' en el Paso 1 (antes de crear la VPC) para crear primero IAM
+      (Usuarios, Grupos, Politicas y Roles). Cambiar a 'true' en el Paso 3 (luego de crear
+      la VPC) para aprovisionar Security Groups y NACLs.
+
+  CreateTeamUsers:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: Crear los 4 Grupos IAM con menor privilegio y los 5 usuarios del equipo.
+
+  UseExistingLabRole:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: >
+      Si se despliega en AWS Academy / Learner Lab con bloqueo SCP de IAM, establecer en 'true'.
+
+  ExistingLabRoleName:
+    Type: String
+    Default: LabRole
+    Description: Nombre del rol IAM preexistente en laboratorios restringidos.
+
+  VpcId:
+    Type: String
+    Default: ''
+    Description: >
+      (Opcional) ID de la VPC. Si se deja vacio cuando DeployPerimeterSecurity='true',
+      se importa automaticamente desde el stack de la Fase 1 (${EnvironmentName}-VpcId).
+
+  VpcCIDR:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: Bloque CIDR principal de la Amazon VPC.
+
+  PublicSubnetACIDR:
+    Type: String
+    Default: 10.0.1.0/24
+    Description: CIDR de la Subred Publica A (us-east-1a).
+
+  PublicSubnetBCIDR:
+    Type: String
+    Default: 10.0.2.0/24
+    Description: CIDR de la Subred Publica B (us-east-1b).
+
+  PrivateAppSubnetACIDR:
+    Type: String
+    Default: 10.0.10.0/24
+    Description: CIDR de la Subred Privada de Computo A (us-east-1a).
+
+  PrivateAppSubnetBCIDR:
+    Type: String
+    Default: 10.0.20.0/24
+    Description: CIDR de la Subred Privada de Computo B (us-east-1b).
+
+  PrivateDevSubnetACIDR:
+    Type: String
+    Default: 10.0.30.0/24
+    Description: CIDR de la Subred Privada de Gestion / Dev (us-east-1a).
+
+  IsolatedDbSubnetACIDR:
+    Type: String
+    Default: 10.0.100.0/24
+    Description: CIDR de la Subred Aislada de Base de Datos A (us-east-1a).
+
+  IsolatedDbSubnetBCIDR:
+    Type: String
+    Default: 10.0.101.0/24
+    Description: CIDR de la Subred Aislada de Base de Datos B (us-east-1b).
+
+Conditions:
+  CreateCustomRoles: !Equals [!Ref UseExistingLabRole, 'false']
+  ShouldCreateTeamUsers: !And
+    - !Equals [!Ref CreateTeamUsers, 'true']
+    - !Equals [!Ref UseExistingLabRole, 'false']
+  ShouldDeployPerimeter: !Equals [!Ref DeployPerimeterSecurity, 'true']
+  HasCustomVpcId: !Not [!Equals [!Ref VpcId, '']]
+
+Resources:
+  # =========================================================================
+  # 1. IDENTIDADES HUMANAS IAM: GRUPOS, POLÍTICAS PoLP Y USUARIOS DEL EQUIPO
+  #    (Se despliega en el Paso 1 ANTES de que exista la VPC)
+  # =========================================================================
+
+  # 1.1 Grupo y Política: Networking & Security (Fases 1 y 2)
+  IamGroupNetworkingSecurity:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-networking-security'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  PolicyNetworkingSecurity:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-networking-security'
+      Groups:
+        - !Ref IamGroupNetworkingSecurity
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowVpcAndPerimeterManagement
+            Effect: Allow
+            Action:
+              - ec2:CreateVpc
+              - ec2:DeleteVpc
+              - ec2:ModifyVpcAttribute
+              - ec2:CreateSubnet
+              - ec2:DeleteSubnet
+              - ec2:ModifySubnetAttribute
+              - ec2:CreateInternetGateway
+              - ec2:DeleteInternetGateway
+              - ec2:AttachInternetGateway
+              - ec2:DetachInternetGateway
+              - ec2:CreateRouteTable
+              - ec2:DeleteRouteTable
+              - ec2:CreateRoute
+              - ec2:DeleteRoute
+              - ec2:AssociateRouteTable
+              - ec2:DisassociateRouteTable
+              - ec2:CreateVpcEndpoint
+              - ec2:DeleteVpcEndpoints
+              - ec2:CreateSecurityGroup
+              - ec2:DeleteSecurityGroup
+              - ec2:AuthorizeSecurityGroupIngress
+              - ec2:AuthorizeSecurityGroupEgress
+              - ec2:RevokeSecurityGroupIngress
+              - ec2:RevokeSecurityGroupEgress
+              - ec2:CreateNetworkAcl
+              - ec2:DeleteNetworkAcl
+              - ec2:CreateNetworkAclEntry
+              - ec2:DeleteNetworkAclEntry
+              - ec2:ReplaceNetworkAclEntry
+              - ec2:ReplaceNetworkAclAssociation
+              - ec2:CreateTags
+              - ec2:DeleteTags
+              - rds:CreateDBSubnetGroup
+              - rds:DeleteDBSubnetGroup
+              - rds:ModifyDBSubnetGroup
+              - cloudformation:*
+            Resource: '*'
+
+  UserGustavoTuesta:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: gustavo-tuesta
+      Groups:
+        - !Ref IamGroupNetworkingSecurity
+      Tags:
+        - Key: Role
+          Value: Networking-Security-Lead
+        - Key: Project
+          Value: SOFI-APM
+
+  # 1.2 Grupo y Política: Database & Storage (Fase 3)
+  IamGroupDatabaseStorage:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-database-storage'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  PolicyDatabaseStorage:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-database-storage'
+      Groups:
+        - !Ref IamGroupDatabaseStorage
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowRdsS3EfsManagement
+            Effect: Allow
+            Action:
+              - rds:*
+              - s3:*
+              - elasticfilesystem:*
+              - kms:ListKeys
+              - kms:DescribeKey
+              - kms:CreateGrant
+              - cloudformation:*
+            Resource: '*'
+          - Sid: AllowPassRdsMonitoringRole
+            Effect: Allow
+            Action: iam:PassRole
+            Resource: !GetAtt RdsEnhancedMonitoringRole.Arn
+
+  UserSandroChavez:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: sandro-chavez
+      Groups:
+        - !Ref IamGroupDatabaseStorage
+      Tags:
+        - Key: Role
+          Value: Database-Storage-Lead
+        - Key: Project
+          Value: SOFI-APM
+
+  # 1.3 Grupo y Política: Compute, Containers & Developers (Fase 4)
+  IamGroupComputeDevelopers:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-compute-developers'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  PolicyComputeDevelopers:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-compute-developers'
+      Groups:
+        - !Ref IamGroupComputeDevelopers
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowEc2EcsSsmOperations
+            Effect: Allow
+            Action:
+              - ec2:RunInstances
+              - ec2:StartInstances
+              - ec2:StopInstances
+              - ec2:RebootInstances
+              - ec2:TerminateInstances
+              - ec2:CreateTags
+              - ecs:*
+              - ecr:*
+              - ssm:StartSession
+              - ssm:TerminateSession
+              - ssm:DescribeSessions
+              - ssm:GetParameter*
+              - logs:*
+              - cloudformation:*
+            Resource: '*'
+          - Sid: AllowPassComputeRolesOnly
+            Effect: Allow
+            Action: iam:PassRole
+            Resource:
+              - !GetAtt EC2DevWorkstationRole.Arn
+              - !GetAtt EcsTaskExecutionRole.Arn
+              - !GetAtt EcsTaskRole.Arn
+
+  UserEdwardMontero:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: edward-montero
+      Groups:
+        - !Ref IamGroupComputeDevelopers
+      Tags:
+        - Key: Role
+          Value: Compute-Containers-Developer
+        - Key: Project
+          Value: SOFI-APM
+
+  # 1.4 Grupo y Política: CloudOps, ALB & Producción (Fase 5)
+  IamGroupCloudOpsProd:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-cloudops-prod'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  PolicyCloudOpsProd:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-cloudops-prod'
+      Groups:
+        - !Ref IamGroupCloudOpsProd
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowAlbAutoScalingMonitoringAndIaC
+            Effect: Allow
+            Action:
+              - elasticloadbalancing:*
+              - application-autoscaling:*
+              - cloudwatch:*
+              - sns:*
+              - logs:*
+              - route53:*
+              - acm:*
+              - cloudformation:*
+              - ec2:*
+              - ecs:*
+              - rds:*
+              - s3:*
+              - iam:Get*
+              - iam:List*
+              - iam:PassRole
+            Resource: '*'
+
+  UserCarlosGago:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: carlos-gago
+      Groups:
+        - !Ref IamGroupCloudOpsProd
+      Tags:
+        - Key: Role
+          Value: CloudOps-Production-Lead
+        - Key: Project
+          Value: SOFI-APM
+
+  # 1.5 Grupo y Política: IAM & Gobernanza de Seguridad (Jhefry & Jherson)
+  IamGroupIamGovernance:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-iam-governance'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  PolicyIamGovernance:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-iam-governance'
+      Groups:
+        - !Ref IamGroupIamGovernance
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowIamAndSecurityGovernance
+            Effect: Allow
+            Action:
+              - iam:CreateRole
+              - iam:DeleteRole
+              - iam:GetRole
+              - iam:UpdateRole
+              - iam:ListRoles
+              - iam:AttachRolePolicy
+              - iam:DetachRolePolicy
+              - iam:PutRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:GetRolePolicy
+              - iam:CreatePolicy
+              - iam:DeletePolicy
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicyVersion
+              - iam:CreateInstanceProfile
+              - iam:DeleteInstanceProfile
+              - iam:AddRoleToInstanceProfile
+              - iam:RemoveRoleFromInstanceProfile
+              - iam:GetInstanceProfile
+              - iam:ListInstanceProfiles
+              - iam:CreateUser
+              - iam:DeleteUser
+              - iam:UpdateUser
+              - iam:CreateGroup
+              - iam:DeleteGroup
+              - iam:AddUserToGroup
+              - iam:RemoveUserFromGroup
+              - iam:GetAccountSummary
+              - iam:GenerateCredentialReport
+              - iam:GetCredentialReport
+              - iam:PassRole
+              - cloudformation:*
+            Resource: '*'
+
+  UserJhefry:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: jhefry
+      Groups:
+        - !Ref IamGroupIamGovernance
+      Tags:
+        - Key: Role
+          Value: IAM-Governance-Lead
+        - Key: Project
+          Value: SOFI-APM
+
+  UserJhersonApaza:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: jherson-apaza
+      Groups:
+        - !Ref IamGroupIamGovernance
+        - !Ref IamGroupComputeDevelopers
+      Tags:
+        - Key: Role
+          Value: IAM-Security-And-Compute
+        - Key: Project
+          Value: SOFI-APM
+
+  # =========================================================================
+  # 2. IDENTIDADES DE MÁQUINA Y ROLES DE SERVICIO IAM (PoLP)
+  #    (Se despliega en el Paso 1 ANTES de que exista la VPC)
+  # =========================================================================
+
+  # 2.1 IAM Role e Instance Profile para Estaciones EC2 Dev (SSM + S3 + EFS)
+  EC2DevWorkstationRole:
+    Type: AWS::IAM::Role
+    Condition: CreateCustomRoles
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-role-ec2-dev-workstation'
+      Description: 'Rol de computo para estaciones EC2 administradas con Systems Manager (Cero SSH)'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: S3LmsReadOnlyAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - 'arn:aws:s3:::*sofi*'
+                  - 'arn:aws:s3:::*sofi*/*'
+        - PolicyName: EfsClientMountAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - elasticfilesystem:ClientMount
+                  - elasticfilesystem:ClientWrite
+                  - elasticfilesystem:DescribeMountTargets
+                Resource: '*'
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  EC2DevInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Condition: CreateCustomRoles
+    Properties:
+      InstanceProfileName: !Sub '${EnvironmentName}-profile-ec2-dev'
+      Roles:
+        - !Ref EC2DevWorkstationRole
+
+  # 2.2 ECS Task Execution Role (Plano de Control AWS Fargate)
+  EcsTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Condition: CreateCustomRoles
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-role-ecs-task-execution'
+      Description: 'Rol del plano de control de ECS Fargate para pull de ECR, logs y secretos'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyName: SsmParametersAndSecretsAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameters
+                  - ssm:GetParameter
+                  - ssm:GetParametersByPath
+                  - secretsmanager:GetSecretValue
+                  - kms:Decrypt
+                Resource: '*'
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 2.3 ECS Task Role (Lógica de Negocio NestJS / Next.js)
+  EcsTaskRole:
+    Type: AWS::IAM::Role
+    Condition: CreateCustomRoles
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-role-ecs-task-code'
+      Description: 'Rol de aplicacion para acceso granular a S3 LMS y envios por Amazon SES'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: S3LmsMediaReadWriteAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                Resource:
+                  - 'arn:aws:s3:::*sofi*'
+                  - 'arn:aws:s3:::*sofi*/*'
+        - PolicyName: SesNotificationAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendRawEmail
+                Resource: '*'
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 2.4 RDS Enhanced Monitoring Role (Métricas de SO de Base de Datos)
+  RdsEnhancedMonitoringRole:
+    Type: AWS::IAM::Role
+    Condition: CreateCustomRoles
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-role-rds-monitoring'
+      Description: 'Rol para envio de metricas detalladas de Amazon RDS a CloudWatch Logs'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: monitoring.rds.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # =========================================================================
+  # 3. MATRIZ DE GRUPOS DE SEGURIDAD (SECURITY GROUPS - STATEFUL)
+  #    (Se activa en el Paso 3 cuando DeployPerimeterSecurity = 'true')
+  # =========================================================================
+
+  # 3.1 Security Group para el Application Load Balancer (ALB Ingress)
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-alb-public'
+      GroupDescription: 'Acceso web publico HTTP y HTTPS hacia el ALB (Ingress Edge)'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: 'Trafico HTTP publico para redireccion a HTTPS'
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: 'Trafico seguro HTTPS publico'
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: !Ref VpcCIDR
+          Description: 'Reenvio de trafico a tareas web Next.js en la VPC'
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: !Ref VpcCIDR
+          Description: 'Reenvio de trafico a tareas backend NestJS y Clientes B2B en la VPC'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-alb-public'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 3.2 Security Group para Tareas ECS Fargate (Cómputo Serverless)
+  FargateSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-fargate-tasks'
+      GroupDescription: 'Trafico entrante exclusivo desde el ALB hacia las tareas Fargate'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref AlbSecurityGroup
+          Description: 'Acceso HTTP al frontend sofi-web exclusivo desde el ALB'
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !Ref AlbSecurityGroup
+          Description: 'Acceso HTTP al backend NestJS y Clientes B2B exclusivo desde el ALB'
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: !Ref VpcCIDR
+          Description: 'Consultas SQL hacia la subred de base de datos RDS'
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: 'Salida HTTPS hacia APIs externas (Discord Gateway, ECR, CloudWatch Logs, SSM)'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-fargate-tasks'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 3.3 Security Group para Estaciones de Desarrollo EC2 (Zero Open Inbound Ports)
+  DevWorkstationSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-ec2-dev'
+      GroupDescription: 'Estaciones EC2 Dev administradas por SSM (Cero puertos SSH abiertos)'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress: []
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: 'Trafico HTTPS cifrado hacia endpoints de AWS Systems Manager y repositorios'
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: !Ref VpcCIDR
+          Description: 'Montaje de sistema de archivos compartido Amazon EFS via NFS'
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: !Ref VpcCIDR
+          Description: 'Conexion controlada para desarrollo / migraciones de base de datos'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-ec2-dev'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 3.4 Security Group para Amazon RDS PostgreSQL 16 (Blindaje RDBMS)
+  RdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-rds-postgres'
+      GroupDescription: 'Acceso en puerto 5432 exclusivo para backend Fargate y estacion Dev'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref FargateSecurityGroup
+          Description: 'Consultas SQL Prisma ORM desde tareas ECS Fargate'
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref DevWorkstationSecurityGroup
+          Description: 'Acceso administrativo controlado desde estacion de desarrollo EC2'
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: !Ref VpcCIDR
+          Description: 'Replicacion sincrona interna entre instancias Multi-AZ'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-rds-postgres'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 3.5 Security Group para Amazon EFS (Montaje de Código Compartido)
+  EfsMountSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-efs-mount'
+      GroupDescription: 'Puntos de montaje NFS para estaciones de desarrollo y contenedores'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          SourceSecurityGroupId: !Ref DevWorkstationSecurityGroup
+          Description: 'Montaje NFS 2049 desde estaciones EC2 Dev'
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          SourceSecurityGroupId: !Ref FargateSecurityGroup
+          Description: 'Montaje NFS 2049 desde tareas ECS Fargate'
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1024
+          ToPort: 65535
+          CidrIp: !Ref VpcCIDR
+          Description: 'Retorno de paquetes NFS a clientes locales'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-efs-mount'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # 3.6 Security Group para VPC Endpoints (AWS PrivateLink)
+  VpcEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ShouldDeployPerimeter
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-sg-sofi-vpc-endpoints'
+      GroupDescription: 'Acceso HTTPS privado hacia SSM, ECR y S3'
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref VpcCIDR
+          Description: 'Llamadas API HTTPS desde cualquier recurso dentro de la VPC'
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: 'Comunicacion cifrada hacia planos de control de AWS'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-sg-sofi-vpc-endpoints'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+
+  # =========================================================================
+  # 4. LISTAS DE CONTROL DE ACCESO A LA RED (NETWORK ACLs - STATELESS)
+  #    (Se activa en el Paso 3 cuando DeployPerimeterSecurity = 'true')
+  # =========================================================================
+
+  # 4.1 NACL para Subredes Públicas
+  PublicSubnetNetworkAcl:
+    Type: AWS::EC2::NetworkAcl
+    Condition: ShouldDeployPerimeter
+    Properties:
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-nacl-public'
+
+  PublicNaclInboundHttp:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+
+  PublicNaclInboundHttps:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 443
+        To: 443
+
+  PublicNaclInboundEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
+
+  PublicNaclOutboundHttp:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+
+  PublicNaclOutboundHttps:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 443
+        To: 443
+
+  PublicNaclOutboundFargateWeb:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 3000
+        To: 3000
+
+  PublicNaclOutboundFargateApi:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 130
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 8080
+        To: 8080
+
+  PublicNaclOutboundEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+      RuleNumber: 140
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
+
+  PublicSubnetAAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-PublicSubnetA'
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+
+  PublicSubnetBAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-PublicSubnetB'
+      NetworkAclId: !Ref PublicSubnetNetworkAcl
+
+  # 4.2 NACL para Subredes Privadas de Cómputo
+  PrivateAppSubnetNetworkAcl:
+    Type: AWS::EC2::NetworkAcl
+    Condition: ShouldDeployPerimeter
+    Properties:
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-nacl-private-app'
+
+  PrivateAppNaclInboundWeb:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 3000
+        To: 3000
+
+  PrivateAppNaclInboundApi:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 8080
+        To: 8080
+
+  PrivateAppNaclInboundEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
+
+  PrivateAppNaclOutboundPostgres:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  PrivateAppNaclOutboundHttps:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 443
+        To: 443
+
+  PrivateAppNaclOutboundEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
+
+  PrivateAppSubnetAAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-PrivateAppSubnetA'
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+
+  PrivateAppSubnetBAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-PrivateAppSubnetB'
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+
+  # 4.3 NACL para Subredes Aisladas de Base de Datos
+  IsolatedDbSubnetNetworkAcl:
+    Type: AWS::EC2::NetworkAcl
+    Condition: ShouldDeployPerimeter
+    Properties:
+      VpcId:
+        Fn::If:
+          - HasCustomVpcId
+          - !Ref VpcId
+          - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-nacl-isolated-db'
+
+  IsolatedDbNaclInboundAppA:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref PrivateAppSubnetACIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  IsolatedDbNaclInboundAppB:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref PrivateAppSubnetBCIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  IsolatedDbNaclInboundDev:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref PrivateDevSubnetACIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  IsolatedDbNaclInboundReplication:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 130
+      Protocol: 6
+      RuleAction: allow
+      Egress: false
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  IsolatedDbNaclOutboundEphemeralAppA:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 100
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref PrivateAppSubnetACIDR
+      PortRange:
+        From: 1024
+        To: 65535
+
+  IsolatedDbNaclOutboundEphemeralAppB:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 110
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref PrivateAppSubnetBCIDR
+      PortRange:
+        From: 1024
+        To: 65535
+
+  IsolatedDbNaclOutboundEphemeralDev:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref PrivateDevSubnetACIDR
+      PortRange:
+        From: 1024
+        To: 65535
+
+  IsolatedDbNaclOutboundReplication:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+      RuleNumber: 130
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 5432
+        To: 5432
+
+  IsolatedDbSubnetAAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-IsolatedDbSubnetA'
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+
+  IsolatedDbSubnetBAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Condition: ShouldDeployPerimeter
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub '${EnvironmentName}-IsolatedDbSubnetB'
+      NetworkAclId: !Ref IsolatedDbSubnetNetworkAcl
+
+Outputs:
+  # =========================================================================
+  # EXPORTACIÓN DE ROLES E INSTANCE PROFILES DE IAM (Disponibles desde Paso 1)
+  # =========================================================================
+  EC2InstanceProfileArn:
+    Description: ARN del Instance Profile para instancias EC2 Dev (SSM + S3 + EFS)
+    Value:
+      Fn::If:
+        - CreateCustomRoles
+        - !GetAtt EC2DevInstanceProfile.Arn
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:instance-profile/${ExistingLabRoleName}'
+    Export:
+      Name: !Sub '${EnvironmentName}-EC2InstanceProfileArn'
+
+  EcsTaskExecutionRoleArn:
+    Description: ARN del rol de ejecucion de tareas ECS Fargate
+    Value:
+      Fn::If:
+        - CreateCustomRoles
+        - !GetAtt EcsTaskExecutionRole.Arn
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${ExistingLabRoleName}'
+    Export:
+      Name: !Sub '${EnvironmentName}-EcsTaskExecutionRoleArn'
+
+  EcsTaskRoleArn:
+    Description: ARN del rol de aplicacion para las tareas ECS Fargate
+    Value:
+      Fn::If:
+        - CreateCustomRoles
+        - !GetAtt EcsTaskRole.Arn
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${ExistingLabRoleName}'
+    Export:
+      Name: !Sub '${EnvironmentName}-EcsTaskRoleArn'
+
+  RdsEnhancedMonitoringRoleArn:
+    Description: ARN del rol de monitoreo mejorado para Amazon RDS
+    Value:
+      Fn::If:
+        - CreateCustomRoles
+        - !GetAtt RdsEnhancedMonitoringRole.Arn
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${ExistingLabRoleName}'
+    Export:
+      Name: !Sub '${EnvironmentName}-RdsEnhancedMonitoringRoleArn'
+
+  # =========================================================================
+  # EXPORTACIÓN DE SECURITY GROUPS (Disponibles cuando DeployPerimeterSecurity='true')
+  # =========================================================================
+  AlbSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group del Application Load Balancer
+    Value: !Ref AlbSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-AlbSecurityGroupId'
+
+  FargateSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group de las tareas ECS Fargate
+    Value: !Ref FargateSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-FargateSecurityGroupId'
+
+  RdsSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group de Amazon RDS PostgreSQL
+    Value: !Ref RdsSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-RdsSecurityGroupId'
+
+  DevSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group de las estaciones EC2 Dev Workstations
+    Value: !Ref DevWorkstationSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-DevSecurityGroupId'
+
+  EfsSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group de montaje para Amazon EFS
+    Value: !Ref EfsMountSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-EfsSecurityGroupId'
+
+  VpcEndpointSecurityGroupId:
+    Condition: ShouldDeployPerimeter
+    Description: ID del Security Group de los VPC Endpoints
+    Value: !Ref VpcEndpointSecurityGroup
+    Export:
+      Name: !Sub '${EnvironmentName}-VpcEndpointSecurityGroupId'
