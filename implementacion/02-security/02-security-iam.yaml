@@ -388,10 +388,34 @@ Resources:
               - iam:CreateUser
               - iam:DeleteUser
               - iam:UpdateUser
+              - iam:CreateLoginProfile
+              - iam:UpdateLoginProfile
+              - iam:DeleteLoginProfile
+              - iam:GetLoginProfile
+              - iam:AttachUserPolicy
+              - iam:DetachUserPolicy
+              - iam:PutUserPolicy
+              - iam:DeleteUserPolicy
+              - iam:GetUserPolicy
+              - iam:ListAttachedUserPolicies
+              - iam:ListUserPolicies
+              - iam:CreateAccessKey
+              - iam:UpdateAccessKey
+              - iam:DeleteAccessKey
+              - iam:ListAccessKeys
+              - iam:TagUser
+              - iam:UntagUser
               - iam:CreateGroup
               - iam:DeleteGroup
               - iam:AddUserToGroup
               - iam:RemoveUserFromGroup
+              - iam:AttachGroupPolicy
+              - iam:DetachGroupPolicy
+              - iam:PutGroupPolicy
+              - iam:DeleteGroupPolicy
+              - iam:GetGroupPolicy
+              - iam:ListAttachedGroupPolicies
+              - iam:ListGroupPolicies
               - iam:GetAccountSummary
               - iam:GenerateCredentialReport
               - iam:GetCredentialReport
