@@ -320,8 +320,11 @@ Resources:
               - s3:*
               - iam:Get*
               - iam:List*
-              - iam:PassRole
             Resource: '*'
+          - Sid: AllowPassCloudOpsRolesOnly
+            Effect: Allow
+            Action: iam:PassRole
+            Resource: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${EnvironmentName}-role-*'
 
   UserCarlosGago:
     Type: AWS::IAM::User
@@ -389,9 +392,12 @@ Resources:
               - iam:GetAccountSummary
               - iam:GenerateCredentialReport
               - iam:GetCredentialReport
-              - iam:PassRole
               - cloudformation:*
             Resource: '*'
+          - Sid: AllowPassProjectRolesOnly
+            Effect: Allow
+            Action: iam:PassRole
+            Resource: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${EnvironmentName}-role-*'
 
   # 1.6 Política Común: Autogestión de MFA para todos los miembros del equipo
   PolicySelfManageMfa:
