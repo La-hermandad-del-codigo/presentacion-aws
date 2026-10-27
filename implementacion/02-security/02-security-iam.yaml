@@ -393,6 +393,41 @@ Resources:
               - cloudformation:*
             Resource: '*'
 
+  # 1.6 Política Común: Autogestión de MFA para todos los miembros del equipo
+  PolicySelfManageMfa:
+    Type: AWS::IAM::Policy
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      PolicyName: !Sub '${EnvironmentName}-pol-self-manage-mfa'
+      Groups:
+        - !Ref IamGroupNetworkingSecurity
+        - !Ref IamGroupDatabaseStorage
+        - !Ref IamGroupComputeDevelopers
+        - !Ref IamGroupCloudOpsProd
+        - !Ref IamGroupIamGovernance
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowManageOwnMFA
+            Effect: Allow
+            Action:
+              - iam:CreateVirtualMFADevice
+              - iam:DeleteVirtualMFADevice
+              - iam:EnableMFADevice
+              - iam:DeactivateMFADevice
+              - iam:ResyncMFADevice
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:mfa/*'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:user/*'
+          - Sid: AllowListMFADevices
+            Effect: Allow
+            Action:
+              - iam:ListVirtualMFADevices
+              - iam:ListMFADevices
+              - iam:ListUsers
+              - iam:GetUser
+            Resource: '*'
+
   UserJhefry:
     Type: AWS::IAM::User
     Condition: ShouldCreateTeamUsers
