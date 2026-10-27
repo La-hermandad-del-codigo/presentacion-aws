@@ -475,7 +475,7 @@ Resources:
           #!/bin/bash
           set -e
           cat <<'PYEOF' > /opt/public_portal.py
-          from http.server import HTTPServer, BaseHTTPRequestHandler
+          from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
           import urllib.request, json, time, socket
 
           TARGET_PRIVATE_IP = "${PrivateTestInstance.PrivateIp}"
@@ -592,7 +592,7 @@ Resources:
               def log_message(self, format, *args):
                   pass
 
-          server = HTTPServer(('0.0.0.0', 80), Handler)
+          server = ThreadingHTTPServer(('0.0.0.0', 80), Handler)
           server.serve_forever()
           PYEOF
 
