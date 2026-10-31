@@ -1,0 +1,382 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI)
+  Fase 3: Capa de Base de Datos y Almacenamiento (Persistencia Relacional y Jerarquía de Storage).
+  Provee Amazon RDS PostgreSQL 16 (gp3, Storage Autoscaling, Multi-AZ configurable, AWS Secrets Manager),
+  Amazon S3 con política de ciclo de vida (Standard -> Glacier Flexible), bloqueo de acceso público y TLS obligatorio,
+  y Amazon EFS para almacenamiento compartido con Lifecycle IA, puntos de montaje Multi-AZ y Access Point.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "1. Parámetros del Entorno e Integración (Fases 1 y 2)"
+        Parameters:
+          - EnvironmentName
+      - Label:
+          default: "2. Parámetros de Base de Datos (Amazon RDS PostgreSQL 16)"
+        Parameters:
+          - DBInstanceClass
+          - DBAllocatedStorage
+          - DBMaxAllocatedStorage
+          - DBName
+          - DBMasterUsername
+          - EnableMultiAZ
+          - EnableEnhancedMonitoring
+      - Label:
+          default: "3. Parámetros de Almacenamiento (Amazon S3 & Glacier)"
+        Parameters:
+          - S3BucketNamePrefix
+          - DaysToStandardIA
+          - DaysToGlacier
+          - DaysToExpiration
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    AllowedValues: [apm-sofi-prod, dev, staging]
+    Description: Prefijo identificador del entorno. Debe coincidir con los stacks desplegados en Fase 1 y 2.
+
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.micro
+    AllowedValues: [db.t3.micro, db.t3.small, db.t4g.micro]
+    Description: Clase de cómputo para la BD (db.t3.micro alineado con el presupuesto TCO aprobado).
+
+  DBAllocatedStorage:
+    Type: Number
+    Default: 20
+    MinValue: 20
+    MaxValue: 100
+    Description: Capacidad inicial de disco SSD gp3 en GB para PostgreSQL.
+
+  DBMaxAllocatedStorage:
+    Type: Number
+    Default: 100
+    MinValue: 20
+    MaxValue: 500
+    Description: Umbral máximo para Storage Autoscaling de RDS (previene saturación de disco ante picos).
+
+  DBName:
+    Type: String
+    Default: sofi_db
+    Description: Nombre de la base de datos relacional para el ecosistema SOFI.
+
+  DBMasterUsername:
+    Type: String
+    Default: sofi_admin
+    Description: Nombre de usuario maestro administrador para PostgreSQL.
+
+  EnableMultiAZ:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: Activar réplica síncrona en zona B. Dejar en 'false' en laboratorios para control de costos.
+
+  EnableEnhancedMonitoring:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: Habilitar monitoreo detallado de SO en CloudWatch consumiendo el rol exportado de Fase 2.
+
+  S3BucketNamePrefix:
+    Type: String
+    Default: apm-sofi-storage
+    Description: Prefijo para el bucket S3 (se le concatenará AccountId y Región para garantizar unicidad global).
+
+  DaysToStandardIA:
+    Type: Number
+    Default: 60
+    Description: Días antes de migrar assets del LMS (videos/PDFs) a S3 Standard-IA (Infrequent Access).
+
+  DaysToGlacier:
+    Type: Number
+    Default: 90
+    Description: Días antes de transferir respaldos (backups/) a S3 Glacier Flexible Retrieval.
+
+  DaysToExpiration:
+    Type: Number
+    Default: 365
+    Description: Días totales tras los cuales los respaldos antiguos en Glacier se eliminan automáticamente.
+
+Conditions:
+  IsMultiAZ: !Equals [!Ref EnableMultiAZ, 'true']
+  IsEnhancedMonitoringEnabled: !Equals [!Ref EnableEnhancedMonitoring, 'true']
+  IsProduction: !Equals [!Ref EnvironmentName, 'apm-sofi-prod']
+
+Resources:
+
+  # =========================================================================
+  # 1. GESTIÓN SEGURA DE CREDENCIALES (AWS Secrets Manager)
+  # =========================================================================
+
+  RDSMasterSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${EnvironmentName}/rds/postgres/credentials"
+      Description: !Sub "Credenciales maestras administradas para RDS PostgreSQL - ${EnvironmentName}"
+      GenerateSecretString:
+        SecretStringTemplate: !Sub '{"username": "${DBMasterUsername}"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '/@" \\'
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-rds-secret"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+        - Key: ManagedBy
+          Value: grp-database-storage
+
+  # =========================================================================
+  # 2. AMAZON RDS POSTGRESQL 16 (Base de Datos Relacional Segura y Optimizada)
+  # =========================================================================
+
+  PostgresDBParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: "Grupo de parametros optimizado para PostgreSQL 16 - SOFI"
+      Family: postgres16
+      Parameters:
+        rds.force_ssl: "1"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-pg16-parameters"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+
+  PostgresDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-postgres"
+      DBName: !Ref DBName
+      Engine: postgres
+      EngineVersion: "16.3"
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
+      StorageType: gp3
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${RDSMasterSecret}:SecretString:password}}"
+      DBSubnetGroupName:
+        Fn::ImportValue: !Sub "${EnvironmentName}-RdsDbSubnetGroup"
+      VPCSecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsSecurityGroupId"
+      DBParameterGroupName: !Ref PostgresDBParameterGroup
+      MultiAZ: !Ref EnableMultiAZ
+      PubliclyAccessible: false
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 1
+      PreferredBackupWindow: "03:00-04:00"
+      PreferredMaintenanceWindow: "Sun:04:30-Sun:05:30"
+      StorageEncrypted: true
+      DeletionProtection: !If [IsProduction, true, false]
+      MonitoringInterval: !If [IsEnhancedMonitoringEnabled, 60, 0]
+      MonitoringRoleArn: !If
+        - IsEnhancedMonitoringEnabled
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsEnhancedMonitoringRoleArn"
+        - !Ref "AWS::NoValue"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-rds-postgres"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+        - Key: Team
+          Value: grp-database-storage
+
+  # =========================================================================
+  # 3. AMAZON S3 & POLÍTICA DE RETENCIÓN S3 GLACIER (Storage Inmutable y Cifrado)
+  # =========================================================================
+
+  SofiStorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${S3BucketNamePrefix}-${AWS::AccountId}-${AWS::Region}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: MoveBackupsToGlacierRule
+            Status: Enabled
+            Prefix: "backups/"
+            Transitions:
+              - TransitionInDays: !Ref DaysToGlacier
+                StorageClass: GLACIER
+            ExpirationInDays: !Ref DaysToExpiration
+            NoncurrentVersionExpirationInDays: 90
+          - Id: OptimizeLMSAssetsRule
+            Status: Enabled
+            Prefix: "lms-media/"
+            Transitions:
+              - TransitionInDays: !Ref DaysToStandardIA
+                StorageClass: STANDARD_IA
+          - Id: CleanIncompleteMultipartUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-s3-storage"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+
+  SofiStorageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SofiStorageBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: EnforceTLSRequestsOnly
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !GetAtt SofiStorageBucket.Arn
+              - !Sub "${SofiStorageBucket.Arn}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+  # =========================================================================
+  # 4. AMAZON EFS (Sistema de Archivos Elástico Compartido para Cómputo/Dev)
+  # =========================================================================
+
+  SharedFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      PerformanceMode: generalPurpose
+      ThroughputMode: bursting
+      LifecyclePolicies:
+        - TransitionToIA: AFTER_30_DAYS
+        - TransitionToPrimaryStorageClass: AFTER_1_ACCESS
+      FileSystemTags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-efs-shared"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+
+  EFSMountTargetAppA:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref SharedFileSystem
+      SubnetId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetA"
+      SecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-EfsSecurityGroupId"
+
+  EFSMountTargetAppB:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref SharedFileSystem
+      SubnetId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetB"
+      SecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-EfsSecurityGroupId"
+
+  EFSAccessPoint:
+    Type: AWS::EFS::AccessPoint
+    Properties:
+      FileSystemId: !Ref SharedFileSystem
+      PosixUser:
+        Uid: "1000"
+        Gid: "1000"
+      RootDirectory:
+        Path: "/workspace"
+        CreationInfo:
+          OwnerUid: "1000"
+          OwnerGid: "1000"
+          Permissions: "0755"
+      AccessPointTags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-efs-access-point"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Phase
+          Value: Fase-3
+
+# =========================================================================
+# 5. OUTPUTS (Salidas exportadas de forma predecible para Fases 4 y 5)
+# =========================================================================
+
+Outputs:
+  RDSEndpointAddress:
+    Description: "Punto de enlace (Endpoint DNS) de la base de datos PostgreSQL para backend NestJS"
+    Value: !GetAtt PostgresDBInstance.Endpoint.Address
+    Export:
+      Name: !Sub "${EnvironmentName}-RDSEndpointAddress"
+
+  RDSEndpointPort:
+    Description: "Puerto de conexion de PostgreSQL"
+    Value: !GetAtt PostgresDBInstance.Endpoint.Port
+    Export:
+      Name: !Sub "${EnvironmentName}-RDSEndpointPort"
+
+  RDSSecretArn:
+    Description: "ARN del secreto en AWS Secrets Manager con las credenciales de la BD"
+    Value: !Ref RDSMasterSecret
+    Export:
+      Name: !Sub "${EnvironmentName}-RDSSecretArn"
+
+  RDSSecretName:
+    Description: "Nombre del secreto de base de datos para integracion en tareas ECS Fargate"
+    Value: !Sub "${EnvironmentName}/rds/postgres/credentials"
+    Export:
+      Name: !Sub "${EnvironmentName}-RDSSecretName"
+
+  S3BucketName:
+    Description: "Nombre unico global del bucket S3 para almacenamiento y LMS"
+    Value: !Ref SofiStorageBucket
+    Export:
+      Name: !Sub "${EnvironmentName}-S3BucketName"
+
+  S3BucketArn:
+    Description: "ARN del bucket S3 para politicas IAM de ECS y EC2"
+    Value: !GetAtt SofiStorageBucket.Arn
+    Export:
+      Name: !Sub "${EnvironmentName}-S3BucketArn"
+
+  EFSFileSystemId:
+    Description: "ID del sistema de archivos Amazon EFS para montaje en EC2 y ECS"
+    Value: !Ref SharedFileSystem
+    Export:
+      Name: !Sub "${EnvironmentName}-EFSFileSystemId"
+
+  EFSAccessPointId:
+    Description: "ID del Access Point de EFS (/workspace) para contenedores y workstations"
+    Value: !Ref EFSAccessPoint
+    Export:
+      Name: !Sub "${EnvironmentName}-EFSAccessPointId"
