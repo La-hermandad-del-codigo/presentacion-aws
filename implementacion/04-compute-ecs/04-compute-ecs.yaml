@@ -1,0 +1,777 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI y Portales B2B)
+  Fase 4: Capa de Cómputo ECS Fargate, Repositorios ECR y Estación de Desarrollo EC2 Dev Workstation.
+  Provee repositorios ECR con políticas de ciclo de vida, clúster ECS con Container Insights,
+  definiciones de tareas Fargate (SOFI, Reflexo Perú, Arte & Ideas), y estación EC2 Dev sin puertos abiertos
+  administrada vía AWS Systems Manager (SSM), con montaje de Amazon EFS (/workspace), Neovim/LazyVim y Tmux.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "1. Parámetros del Entorno e Integración (Fases 1, 2 y 3)"
+        Parameters:
+          - EnvironmentName
+      - Label:
+          default: "2. Parámetros de Amazon EC2 Dev Workstation"
+        Parameters:
+          - EC2InstanceType
+          - EC2AmiId
+          - DevUsername
+      - Label:
+          default: "3. Versiones e Imágenes de Contenedores"
+        Parameters:
+          - ImageTag
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    AllowedValues: [apm-sofi-prod, dev, staging]
+    Description: Prefijo identificador del entorno (coincidente con Fases 1, 2 y 3).
+
+  EC2InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small, t3.medium]
+    Description: Tipo de instancia para la estación de desarrollo EC2 (t3.micro optimizado para presupuesto).
+
+  EC2AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: AMI oficial más reciente de Amazon Linux 2023 resoluble dinámicamente vía SSM Parameter Store.
+
+  DevUsername:
+    Type: String
+    Default: jhefry
+    Description: Nombre de usuario local Linux que se aprovisionará en la instancia EC2 para el practicante.
+
+  ImageTag:
+    Type: String
+    Default: latest
+    Description: Etiqueta inicial de las imágenes Docker para las Task Definitions de ECS.
+
+Resources:
+
+  # =========================================================================
+  # 1. REPOSITORIOS AMAZON ECR (Registro Seguro con Lifecycle Policies)
+  # =========================================================================
+
+  EcrRepoSofiFrontend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-sofi-frontend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-sofi-frontend"
+        - Key: Project
+          Value: SOFI-APM
+
+  EcrRepoSofiBackend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-sofi-backend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-sofi-backend"
+        - Key: Project
+          Value: SOFI-APM
+
+  EcrRepoSofiDiscordBot:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-sofi-discord-bot"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-sofi-discord-bot"
+        - Key: Project
+          Value: SOFI-APM
+
+  EcrRepoReflexoFrontend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-reflexo-frontend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-reflexo-frontend"
+        - Key: Project
+          Value: ReflexoPeru
+
+  EcrRepoReflexoBackend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-reflexo-backend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-reflexo-backend"
+        - Key: Project
+          Value: ReflexoPeru
+
+  EcrRepoArteIdeasFrontend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-arteideas-frontend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-arteideas-frontend"
+        - Key: Project
+          Value: ArteIdeas
+
+  EcrRepoArteIdeasBackend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${EnvironmentName}-arteideas-backend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retener unicamente las ultimas 5 imagenes",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecr-arteideas-backend"
+        - Key: Project
+          Value: ArteIdeas
+
+  # =========================================================================
+  # 2. CLÚSTER AMAZON ECS (Fargate + Container Insights)
+  # =========================================================================
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "${EnvironmentName}-cluster"
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecs-cluster"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Phase
+          Value: Fase-4
+
+  # =========================================================================
+  # 3. GRUPOS DE LOGS EN AMAZON CLOUDWATCH
+  # =========================================================================
+
+  LogGroupSofiFrontend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/sofi-frontend"
+      RetentionInDays: 7
+
+  LogGroupSofiBackend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/sofi-backend"
+      RetentionInDays: 7
+
+  LogGroupSofiDiscordBot:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/sofi-discord-bot"
+      RetentionInDays: 7
+
+  LogGroupReflexoFrontend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/reflexo-frontend"
+      RetentionInDays: 7
+
+  LogGroupReflexoBackend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/reflexo-backend"
+      RetentionInDays: 7
+
+  LogGroupArteIdeasFrontend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/arteideas-frontend"
+      RetentionInDays: 7
+
+  LogGroupArteIdeasBackend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}/arteideas-backend"
+      RetentionInDays: 7
+
+  # =========================================================================
+  # 4. DEFINICIONES DE TAREAS ECS FARGATE (Task Definitions)
+  # =========================================================================
+
+  # --- 4.1 Task Definition SOFI Platform (Frontend + Backend + Discord Bot) ---
+  SofiTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${EnvironmentName}-sofi-task"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "1024"
+      Memory: "2048"
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskExecutionRoleArn"
+      TaskRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskRoleArn"
+      ContainerDefinitions:
+        - Name: sofi-frontend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoSofiFrontend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "3000"
+            - Name: INTERNAL_API_URL
+              Value: "http://localhost:8080"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupSofiFrontend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+        - Name: sofi-backend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoSofiBackend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "8080"
+            - Name: NODE_ENV
+              Value: production
+            - Name: DB_HOST
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSEndpointAddress"
+            - Name: DB_PORT
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSEndpointPort"
+            - Name: DB_NAME
+              Value: sofi_db
+            - Name: DB_USERNAME
+              Value: sofi_admin
+            - Name: AWS_REGION
+              Value: !Ref "AWS::Region"
+            - Name: S3_BUCKET_NAME
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-S3BucketName"
+          Secrets:
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSSecretArn"
+                    - ":password::"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupSofiBackend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+        - Name: sofi-discord-bot
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoSofiDiscordBot}:${ImageTag}"
+          Essential: false
+          Environment:
+            - Name: API_URL
+              Value: "http://localhost:8080"
+            - Name: DB_HOST
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSEndpointAddress"
+            - Name: DB_PORT
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSEndpointPort"
+            - Name: DB_NAME
+              Value: sofi_db
+            - Name: DB_USERNAME
+              Value: sofi_admin
+          Secrets:
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${EnvironmentName}-SofiRDSSecretArn"
+                    - ":password::"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupSofiDiscordBot
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+  # --- 4.2 Task Definition Reflexo Perú (Frontend + Backend) ---
+  ReflexoTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${EnvironmentName}-reflexo-task"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "512"
+      Memory: "1024"
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskExecutionRoleArn"
+      TaskRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskRoleArn"
+      ContainerDefinitions:
+        - Name: reflexo-frontend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoReflexoFrontend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "3000"
+            - Name: INTERNAL_API_URL
+              Value: "http://localhost:8080"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupReflexoFrontend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+        - Name: reflexo-backend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoReflexoBackend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "8080"
+            - Name: NODE_ENV
+              Value: production
+            - Name: DB_HOST
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-ReflexoRDSEndpointAddress"
+            - Name: DB_PORT
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-ReflexoRDSEndpointPort"
+            - Name: DB_NAME
+              Value: reflexo_db
+            - Name: DB_USERNAME
+              Value: reflexo_admin
+          Secrets:
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${EnvironmentName}-ReflexoRDSSecretArn"
+                    - ":password::"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupReflexoBackend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+  # --- 4.3 Task Definition Arte & Ideas (Frontend + Backend) ---
+  ArteIdeasTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${EnvironmentName}-arteideas-task"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "512"
+      Memory: "1024"
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskExecutionRoleArn"
+      TaskRoleArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EcsTaskRoleArn"
+      ContainerDefinitions:
+        - Name: arteideas-frontend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoArteIdeasFrontend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "3000"
+            - Name: INTERNAL_API_URL
+              Value: "http://localhost:8080"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupArteIdeasFrontend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+        - Name: arteideas-backend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoArteIdeasBackend}:${ImageTag}"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: PORT
+              Value: "8080"
+            - Name: NODE_ENV
+              Value: production
+            - Name: DB_HOST
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-ArteIdeasRDSEndpointAddress"
+            - Name: DB_PORT
+              Value:
+                Fn::ImportValue: !Sub "${EnvironmentName}-ArteIdeasRDSEndpointPort"
+            - Name: DB_NAME
+              Value: arteideas_db
+            - Name: DB_USERNAME
+              Value: arteideas_admin
+          Secrets:
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${EnvironmentName}-ArteIdeasRDSSecretArn"
+                    - ":password::"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupArteIdeasBackend
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+
+  # =========================================================================
+  # 5. ESTACIÓN DE DESARROLLO AMAZON EC2 DEV WORKSTATION (Zero-SSH con SSM)
+  # =========================================================================
+
+  EC2DevWorkstation:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref EC2InstanceType
+      ImageId: !Ref EC2AmiId
+      SubnetId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-PrivateDevSubnetA"
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-DevSecurityGroupId"
+      IamInstanceProfile:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EC2InstanceProfileArn"
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 25
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: true
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash
+            set -euo pipefail
+            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "=== INICIANDO CONFIGURACIÓN EC2 DEV WORKSTATION ==="
+
+            # 1. Actualización e instalación de utilitarios base
+            dnf update -y
+            dnf install -y git tmux amazon-efs-utils amazon-ssm-agent jq curl wget tar unzip zsh util-linux-user
+
+            # Habilitar e iniciar SSM Agent
+            systemctl enable amazon-ssm-agent
+            systemctl restart amazon-ssm-agent
+
+            # 2. Instalación de Docker CLI y Docker Engine
+            dnf install -y docker
+            systemctl enable docker
+            systemctl start docker
+
+            # 3. Instalación de Node.js 20 LTS
+            dnf install -y nodejs npm
+
+            # 4. Instalación de Python 3 y pip
+            dnf install -y python3 python3-pip
+
+            # 5. Instalación de Neovim v0.10+ (AppImage / Binary)
+            curl -Lo /tmp/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux64.tar.gz
+            tar -xzf /tmp/nvim-linux64.tar.gz -C /opt/
+            ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
+
+            # 6. Creación de usuario practicante
+            if ! id -u ${DevUsername} >/dev/null 2>&1; then
+              useradd -m -s /bin/bash ${DevUsername}
+            fi
+            usermod -aG docker,wheel ${DevUsername}
+            echo "${DevUsername} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-${DevUsername}
+
+            # 7. Montaje de Amazon EFS compartido en /workspace
+            mkdir -p /workspace
+            EFS_FS_ID="${EfsId}"
+            EFS_AP_ID="${EfsApId}"
+
+            # Montar con EFS mount helper usando TLS y Access Point
+            mount -t efs -o tls,accesspoint=$${EFS_AP_ID} $${EFS_FS_ID}:/ /workspace || true
+            echo "$${EFS_FS_ID}:/ /workspace efs _netdev,tls,accesspoint=$${EFS_AP_ID} 0 0" >> /etc/fstab
+
+            chown -R ${DevUsername}:${DevUsername} /workspace
+            chmod 755 /workspace
+
+            # 8. Pre-configuración de LazyVim para el usuario
+            USER_HOME="/home/${DevUsername}"
+            sudo -u ${DevUsername} git clone https://github.com/LazyVim/starter "$${USER_HOME}/.config/nvim" || true
+            rm -rf "$${USER_HOME}/.config/nvim/.git" || true
+            chown -R ${DevUsername}:${DevUsername} "$${USER_HOME}/.config"
+
+            # 9. Configurar apagado automático a las 18:00 Lima (23:00 UTC) de Lunes a Viernes
+            cat << 'EOF' > /etc/cron.d/auto-shutdown-ec2
+            # Apagado preventivo FinOps de lunes a viernes a las 23:00 UTC (18:00 hora Perú)
+            0 23 * * 1-5 root /sbin/shutdown -h now
+            EOF
+            chmod 644 /etc/cron.d/auto-shutdown-ec2
+
+            echo "=== CONFIGURACIÓN DE EC2 DEV COMPLETADA SATISFACTORIAMENTE ==="
+          - EfsId:
+              Fn::ImportValue: !Sub "${EnvironmentName}-EFSFileSystemId"
+            EfsApId:
+              Fn::ImportValue: !Sub "${EnvironmentName}-EFSAccessPointId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ec2-dev-workstation"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: SOFI-APM
+        - Key: Role
+          Value: DevWorkstation
+        - Key: Phase
+          Value: Fase-4
+
+# =========================================================================
+# 6. OUTPUTS (Salidas para Fase 5 y CI/CD)
+# =========================================================================
+
+Outputs:
+  ECSClusterName:
+    Description: Nombre del clúster ECS Fargate
+    Value: !Ref ECSCluster
+    Export:
+      Name: !Sub "${EnvironmentName}-ECSClusterName"
+
+  ECSClusterArn:
+    Description: ARN del clúster ECS Fargate
+    Value: !GetAtt ECSCluster.Arn
+    Export:
+      Name: !Sub "${EnvironmentName}-ECSClusterArn"
+
+  SofiTaskDefinitionArn:
+    Description: ARN de la Task Definition de SOFI Platform
+    Value: !Ref SofiTaskDefinition
+    Export:
+      Name: !Sub "${EnvironmentName}-SofiTaskDefinitionArn"
+
+  ReflexoTaskDefinitionArn:
+    Description: ARN de la Task Definition de Reflexo Perú
+    Value: !Ref ReflexoTaskDefinition
+    Export:
+      Name: !Sub "${EnvironmentName}-ReflexoTaskDefinitionArn"
+
+  ArteIdeasTaskDefinitionArn:
+    Description: ARN de la Task Definition de Arte & Ideas
+    Value: !Ref ArteIdeasTaskDefinition
+    Export:
+      Name: !Sub "${EnvironmentName}-ArteIdeasTaskDefinitionArn"
+
+  EC2DevInstanceId:
+    Description: ID de la instancia EC2 Dev Workstation para conexión SSM Session Manager
+    Value: !Ref EC2DevWorkstation
+    Export:
+      Name: !Sub "${EnvironmentName}-EC2DevInstanceId"
+
+  EC2DevPrivateIp:
+    Description: Dirección IP privada de la instancia EC2 Dev
+    Value: !GetAtt EC2DevWorkstation.PrivateIp
+    Export:
+      Name: !Sub "${EnvironmentName}-EC2DevPrivateIp"
+
+  # ECR URIs para GitHub Actions CI/CD
+  EcrSofiFrontendUri:
+    Description: URI del repositorio ECR para sofi-frontend
+    Value: !GetAtt EcrRepoSofiFrontend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrSofiFrontendUri"
+
+  EcrSofiBackendUri:
+    Description: URI del repositorio ECR para sofi-backend
+    Value: !GetAtt EcrRepoSofiBackend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrSofiBackendUri"
+
+  EcrSofiDiscordBotUri:
+    Description: URI del repositorio ECR para sofi-discord-bot
+    Value: !GetAtt EcrRepoSofiDiscordBot.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrSofiDiscordBotUri"
+
+  EcrReflexoFrontendUri:
+    Description: URI del repositorio ECR para reflexo-frontend
+    Value: !GetAtt EcrRepoReflexoFrontend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrReflexoFrontendUri"
+
+  EcrReflexoBackendUri:
+    Description: URI del repositorio ECR para reflexo-backend
+    Value: !GetAtt EcrRepoReflexoBackend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrReflexoBackendUri"
+
+  EcrArteIdeasFrontendUri:
+    Description: URI del repositorio ECR para arteideas-frontend
+    Value: !GetAtt EcrRepoArteIdeasFrontend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrArteIdeasFrontendUri"
+
+  EcrArteIdeasBackendUri:
+    Description: URI del repositorio ECR para arteideas-backend
+    Value: !GetAtt EcrRepoArteIdeasBackend.RepositoryUri
+    Export:
+      Name: !Sub "${EnvironmentName}-EcrArteIdeasBackendUri"

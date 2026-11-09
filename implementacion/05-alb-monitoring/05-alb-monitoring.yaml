@@ -1,0 +1,553 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI y Portales B2B)
+  Fase 5: Capa de Balanceo de Carga (ALB Multi-AZ), Certificado SSL ACM, Enrutamiento Route 53,
+  Servicios ECS Fargate con Auto Scaling y Monitoreo CloudWatch con Notificaciones SNS.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "1. Parámetros del Entorno e Integración (Fases 1 a 4)"
+        Parameters:
+          - EnvironmentName
+      - Label:
+          default: "2. Parámetros de Dominio y DNS (Route 53 & ACM)"
+        Parameters:
+          - DomainName
+          - Route53HostedZoneId
+      - Label:
+          default: "3. Capacidad de Tareas ECS Fargate"
+        Parameters:
+          - DesiredCount
+          - MinCapacity
+          - MaxCapacity
+      - Label:
+          default: "4. Notificaciones y Alertas"
+        Parameters:
+          - AlertEmail
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    AllowedValues: [apm-sofi-prod, dev, staging]
+    Description: Prefijo identificador del entorno (coincidente con Fases 1, 2, 3 y 4).
+
+  DomainName:
+    Type: String
+    Default: cabanillas.net.pe
+    Description: Nombre de dominio público registrado para la solución.
+
+  Route53HostedZoneId:
+    Type: String
+    Description: ID de la Zona Alojada Pública en Route 53 para cabanillas.net.pe (ej. Z0123456789ABCDEF).
+
+  DesiredCount:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 4
+    Description: Número deseado de tareas Fargate concurrentes por servicio.
+
+  MinCapacity:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 2
+    Description: Capacidad mínima de Auto Scaling por servicio.
+
+  MaxCapacity:
+    Type: Number
+    Default: 4
+    MinValue: 2
+    MaxValue: 10
+    Description: Capacidad máxima de Auto Scaling por servicio.
+
+  AlertEmail:
+    Type: String
+    Default: jhefrycabanillas@gmail.com
+    Description: Correo electrónico para recibir notificaciones críticas de CloudWatch vía SNS.
+
+Conditions:
+  HasAlertEmail: !Not [!Equals [!Ref AlertEmail, '']]
+
+Resources:
+
+  # =========================================================================
+  # 1. CERTIFICADO SSL/TLS EN AWS CERTIFICATE MANAGER (Validación DNS Route 53)
+  # =========================================================================
+
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames:
+        - !Sub "*.${DomainName}"
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref DomainName
+          HostedZoneId: !Ref Route53HostedZoneId
+        - DomainName: !Sub "*.${DomainName}"
+          HostedZoneId: !Ref Route53HostedZoneId
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-acm-wildcard-cert"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # =========================================================================
+  # 2. APPLICATION LOAD BALANCER PÚBLICO MULTI-AZ
+  # =========================================================================
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub "${EnvironmentName}-alb"
+      Type: application
+      Scheme: internet-facing
+      IpAddressType: ipv4
+      SecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-AlbSecurityGroupId"
+      Subnets:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PublicSubnetA"
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PublicSubnetB"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-public-alb"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Phase
+          Value: Fase-5
+
+  # =========================================================================
+  # 3. TARGET GROUPS PARA FARGATE (Modo IP con Health Checks)
+  # =========================================================================
+
+  TargetGroupSofi:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${EnvironmentName}-tg-sofi"
+      Port: 3000
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckPath: /api/health
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: "200"
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-tg-sofi"
+        - Key: Project
+          Value: SOFI-APM
+
+  TargetGroupReflexo:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${EnvironmentName}-tg-reflexo"
+      Port: 3000
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckPath: /api/health
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: "200"
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-tg-reflexo"
+        - Key: Project
+          Value: ReflexoPeru
+
+  TargetGroupArteIdeas:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${EnvironmentName}-tg-arteideas"
+      Port: 3000
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckPath: /api/health
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: "200"
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-tg-arteideas"
+        - Key: Project
+          Value: ArteIdeas
+
+  # =========================================================================
+  # 4. LISTENERS Y ENRUTAMIENTO POR HOST HEADER
+  # =========================================================================
+
+  # Redirección HTTP (80) -> HTTPS (443)
+  HttpListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            Protocol: HTTPS
+            Port: "443"
+            StatusCode: HTTP_301
+
+  # Listener Seguro HTTPS (443)
+  HttpsListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-2021-06
+      Certificates:
+        - CertificateArn: !Ref SSLCertificate
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupSofi
+
+  # Regla 1: sofi.cabanillas.net.pe -> TargetGroupSofi
+  ListenerRuleSofi:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref HttpsListener
+      Priority: 10
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - !Sub "sofi.${DomainName}"
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupSofi
+
+  # Regla 2: reflexo.cabanillas.net.pe -> TargetGroupReflexo
+  ListenerRuleReflexo:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref HttpsListener
+      Priority: 20
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - !Sub "reflexo.${DomainName}"
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupReflexo
+
+  # Regla 3: arteideas.cabanillas.net.pe -> TargetGroupArteIdeas
+  ListenerRuleArteIdeas:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref HttpsListener
+      Priority: 30
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - !Sub "arteideas.${DomainName}"
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupArteIdeas
+
+  # =========================================================================
+  # 5. REGISTROS ROUTE 53 (Alias DNS hacia el ALB)
+  # =========================================================================
+
+  DnsRecordApex:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref Route53HostedZoneId
+      Name: !Sub "${DomainName}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+        DNSName: !GetAtt ApplicationLoadBalancer.DNSName
+        EvaluateTargetHealth: true
+
+  DnsRecordSofi:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref Route53HostedZoneId
+      Name: !Sub "sofi.${DomainName}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+        DNSName: !GetAtt ApplicationLoadBalancer.DNSName
+        EvaluateTargetHealth: true
+
+  DnsRecordReflexo:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref Route53HostedZoneId
+      Name: !Sub "reflexo.${DomainName}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+        DNSName: !GetAtt ApplicationLoadBalancer.DNSName
+        EvaluateTargetHealth: true
+
+  DnsRecordArteIdeas:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref Route53HostedZoneId
+      Name: !Sub "arteideas.${DomainName}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+        DNSName: !GetAtt ApplicationLoadBalancer.DNSName
+        EvaluateTargetHealth: true
+
+  # =========================================================================
+  # 6. SERVICIOS ECS FARGATE
+  # =========================================================================
+
+  SofiEcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub "${EnvironmentName}-sofi-service"
+      Cluster:
+        Fn::ImportValue: !Sub "${EnvironmentName}-ECSClusterArn"
+      TaskDefinition:
+        Fn::ImportValue: !Sub "${EnvironmentName}-SofiTaskDefinitionArn"
+      LaunchType: FARGATE
+      DesiredCount: !Ref DesiredCount
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-FargateSecurityGroupId"
+          Subnets:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetA"
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetB"
+      LoadBalancers:
+        - ContainerName: sofi-frontend
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroupSofi
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-sofi-service"
+        - Key: Project
+          Value: SOFI-APM
+
+  ReflexoEcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub "${EnvironmentName}-reflexo-service"
+      Cluster:
+        Fn::ImportValue: !Sub "${EnvironmentName}-ECSClusterArn"
+      TaskDefinition:
+        Fn::ImportValue: !Sub "${EnvironmentName}-ReflexoTaskDefinitionArn"
+      LaunchType: FARGATE
+      DesiredCount: !Ref DesiredCount
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-FargateSecurityGroupId"
+          Subnets:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetA"
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetB"
+      LoadBalancers:
+        - ContainerName: reflexo-frontend
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroupReflexo
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-reflexo-service"
+        - Key: Project
+          Value: ReflexoPeru
+
+  ArteIdeasEcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub "${EnvironmentName}-arteideas-service"
+      Cluster:
+        Fn::ImportValue: !Sub "${EnvironmentName}-ECSClusterArn"
+      TaskDefinition:
+        Fn::ImportValue: !Sub "${EnvironmentName}-ArteIdeasTaskDefinitionArn"
+      LaunchType: FARGATE
+      DesiredCount: !Ref DesiredCount
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-FargateSecurityGroupId"
+          Subnets:
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetA"
+            - Fn::ImportValue: !Sub "${EnvironmentName}-PrivateAppSubnetB"
+      LoadBalancers:
+        - ContainerName: arteideas-frontend
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroupArteIdeas
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-arteideas-service"
+        - Key: Project
+          Value: ArteIdeas
+
+  # =========================================================================
+  # 7. AUTO SCALING DE TAREAS ECS (Application Auto Scaling)
+  # =========================================================================
+
+  SofiScalableTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: !Ref MaxCapacity
+      MinCapacity: !Ref MinCapacity
+      ResourceId: !Sub
+        - "service/${ClusterName}/${ServiceName}"
+        - ClusterName:
+            Fn::ImportValue: !Sub "${EnvironmentName}-ECSClusterName"
+          ServiceName: !GetAtt SofiEcsService.Name
+      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  SofiCpuScalingPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Sub "${EnvironmentName}-sofi-cpu-scaling"
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref SofiScalableTarget
+      TargetTrackingScalingPolicyConfiguration:
+        TargetValue: 70.0
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 300
+        ScaleOutCooldown: 60
+
+  # =========================================================================
+  # 8. ALERTAS CLOUDWATCH Y NOTIFICACIONES SNS
+  # =========================================================================
+
+  DevOpsAlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "${EnvironmentName}-devops-alerts"
+      DisplayName: "Alertas Operativas y de Disponibilidad APM SOFI"
+
+  DevOpsAlertsSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties:
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+      TopicArn: !Ref DevOpsAlertsTopic
+
+  AlarmAlb5xx:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${EnvironmentName}-alb-high-5xx-errors"
+      AlarmDescription: "Disparada si el ALB genera más de 10 errores HTTP 5XX en 5 minutos"
+      Namespace: AWS/ApplicationELB
+      MetricName: HTTPCode_Target_5XX_Count
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref DevOpsAlertsTopic
+
+  AlarmSofiUnhealthyHost:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${EnvironmentName}-sofi-unhealthy-hosts"
+      AlarmDescription: "Disparada si el Target Group de SOFI detecta hosts no saludables"
+      Namespace: AWS/ApplicationELB
+      MetricName: UnHealthyHostCount
+      Dimensions:
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroupSofi.TargetGroupFullName
+        - Name: LoadBalancer
+          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref DevOpsAlertsTopic
+
+# =========================================================================
+# 9. OUTPUTS (Endpoints y URLs finales)
+# =========================================================================
+
+Outputs:
+  ALBDNSName:
+    Description: DNS público generado por AWS para el Application Load Balancer
+    Value: !GetAtt ApplicationLoadBalancer.DNSName
+    Export:
+      Name: !Sub "${EnvironmentName}-ALBDNSName"
+
+  ALBArn:
+    Description: ARN del Application Load Balancer
+    Value: !Ref ApplicationLoadBalancer
+    Export:
+      Name: !Sub "${EnvironmentName}-ALBArn"
+
+  SofiUrl:
+    Description: URL pública HTTPS de la Plataforma SOFI
+    Value: !Sub "https://sofi.${DomainName}"
+
+  ReflexoUrl:
+    Description: URL pública HTTPS de Reflexo Perú
+    Value: !Sub "https://reflexo.${DomainName}"
+
+  ArteIdeasUrl:
+    Description: URL pública HTTPS de Arte & Ideas
+    Value: !Sub "https://arteideas.${DomainName}"
+
+  DevOpsAlertsTopicArn:
+    Description: ARN del tópico SNS de alertas operativas
+    Value: !Ref DevOpsAlertsTopic
+    Export:
+      Name: !Sub "${EnvironmentName}-DevOpsAlertsTopicArn"

@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
-  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI)
+  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI y Portales B2B)
   Fase 3: Capa de Base de Datos y Almacenamiento (Persistencia Relacional y Jerarquía de Storage).
-  Provee Amazon RDS PostgreSQL 16 (gp3, Storage Autoscaling, Multi-AZ configurable, AWS Secrets Manager),
+  Provee 3 instancias dedicadas Amazon RDS PostgreSQL 16 (sofi_db, reflexo_db, arteideas_db) con AWS Secrets Manager,
   Amazon S3 con política de ciclo de vida (Standard -> Glacier Flexible), bloqueo de acceso público y TLS obligatorio,
-  y Amazon EFS para almacenamiento compartido con Lifecycle IA, puntos de montaje Multi-AZ y Access Point.
+  y Amazon EFS para almacenamiento compartido con Lifecycle IA, puntos de montaje Multi-AZ y Access Point /workspace.
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -19,10 +19,9 @@ Metadata:
           - DBInstanceClass
           - DBAllocatedStorage
           - DBMaxAllocatedStorage
-          - DBName
-          - DBMasterUsername
           - EnableMultiAZ
           - EnableEnhancedMonitoring
+          - EnableDeletionProtection
       - Label:
           default: "3. Parámetros de Almacenamiento (Amazon S3 & Glacier)"
         Parameters:
@@ -42,14 +41,14 @@ Parameters:
     Type: String
     Default: db.t3.micro
     AllowedValues: [db.t3.micro, db.t3.small, db.t4g.micro]
-    Description: Clase de cómputo para la BD (db.t3.micro alineado con el presupuesto TCO aprobado).
+    Description: Clase de cómputo para las 3 BDs (db.t3.micro para optimización de presupuesto).
 
   DBAllocatedStorage:
     Type: Number
     Default: 20
     MinValue: 20
     MaxValue: 100
-    Description: Capacidad inicial de disco SSD gp3 en GB para PostgreSQL.
+    Description: Capacidad inicial de disco SSD gp3 en GB para cada instancia PostgreSQL.
 
   DBMaxAllocatedStorage:
     Type: Number
@@ -57,16 +56,6 @@ Parameters:
     MinValue: 20
     MaxValue: 500
     Description: Umbral máximo para Storage Autoscaling de RDS (previene saturación de disco ante picos).
-
-  DBName:
-    Type: String
-    Default: sofi_db
-    Description: Nombre de la base de datos relacional para el ecosistema SOFI.
-
-  DBMasterUsername:
-    Type: String
-    Default: sofi_admin
-    Description: Nombre de usuario maestro administrador para PostgreSQL.
 
   EnableMultiAZ:
     Type: String
@@ -79,6 +68,12 @@ Parameters:
     Default: 'false'
     AllowedValues: ['true', 'false']
     Description: Habilitar monitoreo detallado de SO en CloudWatch consumiendo el rol exportado de Fase 2.
+
+  EnableDeletionProtection:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: Protección contra eliminación accidental. Dejar en 'false' para facilitar limpieza tras la presentación.
 
   S3BucketNamePrefix:
     Type: String
@@ -103,7 +98,7 @@ Parameters:
 Conditions:
   IsMultiAZ: !Equals [!Ref EnableMultiAZ, 'true']
   IsEnhancedMonitoringEnabled: !Equals [!Ref EnableEnhancedMonitoring, 'true']
-  IsProduction: !Equals [!Ref EnvironmentName, 'apm-sofi-prod']
+  IsDeletionProtectionEnabled: !Equals [!Ref EnableDeletionProtection, 'true']
 
 Resources:
 
@@ -111,36 +106,74 @@ Resources:
   # 1. GESTIÓN SEGURA DE CREDENCIALES (AWS Secrets Manager)
   # =========================================================================
 
-  RDSMasterSecret:
+  SofiRDSSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Sub "${EnvironmentName}/rds/postgres/credentials"
-      Description: !Sub "Credenciales maestras administradas para RDS PostgreSQL - ${EnvironmentName}"
+      Name: !Sub "${EnvironmentName}/rds/sofi/credentials"
+      Description: !Sub "Credenciales maestras administradas para RDS PostgreSQL - SOFI (${EnvironmentName})"
       GenerateSecretString:
-        SecretStringTemplate: !Sub '{"username": "${DBMasterUsername}"}'
+        SecretStringTemplate: '{"username": "sofi_admin"}'
         GenerateStringKey: "password"
         PasswordLength: 16
         ExcludeCharacters: '/@" \\'
       Tags:
         - Key: Name
-          Value: !Sub "${EnvironmentName}-rds-secret"
+          Value: !Sub "${EnvironmentName}-sofi-rds-secret"
         - Key: Environment
           Value: !Ref EnvironmentName
         - Key: Project
           Value: SOFI-APM
         - Key: Phase
           Value: Fase-3
-        - Key: ManagedBy
-          Value: grp-database-storage
+
+  ReflexoRDSSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${EnvironmentName}/rds/reflexo/credentials"
+      Description: !Sub "Credenciales maestras administradas para RDS PostgreSQL - Reflexo Peru (${EnvironmentName})"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "reflexo_admin"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '/@" \\'
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-reflexo-rds-secret"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: ReflexoPeru
+        - Key: Phase
+          Value: Fase-3
+
+  ArteIdeasRDSSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${EnvironmentName}/rds/arteideas/credentials"
+      Description: !Sub "Credenciales maestras administradas para RDS PostgreSQL - Arte & Ideas (${EnvironmentName})"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "arteideas_admin"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '/@" \\'
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-arteideas-rds-secret"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: ArteIdeas
+        - Key: Phase
+          Value: Fase-3
 
   # =========================================================================
-  # 2. AMAZON RDS POSTGRESQL 16 (Base de Datos Relacional Segura y Optimizada)
+  # 2. AMAZON RDS POSTGRESQL 16 (Grupo de Parámetros Compartido y 3 Instancias)
   # =========================================================================
 
   PostgresDBParameterGroup:
     Type: AWS::RDS::DBParameterGroup
     Properties:
-      Description: "Grupo de parametros optimizado para PostgreSQL 16 - SOFI"
+      Description: "Grupo de parametros optimizado para PostgreSQL 16 con SSL obligatorio"
       Family: postgres16
       Parameters:
         rds.force_ssl: "1"
@@ -149,24 +182,23 @@ Resources:
           Value: !Sub "${EnvironmentName}-pg16-parameters"
         - Key: Environment
           Value: !Ref EnvironmentName
-        - Key: Project
-          Value: SOFI-APM
         - Key: Phase
           Value: Fase-3
 
-  PostgresDBInstance:
+  # --- 2.1 RDS SOFI Platform (sofi_db) ---
+  PostgresDBInstanceSofi:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBInstanceIdentifier: !Sub "${EnvironmentName}-postgres"
-      DBName: !Ref DBName
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-sofi"
+      DBName: sofi_db
       Engine: postgres
       EngineVersion: "16.3"
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: !Ref DBAllocatedStorage
       MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
       StorageType: gp3
-      MasterUsername: !Ref DBMasterUsername
-      MasterUserPassword: !Sub "{{resolve:secretsmanager:${RDSMasterSecret}:SecretString:password}}"
+      MasterUsername: sofi_admin
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${SofiRDSSecret}:SecretString:password}}"
       DBSubnetGroupName:
         Fn::ImportValue: !Sub "${EnvironmentName}-RdsDbSubnetGroup"
       VPCSecurityGroups:
@@ -179,7 +211,7 @@ Resources:
       PreferredBackupWindow: "03:00-04:00"
       PreferredMaintenanceWindow: "Sun:04:30-Sun:05:30"
       StorageEncrypted: true
-      DeletionProtection: !If [IsProduction, true, false]
+      DeletionProtection: !If [IsDeletionProtectionEnabled, true, false]
       MonitoringInterval: !If [IsEnhancedMonitoringEnabled, 60, 0]
       MonitoringRoleArn: !If
         - IsEnhancedMonitoringEnabled
@@ -187,15 +219,97 @@ Resources:
         - !Ref "AWS::NoValue"
       Tags:
         - Key: Name
-          Value: !Sub "${EnvironmentName}-rds-postgres"
+          Value: !Sub "${EnvironmentName}-rds-sofi"
         - Key: Environment
           Value: !Ref EnvironmentName
         - Key: Project
           Value: SOFI-APM
         - Key: Phase
           Value: Fase-3
-        - Key: Team
-          Value: grp-database-storage
+
+  # --- 2.2 RDS Reflexo Perú (reflexo_db) ---
+  PostgresDBInstanceReflexo:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-reflexo"
+      DBName: reflexo_db
+      Engine: postgres
+      EngineVersion: "16.3"
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
+      StorageType: gp3
+      MasterUsername: reflexo_admin
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${ReflexoRDSSecret}:SecretString:password}}"
+      DBSubnetGroupName:
+        Fn::ImportValue: !Sub "${EnvironmentName}-RdsDbSubnetGroup"
+      VPCSecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsSecurityGroupId"
+      DBParameterGroupName: !Ref PostgresDBParameterGroup
+      MultiAZ: !Ref EnableMultiAZ
+      PubliclyAccessible: false
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 1
+      PreferredBackupWindow: "04:00-05:00"
+      PreferredMaintenanceWindow: "Sun:05:30-Sun:06:30"
+      StorageEncrypted: true
+      DeletionProtection: !If [IsDeletionProtectionEnabled, true, false]
+      MonitoringInterval: !If [IsEnhancedMonitoringEnabled, 60, 0]
+      MonitoringRoleArn: !If
+        - IsEnhancedMonitoringEnabled
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsEnhancedMonitoringRoleArn"
+        - !Ref "AWS::NoValue"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-rds-reflexo"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: ReflexoPeru
+        - Key: Phase
+          Value: Fase-3
+
+  # --- 2.3 RDS Arte & Ideas (arteideas_db) ---
+  PostgresDBInstanceArteIdeas:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-arteideas"
+      DBName: arteideas_db
+      Engine: postgres
+      EngineVersion: "16.3"
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
+      StorageType: gp3
+      MasterUsername: arteideas_admin
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${ArteIdeasRDSSecret}:SecretString:password}}"
+      DBSubnetGroupName:
+        Fn::ImportValue: !Sub "${EnvironmentName}-RdsDbSubnetGroup"
+      VPCSecurityGroups:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsSecurityGroupId"
+      DBParameterGroupName: !Ref PostgresDBParameterGroup
+      MultiAZ: !Ref EnableMultiAZ
+      PubliclyAccessible: false
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 1
+      PreferredBackupWindow: "05:00-06:00"
+      PreferredMaintenanceWindow: "Sun:06:30-Sun:07:30"
+      StorageEncrypted: true
+      DeletionProtection: !If [IsDeletionProtectionEnabled, true, false]
+      MonitoringInterval: !If [IsEnhancedMonitoringEnabled, 60, 0]
+      MonitoringRoleArn: !If
+        - IsEnhancedMonitoringEnabled
+        - Fn::ImportValue: !Sub "${EnvironmentName}-RdsEnhancedMonitoringRoleArn"
+        - !Ref "AWS::NoValue"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-rds-arteideas"
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Project
+          Value: ArteIdeas
+        - Key: Phase
+          Value: Fase-3
 
   # =========================================================================
   # 3. AMAZON S3 & POLÍTICA DE RETENCIÓN S3 GLACIER (Storage Inmutable y Cifrado)
@@ -329,34 +443,100 @@ Resources:
           Value: Fase-3
 
 # =========================================================================
-# 5. OUTPUTS (Salidas exportadas de forma predecible para Fases 4 y 5)
+# 5. OUTPUTS (Salidas exportadas para Fases 4 y 5)
 # =========================================================================
 
 Outputs:
+
+  # --- SOFI Outputs ---
+  SofiRDSEndpointAddress:
+    Description: "Endpoint DNS de la base de datos PostgreSQL de SOFI"
+    Value: !GetAtt PostgresDBInstanceSofi.Endpoint.Address
+    Export:
+      Name: !Sub "${EnvironmentName}-SofiRDSEndpointAddress"
+
+  SofiRDSEndpointPort:
+    Description: "Puerto de conexion PostgreSQL de SOFI"
+    Value: !GetAtt PostgresDBInstanceSofi.Endpoint.Port
+    Export:
+      Name: !Sub "${EnvironmentName}-SofiRDSEndpointPort"
+
+  SofiRDSSecretArn:
+    Description: "ARN del secreto en AWS Secrets Manager con credenciales de SOFI"
+    Value: !Ref SofiRDSSecret
+    Export:
+      Name: !Sub "${EnvironmentName}-SofiRDSSecretArn"
+
+  SofiRDSSecretName:
+    Description: "Nombre del secreto de SOFI para Fargate"
+    Value: !Sub "${EnvironmentName}/rds/sofi/credentials"
+    Export:
+      Name: !Sub "${EnvironmentName}-SofiRDSSecretName"
+
+  # Alias de compatibilidad hacia SOFI
   RDSEndpointAddress:
-    Description: "Punto de enlace (Endpoint DNS) de la base de datos PostgreSQL para backend NestJS"
-    Value: !GetAtt PostgresDBInstance.Endpoint.Address
+    Description: "Endpoint DNS de la base de datos PostgreSQL principal (SOFI)"
+    Value: !GetAtt PostgresDBInstanceSofi.Endpoint.Address
     Export:
       Name: !Sub "${EnvironmentName}-RDSEndpointAddress"
 
-  RDSEndpointPort:
-    Description: "Puerto de conexion de PostgreSQL"
-    Value: !GetAtt PostgresDBInstance.Endpoint.Port
-    Export:
-      Name: !Sub "${EnvironmentName}-RDSEndpointPort"
-
   RDSSecretArn:
-    Description: "ARN del secreto en AWS Secrets Manager con las credenciales de la BD"
-    Value: !Ref RDSMasterSecret
+    Description: "ARN del secreto en AWS Secrets Manager de la base de datos principal"
+    Value: !Ref SofiRDSSecret
     Export:
       Name: !Sub "${EnvironmentName}-RDSSecretArn"
 
-  RDSSecretName:
-    Description: "Nombre del secreto de base de datos para integracion en tareas ECS Fargate"
-    Value: !Sub "${EnvironmentName}/rds/postgres/credentials"
+  # --- Reflexo Peru Outputs ---
+  ReflexoRDSEndpointAddress:
+    Description: "Endpoint DNS de la base de datos PostgreSQL de Reflexo Peru"
+    Value: !GetAtt PostgresDBInstanceReflexo.Endpoint.Address
     Export:
-      Name: !Sub "${EnvironmentName}-RDSSecretName"
+      Name: !Sub "${EnvironmentName}-ReflexoRDSEndpointAddress"
 
+  ReflexoRDSEndpointPort:
+    Description: "Puerto de conexion PostgreSQL de Reflexo Peru"
+    Value: !GetAtt PostgresDBInstanceReflexo.Endpoint.Port
+    Export:
+      Name: !Sub "${EnvironmentName}-ReflexoRDSEndpointPort"
+
+  ReflexoRDSSecretArn:
+    Description: "ARN del secreto en AWS Secrets Manager con credenciales de Reflexo Peru"
+    Value: !Ref ReflexoRDSSecret
+    Export:
+      Name: !Sub "${EnvironmentName}-ReflexoRDSSecretArn"
+
+  ReflexoRDSSecretName:
+    Description: "Nombre del secreto de Reflexo Peru para Fargate"
+    Value: !Sub "${EnvironmentName}/rds/reflexo/credentials"
+    Export:
+      Name: !Sub "${EnvironmentName}-ReflexoRDSSecretName"
+
+  # --- Arte & Ideas Outputs ---
+  ArteIdeasRDSEndpointAddress:
+    Description: "Endpoint DNS de la base de datos PostgreSQL de Arte & Ideas"
+    Value: !GetAtt PostgresDBInstanceArteIdeas.Endpoint.Address
+    Export:
+      Name: !Sub "${EnvironmentName}-ArteIdeasRDSEndpointAddress"
+
+  ArteIdeasRDSEndpointPort:
+    Description: "Puerto de conexion PostgreSQL de Arte & Ideas"
+    Value: !GetAtt PostgresDBInstanceArteIdeas.Endpoint.Port
+    Export:
+      Name: !Sub "${EnvironmentName}-ArteIdeasRDSEndpointPort"
+
+  ArteIdeasRDSSecretArn:
+    Description: "ARN del secreto en AWS Secrets Manager con credenciales de Arte & Ideas"
+    Value: !Ref ArteIdeasRDSSecret
+    Export:
+      Name: !Sub "${EnvironmentName}-ArteIdeasRDSSecretArn"
+
+  ArteIdeasRDSSecretName:
+    Description: "Nombre del secreto de Arte & Ideas para Fargate"
+    Value: !Sub "${EnvironmentName}/rds/arteideas/credentials"
+    Export:
+      Name: !Sub "${EnvironmentName}-ArteIdeasRDSSecretName"
+
+  # --- Storage & Filesystem Outputs ---
   S3BucketName:
     Description: "Nombre unico global del bucket S3 para almacenamiento y LMS"
     Value: !Ref SofiStorageBucket
