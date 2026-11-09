@@ -791,12 +791,12 @@ Resources:
           FromPort: 3000
           ToPort: 3000
           SourceSecurityGroupId: !Ref AlbSecurityGroup
-          Description: 'Vista previa web frontend del practicante (<nombre>-web) exclusiva desde el ALB'
+          Description: 'Vista previa web frontend del practicante (nombre-web) exclusiva desde el ALB'
         - IpProtocol: tcp
           FromPort: 8080
           ToPort: 8080
           SourceSecurityGroupId: !Ref AlbSecurityGroup
-          Description: 'Vista previa API backend del practicante (<nombre>-api) exclusiva desde el ALB'
+          Description: 'Vista previa API backend del practicante (nombre-api) exclusiva desde el ALB'
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 443
