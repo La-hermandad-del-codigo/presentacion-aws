@@ -54,9 +54,9 @@ Parameters:
 
   EnableTestInstances:
     Type: String
-    Default: 'true'
+    Default: 'false'
     AllowedValues: ['true', 'false']
-    Description: 'Desplegar instancias EC2 de prueba (t3.micro) para validar conectividad externa y aislamiento este-oeste.'
+    Description: 'Desplegar instancias EC2 de prueba (t3.micro) para validar conectividad externa y aislamiento este-oeste (requiere Fase 2 previa).'
 
   TestInstanceType:
     Type: String
@@ -261,8 +261,26 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
 
   # =========================================================================
-  # 7. TABLA DE RUTEO PRIVADA (COMPUTO Y GESTION) + GATEWAY ENDPOINT S3
+  # 7. NAT GATEWAY (SINGLE-AZ FINOPS) + TABLA DE RUTEO PRIVADA + S3 ENDPOINT
   # =========================================================================
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-nat-eip'
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGatewayEIP.AllocationId
+      SubnetId: !Ref PublicSubnetA
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-nat-gw-a'
+
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -270,6 +288,13 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub '${EnvironmentName}-private-rt'
+
+  PrivateDefaultRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
 
   PrivateAppSubnetARouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation

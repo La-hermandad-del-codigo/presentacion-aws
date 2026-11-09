@@ -192,7 +192,7 @@ Resources:
       DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-sofi"
       DBName: sofi_db
       Engine: postgres
-      EngineVersion: "16.3"
+      EngineVersion: "16"
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: !Ref DBAllocatedStorage
       MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
@@ -234,7 +234,7 @@ Resources:
       DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-reflexo"
       DBName: reflexo_db
       Engine: postgres
-      EngineVersion: "16.3"
+      EngineVersion: "16"
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: !Ref DBAllocatedStorage
       MaxAllocatedStorage: !Ref DBMaxAllocatedStorage
@@ -276,7 +276,7 @@ Resources:
       DBInstanceIdentifier: !Sub "${EnvironmentName}-rds-arteideas"
       DBName: arteideas_db
       Engine: postgres
-      EngineVersion: "16.3"
+      EngineVersion: "16"
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: !Ref DBAllocatedStorage
       MaxAllocatedStorage: !Ref DBMaxAllocatedStorage

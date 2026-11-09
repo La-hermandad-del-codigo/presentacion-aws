@@ -15,12 +15,11 @@ Parameters:
 
   DeployPerimeterSecurity:
     Type: String
-    Default: 'false'
+    Default: 'true'
     AllowedValues: ['true', 'false']
     Description: >
-      Establecer en 'false' en el Paso 1 (antes de crear la VPC) para crear primero IAM
-      (Usuarios, Grupos, Politicas y Roles). Cambiar a 'true' en el Paso 3 (luego de crear
-      la VPC) para aprovisionar Security Groups y NACLs.
+      Establecer en 'true' cuando la VPC (Fase 1) ya está creada para aprovisionar
+      IAM + Security Groups + NACLs en un solo paso.
 
   CreateTeamUsers:
     Type: String
@@ -722,10 +721,20 @@ Resources:
           CidrIp: !Ref VpcCIDR
           Description: 'Consultas SQL hacia la subred de base de datos RDS'
         - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: !Ref VpcCIDR
+          Description: 'Montaje NFS hacia puntos de acceso Amazon EFS'
+        - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
           Description: 'Salida HTTPS hacia APIs externas (Discord Gateway, ECR, CloudWatch Logs, SSM)'
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: 'Salida HTTP auxiliar para resolucion de paquetes'
       Tags:
         - Key: Name
           Value: !Sub '${EnvironmentName}-sg-sofi-fargate-tasks'
@@ -753,6 +762,16 @@ Resources:
           ToPort: 443
           CidrIp: 0.0.0.0/0
           Description: 'Trafico HTTPS cifrado hacia endpoints de AWS Systems Manager y repositorios'
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: 'Trafico HTTP hacia mirrors de paquetes Linux'
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: 'Salida SSH hacia GitHub (git@github.com) para practicantes'
         - IpProtocol: tcp
           FromPort: 2049
           ToPort: 2049
@@ -1108,6 +1127,34 @@ Resources:
         From: 443
         To: 443
 
+  PrivateAppNaclOutboundHttp:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 115
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+
+  PrivateAppNaclOutboundNfs:
+    Type: AWS::EC2::NetworkAclEntry
+    Condition: ShouldDeployPerimeter
+    Properties:
+      NetworkAclId: !Ref PrivateAppSubnetNetworkAcl
+      RuleNumber: 118
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: !Ref VpcCIDR
+      PortRange:
+        From: 2049
+        To: 2049
+
   PrivateAppNaclOutboundEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Condition: ShouldDeployPerimeter
@@ -1293,6 +1340,16 @@ Outputs:
         - !Sub 'arn:aws:iam::${AWS::AccountId}:instance-profile/${ExistingLabRoleName}'
     Export:
       Name: !Sub '${EnvironmentName}-EC2InstanceProfileArn'
+
+  EC2InstanceProfileName:
+    Description: Nombre fisico del Instance Profile para AWS::EC2::Instance
+    Value:
+      Fn::If:
+        - CreateCustomRoles
+        - !Ref EC2DevInstanceProfile
+        - !Ref ExistingLabRoleName
+    Export:
+      Name: !Sub '${EnvironmentName}-EC2InstanceProfileName'
 
   EcsTaskExecutionRoleArn:
     Description: ARN del rol de ejecucion de tareas ECS Fargate

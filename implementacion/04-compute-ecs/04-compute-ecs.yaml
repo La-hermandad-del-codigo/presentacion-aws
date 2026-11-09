@@ -52,6 +52,17 @@ Parameters:
     Default: latest
     Description: Etiqueta inicial de las imágenes Docker para las Task Definitions de ECS.
 
+  DiscordWebhookUrl:
+    Type: String
+    Default: ""
+    Description: (Opcional) URL del Webhook de Discord para notificaciones de la plataforma SOFI.
+
+  DiscordBotToken:
+    Type: String
+    Default: ""
+    NoEcho: true
+    Description: (Opcional) Token del Bot de Discord para comandos interactivos de SOFI.
+
 Resources:
 
   # =========================================================================
@@ -402,6 +413,8 @@ Resources:
             - Name: S3_BUCKET_NAME
               Value:
                 Fn::ImportValue: !Sub "${EnvironmentName}-S3BucketName"
+            - Name: DISCORD_WEBHOOK_URL
+              Value: !Ref DiscordWebhookUrl
           Secrets:
             - Name: DB_PASSWORD
               ValueFrom:
@@ -432,6 +445,8 @@ Resources:
               Value: sofi_db
             - Name: DB_USERNAME
               Value: sofi_admin
+            - Name: DISCORD_BOT_TOKEN
+              Value: !Ref DiscordBotToken
           Secrets:
             - Name: DB_PASSWORD
               ValueFrom:
@@ -596,7 +611,7 @@ Resources:
       SecurityGroupIds:
         - Fn::ImportValue: !Sub "${EnvironmentName}-DevSecurityGroupId"
       IamInstanceProfile:
-        Fn::ImportValue: !Sub "${EnvironmentName}-EC2InstanceProfileArn"
+        Fn::ImportValue: !Sub "${EnvironmentName}-EC2InstanceProfileName"
       BlockDeviceMappings:
         - DeviceName: /dev/xvda
           Ebs:

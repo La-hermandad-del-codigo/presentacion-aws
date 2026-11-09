@@ -8,7 +8,7 @@ Documento técnico descriptivo que consolida la arquitectura implementada en las
 
 | Fase | Archivo CloudFormation | Dominio Arquitectónico | Componentes Clave |
 | :--- | :--- | :--- | :--- |
-| **Fase 1** | `01-networking-vpc.yaml` | Redes y Alta Disponibilidad | VPC `10.0.0.0/16`, 7 subredes Multi-AZ, Internet Gateway, S3 Gateway Endpoint. |
+| **Fase 1** | `01-networking-vpc.yaml` | Redes y Alta Disponibilidad | VPC `10.0.0.0/16`, 7 subredes Multi-AZ, Internet Gateway, NAT Gateway Single-AZ, S3 Gateway Endpoint. |
 | **Fase 2** | `02-security-iam.yaml` | Seguridad e Identidad (PoLP) | Roles IAM (`EC2Dev`, `EcsTaskExecution`, `EcsTask`), Security Groups en capas, NACLs. |
 | **Fase 3** | `03-database-storage.yaml` | Persistencia y Storage | 3 RDS PostgreSQL 16 (`db.t3.micro`), 3 Secretos en Secrets Manager, S3 Glacier, EFS `/workspace`. |
 | **Fase 4** | `04-compute-ecs.yaml` | Cómputo ECS y EC2 Dev | 7 Repositorios ECR, Clúster ECS, Task Definitions Fargate, EC2 Dev (Zero-SSH, SSM, Neovim/Tmux). |
@@ -28,19 +28,20 @@ Documento técnico descriptivo que consolida la arquitectura implementada en las
   * `PublicSubnetB`: `10.0.2.0/24` (AZ `us-east-1b`).
   * Ruteo directo al `InternetGateway`.
 * **Subredes Privadas de Aplicación (Capa de Cómputo Fargate & EFS):**
-  * `PrivateAppSubnetA`: `10.0.11.0/24` (AZ `us-east-1a`).
-  * `PrivateAppSubnetB`: `10.0.12.0/24` (AZ `us-east-1b`).
+  * `PrivateAppSubnetA`: `10.0.10.0/24` (AZ `us-east-1a`).
+  * `PrivateAppSubnetB`: `10.0.20.0/24` (AZ `us-east-1b`).
   * Sin asignación de IP pública (`MapPublicIpOnLaunch: false`).
 * **Subred Privada de Desarrollo (Estación EC2 Practicantes):**
-  * `PrivateDevSubnetA`: `10.0.21.0/24` (AZ `us-east-1a`).
+  * `PrivateDevSubnetA`: `10.0.30.0/24` (AZ `us-east-1a`).
   * Aislamiento de workstations sin exposición perimetral.
 * **Subredes Aisladas de Base de Datos (Persistencia RDS):**
-  * `IsolatedDbSubnetA`: `10.0.31.0/24` (AZ `us-east-1a`).
-  * `IsolatedDbSubnetB`: `10.0.32.0/24` (AZ `us-east-1b`).
+  * `IsolatedDbSubnetA`: `10.0.100.0/24` (AZ `us-east-1a`).
+  * `IsolatedDbSubnetB`: `10.0.101.0/24` (AZ `us-east-1b`).
   * Asociadas al recurso `DBSubnetGroup` sin tabla de ruteo hacia Internet Gateway (aislamiento criptográfico y de red).
 
-### 1.3 VPC Endpoints
-* **S3 Gateway Endpoint:** Asociado a todas las tablas de enrutamiento privadas para tráfico directo hacia Amazon S3 sin costos de transferencia por NAT Gateway.
+### 1.3 NAT Gateway (FinOps) y VPC Endpoints
+* **NAT Gateway Single-AZ (`PublicSubnetA`):** Provee salida segura a Internet (`0.0.0.0/0`) en `PrivateRouteTable` para que las tareas Fargate (`AssignPublicIp: DISABLED`) descarguen imágenes de ECR, lean secretos, conecten el bot de Discord, y para que la instancia EC2 Dev se registre en SSM Session Manager e instale paquetes desde GitHub.
+* **S3 Gateway Endpoint:** Asociado a `PrivateRouteTable` para tráfico directo hacia Amazon S3 sin pasar por el NAT Gateway ni generar cargos de transferencia.
 
 ---
 

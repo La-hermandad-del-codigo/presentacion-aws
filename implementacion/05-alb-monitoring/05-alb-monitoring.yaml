@@ -339,6 +339,9 @@ Resources:
 
   SofiEcsService:
     Type: AWS::ECS::Service
+    DependsOn:
+      - HttpsListener
+      - ListenerRuleSofi
     Properties:
       ServiceName: !Sub "${EnvironmentName}-sofi-service"
       Cluster:
@@ -370,6 +373,9 @@ Resources:
 
   ReflexoEcsService:
     Type: AWS::ECS::Service
+    DependsOn:
+      - HttpsListener
+      - ListenerRuleReflexo
     Properties:
       ServiceName: !Sub "${EnvironmentName}-reflexo-service"
       Cluster:
@@ -401,6 +407,9 @@ Resources:
 
   ArteIdeasEcsService:
     Type: AWS::ECS::Service
+    DependsOn:
+      - HttpsListener
+      - ListenerRuleArteIdeas
     Properties:
       ServiceName: !Sub "${EnvironmentName}-arteideas-service"
       Cluster:
