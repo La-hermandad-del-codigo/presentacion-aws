@@ -69,8 +69,15 @@ Parameters:
     Default: jhefrycabanillas@gmail.com
     Description: Correo electrónico para recibir notificaciones críticas de CloudWatch vía SNS.
 
+  DeploySofi:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: Determina si se despliegan el servicio ECS, Target Group y DNS de SOFI Platform.
+
 Conditions:
   HasAlertEmail: !Not [!Equals [!Ref AlertEmail, '']]
+  IsSofiEnabled: !Equals [!Ref DeploySofi, 'true']
 
 Resources:
 
@@ -87,8 +94,6 @@ Resources:
       ValidationMethod: DNS
       DomainValidationOptions:
         - DomainName: !Ref DomainName
-          HostedZoneId: !Ref Route53HostedZoneId
-        - DomainName: !Sub "*.${DomainName}"
           HostedZoneId: !Ref Route53HostedZoneId
       Tags:
         - Key: Name
@@ -126,6 +131,7 @@ Resources:
 
   TargetGroupSofi:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Condition: IsSofiEnabled
     Properties:
       Name: !Sub "${EnvironmentName}-tg-sofi"
       Port: 3000
@@ -134,7 +140,7 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
       HealthCheckEnabled: true
-      HealthCheckPath: /api/health
+      HealthCheckPath: /
       HealthCheckPort: "3000"
       HealthCheckProtocol: HTTP
       HealthCheckIntervalSeconds: 30
@@ -142,7 +148,7 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 3
       Matcher:
-        HttpCode: "200"
+        HttpCode: "200-399"
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: "30"
@@ -162,7 +168,7 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
       HealthCheckEnabled: true
-      HealthCheckPath: /api/health
+      HealthCheckPath: /
       HealthCheckPort: "3000"
       HealthCheckProtocol: HTTP
       HealthCheckIntervalSeconds: 30
@@ -170,7 +176,7 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 3
       Matcher:
-        HttpCode: "200"
+        HttpCode: "200-399"
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: "30"
@@ -190,7 +196,7 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
       HealthCheckEnabled: true
-      HealthCheckPath: /api/health
+      HealthCheckPath: /
       HealthCheckPort: "3000"
       HealthCheckProtocol: HTTP
       HealthCheckIntervalSeconds: 30
@@ -198,7 +204,7 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 3
       Matcher:
-        HttpCode: "200"
+        HttpCode: "200-399"
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: "30"
@@ -237,12 +243,16 @@ Resources:
       Certificates:
         - CertificateArn: !Ref SSLCertificate
       DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref TargetGroupSofi
+        - Type: fixed-response
+          FixedResponseConfig:
+            ContentType: text/plain
+            MessageBody: "APM Inversiones - Service Unavailable or Not Found"
+            StatusCode: "404"
 
   # Regla 1: sofi.cabanillas.net.pe -> TargetGroupSofi
   ListenerRuleSofi:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Condition: IsSofiEnabled
     Properties:
       ListenerArn: !Ref HttpsListener
       Priority: 10
@@ -302,6 +312,7 @@ Resources:
 
   DnsRecordSofi:
     Type: AWS::Route53::RecordSet
+    Condition: IsSofiEnabled
     Properties:
       HostedZoneId: !Ref Route53HostedZoneId
       Name: !Sub "sofi.${DomainName}."
@@ -339,6 +350,7 @@ Resources:
 
   SofiEcsService:
     Type: AWS::ECS::Service
+    Condition: IsSofiEnabled
     DependsOn:
       - HttpsListener
       - ListenerRuleSofi
@@ -445,6 +457,7 @@ Resources:
 
   SofiScalableTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Condition: IsSofiEnabled
     Properties:
       MaxCapacity: !Ref MaxCapacity
       MinCapacity: !Ref MinCapacity
@@ -459,6 +472,7 @@ Resources:
 
   SofiCpuScalingPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Condition: IsSofiEnabled
     Properties:
       PolicyName: !Sub "${EnvironmentName}-sofi-cpu-scaling"
       PolicyType: TargetTrackingScaling
@@ -508,6 +522,7 @@ Resources:
 
   AlarmSofiUnhealthyHost:
     Type: AWS::CloudWatch::Alarm
+    Condition: IsSofiEnabled
     Properties:
       AlarmName: !Sub "${EnvironmentName}-sofi-unhealthy-hosts"
       AlarmDescription: "Disparada si el Target Group de SOFI detecta hosts no saludables"
@@ -568,6 +583,7 @@ Outputs:
       Name: !Sub "${EnvironmentName}-DomainName"
 
   SofiUrl:
+    Condition: IsSofiEnabled
     Description: URL pública HTTPS de la Plataforma SOFI
     Value: !Sub "https://sofi.${DomainName}"
 
