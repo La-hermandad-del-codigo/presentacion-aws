@@ -154,7 +154,7 @@ Resources:
               - ssm:TerminateSession
               - ssm:ResumeSession
             Resource:
-              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:session/$${aws:username}-*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:session/${!aws:username}-*"
 
           # 4. ABAC: Solo puede encender, detener o reiniciar su propia instancia EC2
           - Sid: AllowPowerControlOnlyOnOwnInstance
@@ -227,14 +227,12 @@ Resources:
             ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
 
             # 6. Lazygit nativo para ARM64
-            LAZYGIT_VERSION="0.44.1"
-            curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v$${LAZYGIT_VERSION}/lazygit_$${LAZYGIT_VERSION}_Linux_arm64.tar.gz"
+            curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v0.44.1/lazygit_0.44.1_Linux_arm64.tar.gz"
             tar -xzf /tmp/lazygit.tar.gz -C /usr/local/bin lazygit
             chmod +x /usr/local/bin/lazygit
 
             # 7. Lazysql (TUI para Bases de Datos Relacionales) nativo para ARM64
-            LAZYSQL_VERSION="0.3.2"
-            curl -Lo /tmp/lazysql.tar.gz "https://github.com/jorgerojas26/lazysql/releases/download/v$${LAZYSQL_VERSION}/lazysql_Linux_arm64.tar.gz"
+            curl -Lo /tmp/lazysql.tar.gz "https://github.com/jorgerojas26/lazysql/releases/download/v0.3.2/lazysql_Linux_arm64.tar.gz"
             tar -xzf /tmp/lazysql.tar.gz -C /usr/local/bin lazysql
             chmod +x /usr/local/bin/lazysql
 
@@ -256,17 +254,15 @@ Resources:
             sudo -u ${PracticanteUsername} git config --global credential.helper store
 
             # 10. Preinstalacion de LazyVim
-            USER_HOME="/home/${PracticanteUsername}"
-            sudo -u ${PracticanteUsername} git clone https://github.com/LazyVim/starter "$${USER_HOME}/.config/nvim" || true
-            rm -rf "$${USER_HOME}/.config/nvim/.git" || true
-            chown -R ${PracticanteUsername}:${PracticanteUsername} "$${USER_HOME}/.config"
+            USER_DIR="/home/${PracticanteUsername}"
+            sudo -u ${PracticanteUsername} git clone https://github.com/LazyVim/starter "$USER_DIR/.config/nvim" || true
+            rm -rf "$USER_DIR/.config/nvim/.git" || true
+            chown -R ${PracticanteUsername}:${PracticanteUsername} "$USER_DIR/.config"
 
             # 11. Montaje de Amazon EFS compartido en /workspace y carpeta propia del practicante
             mkdir -p /workspace
-            EFS_FS_ID="${EfsId}"
-            EFS_AP_ID="${EfsApId}"
-            mount -t efs -o tls,accesspoint=$${EFS_AP_ID} $${EFS_FS_ID}:/ /workspace || true
-            echo "$${EFS_FS_ID}:/ /workspace efs _netdev,tls,accesspoint=$${EFS_AP_ID} 0 0" >> /etc/fstab
+            mount -t efs -o tls,accesspoint=${EfsApId} ${EfsId}:/ /workspace || true
+            echo "${EfsId}:/ /workspace efs _netdev,tls,accesspoint=${EfsApId} 0 0" >> /etc/fstab
 
             mkdir -p "/workspace/${PracticanteUsername}"
             chown -R ${PracticanteUsername}:${PracticanteUsername} "/workspace/${PracticanteUsername}"
