@@ -1,0 +1,451 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI)
+  Fase 6 (Plantilla Reutilizable / Service Catalog): Onboarding Automatizado de Practicante.
+  Aprovisiona en un solo paso:
+  1) Usuario IAM del practicante con bloqueo ABAC por Tag (Owner=${aws:username}),
+  2) Instancia EC2 Graviton ARM64 (t4g.small) en subred privada con SSM (Zero-SSH), EFS (/workspace),
+     Neovim + LazyVim, Lazygit, Lazysql, pgcli, psql, Git preconfigurado, GitHub CLI (gh), Tmux y Docker,
+  3) Dos Target Groups, reglas en el ALB y 2 subdominios HTTPS dedicados en Route 53:
+     - https://<practicante>-web.cabanillas.net.pe (Puerto 3000 - Frontend)
+     - https://<practicante>-api.cabanillas.net.pe (Puerto 8080 - Backend)
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "1. Datos del Practicante (Identidad IAM, Linux, Git y Subdominios)"
+        Parameters:
+          - PracticanteUsername
+          - PracticanteEmail
+          - PracticanteInitialPassword
+      - Label:
+          default: "2. Prioridades de Enrutamiento en el ALB (Unicas por Practicante)"
+        Parameters:
+          - RulePriorityWeb
+          - RulePriorityApi
+      - Label:
+          default: "3. Especificaciones de la Estacion EC2 Graviton (ARM64)"
+        Parameters:
+          - EC2InstanceType
+          - EC2Arm64AmiId
+          - EnvironmentName
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: apm-sofi-prod
+    AllowedValues: [apm-sofi-prod, dev, staging]
+    Description: Prefijo identificador del entorno (debe coincidir con las Fases 1 a 5).
+
+  PracticanteUsername:
+    Type: String
+    AllowedPattern: "^[a-z][a-z0-9-]{2,19}$"
+    ConstraintDescription: Debe contener solo letras minusculas, numeros o guiones (3 a 20 caracteres, ej. pedro, practicante1).
+    Description: >
+      Identificador unico del practicante. Creara el usuario IAM, el usuario Linux en EC2,
+      la configuracion de Git y los subdominios <nombre>-web y <nombre>-api.
+
+  PracticanteEmail:
+    Type: String
+    Default: practicante@senati.pe
+    Description: Correo del practicante para configurar sus commits locales en Git (git config user.email).
+
+  PracticanteInitialPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Default: "Senati2026*AWS"
+    Description: Contrasena inicial para que el practicante inicie sesion en la consola web de AWS.
+
+  RulePriorityWeb:
+    Type: Number
+    Default: 100
+    MinValue: 50
+    MaxValue: 49000
+    Description: Prioridad unica de la regla en el ALB para el subdominio Frontend (<nombre>-web). Si creas otro practicante, usa ej. 110.
+
+  RulePriorityApi:
+    Type: Number
+    Default: 101
+    MinValue: 51
+    MaxValue: 49001
+    Description: Prioridad unica de la regla en el ALB para el subdominio Backend (<nombre>-api). Si creas otro practicante, usa ej. 111.
+
+  EC2InstanceType:
+    Type: String
+    Default: t4g.small
+    AllowedValues: [t4g.small, t4g.micro, t4g.medium]
+    Description: Instancia AWS Graviton2 (ARM64). t4g.small provee 2 vCPU y 2 GiB RAM (apta para capa gratuita).
+
+  EC2Arm64AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64
+    Description: AMI oficial Amazon Linux 2023 para arquitectura ARM64 (AWS Graviton).
+
+Resources:
+
+  # =========================================================================
+  # 1. IDENTIDAD IAM DEL PRACTICANTE + AISLAMIENTO ABAC POR TAG (Owner)
+  # =========================================================================
+
+  PracticanteIamUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Ref PracticanteUsername
+      LoginProfile:
+        Password: !Ref PracticanteInitialPassword
+        PasswordResetRequired: false
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+      Tags:
+        - Key: Role
+          Value: Practicante-Developer
+        - Key: Owner
+          Value: !Ref PracticanteUsername
+        - Key: Project
+          Value: SOFI-APM
+
+  PracticanteAbacPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub "${EnvironmentName}-pol-abac-${PracticanteUsername}"
+      Users:
+        - !Ref PracticanteIamUser
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          # 1. Lectura minima para visualizar la consola de EC2 y Systems Manager
+          - Sid: AllowReadEc2AndSsmConsole
+            Effect: Allow
+            Action:
+              - ec2:DescribeInstances
+              - ec2:DescribeInstanceStatus
+              - ec2:DescribeTags
+              - ssm:DescribeInstanceInformation
+              - ssm:DescribeSessions
+              - ssm:GetConnectionStatus
+            Resource: '*'
+
+          # 2. ABAC: Solo puede conectarse por SSM a la EC2 que tenga el Tag Owner = su propio usuario IAM
+          - Sid: AllowSsmSessionOnlyOnOwnInstance
+            Effect: Allow
+            Action:
+              - ssm:StartSession
+            Resource:
+              - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+            Condition:
+              StringEquals:
+                ssm:resourceTag/Owner: "${aws:username}"
+
+          # 3. Permitir el documento de sesion interactiva y Port Forwarding de SSM
+          - Sid: AllowSsmDocumentsAndOwnSessionControl
+            Effect: Allow
+            Action:
+              - ssm:StartSession
+            Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}::document/AWS-StartSession"
+              - !Sub "arn:aws:ssm:${AWS::Region}::document/AWS-StartPortForwardingSession"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:document/*"
+
+          - Sid: AllowTerminateAndResumeOwnSession
+            Effect: Allow
+            Action:
+              - ssm:TerminateSession
+              - ssm:ResumeSession
+            Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:session/$${aws:username}-*"
+
+          # 4. ABAC: Solo puede encender, detener o reiniciar su propia instancia EC2
+          - Sid: AllowPowerControlOnlyOnOwnInstance
+            Effect: Allow
+            Action:
+              - ec2:StartInstances
+              - ec2:StopInstances
+              - ec2:RebootInstances
+            Resource:
+              - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+            Condition:
+              StringEquals:
+                ec2:ResourceTag/Owner: "${aws:username}"
+
+  # =========================================================================
+  # 2. ESTACIÓN DE TRABAJO DEDICADA EC2 GRAVITON (t4g.small ARM64)
+  # =========================================================================
+
+  PracticanteEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref EC2InstanceType
+      ImageId: !Ref EC2Arm64AmiId
+      SubnetId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-PrivateDevSubnetA"
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-DevSecurityGroupId"
+      IamInstanceProfile:
+        Fn::ImportValue: !Sub "${EnvironmentName}-EC2InstanceProfileName"
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 25
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: true
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash
+            set -euo pipefail
+            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "=== INICIANDO PROVISIONAMIENTO DE ESTACION EC2 ARM64 PARA: ${PracticanteUsername} ==="
+
+            # 1. Paquetes base, compiladores (para Treesitter), Tmux, Git, PostgreSQL 16 (psql) y utilitarios
+            dnf update -y
+            dnf install -y git tmux amazon-efs-utils amazon-ssm-agent jq curl wget tar unzip zsh \
+              util-linux-user gcc gcc-c++ make ripgrep fd-find fzf postgresql16
+
+            systemctl enable amazon-ssm-agent
+            systemctl restart amazon-ssm-agent
+
+            # 2. Docker Engine + Docker Compose
+            dnf install -y docker
+            systemctl enable docker
+            systemctl start docker
+
+            # 3. Node.js 20 LTS y Python 3 + pgcli (Cliente interactivo de BD con autocompletado)
+            dnf install -y nodejs npm python3 python3-pip
+            pip3 install pgcli || true
+
+            # 4. GitHub CLI (gh) oficial para ARM64 (aarch64)
+            dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo || true
+            dnf install -y gh || true
+
+            # 5. Neovim v0.10.4 nativo para ARM64
+            curl -Lo /tmp/nvim-linux-arm64.tar.gz https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-arm64.tar.gz
+            tar -xzf /tmp/nvim-linux-arm64.tar.gz -C /opt/
+            ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
+
+            # 6. Lazygit nativo para ARM64
+            LAZYGIT_VERSION="0.44.1"
+            curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v$${LAZYGIT_VERSION}/lazygit_$${LAZYGIT_VERSION}_Linux_arm64.tar.gz"
+            tar -xzf /tmp/lazygit.tar.gz -C /usr/local/bin lazygit
+            chmod +x /usr/local/bin/lazygit
+
+            # 7. Lazysql (TUI para Bases de Datos Relacionales) nativo para ARM64
+            LAZYSQL_VERSION="0.3.2"
+            curl -Lo /tmp/lazysql.tar.gz "https://github.com/jorgerojas26/lazysql/releases/download/v$${LAZYSQL_VERSION}/lazysql_Linux_arm64.tar.gz"
+            tar -xzf /tmp/lazysql.tar.gz -C /usr/local/bin lazysql
+            chmod +x /usr/local/bin/lazysql
+
+            # 8. Creacion del usuario Linux del practicante + sudoers + docker
+            if ! id -u ${PracticanteUsername} >/dev/null 2>&1; then
+              useradd -m -s /bin/bash ${PracticanteUsername}
+            fi
+            usermod -aG docker,wheel ${PracticanteUsername}
+            echo "${PracticanteUsername} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-${PracticanteUsername}
+
+            # Hacer que al entrar por SSM Session Manager cambie directo al usuario del practicante
+            mkdir -p /home/ssm-user
+            echo "sudo su - ${PracticanteUsername}" >> /home/ssm-user/.bashrc || true
+
+            # 9. Configuracion local de Git para el practicante
+            sudo -u ${PracticanteUsername} git config --global user.name "${PracticanteUsername}"
+            sudo -u ${PracticanteUsername} git config --global user.email "${PracticanteEmail}"
+            sudo -u ${PracticanteUsername} git config --global init.defaultBranch main
+            sudo -u ${PracticanteUsername} git config --global credential.helper store
+
+            # 10. Preinstalacion de LazyVim
+            USER_HOME="/home/${PracticanteUsername}"
+            sudo -u ${PracticanteUsername} git clone https://github.com/LazyVim/starter "$${USER_HOME}/.config/nvim" || true
+            rm -rf "$${USER_HOME}/.config/nvim/.git" || true
+            chown -R ${PracticanteUsername}:${PracticanteUsername} "$${USER_HOME}/.config"
+
+            # 11. Montaje de Amazon EFS compartido en /workspace y carpeta propia del practicante
+            mkdir -p /workspace
+            EFS_FS_ID="${EfsId}"
+            EFS_AP_ID="${EfsApId}"
+            mount -t efs -o tls,accesspoint=$${EFS_AP_ID} $${EFS_FS_ID}:/ /workspace || true
+            echo "$${EFS_FS_ID}:/ /workspace efs _netdev,tls,accesspoint=$${EFS_AP_ID} 0 0" >> /etc/fstab
+
+            mkdir -p "/workspace/${PracticanteUsername}"
+            chown -R ${PracticanteUsername}:${PracticanteUsername} "/workspace/${PracticanteUsername}"
+            chmod 775 /workspace
+
+            # 12. Apagado automatico FinOps (18:00 hora Peru / 23:00 UTC de lunes a viernes)
+            cat << 'EOF' > /etc/cron.d/auto-shutdown-ec2
+            0 23 * * 1-5 root /sbin/shutdown -h now
+            EOF
+            chmod 644 /etc/cron.d/auto-shutdown-ec2
+
+            echo "=== ESTACION EC2 DE ${PracticanteUsername} LISTA ==="
+          - EfsId:
+              Fn::ImportValue: !Sub "${EnvironmentName}-EFSFileSystemId"
+            EfsApId:
+              Fn::ImportValue: !Sub "${EnvironmentName}-EFSAccessPointId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ec2-dev-${PracticanteUsername}"
+        - Key: Owner
+          Value: !Ref PracticanteUsername
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Role
+          Value: PracticanteWorkstation
+        - Key: Phase
+          Value: Fase-6
+
+  # =========================================================================
+  # 3. TARGET GROUPS Y REGLAS DEL ALB PARA PREVIEW WEB (:3000) Y API (:8080)
+  # =========================================================================
+
+  TargetGroupPracticanteWeb:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "tg-dev-web-${PracticanteUsername}"
+      Port: 3000
+      Protocol: HTTP
+      TargetType: instance
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckPath: /
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: "200-404"
+      Targets:
+        - Id: !Ref PracticanteEC2Instance
+          Port: 3000
+      Tags:
+        - Key: Owner
+          Value: !Ref PracticanteUsername
+
+  TargetGroupPracticanteApi:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "tg-dev-api-${PracticanteUsername}"
+      Port: 8080
+      Protocol: HTTP
+      TargetType: instance
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckPath: /
+      HealthCheckPort: "8080"
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: "200-404"
+      Targets:
+        - Id: !Ref PracticanteEC2Instance
+          Port: 8080
+      Tags:
+        - Key: Owner
+          Value: !Ref PracticanteUsername
+
+  ListenerRulePracticanteWeb:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-HttpsListenerArn"
+      Priority: !Ref RulePriorityWeb
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - !Sub
+                - "${PracticanteUsername}-web.${Domain}"
+                - Domain:
+                    Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupPracticanteWeb
+
+  ListenerRulePracticanteApi:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn:
+        Fn::ImportValue: !Sub "${EnvironmentName}-HttpsListenerArn"
+      Priority: !Ref RulePriorityApi
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - !Sub
+                - "${PracticanteUsername}-api.${Domain}"
+                - Domain:
+                    Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupPracticanteApi
+
+  # =========================================================================
+  # 4. SUBDOMINIOS DEDICADOS EN ROUTE 53 (<nombre>-web y <nombre>-api)
+  # =========================================================================
+
+  DnsRecordPracticanteWeb:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-Route53HostedZoneId"
+      Name: !Sub
+        - "${PracticanteUsername}-web.${Domain}."
+        - Domain:
+            Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"
+      Type: A
+      AliasTarget:
+        HostedZoneId:
+          Fn::ImportValue: !Sub "${EnvironmentName}-ALBCanonicalHostedZoneId"
+        DNSName:
+          Fn::ImportValue: !Sub "${EnvironmentName}-ALBDNSName"
+        EvaluateTargetHealth: false
+
+  DnsRecordPracticanteApi:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-Route53HostedZoneId"
+      Name: !Sub
+        - "${PracticanteUsername}-api.${Domain}."
+        - Domain:
+            Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"
+      Type: A
+      AliasTarget:
+        HostedZoneId:
+          Fn::ImportValue: !Sub "${EnvironmentName}-ALBCanonicalHostedZoneId"
+        DNSName:
+          Fn::ImportValue: !Sub "${EnvironmentName}-ALBDNSName"
+        EvaluateTargetHealth: false
+
+# =========================================================================
+# 5. OUTPUTS (Credenciales, Instancia y URLs de Prueba del Practicante)
+# =========================================================================
+
+Outputs:
+  PracticanteIamUserName:
+    Description: Usuario IAM creado para el practicante
+    Value: !Ref PracticanteIamUser
+
+  PracticanteEC2InstanceId:
+    Description: ID de la instancia EC2 asignada exclusivamente al practicante (Tag Owner)
+    Value: !Ref PracticanteEC2Instance
+
+  PracticanteFrontendPreviewUrl:
+    Description: URL publica HTTPS conectada al puerto 3000 de la EC2 del practicante
+    Value: !Sub
+      - "https://${PracticanteUsername}-web.${Domain}"
+      - Domain:
+          Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"
+
+  PracticanteBackendPreviewUrl:
+    Description: URL publica HTTPS conectada al puerto 8080 de la EC2 del practicante
+    Value: !Sub
+      - "https://${PracticanteUsername}-api.${Domain}"
+      - Domain:
+          Fn::ImportValue: !Sub "${EnvironmentName}-DomainName"

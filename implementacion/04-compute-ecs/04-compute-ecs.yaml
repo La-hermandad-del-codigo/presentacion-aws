@@ -1,10 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
   SENATI - Proyecto Final AWS Fundamentals: APM Inversiones / RPsoft (Plataforma SOFI y Portales B2B)
-  Fase 4: Capa de Cómputo ECS Fargate, Repositorios ECR y Estación de Desarrollo EC2 Dev Workstation.
-  Provee repositorios ECR con políticas de ciclo de vida, clúster ECS con Container Insights,
-  definiciones de tareas Fargate (SOFI, Reflexo Perú, Arte & Ideas), y estación EC2 Dev sin puertos abiertos
-  administrada vía AWS Systems Manager (SSM), con montaje de Amazon EFS (/workspace), Neovim/LazyVim y Tmux.
+  Fase 4: Capa de Cómputo Serverless ECS Fargate y Repositorios Amazon ECR.
+  Provee 7 repositorios ECR con políticas de ciclo de vida, clúster ECS con Container Insights,
+  grupos de logs en CloudWatch y definiciones de tareas Fargate (SOFI, Reflexo Perú, Arte & Ideas).
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -14,15 +13,11 @@ Metadata:
         Parameters:
           - EnvironmentName
       - Label:
-          default: "2. Parámetros de Amazon EC2 Dev Workstation"
-        Parameters:
-          - EC2InstanceType
-          - EC2AmiId
-          - DevUsername
-      - Label:
-          default: "3. Versiones e Imágenes de Contenedores"
+          default: "2. Versiones, Imágenes y Discord (SOFI)"
         Parameters:
           - ImageTag
+          - DiscordWebhookUrl
+          - DiscordBotToken
 
 Parameters:
   EnvironmentName:
@@ -30,22 +25,6 @@ Parameters:
     Default: apm-sofi-prod
     AllowedValues: [apm-sofi-prod, dev, staging]
     Description: Prefijo identificador del entorno (coincidente con Fases 1, 2 y 3).
-
-  EC2InstanceType:
-    Type: String
-    Default: t3.micro
-    AllowedValues: [t3.micro, t3.small, t3.medium]
-    Description: Tipo de instancia para la estación de desarrollo EC2 (t3.micro optimizado para presupuesto).
-
-  EC2AmiId:
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
-    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
-    Description: AMI oficial más reciente de Amazon Linux 2023 resoluble dinámicamente vía SSM Parameter Store.
-
-  DevUsername:
-    Type: String
-    Default: jhefry
-    Description: Nombre de usuario local Linux que se aprovisionará en la instancia EC2 para el practicante.
 
   ImageTag:
     Type: String
@@ -597,114 +576,8 @@ Resources:
               awslogs-region: !Ref "AWS::Region"
               awslogs-stream-prefix: ecs
 
-  # =========================================================================
-  # 5. ESTACIÓN DE DESARROLLO AMAZON EC2 DEV WORKSTATION (Zero-SSH con SSM)
-  # =========================================================================
-
-  EC2DevWorkstation:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref EC2InstanceType
-      ImageId: !Ref EC2AmiId
-      SubnetId:
-        Fn::ImportValue: !Sub "${EnvironmentName}-PrivateDevSubnetA"
-      SecurityGroupIds:
-        - Fn::ImportValue: !Sub "${EnvironmentName}-DevSecurityGroupId"
-      IamInstanceProfile:
-        Fn::ImportValue: !Sub "${EnvironmentName}-EC2InstanceProfileName"
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvda
-          Ebs:
-            VolumeSize: 25
-            VolumeType: gp3
-            Encrypted: true
-            DeleteOnTermination: true
-      UserData:
-        Fn::Base64: !Sub
-          - |
-            #!/bin/bash
-            set -euo pipefail
-            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-
-            echo "=== INICIANDO CONFIGURACIÓN EC2 DEV WORKSTATION ==="
-
-            # 1. Actualización e instalación de utilitarios base
-            dnf update -y
-            dnf install -y git tmux amazon-efs-utils amazon-ssm-agent jq curl wget tar unzip zsh util-linux-user
-
-            # Habilitar e iniciar SSM Agent
-            systemctl enable amazon-ssm-agent
-            systemctl restart amazon-ssm-agent
-
-            # 2. Instalación de Docker CLI y Docker Engine
-            dnf install -y docker
-            systemctl enable docker
-            systemctl start docker
-
-            # 3. Instalación de Node.js 20 LTS
-            dnf install -y nodejs npm
-
-            # 4. Instalación de Python 3 y pip
-            dnf install -y python3 python3-pip
-
-            # 5. Instalación de Neovim v0.10+ (AppImage / Binary)
-            curl -Lo /tmp/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux64.tar.gz
-            tar -xzf /tmp/nvim-linux64.tar.gz -C /opt/
-            ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
-
-            # 6. Creación de usuarios administradores/practicantes (jhefry y gustavo)
-            for DEV_U in ${DevUsername} gustavo; do
-              if ! id -u "$${DEV_U}" >/dev/null 2>&1; then
-                useradd -m -s /bin/bash "$${DEV_U}"
-              fi
-              usermod -aG docker,wheel "$${DEV_U}"
-              echo "$${DEV_U} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/99-$${DEV_U}"
-            done
-
-            # 7. Montaje de Amazon EFS compartido en /workspace
-            mkdir -p /workspace
-            EFS_FS_ID="${EfsId}"
-            EFS_AP_ID="${EfsApId}"
-
-            # Montar con EFS mount helper usando TLS y Access Point
-            mount -t efs -o tls,accesspoint=$${EFS_AP_ID} $${EFS_FS_ID}:/ /workspace || true
-            echo "$${EFS_FS_ID}:/ /workspace efs _netdev,tls,accesspoint=$${EFS_AP_ID} 0 0" >> /etc/fstab
-
-            chown -R ${DevUsername}:${DevUsername} /workspace
-            chmod 755 /workspace
-
-            # 8. Pre-configuración de LazyVim para el usuario
-            USER_HOME="/home/${DevUsername}"
-            sudo -u ${DevUsername} git clone https://github.com/LazyVim/starter "$${USER_HOME}/.config/nvim" || true
-            rm -rf "$${USER_HOME}/.config/nvim/.git" || true
-            chown -R ${DevUsername}:${DevUsername} "$${USER_HOME}/.config"
-
-            # 9. Configurar apagado automático a las 18:00 Lima (23:00 UTC) de Lunes a Viernes
-            cat << 'EOF' > /etc/cron.d/auto-shutdown-ec2
-            # Apagado preventivo FinOps de lunes a viernes a las 23:00 UTC (18:00 hora Perú)
-            0 23 * * 1-5 root /sbin/shutdown -h now
-            EOF
-            chmod 644 /etc/cron.d/auto-shutdown-ec2
-
-            echo "=== CONFIGURACIÓN DE EC2 DEV COMPLETADA SATISFACTORIAMENTE ==="
-          - EfsId:
-              Fn::ImportValue: !Sub "${EnvironmentName}-EFSFileSystemId"
-            EfsApId:
-              Fn::ImportValue: !Sub "${EnvironmentName}-EFSAccessPointId"
-      Tags:
-        - Key: Name
-          Value: !Sub "${EnvironmentName}-ec2-dev-workstation"
-        - Key: Environment
-          Value: !Ref EnvironmentName
-        - Key: Project
-          Value: SOFI-APM
-        - Key: Role
-          Value: DevWorkstation
-        - Key: Phase
-          Value: Fase-4
-
 # =========================================================================
-# 6. OUTPUTS (Salidas para Fase 5 y CI/CD)
+# 5. OUTPUTS (Salidas para Fase 5 y CI/CD)
 # =========================================================================
 
 Outputs:
@@ -737,18 +610,6 @@ Outputs:
     Value: !Ref ArteIdeasTaskDefinition
     Export:
       Name: !Sub "${EnvironmentName}-ArteIdeasTaskDefinitionArn"
-
-  EC2DevInstanceId:
-    Description: ID de la instancia EC2 Dev Workstation para conexión SSM Session Manager
-    Value: !Ref EC2DevWorkstation
-    Export:
-      Name: !Sub "${EnvironmentName}-EC2DevInstanceId"
-
-  EC2DevPrivateIp:
-    Description: Dirección IP privada de la instancia EC2 Dev
-    Value: !GetAtt EC2DevWorkstation.PrivateIp
-    Export:
-      Name: !Sub "${EnvironmentName}-EC2DevPrivateIp"
 
   # ECR URIs para GitHub Actions CI/CD
   EcrSofiFrontendUri:

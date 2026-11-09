@@ -786,7 +786,17 @@ Resources:
           - HasCustomVpcId
           - !Ref VpcId
           - Fn::ImportValue: !Sub '${EnvironmentName}-VpcId'
-      SecurityGroupIngress: []
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref AlbSecurityGroup
+          Description: 'Vista previa web frontend del practicante (<nombre>-web) exclusiva desde el ALB'
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !Ref AlbSecurityGroup
+          Description: 'Vista previa API backend del practicante (<nombre>-api) exclusiva desde el ALB'
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 443
@@ -1381,6 +1391,13 @@ Outputs:
         - !Ref ExistingLabRoleName
     Export:
       Name: !Sub '${EnvironmentName}-EC2InstanceProfileName'
+
+  ComputeDevelopersGroupName:
+    Condition: ShouldCreateTeamUsers
+    Description: Nombre del grupo IAM de practicantes y desarrolladores
+    Value: !Ref IamGroupComputeDevelopers
+    Export:
+      Name: !Sub '${EnvironmentName}-ComputeDevelopersGroupName'
 
   EcsTaskExecutionRoleArn:
     Description: ARN del rol de ejecucion de tareas ECS Fargate

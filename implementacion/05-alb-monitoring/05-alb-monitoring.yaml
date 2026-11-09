@@ -543,6 +543,30 @@ Outputs:
     Export:
       Name: !Sub "${EnvironmentName}-ALBArn"
 
+  ALBCanonicalHostedZoneId:
+    Description: Canonical Hosted Zone ID del ALB para registros Alias en Route 53
+    Value: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+    Export:
+      Name: !Sub "${EnvironmentName}-ALBCanonicalHostedZoneId"
+
+  HttpsListenerArn:
+    Description: ARN del Listener HTTPS (443) para inyectar reglas de subdominios de practicantes
+    Value: !Ref HttpsListener
+    Export:
+      Name: !Sub "${EnvironmentName}-HttpsListenerArn"
+
+  ExportedRoute53HostedZoneId:
+    Description: ID de la Zona Alojada en Route 53 exportado para la Fase 6 (Practicantes)
+    Value: !Ref Route53HostedZoneId
+    Export:
+      Name: !Sub "${EnvironmentName}-Route53HostedZoneId"
+
+  ExportedDomainName:
+    Description: Dominio base exportado para la Fase 6 (Practicantes)
+    Value: !Ref DomainName
+    Export:
+      Name: !Sub "${EnvironmentName}-DomainName"
+
   SofiUrl:
     Description: URL pública HTTPS de la Plataforma SOFI
     Value: !Sub "https://sofi.${DomainName}"
