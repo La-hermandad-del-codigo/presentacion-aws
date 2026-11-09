@@ -652,12 +652,14 @@ Resources:
             tar -xzf /tmp/nvim-linux64.tar.gz -C /opt/
             ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
 
-            # 6. Creación de usuario practicante
-            if ! id -u ${DevUsername} >/dev/null 2>&1; then
-              useradd -m -s /bin/bash ${DevUsername}
-            fi
-            usermod -aG docker,wheel ${DevUsername}
-            echo "${DevUsername} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-${DevUsername}
+            # 6. Creación de usuarios administradores/practicantes (jhefry y gustavo)
+            for DEV_U in ${DevUsername} gustavo; do
+              if ! id -u "$${DEV_U}" >/dev/null 2>&1; then
+                useradd -m -s /bin/bash "$${DEV_U}"
+              fi
+              usermod -aG docker,wheel "$${DEV_U}"
+              echo "$${DEV_U} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/99-$${DEV_U}"
+            done
 
             # 7. Montaje de Amazon EFS compartido en /workspace
             mkdir -p /workspace

@@ -425,7 +425,17 @@ Resources:
             Action: iam:PassRole
             Resource: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${EnvironmentName}-role-*'
 
-  # 1.6 Política Común: Autogestión de MFA para todos los miembros del equipo
+  # 1.6 Grupo de Administradores Generales (Break-Glass / Platform Admins)
+  IamGroupPlatformAdmins:
+    Type: AWS::IAM::Group
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      GroupName: !Sub '${EnvironmentName}-grp-platform-admins'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+
+  # 1.7 Política Común: Autogestión de MFA para todos los miembros del equipo
   PolicySelfManageMfa:
     Type: AWS::IAM::Policy
     Condition: ShouldCreateTeamUsers
@@ -437,6 +447,7 @@ Resources:
         - !Ref IamGroupComputeDevelopers
         - !Ref IamGroupCloudOpsProd
         - !Ref IamGroupIamGovernance
+        - !Ref IamGroupPlatformAdmins
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -467,9 +478,29 @@ Resources:
       UserName: jhefry
       Groups:
         - !Ref IamGroupIamGovernance
+        - !Ref IamGroupPlatformAdmins
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
       Tags:
         - Key: Role
-          Value: IAM-Governance-Lead
+          Value: Platform-Admin-And-IAM-Governance-Lead
+        - Key: Project
+          Value: SOFI-APM
+
+  UserGustavoAdmin:
+    Type: AWS::IAM::User
+    Condition: ShouldCreateTeamUsers
+    Properties:
+      UserName: gustavo-tuesta-admin
+      Groups:
+        - !Ref IamGroupPlatformAdmins
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Tags:
+        - Key: Role
+          Value: Platform-Admin-Account
+        - Key: Owner
+          Value: Gustavo-Tuesta
         - Key: Project
           Value: SOFI-APM
 
