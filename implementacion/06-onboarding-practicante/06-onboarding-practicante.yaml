@@ -200,41 +200,46 @@ Resources:
 
             echo "=== INICIANDO PROVISIONAMIENTO DE ESTACION EC2 ARM64 PARA: ${PracticanteUsername} ==="
 
-            # 1. Paquetes base, compiladores (para Treesitter), Tmux, Git, PostgreSQL 16 (psql) y utilitarios
+            # 1. Paquetes base, compiladores, herramientas de desarrollo y PostgreSQL 16
             dnf update -y
-            dnf install -y git tmux amazon-efs-utils amazon-ssm-agent jq curl wget tar unzip zsh \
-              util-linux-user gcc gcc-c++ make ripgrep fd-find fzf postgresql16
+            dnf install -y --allowerasing git tmux amazon-efs-utils amazon-ssm-agent jq wget tar unzip zsh \
+              util-linux-user gcc gcc-c++ make postgresql16 docker nodejs npm python3 python3-pip cmake gettext
 
             systemctl enable amazon-ssm-agent
             systemctl restart amazon-ssm-agent
 
-            # 2. Docker Engine + Docker Compose
-            dnf install -y docker
-            systemctl enable docker
-            systemctl start docker
+            # 2. Docker Engine
+            systemctl enable --now docker
 
-            # 3. Node.js 20 LTS y Python 3 + pgcli (Cliente interactivo de BD con autocompletado)
-            dnf install -y nodejs npm python3 python3-pip
+            # 3. Python herramientas
             pip3 install pgcli || true
 
             # 4. GitHub CLI (gh) oficial para ARM64 (aarch64)
             dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo || true
             dnf install -y gh || true
 
-            # 5. Neovim v0.10.4 nativo para ARM64
-            curl -Lo /tmp/nvim-linux-arm64.tar.gz https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-arm64.tar.gz
-            tar -xzf /tmp/nvim-linux-arm64.tar.gz -C /opt/
-            ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
+            # 5. Ripgrep (rg) y fd nativos para ARM64
+            curl -Lo /tmp/rg.tar.gz https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-aarch64-unknown-linux-musl.tar.gz
+            tar -xzf /tmp/rg.tar.gz -C /usr/local/bin --strip-components=1 ripgrep-15.2.0-aarch64-unknown-linux-musl/rg
+            chmod +x /usr/local/bin/rg
+
+            curl -Lo /tmp/fd.tar.gz https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-musl.tar.gz
+            mkdir -p /tmp/fd_dir && tar -xzf /tmp/fd.tar.gz -C /tmp/fd_dir
+            find /tmp/fd_dir -name fd -exec cp {} /usr/local/bin/ \; && chmod +x /usr/local/bin/fd
 
             # 6. Lazygit nativo para ARM64
             curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v0.44.1/lazygit_0.44.1_Linux_arm64.tar.gz"
             tar -xzf /tmp/lazygit.tar.gz -C /usr/local/bin lazygit
             chmod +x /usr/local/bin/lazygit
 
-            # 7. Lazysql (TUI para Bases de Datos Relacionales) nativo para ARM64
+            # 7. Lazysql nativo para ARM64
             curl -Lo /tmp/lazysql.tar.gz "https://github.com/jorgerojas26/lazysql/releases/download/v0.3.2/lazysql_Linux_arm64.tar.gz"
             tar -xzf /tmp/lazysql.tar.gz -C /usr/local/bin lazysql
             chmod +x /usr/local/bin/lazysql
+
+            # 8. Neovim v0.10 compilado nativamente para AL2023 ARM64
+            git clone --depth 1 --branch v0.10.4 https://github.com/neovim/neovim.git /tmp/neovim
+            cd /tmp/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo -j2 && make install
 
             # 8. Creacion del usuario Linux del practicante + sudoers + docker
             if ! id -u ${PracticanteUsername} >/dev/null 2>&1; then
